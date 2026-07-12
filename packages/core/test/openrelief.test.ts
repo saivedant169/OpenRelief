@@ -104,6 +104,21 @@ describe("OpenRelief domain core", () => {
     expect(checklist.items.map((item) => item.title)).toContain("Collect proof of occupancy");
   });
 
+  it("marks checklist items as editable", () => {
+    const letter = analyzeLetter(denialLetter);
+    const checklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: ["denial_or_appeal"]
+      },
+      letter,
+      californiaWildfirePolicyPack
+    );
+
+    expect(checklist.items.every((item) => "editable" in item && item.editable === true)).toBe(true);
+  });
+
   it("keeps uploaded deadline text on checklist deadline items", () => {
     const letter = analyzeLetter(denialLetter);
     const checklist = createChecklist(

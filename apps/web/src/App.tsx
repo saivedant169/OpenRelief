@@ -665,6 +665,7 @@ export const App = () => {
                       <span className={`category-dot ${item.category}`} />
                       <div>
                         <strong>{item.title}</strong>
+                        {item.editable ? <span className="editable-mark">Editable</span> : null}
                         <p>{item.reason}</p>
                       </div>
                     </li>

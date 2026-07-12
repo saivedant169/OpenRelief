@@ -67,6 +67,7 @@ export interface ChecklistItem {
   title: string;
   category: "human_review" | "deadline" | "evidence" | "source_review";
   reason: string;
+  editable: boolean;
   deadline?: Deadline;
   sourceIds: string[];
 }
@@ -256,6 +257,7 @@ export const createChecklist = (
       title: "Request human review",
       category: "human_review",
       reason: "Denial, appeal, or risk flags should be reviewed by a qualified helper.",
+      editable: true,
       sourceIds: ["fema-appeals"]
     });
   }
@@ -267,6 +269,7 @@ export const createChecklist = (
       title: "Confirm the response deadline",
       category: "deadline",
       reason: `The uploaded letter says: ${deadline.text}.`,
+      editable: true,
       deadline,
       sourceIds: ["fema-appeals"]
     });
@@ -278,6 +281,7 @@ export const createChecklist = (
       title: "Collect proof of occupancy",
       category: "evidence",
       reason: "The letter asks for residence documentation.",
+      editable: true,
       sourceIds: ["fema-documents"]
     });
   }
@@ -288,6 +292,7 @@ export const createChecklist = (
       title: "Collect insurance information",
       category: "evidence",
       reason: "The letter mentions insurance review.",
+      editable: true,
       sourceIds: ["fema-documents"]
     });
   }
@@ -297,6 +302,7 @@ export const createChecklist = (
     title: "Review official sources",
     category: "source_review",
     reason: `Use the ${policyPack.name} source list before relying on policy details.`,
+    editable: true,
     sourceIds: policyPack.sources.map((source) => source.id)
   });
 

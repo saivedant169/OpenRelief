@@ -536,6 +536,19 @@ a:focus-visible,
   margin: 4px 0 0;
 }
 
+.editable-mark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  margin-left: 8px;
+  padding: 0 8px;
+  color: #073f91;
+  background: #edf4ff;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
 .category-dot {
   width: 12px;
   height: 12px;

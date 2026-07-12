@@ -21,6 +21,10 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Collect proof of occupancy")).toBeInTheDocument();
     expect(screen.getByText("Evidence packet outline")).toBeInTheDocument();
     expect(screen.getByText("Appeal FEMA's Decision")).toBeInTheDocument();
+
+    const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
+    expect(checklistCard).not.toBeNull();
+    expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
   });
 
   it("shows export text and requires confirmation before clearing local work", async () => {
