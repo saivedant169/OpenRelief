@@ -51,6 +51,16 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Source check")).toBeInTheDocument();
   });
 
+  it("shows a bounded appeal draft for denial letters", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByRole("heading", { name: "Appeal draft" })).toBeInTheDocument();
+    expect(screen.getByText("Draft appeal note for human review")).toBeInTheDocument();
+    expect(screen.getByText(/not legal advice/i)).toBeInTheDocument();
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);

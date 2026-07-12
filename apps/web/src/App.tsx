@@ -12,6 +12,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import {
   analyzeLetter,
   buildEvidencePacket,
+  createAppealDraft,
   createCaseExport,
   createChecklist,
   type LetterAnalysis,
@@ -97,6 +98,13 @@ export const App = () => {
   }, [analysis]);
 
   const evidencePacket = useMemo(() => buildEvidencePacket(analysis?.detectedRequests ?? []), [analysis]);
+  const appealDraft = useMemo(() => {
+    if (!analysis || !checklist) {
+      return null;
+    }
+
+    return createAppealDraft(analysis, checklist, californiaWildfirePolicyPack);
+  }, [analysis, checklist]);
 
   const handleAnalyze = () => {
     setAnalysis(analyzeLetter(letterText));
@@ -309,6 +317,17 @@ export const App = () => {
                   ))}
                 </div>
               </article>
+
+              {appealDraft ? (
+                <article className="result-card wide">
+                  <div className="section-heading">
+                    <h2>Appeal draft</h2>
+                    <span className="risk">Human review</span>
+                  </div>
+                  <strong>{appealDraft.title}</strong>
+                  <pre className="draft-text">{appealDraft.body}</pre>
+                </article>
+              ) : null}
 
               <article className="result-card">
                 <h2>Source citations</h2>

@@ -483,6 +483,19 @@ a:focus-visible,
   font-size: 12px;
 }
 
+.draft-text {
+  margin: 12px 0 0;
+  padding: 14px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  color: #15202b;
+  background: #fbfcfd;
+  border: 1px solid #d8dee6;
+  border-radius: 8px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  line-height: 1.55;
+}
+
 .sources a,
 .sources span {
   display: block;
