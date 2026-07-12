@@ -16,6 +16,7 @@ import {
   createCaseExport,
   createChecklist,
   detectRiskFlags,
+  type EvidencePacket,
   type LetterAnalysis,
   type LetterType
 } from "../../../packages/core/src/openrelief";
@@ -54,6 +55,11 @@ type SavedDraft = {
   intakeText?: string;
 };
 
+type EvidenceSummaryItem = {
+  label: string;
+  sourceIds: string[];
+};
+
 type SavedCaseSummary = {
   id: string;
   title: string;
@@ -61,6 +67,7 @@ type SavedCaseSummary = {
   letterText: string;
   fileName: string;
   intakeText: string;
+  missingEvidence: EvidenceSummaryItem[];
   riskFlags: string[];
   summary: string;
 };
@@ -86,6 +93,21 @@ const readSavedDraft = (): SavedDraft => {
 const isLetterType = (value: unknown): value is LetterType =>
   typeof value === "string" && value in letterTypeLabels;
 
+const isStringList = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((item) => typeof item === "string");
+
+const isEvidenceSummaryItem = (value: unknown): value is EvidenceSummaryItem => {
+  const candidate = value as Partial<EvidenceSummaryItem> | null;
+  return !!candidate && typeof candidate.label === "string" && isStringList(candidate.sourceIds);
+};
+
+const extractMissingEvidence = (packet: EvidencePacket): EvidenceSummaryItem[] =>
+  packet.groups.flatMap((group) =>
+    group.items
+      .filter((item) => item.status === "missing")
+      .map((item) => ({ label: item.label, sourceIds: item.sourceIds }))
+  );
+
 const readSavedCases = (): SavedCaseSummary[] => {
   try {
     const saved = window.localStorage.getItem(casesStorageKey);
@@ -93,23 +115,46 @@ const readSavedCases = (): SavedCaseSummary[] => {
       return [];
     }
 
-    const parsed = JSON.parse(saved) as SavedCaseSummary[];
+    const parsed = JSON.parse(saved) as unknown;
     if (!Array.isArray(parsed)) {
       return [];
     }
 
-    return parsed.filter(
-      (item): item is SavedCaseSummary =>
-        typeof item?.id === "string" &&
-        typeof item.title === "string" &&
-        isLetterType(item.letterType) &&
-        typeof item.letterText === "string" &&
-        typeof item.fileName === "string" &&
-        typeof item.intakeText === "string" &&
-        Array.isArray(item.riskFlags) &&
-        item.riskFlags.every((flag) => typeof flag === "string") &&
-        typeof item.summary === "string"
-    );
+    return parsed.flatMap((item) => {
+      const candidate = item as Partial<SavedCaseSummary> | null;
+      if (
+        !candidate ||
+        typeof candidate.id !== "string" ||
+        typeof candidate.title !== "string" ||
+        !isLetterType(candidate.letterType) ||
+        typeof candidate.letterText !== "string" ||
+        typeof candidate.fileName !== "string" ||
+        typeof candidate.intakeText !== "string" ||
+        !isStringList(candidate.riskFlags) ||
+        typeof candidate.summary !== "string"
+      ) {
+        return [];
+      }
+
+      const missingEvidence =
+        Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
+          ? candidate.missingEvidence
+          : extractMissingEvidence(buildEvidencePacket(analyzeLetter(candidate.letterText).detectedRequests));
+
+      return [
+        {
+          id: candidate.id,
+          title: candidate.title,
+          letterType: candidate.letterType,
+          letterText: candidate.letterText,
+          fileName: candidate.fileName,
+          intakeText: candidate.intakeText,
+          missingEvidence,
+          riskFlags: candidate.riskFlags,
+          summary: candidate.summary
+        }
+      ];
+    });
   } catch {
     return [];
   }
@@ -123,6 +168,7 @@ export const App = () => {
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
   const [exportText, setExportText] = useState("");
   const [clearArmed, setClearArmed] = useState(false);
+  const [activeSavedCaseId, setActiveSavedCaseId] = useState<string | null>(null);
   const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
 
   useEffect(() => {
@@ -174,6 +220,7 @@ export const App = () => {
     setAnalysis(analyzeLetter(letterText));
     setExportText("");
     setClearArmed(false);
+    setActiveSavedCaseId(null);
   };
 
   const handleCreatePacketText = () => {
@@ -197,6 +244,7 @@ export const App = () => {
       letterText,
       fileName,
       intakeText,
+      missingEvidence: extractMissingEvidence(evidencePacket),
       riskFlags,
       summary: analysis.summary
     };
@@ -212,6 +260,7 @@ export const App = () => {
     setAnalysis(analyzeLetter(savedCase.letterText));
     setExportText("");
     setClearArmed(false);
+    setActiveSavedCaseId(savedCase.id);
   };
 
   const handleClearLocalData = () => {
@@ -226,6 +275,7 @@ export const App = () => {
     setExportText("");
     setSavedCases([]);
     setClearArmed(false);
+    setActiveSavedCaseId(null);
     setFileName("No file selected");
     window.localStorage.removeItem(caseStorageKey);
     window.localStorage.removeItem(casesStorageKey);
@@ -239,12 +289,17 @@ export const App = () => {
 
     setFileName(file.name);
     setClearArmed(false);
+    setActiveSavedCaseId(null);
     if (file.type.startsWith("text/")) {
       setLetterText(await file.text());
     }
   };
 
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
+  const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
+  const activeCaseSourceIds = activeSavedCase
+    ? [...new Set(activeSavedCase.missingEvidence.flatMap((item) => item.sourceIds))]
+    : [];
 
   return (
     <div className="app-shell">
@@ -341,6 +396,7 @@ export const App = () => {
                 setAnalysis(null);
                 setExportText("");
                 setClearArmed(false);
+                setActiveSavedCaseId(null);
               }}
             >
               Load sample
@@ -378,6 +434,7 @@ export const App = () => {
                 setIntakeText(event.target.value);
                 setExportText("");
                 setClearArmed(false);
+                setActiveSavedCaseId(null);
               }}
             />
           </section>
@@ -397,6 +454,7 @@ export const App = () => {
                 setLetterText(event.target.value);
                 setExportText("");
                 setClearArmed(false);
+                setActiveSavedCaseId(null);
               }}
             />
             <div className="panel-footer">
@@ -474,6 +532,49 @@ export const App = () => {
                   ))}
                 </div>
               </article>
+
+              {activeSavedCase ? (
+                <section className="result-card wide" aria-label="Case detail">
+                  <div className="section-heading">
+                    <div>
+                      <h2>Case detail</h2>
+                      <p>Saved local snapshot for case-worker review.</p>
+                    </div>
+                    <span className="quality">{activeSavedCase.id}</span>
+                  </div>
+                  <div className="case-detail-grid">
+                    <section className="case-detail-section">
+                      <h3>Missing evidence</h3>
+                      {activeSavedCase.missingEvidence.length > 0 ? (
+                        <ul className="case-detail-list">
+                          {activeSavedCase.missingEvidence.map((item) => (
+                            <li key={item.label}>{item.label}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No missing evidence marked</p>
+                      )}
+                    </section>
+                    <section className="case-detail-section">
+                      <h3>Source appendix</h3>
+                      <ul className="case-detail-list">
+                        {activeCaseSourceIds.map((sourceId) => {
+                          const source = sourceById.get(sourceId);
+                          if (!source) {
+                            return null;
+                          }
+
+                          return (
+                            <li key={source.id}>
+                              <a href={source.url}>{source.title}</a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
+                  </div>
+                </section>
+              ) : null}
 
               {appealDraft ? (
                 <article className="result-card wide">

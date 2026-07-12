@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { App } from "./App";
@@ -107,6 +107,20 @@ describe("OpenRelief web workflow", () => {
     const restoredLetterField = screen.getByLabelText("Extracted letter text") as HTMLTextAreaElement;
     expect(restoredLetterField.value).toContain("proof of occupancy");
     expect(screen.getByRole("heading", { name: "Claim denial" })).toBeInTheDocument();
+  });
+
+  it("shows missing evidence with source in opened saved case detail", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+
+    const detail = screen.getByRole("region", { name: "Case detail" });
+
+    expect(within(detail).getByRole("heading", { name: "Missing evidence" })).toBeInTheDocument();
+    expect(within(detail).getByText("Lease, mortgage, utility bill, or other occupancy proof")).toBeInTheDocument();
+    expect(within(detail).getByText("Documents Needed for FEMA Assistance")).toBeInTheDocument();
   });
 
   it("restores a saved local draft and clears stored data", async () => {
