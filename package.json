@@ -15,7 +15,7 @@
     "lint": "tsc -b --pretty false",
     "evals": "vitest run packages/evals/src",
     "policy:validate": "vitest run packages/policy-packs",
-    "docs:check": "vitest run docs/review.test.ts",
+    "docs:check": "vitest run docs",
     "security:audit": "npm audit --audit-level=critical"
   },
   "dependencies": {

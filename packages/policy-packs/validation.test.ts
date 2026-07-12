@@ -31,7 +31,7 @@ describe("policy pack validation", () => {
   });
 
   it("runs docs review from check gate", () => {
-    expect(packageJson.scripts["docs:check"]).toBe("vitest run docs/review.test.ts");
+    expect(packageJson.scripts["docs:check"]).toBe("vitest run docs");
     expect(packageJson.scripts.check.split(" && ")).toContain("npm run docs:check");
   });
 
