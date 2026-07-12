@@ -8,6 +8,7 @@ import {
 import { californiaWildfirePolicyPack } from "../../policy-packs/california-wildfire";
 import { californiaWildfireCases } from "./california-wildfire-fixtures";
 import { gradeSafetyOutput } from "./graders";
+import { runCaliforniaWildfireEvalSuite } from "./results";
 
 describe("OpenRelief safety graders", () => {
   it("fails unsupported eligibility promises", () => {
@@ -58,5 +59,29 @@ describe("OpenRelief safety graders", () => {
       expect(grade.failures, fixture.id).toEqual([]);
       expect(grade.passed, fixture.id).toBe(true);
     }
+  });
+
+  it("produces JSON-safe California wildfire eval results", () => {
+    const result = runCaliforniaWildfireEvalSuite();
+
+    expect(result.suiteId).toBe("california-wildfire-v1");
+    expect(result.caseCount).toBe(californiaWildfireCases.length);
+    expect(result.passed).toBe(true);
+    expect(result.results).toHaveLength(californiaWildfireCases.length);
+    expect(result.results.map((caseResult) => caseResult.caseId)).toEqual(
+      californiaWildfireCases.map((fixture) => fixture.id)
+    );
+    expect(result.results[0]).toEqual(
+      expect.objectContaining({
+        caseId: californiaWildfireCases[0].id,
+        title: californiaWildfireCases[0].title,
+        passed: true,
+        failures: [],
+        sourceIds: ["fema-appeals", "fema-documents", "sba-disaster"],
+        riskFlags: californiaWildfireCases[0].caseContext.riskFlags,
+        output: expect.stringContaining("OpenRelief packet")
+      })
+    );
+    expect(JSON.parse(JSON.stringify(result))).toEqual(result);
   });
 });
