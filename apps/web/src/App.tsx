@@ -58,6 +58,9 @@ type SavedCaseSummary = {
   id: string;
   title: string;
   letterType: LetterType;
+  letterText: string;
+  fileName: string;
+  intakeText: string;
   riskFlags: string[];
   summary: string;
 };
@@ -100,6 +103,9 @@ const readSavedCases = (): SavedCaseSummary[] => {
         typeof item?.id === "string" &&
         typeof item.title === "string" &&
         isLetterType(item.letterType) &&
+        typeof item.letterText === "string" &&
+        typeof item.fileName === "string" &&
+        typeof item.intakeText === "string" &&
         Array.isArray(item.riskFlags) &&
         item.riskFlags.every((flag) => typeof flag === "string") &&
         typeof item.summary === "string"
@@ -185,11 +191,22 @@ export const App = () => {
       id: "OR-CA-2026-001",
       title: letterTypeLabels[analysis.letterType],
       letterType: analysis.letterType,
+      letterText,
+      fileName,
+      intakeText,
       riskFlags,
       summary: analysis.summary
     };
 
     setSavedCases((current) => [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10));
+  };
+
+  const handleOpenSavedCase = (savedCase: SavedCaseSummary) => {
+    setLetterText(savedCase.letterText);
+    setIntakeText(savedCase.intakeText);
+    setFileName(savedCase.fileName);
+    setAnalysis(analyzeLetter(savedCase.letterText));
+    setExportText("");
   };
 
   const handleClearLocalData = () => {
@@ -275,8 +292,15 @@ export const App = () => {
               <ul className="saved-cases">
                 {savedCases.map((savedCase) => (
                   <li key={savedCase.id}>
-                    <strong>Saved case: {savedCase.title}</strong>
-                    <span>{savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "No risk flags"}</span>
+                    <button
+                      aria-label={`Open saved case ${savedCase.id}`}
+                      className="queue-row"
+                      type="button"
+                      onClick={() => handleOpenSavedCase(savedCase)}
+                    >
+                      <strong>Saved case: {savedCase.title}</strong>
+                      <span>{savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "No risk flags"}</span>
+                    </button>
                   </li>
                 ))}
               </ul>

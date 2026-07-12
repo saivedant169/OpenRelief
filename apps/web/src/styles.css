@@ -205,6 +205,22 @@ a:hover {
   font-size: 13px;
 }
 
+.queue-row {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.queue-row:hover strong {
+  text-decoration: underline;
+}
+
 .main-panel {
   padding: 32px;
 }

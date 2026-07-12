@@ -84,6 +84,26 @@ describe("OpenRelief web workflow", () => {
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });
 
+  it("opens a saved case snapshot from the local queue", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    const letterField = screen.getByLabelText("Extracted letter text");
+    await userEvent.clear(letterField);
+    await userEvent.type(letterField, "FEMA Notice\nYour application is approved for rental assistance.");
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByRole("heading", { name: "Approval" })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+
+    const restoredLetterField = screen.getByLabelText("Extracted letter text") as HTMLTextAreaElement;
+    expect(restoredLetterField.value).toContain("proof of occupancy");
+    expect(screen.getByRole("heading", { name: "Claim denial" })).toBeInTheDocument();
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);
