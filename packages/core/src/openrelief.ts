@@ -67,6 +67,7 @@ export interface ChecklistItem {
   title: string;
   category: "human_review" | "deadline" | "evidence" | "source_review";
   reason: string;
+  deadline?: Deadline;
   sourceIds: string[];
 }
 
@@ -260,11 +261,13 @@ export const createChecklist = (
   }
 
   if (letter.detectedDeadlines.length > 0) {
+    const deadline = letter.detectedDeadlines[0];
     items.push({
       id: "review-deadline",
       title: "Confirm the response deadline",
       category: "deadline",
-      reason: "The uploaded letter contains deadline language.",
+      reason: `The uploaded letter says: ${deadline.text}.`,
+      deadline,
       sourceIds: ["fema-appeals"]
     });
   }

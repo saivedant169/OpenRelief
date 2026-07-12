@@ -104,6 +104,28 @@ describe("OpenRelief domain core", () => {
     expect(checklist.items.map((item) => item.title)).toContain("Collect proof of occupancy");
   });
 
+  it("keeps uploaded deadline text on checklist deadline items", () => {
+    const letter = analyzeLetter(denialLetter);
+    const checklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: ["denial_or_appeal"]
+      },
+      letter,
+      californiaWildfirePolicyPack
+    );
+
+    const deadlineItem = checklist.items.find((item) => item.category === "deadline");
+
+    expect(deadlineItem?.reason).toContain("appeal within 60 days");
+    expect(deadlineItem?.deadline).toEqual({
+      label: "appeal window",
+      text: "appeal within 60 days",
+      source: "uploaded_letter"
+    });
+  });
+
   it("builds an evidence packet grouped by recovery category", () => {
     const packet = buildEvidencePacket(["proof of occupancy", "insurance information"]);
 
