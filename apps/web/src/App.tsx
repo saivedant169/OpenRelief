@@ -131,6 +131,70 @@ const extractMissingEvidence = (packet: EvidencePacket): EvidenceSummaryItem[] =
       .map((item) => ({ label: item.label, sourceIds: item.sourceIds }))
   );
 
+const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
+  if (!Array.isArray(parsed)) {
+    return [];
+  }
+
+  return parsed.flatMap((item) => {
+    const candidate = item as Partial<SavedCaseSummary> | null;
+    if (
+      !candidate ||
+      typeof candidate.id !== "string" ||
+      typeof candidate.title !== "string" ||
+      !isLetterType(candidate.letterType) ||
+      typeof candidate.letterText !== "string" ||
+      typeof candidate.fileName !== "string" ||
+      typeof candidate.intakeText !== "string" ||
+      !isStringList(candidate.riskFlags) ||
+      typeof candidate.summary !== "string"
+    ) {
+      return [];
+    }
+
+    const restoredAnalysis = analyzeLetter(candidate.letterText);
+    const missingEvidence =
+      Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
+        ? candidate.missingEvidence
+        : extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests));
+    const deadlines =
+      Array.isArray(candidate.deadlines) && candidate.deadlines.every(isDeadline)
+        ? candidate.deadlines
+        : restoredAnalysis.detectedDeadlines;
+    const checklistItems =
+      Array.isArray(candidate.checklistItems) && candidate.checklistItems.every(isChecklistSummaryItem)
+        ? candidate.checklistItems
+        : createChecklist(
+            {
+              county: "Los Angeles",
+              disasterType: "wildfire",
+              riskFlags: detectRiskFlags(candidate.intakeText, restoredAnalysis)
+            },
+            restoredAnalysis,
+            californiaWildfirePolicyPack
+          ).items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
+
+    return [
+      {
+        id: candidate.id,
+        title: candidate.title,
+        letterType: candidate.letterType,
+        letterText: candidate.letterText,
+        fileName: candidate.fileName,
+        intakeText: candidate.intakeText,
+        deadlines,
+        missingEvidence,
+        checklistItems,
+        riskFlags: candidate.riskFlags,
+        summary: candidate.summary,
+        notes: typeof candidate.notes === "string" ? candidate.notes : ""
+      }
+    ];
+  });
+};
+
+const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSavedCases(JSON.parse(json) as unknown);
+
 const readSavedCases = (): SavedCaseSummary[] => {
   try {
     const saved = window.localStorage.getItem(casesStorageKey);
@@ -139,65 +203,7 @@ const readSavedCases = (): SavedCaseSummary[] => {
     }
 
     const parsed = JSON.parse(saved) as unknown;
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed.flatMap((item) => {
-      const candidate = item as Partial<SavedCaseSummary> | null;
-      if (
-        !candidate ||
-        typeof candidate.id !== "string" ||
-        typeof candidate.title !== "string" ||
-        !isLetterType(candidate.letterType) ||
-        typeof candidate.letterText !== "string" ||
-        typeof candidate.fileName !== "string" ||
-        typeof candidate.intakeText !== "string" ||
-        !isStringList(candidate.riskFlags) ||
-        typeof candidate.summary !== "string"
-      ) {
-        return [];
-      }
-
-      const restoredAnalysis = analyzeLetter(candidate.letterText);
-      const missingEvidence =
-        Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
-          ? candidate.missingEvidence
-          : extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests));
-      const deadlines =
-        Array.isArray(candidate.deadlines) && candidate.deadlines.every(isDeadline)
-          ? candidate.deadlines
-          : restoredAnalysis.detectedDeadlines;
-      const checklistItems =
-        Array.isArray(candidate.checklistItems) && candidate.checklistItems.every(isChecklistSummaryItem)
-          ? candidate.checklistItems
-          : createChecklist(
-              {
-                county: "Los Angeles",
-                disasterType: "wildfire",
-                riskFlags: detectRiskFlags(candidate.intakeText, restoredAnalysis)
-              },
-              restoredAnalysis,
-              californiaWildfirePolicyPack
-            ).items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
-
-      return [
-        {
-          id: candidate.id,
-          title: candidate.title,
-          letterType: candidate.letterType,
-          letterText: candidate.letterText,
-          fileName: candidate.fileName,
-          intakeText: candidate.intakeText,
-          deadlines,
-          missingEvidence,
-          checklistItems,
-          riskFlags: candidate.riskFlags,
-          summary: candidate.summary,
-          notes: typeof candidate.notes === "string" ? candidate.notes : ""
-        }
-      ];
-    });
+    return normalizeSavedCases(parsed);
   } catch {
     return [];
   }
@@ -213,6 +219,8 @@ export const App = () => {
   const [clearArmed, setClearArmed] = useState(false);
   const [activeSavedCaseId, setActiveSavedCaseId] = useState<string | null>(null);
   const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
+  const [caseArchiveText, setCaseArchiveText] = useState("");
+  const [caseArchiveError, setCaseArchiveError] = useState("");
 
   useEffect(() => {
     if (letterText === "" && fileName === "No file selected") {
@@ -299,6 +307,33 @@ export const App = () => {
     setClearArmed(false);
   };
 
+  const handleExportSavedCases = () => {
+    setCaseArchiveText(JSON.stringify(savedCases, null, 2));
+    setCaseArchiveError("");
+    setClearArmed(false);
+  };
+
+  const handleImportSavedCases = () => {
+    try {
+      const importedCases = parseSavedCasesJson(caseArchiveText);
+      if (importedCases.length === 0) {
+        setCaseArchiveError("No valid saved cases found.");
+        return;
+      }
+
+      const importedIds = new Set(importedCases.map((savedCase) => savedCase.id));
+      setSavedCases((current) =>
+        [...importedCases, ...current.filter((savedCase) => !importedIds.has(savedCase.id))].slice(0, 10)
+      );
+      setCaseArchiveText(JSON.stringify(importedCases, null, 2));
+      setCaseArchiveError("");
+      setClearArmed(false);
+      setActiveSavedCaseId(null);
+    } catch {
+      setCaseArchiveError("Saved cases JSON could not be read.");
+    }
+  };
+
   const handleSavedCaseNotes = (notes: string) => {
     if (!activeSavedCaseId) {
       return;
@@ -334,6 +369,8 @@ export const App = () => {
     setClearArmed(false);
     setActiveSavedCaseId(null);
     setFileName("No file selected");
+    setCaseArchiveText("");
+    setCaseArchiveError("");
     window.localStorage.removeItem(caseStorageKey);
     window.localStorage.removeItem(casesStorageKey);
   };
@@ -433,6 +470,33 @@ export const App = () => {
             ) : (
               <p>No saved cases</p>
             )}
+            <section className="case-archive" aria-label="Saved case archive">
+              <label className="case-archive-label">
+                <span>Saved cases JSON</span>
+                <textarea
+                  className="case-archive-textarea"
+                  value={caseArchiveText}
+                  onChange={(event) => {
+                    setCaseArchiveText(event.target.value);
+                    setCaseArchiveError("");
+                  }}
+                />
+              </label>
+              <section className="case-archive-actions" aria-label="Saved case archive actions">
+                <button
+                  className="secondary-action"
+                  type="button"
+                  disabled={savedCases.length === 0}
+                  onClick={handleExportSavedCases}
+                >
+                  Export saved cases
+                </button>
+                <button className="secondary-action" type="button" onClick={handleImportSavedCases}>
+                  Import saved cases
+                </button>
+              </section>
+              {caseArchiveError ? <p className="archive-error">{caseArchiveError}</p> : null}
+            </section>
           </section>
         </aside>
 

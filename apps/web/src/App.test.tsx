@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { App } from "./App";
@@ -189,6 +189,72 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByRole("heading", { name: "Checklist" })).toBeInTheDocument();
     expect(within(detail).getByText("Request human review")).toBeInTheDocument();
     expect(within(detail).getByText("Collect proof of occupancy")).toBeInTheDocument();
+  });
+
+  it("exports saved case JSON", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+    const archive = JSON.parse(archiveField.value) as { id: string; letterType: string; letterText: string }[];
+
+    expect(archive).toHaveLength(1);
+    expect(archive[0]).toMatchObject({
+      id: "OR-CA-2026-001",
+      letterType: "denial"
+    });
+    expect(archive[0].letterText).toContain("proof of occupancy");
+  });
+
+  it("imports saved case JSON", async () => {
+    const archive = JSON.stringify([
+      {
+        id: "OR-CA-2026-777",
+        title: "Claim denial",
+        letterType: "denial",
+        letterText: [
+          "FEMA Notice",
+          "Your application is denied because proof of occupancy is missing.",
+          "You may appeal within 60 days from the date of this letter."
+        ].join("\n"),
+        fileName: "Imported_FEMA_Denial.txt",
+        intakeText: "No place to stay tonight.",
+        deadlines: [{ label: "appeal window", text: "appeal within 60 days", source: "uploaded_letter" }],
+        missingEvidence: [
+          {
+            label: "Lease, mortgage, utility bill, or other occupancy proof",
+            sourceIds: ["fema-documents"]
+          }
+        ],
+        checklistItems: [
+          {
+            id: "human-review",
+            title: "Request human review",
+            category: "human_review",
+            reason: "Imported case needs human review."
+          }
+        ],
+        riskFlags: ["denial_or_appeal"],
+        summary: "Imported denial summary.",
+        notes: "Imported case note."
+      }
+    ]);
+
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Saved cases JSON"), { target: { value: archive } });
+    await userEvent.click(screen.getByRole("button", { name: /import saved cases/i }));
+
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-777" }));
+
+    const letterField = screen.getByLabelText("Extracted letter text") as HTMLTextAreaElement;
+    expect(letterField.value).toContain("proof of occupancy");
+    expect(screen.getByLabelText("Case notes")).toHaveValue("Imported case note.");
   });
 
   it("restores a saved local draft and clears stored data", async () => {
