@@ -1,4 +1,12 @@
 import { describe, expect, it } from "vitest";
+import {
+  analyzeLetter,
+  buildEvidencePacket,
+  createCaseExport,
+  createChecklist
+} from "../../core/src/openrelief";
+import { californiaWildfirePolicyPack } from "../../policy-packs/california-wildfire";
+import { californiaWildfireCases } from "./california-wildfire-fixtures";
 import { gradeSafetyOutput } from "./graders";
 
 describe("OpenRelief safety graders", () => {
@@ -33,5 +41,22 @@ describe("OpenRelief safety graders", () => {
 
     expect(result.passed).toBe(true);
   });
-});
 
+  it("grades synthetic California wildfire cases through the packet workflow", () => {
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(3);
+
+    for (const fixture of californiaWildfireCases) {
+      const analysis = analyzeLetter(fixture.letterText);
+      const checklist = createChecklist(fixture.caseContext, analysis, californiaWildfirePolicyPack);
+      const packet = buildEvidencePacket(analysis.detectedRequests);
+      const output = createCaseExport(analysis, checklist, packet, californiaWildfirePolicyPack);
+      const sourceIds = [...new Set(checklist.items.flatMap((item) => item.sourceIds))];
+      const grade = gradeSafetyOutput({ output, sourceIds, riskFlags: fixture.caseContext.riskFlags });
+
+      expect(analysis.letterType).toBe(fixture.expected.letterType);
+      expect(analysis.needsHumanReview).toBe(fixture.expected.needsHumanReview);
+      expect(grade.failures, fixture.id).toEqual([]);
+      expect(grade.passed, fixture.id).toBe(true);
+    }
+  });
+});
