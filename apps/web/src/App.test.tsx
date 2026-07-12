@@ -136,6 +136,26 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("appeal within 60 days")).toBeInTheDocument();
   });
 
+  it("shows queue triage summary and escalation flags in case detail", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    const queue = screen.getByRole("region", { name: "Local case queue" });
+
+    expect(within(queue).getByText("Missing: 1")).toBeInTheDocument();
+    expect(within(queue).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
+    expect(within(queue).getByText("Flags: denial_or_appeal")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+
+    const detail = screen.getByRole("region", { name: "Case detail" });
+
+    expect(within(detail).getByRole("heading", { name: "Escalation flags" })).toBeInTheDocument();
+    expect(within(detail).getByText("denial_or_appeal")).toBeInTheDocument();
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);

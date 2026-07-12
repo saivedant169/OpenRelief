@@ -379,7 +379,9 @@ export const App = () => {
                       onClick={() => handleOpenSavedCase(savedCase)}
                     >
                       <strong>Saved case: {savedCase.title}</strong>
-                      <span>{savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "No risk flags"}</span>
+                      <span>Missing: {savedCase.missingEvidence.length}</span>
+                      <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
+                      <span>Flags: {savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "None"}</span>
                     </button>
                   </li>
                 ))}
@@ -581,6 +583,18 @@ export const App = () => {
                         </ul>
                       ) : (
                         <p>No deadline found</p>
+                      )}
+                    </section>
+                    <section className="case-detail-section">
+                      <h3>Escalation flags</h3>
+                      {activeSavedCase.riskFlags.length > 0 ? (
+                        <ul className="case-detail-list">
+                          {activeSavedCase.riskFlags.map((flag) => (
+                            <li key={flag}>{flag}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No escalation flags</p>
                       )}
                     </section>
                     <section className="case-detail-section">
