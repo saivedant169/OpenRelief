@@ -156,6 +156,23 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("denial_or_appeal")).toBeInTheDocument();
   });
 
+  it("stores case-worker notes locally from case detail", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+
+    const notesField = screen.getByLabelText("Case notes");
+    await userEvent.type(notesField, "Called survivor about occupancy proof.");
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem("openrelief:v1:cases")).toContain(
+        "Called survivor about occupancy proof."
+      );
+    });
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);

@@ -72,6 +72,7 @@ type SavedCaseSummary = {
   missingEvidence: EvidenceSummaryItem[];
   riskFlags: string[];
   summary: string;
+  notes: string;
 };
 
 const readSavedDraft = (): SavedDraft => {
@@ -163,7 +164,8 @@ const readSavedCases = (): SavedCaseSummary[] => {
           deadlines,
           missingEvidence,
           riskFlags: candidate.riskFlags,
-          summary: candidate.summary
+          summary: candidate.summary,
+          notes: typeof candidate.notes === "string" ? candidate.notes : ""
         }
       ];
     });
@@ -259,10 +261,22 @@ export const App = () => {
       deadlines: analysis.detectedDeadlines,
       missingEvidence: extractMissingEvidence(evidencePacket),
       riskFlags,
-      summary: analysis.summary
+      summary: analysis.summary,
+      notes: ""
     };
 
     setSavedCases((current) => [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10));
+    setClearArmed(false);
+  };
+
+  const handleSavedCaseNotes = (notes: string) => {
+    if (!activeSavedCaseId) {
+      return;
+    }
+
+    setSavedCases((current) =>
+      current.map((savedCase) => (savedCase.id === activeSavedCaseId ? { ...savedCase, notes } : savedCase))
+    );
     setClearArmed(false);
   };
 
@@ -613,6 +627,15 @@ export const App = () => {
                           );
                         })}
                       </ul>
+                    </section>
+                    <section className="case-detail-section case-notes-section">
+                      <h3>Notes</h3>
+                      <textarea
+                        aria-label="Case notes"
+                        className="case-notes"
+                        value={activeSavedCase.notes}
+                        onChange={(event) => handleSavedCaseNotes(event.target.value)}
+                      />
                     </section>
                   </div>
                 </section>

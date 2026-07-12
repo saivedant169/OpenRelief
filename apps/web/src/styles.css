@@ -574,6 +574,10 @@ a:focus-visible,
   overflow-wrap: anywhere;
 }
 
+.case-notes {
+  min-height: 120px;
+}
+
 .risk-list {
   display: flex;
   flex-wrap: wrap;
