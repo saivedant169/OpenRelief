@@ -21,6 +21,14 @@ const injectionLetter = `
 `;
 
 describe("OpenRelief domain core", () => {
+  it("classifies approval letters without forced human review", () => {
+    const result = analyzeLetter("FEMA Notice\nYour application is approved for rental assistance.");
+
+    expect(result.letterType).toBe("approval");
+    expect(result.needsHumanReview).toBe(false);
+    expect(result.summary).toContain("approve");
+  });
+
   it("classifies denial letters and extracts deadline language", () => {
     const result = analyzeLetter(denialLetter);
 
@@ -36,6 +44,26 @@ describe("OpenRelief domain core", () => {
     expect(result.letterType).toBe("denial");
     expect(result.injectionWarnings.length).toBeGreaterThan(0);
     expect(result.summary).not.toContain("approved");
+  });
+
+  it("classifies inspection notices without inventing deadlines", () => {
+    const result = analyzeLetter("FEMA Inspection Notice\nAn inspector will call to schedule a home inspection.");
+
+    expect(result.letterType).toBe("inspection_notice");
+    expect(result.detectedDeadlines).toEqual([]);
+    expect(result.needsHumanReview).toBe(false);
+  });
+
+  it("classifies deadline notices with source set to uploaded letter", () => {
+    const result = analyzeLetter("FEMA Notice\nPlease respond within 30 days to keep your application moving.");
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response window",
+      text: "respond within 30 days",
+      source: "uploaded_letter"
+    });
+    expect(result.needsHumanReview).toBe(false);
   });
 
   it("creates source-backed checklist with escalation first", () => {

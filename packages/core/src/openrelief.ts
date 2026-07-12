@@ -114,9 +114,15 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("insurance") ? "insurance information" : ""
   ].filter(Boolean);
 
-  const detectedDeadlines = normalized.includes("appeal within 60 days")
-    ? [{ label: "appeal window", text: "appeal within 60 days", source: "uploaded_letter" as const }]
-    : [];
+  const detectedDeadlines: Deadline[] = [];
+
+  if (normalized.includes("appeal within 60 days")) {
+    detectedDeadlines.push({ label: "appeal window", text: "appeal within 60 days", source: "uploaded_letter" });
+  }
+
+  if (normalized.includes("respond within 30 days")) {
+    detectedDeadlines.push({ label: "response window", text: "respond within 30 days", source: "uploaded_letter" });
+  }
 
   if (normalized.includes("denied") || normalized.includes("denial")) {
     return {
@@ -133,6 +139,39 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     return {
       letterType: "request_for_information",
       summary: "This letter appears to request more information before a decision can be made.",
+      detectedDeadlines,
+      detectedRequests,
+      injectionWarnings,
+      needsHumanReview: false
+    };
+  }
+
+  if (normalized.includes("inspection") || normalized.includes("inspector")) {
+    return {
+      letterType: "inspection_notice",
+      summary: "This letter appears to describe an inspection step.",
+      detectedDeadlines,
+      detectedRequests,
+      injectionWarnings,
+      needsHumanReview: false
+    };
+  }
+
+  if (detectedDeadlines.length > 0 || normalized.includes("deadline")) {
+    return {
+      letterType: "deadline_notice",
+      summary: "This letter appears to include a response deadline.",
+      detectedDeadlines,
+      detectedRequests,
+      injectionWarnings,
+      needsHumanReview: false
+    };
+  }
+
+  if (normalized.includes("approved") || normalized.includes("approval")) {
+    return {
+      letterType: "approval",
+      summary: "This letter appears to approve assistance and should still be reviewed for amounts, dates, and next steps.",
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
