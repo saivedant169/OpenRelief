@@ -37,6 +37,7 @@ const steps = [
 
 const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => [source.id, source]));
 const caseStorageKey = "openrelief:v1:case";
+const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
@@ -51,6 +52,14 @@ type SavedDraft = {
   letterText?: string;
   fileName?: string;
   intakeText?: string;
+};
+
+type SavedCaseSummary = {
+  id: string;
+  title: string;
+  letterType: LetterType;
+  riskFlags: string[];
+  summary: string;
 };
 
 const readSavedDraft = (): SavedDraft => {
@@ -71,8 +80,38 @@ const readSavedDraft = (): SavedDraft => {
   }
 };
 
+const isLetterType = (value: unknown): value is LetterType =>
+  typeof value === "string" && value in letterTypeLabels;
+
+const readSavedCases = (): SavedCaseSummary[] => {
+  try {
+    const saved = window.localStorage.getItem(casesStorageKey);
+    if (!saved) {
+      return [];
+    }
+
+    const parsed = JSON.parse(saved) as SavedCaseSummary[];
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter(
+      (item): item is SavedCaseSummary =>
+        typeof item?.id === "string" &&
+        typeof item.title === "string" &&
+        isLetterType(item.letterType) &&
+        Array.isArray(item.riskFlags) &&
+        item.riskFlags.every((flag) => typeof flag === "string") &&
+        typeof item.summary === "string"
+    );
+  } catch {
+    return [];
+  }
+};
+
 export const App = () => {
   const [savedDraft] = useState(readSavedDraft);
+  const [savedCases, setSavedCases] = useState(readSavedCases);
   const [letterText, setLetterText] = useState(savedDraft.letterText ?? sampleLetter);
   const [intakeText, setIntakeText] = useState(savedDraft.intakeText ?? "");
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
@@ -86,6 +125,15 @@ export const App = () => {
 
     window.localStorage.setItem(caseStorageKey, JSON.stringify({ letterText, fileName, intakeText }));
   }, [fileName, intakeText, letterText]);
+
+  useEffect(() => {
+    if (savedCases.length === 0) {
+      window.localStorage.removeItem(casesStorageKey);
+      return;
+    }
+
+    window.localStorage.setItem(casesStorageKey, JSON.stringify(savedCases));
+  }, [savedCases]);
 
   const riskFlags = useMemo(() => detectRiskFlags(intakeText, analysis ?? undefined), [analysis, intakeText]);
 
@@ -128,13 +176,31 @@ export const App = () => {
     setExportText(createCaseExport(analysis, checklist, evidencePacket, californiaWildfirePolicyPack));
   };
 
+  const handleSaveCaseSnapshot = () => {
+    if (!analysis) {
+      return;
+    }
+
+    const snapshot: SavedCaseSummary = {
+      id: "OR-CA-2026-001",
+      title: letterTypeLabels[analysis.letterType],
+      letterType: analysis.letterType,
+      riskFlags,
+      summary: analysis.summary
+    };
+
+    setSavedCases((current) => [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10));
+  };
+
   const handleClearLocalData = () => {
     setLetterText("");
     setIntakeText("");
     setAnalysis(null);
     setExportText("");
+    setSavedCases([]);
     setFileName("No file selected");
     window.localStorage.removeItem(caseStorageKey);
+    window.localStorage.removeItem(casesStorageKey);
   };
 
   const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -202,6 +268,21 @@ export const App = () => {
                 <dd>Browser local</dd>
               </div>
             </dl>
+          </section>
+          <section className="case-card" aria-label="Local case queue">
+            <strong>Local case queue</strong>
+            {savedCases.length > 0 ? (
+              <ul className="saved-cases">
+                {savedCases.map((savedCase) => (
+                  <li key={savedCase.id}>
+                    <strong>Saved case: {savedCase.title}</strong>
+                    <span>{savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "No risk flags"}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No saved cases</p>
+            )}
           </section>
         </aside>
 
@@ -394,6 +475,9 @@ export const App = () => {
                     <p>Save plain text for printing or case-worker review.</p>
                   </div>
                   <div className="export-actions">
+                    <button className="secondary-action" type="button" onClick={handleSaveCaseSnapshot}>
+                      Save case snapshot
+                    </button>
                     <button className="secondary-action" type="button" onClick={handleCreatePacketText}>
                       Create packet text
                     </button>

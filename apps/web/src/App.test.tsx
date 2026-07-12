@@ -73,6 +73,17 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText(/medical_emergency/)).toBeInTheDocument();
   });
 
+  it("saves analyzed case to a local case queue", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    expect(screen.getByRole("region", { name: "Local case queue" })).toBeInTheDocument();
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);

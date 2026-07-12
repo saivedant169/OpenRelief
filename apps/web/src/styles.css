@@ -180,6 +180,31 @@ a:hover {
   font-weight: 650;
 }
 
+.case-card p {
+  margin: 12px 0 0;
+  color: #4b5b6b;
+}
+
+.saved-cases {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.saved-cases li {
+  display: grid;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid #d8dee6;
+}
+
+.saved-cases span {
+  color: #4b5b6b;
+  font-size: 13px;
+}
+
 .main-panel {
   padding: 32px;
 }
