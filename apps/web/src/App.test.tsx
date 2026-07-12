@@ -1,9 +1,13 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { App } from "./App";
 
 describe("OpenRelief web workflow", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it("turns a sample denial letter into review, checklist, evidence, and sources", async () => {
     render(<App />);
 
@@ -32,5 +36,30 @@ describe("OpenRelief web workflow", () => {
 
     expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
+
+  it("restores a saved local draft and clears stored data", async () => {
+    const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
+    const { unmount } = render(<App />);
+
+    const letterField = screen.getByLabelText("Extracted letter text");
+    await userEvent.clear(letterField);
+    await userEvent.type(letterField, savedLetter);
+
+    await waitFor(() => {
+      const stored = window.localStorage.getItem("openrelief:v1:case");
+      expect(stored).not.toBeNull();
+      expect(JSON.parse(stored ?? "{}")).toMatchObject({ letterText: savedLetter });
+    });
+
+    unmount();
+    render(<App />);
+
+    expect(screen.getByLabelText("Extracted letter text")).toHaveValue(savedLetter);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
+
+    expect(window.localStorage.getItem("openrelief:v1:case")).toBeNull();
   });
 });

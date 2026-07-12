@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   Upload
 } from "lucide-react";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import {
   analyzeLetter,
   buildEvidencePacket,
@@ -39,12 +39,45 @@ const steps = [
 ];
 
 const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => [source.id, source]));
+const caseStorageKey = "openrelief:v1:case";
+const sampleFileName = "Sample_FEMA_Denial.txt";
+
+type SavedDraft = {
+  letterText?: string;
+  fileName?: string;
+};
+
+const readSavedDraft = (): SavedDraft => {
+  try {
+    const saved = window.localStorage.getItem(caseStorageKey);
+    if (!saved) {
+      return {};
+    }
+
+    const parsed = JSON.parse(saved) as SavedDraft;
+    return {
+      letterText: typeof parsed.letterText === "string" ? parsed.letterText : undefined,
+      fileName: typeof parsed.fileName === "string" ? parsed.fileName : undefined
+    };
+  } catch {
+    return {};
+  }
+};
 
 export const App = () => {
-  const [letterText, setLetterText] = useState(sampleLetter);
+  const [savedDraft] = useState(readSavedDraft);
+  const [letterText, setLetterText] = useState(savedDraft.letterText ?? sampleLetter);
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
   const [exportText, setExportText] = useState("");
-  const [fileName, setFileName] = useState("Sample_FEMA_Denial.txt");
+  const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
+
+  useEffect(() => {
+    if (letterText === "" && fileName === "No file selected") {
+      return;
+    }
+
+    window.localStorage.setItem(caseStorageKey, JSON.stringify({ letterText, fileName }));
+  }, [fileName, letterText]);
 
   const checklist = useMemo(() => {
     if (!analysis) {
@@ -74,6 +107,7 @@ export const App = () => {
     setAnalysis(null);
     setExportText("");
     setFileName("No file selected");
+    window.localStorage.removeItem(caseStorageKey);
   };
 
   const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +187,16 @@ export const App = () => {
               </div>
               <p>Upload a letter, review extracted text, and create a safe next-step plan.</p>
             </div>
-            <button className="secondary-action" type="button" onClick={() => setLetterText(sampleLetter)}>
+            <button
+              className="secondary-action"
+              type="button"
+              onClick={() => {
+                setLetterText(sampleLetter);
+                setFileName(sampleFileName);
+                setAnalysis(null);
+                setExportText("");
+              }}
+            >
               Load sample
             </button>
           </section>
