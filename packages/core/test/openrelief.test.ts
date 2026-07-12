@@ -94,6 +94,12 @@ describe("OpenRelief domain core", () => {
     ]);
   });
 
+  it("detects suspected scam or fraud risk from survivor context", () => {
+    const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("adds denial or appeal risk from letter analysis", () => {
     const flags = detectRiskFlags("", analyzeLetter(denialLetter));
 

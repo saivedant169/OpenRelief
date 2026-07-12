@@ -12,7 +12,8 @@ export type RiskFlag =
   | "medical_emergency"
   | "abuse_or_unsafe_home"
   | "disability_accommodation"
-  | "immigration_sensitive";
+  | "immigration_sensitive"
+  | "suspected_fraud_or_scam";
 
 export interface SourceRecord {
   id: string;
@@ -280,6 +281,10 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
 
   if (/immigration|undocumented|deportation|visa/i.test(normalized)) {
     addFlag(flags, "immigration_sensitive");
+  }
+
+  if (/scam|fraud|fraudulent|fake fema|asked for.*fema code|asked for.*application id/i.test(normalized)) {
+    addFlag(flags, "suspected_fraud_or_scam");
   }
 
   return flags;
