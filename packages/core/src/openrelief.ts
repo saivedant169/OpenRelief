@@ -261,3 +261,39 @@ export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResu
     errors
   };
 };
+
+export const createCaseExport = (
+  letter: LetterAnalysis,
+  checklist: Checklist,
+  evidencePacket: EvidencePacket,
+  policyPack: PolicyPack
+): string => {
+  const checklistLines = checklist.items.map((item) => `- ${item.title}: ${item.reason}`).join("\n");
+  const evidenceLines = evidencePacket.groups
+    .map((group) => {
+      const items = group.items.map((item) => `  - ${item.label} (${item.status})`).join("\n");
+      return `${group.category}\n${items}`;
+    })
+    .join("\n\n");
+  const sourceLines = policyPack.sources
+    .map((source) => `- ${source.title}: ${source.url} (retrieved ${source.retrievedAt})`)
+    .join("\n");
+
+  return [
+    "OpenRelief packet",
+    "",
+    "Safety note: this is not a government decision or legal advice.",
+    "",
+    `Letter type: ${letter.letterType}`,
+    `Summary: ${letter.summary}`,
+    "",
+    "Checklist",
+    checklistLines,
+    "",
+    "Evidence packet outline",
+    evidenceLines,
+    "",
+    "Sources",
+    sourceLines
+  ].join("\n");
+};

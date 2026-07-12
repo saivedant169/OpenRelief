@@ -358,6 +358,23 @@ a:focus-visible,
   border: 1px solid #9cbce6;
 }
 
+.danger-action {
+  color: #8b1a1a;
+  border-color: #e0a0a0;
+}
+
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.export-output {
+  min-height: 260px;
+  margin-top: 12px;
+}
+
 .results-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;

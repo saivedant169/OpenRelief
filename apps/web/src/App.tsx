@@ -12,6 +12,7 @@ import { ChangeEvent, useMemo, useState } from "react";
 import {
   analyzeLetter,
   buildEvidencePacket,
+  createCaseExport,
   createChecklist,
   type LetterAnalysis
 } from "../../../packages/core/src/openrelief";
@@ -42,6 +43,7 @@ const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => 
 export const App = () => {
   const [letterText, setLetterText] = useState(sampleLetter);
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
+  const [exportText, setExportText] = useState("");
   const [fileName, setFileName] = useState("Sample_FEMA_Denial.txt");
 
   const checklist = useMemo(() => {
@@ -54,7 +56,25 @@ export const App = () => {
 
   const evidencePacket = useMemo(() => buildEvidencePacket(analysis?.detectedRequests ?? []), [analysis]);
 
-  const handleAnalyze = () => setAnalysis(analyzeLetter(letterText));
+  const handleAnalyze = () => {
+    setAnalysis(analyzeLetter(letterText));
+    setExportText("");
+  };
+
+  const handleCreatePacketText = () => {
+    if (!analysis || !checklist) {
+      return;
+    }
+
+    setExportText(createCaseExport(analysis, checklist, evidencePacket, californiaWildfirePolicyPack));
+  };
+
+  const handleClearLocalData = () => {
+    setLetterText("");
+    setAnalysis(null);
+    setExportText("");
+    setFileName("No file selected");
+  };
 
   const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -164,7 +184,10 @@ export const App = () => {
             <textarea
               aria-label="Extracted letter text"
               value={letterText}
-              onChange={(event) => setLetterText(event.target.value)}
+              onChange={(event) => {
+                setLetterText(event.target.value);
+                setExportText("");
+              }}
             />
             <div className="panel-footer">
               <span>Local draft, not submitted anywhere</span>
@@ -253,6 +276,26 @@ export const App = () => {
                   })}
                 </ul>
               </article>
+
+              <article className="result-card wide">
+                <div className="section-heading">
+                  <div>
+                    <h2>Export packet</h2>
+                    <p>Save plain text for printing or case-worker review.</p>
+                  </div>
+                  <div className="export-actions">
+                    <button className="secondary-action" type="button" onClick={handleCreatePacketText}>
+                      Create packet text
+                    </button>
+                    <button className="secondary-action danger-action" type="button" onClick={handleClearLocalData}>
+                      Clear local data
+                    </button>
+                  </div>
+                </div>
+                {exportText ? (
+                  <textarea className="export-output" aria-label="Export packet text" value={exportText} readOnly />
+                ) : null}
+              </article>
             </section>
           ) : (
             <section className="empty-state">
@@ -265,4 +308,3 @@ export const App = () => {
     </div>
   );
 };
-

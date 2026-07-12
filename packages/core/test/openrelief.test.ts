@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   analyzeLetter,
   buildEvidencePacket,
+  createCaseExport,
   createChecklist,
   validatePolicyPack
 } from "../src/openrelief";
@@ -84,5 +85,24 @@ describe("OpenRelief domain core", () => {
     expect(validation.valid).toBe(false);
     expect(validation.errors[0]).toContain("bad-rule");
   });
-});
 
+  it("exports local packet text with safety boundary and sources", () => {
+    const letter = analyzeLetter(denialLetter);
+    const checklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: ["denial_or_appeal"]
+      },
+      letter,
+      californiaWildfirePolicyPack
+    );
+    const packet = buildEvidencePacket(letter.detectedRequests);
+    const exported = createCaseExport(letter, checklist, packet, californiaWildfirePolicyPack);
+
+    expect(exported).toContain("OpenRelief packet");
+    expect(exported).toContain("not a government decision or legal advice");
+    expect(exported).toContain("Request human review");
+    expect(exported).toContain("Appeal FEMA's Decision");
+  });
+});

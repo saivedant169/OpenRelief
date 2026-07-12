@@ -226,14 +226,14 @@ Before hosted demo:
 - security contact,
 - error reporting off by default.
 
-## Hiring/Frontier Signal Plan
+## Frontier Engineering Signal Plan
 
-OpenAI/Anthropic/frontier AI signal comes from:
+Project signal comes from:
 
 - realistic agent environment,
 - high-stakes workflow,
 - graders and eval harness,
-- source-grounded AI,
+- source-grounded workflow,
 - privacy and safety architecture,
 - public technical report,
 - measurable failure modes,
@@ -296,4 +296,3 @@ Create repo skeleton and implement domain core before UI polish:
 3. `packages/evals`
 4. `apps/web`
 5. `examples/california-wildfire`
-
