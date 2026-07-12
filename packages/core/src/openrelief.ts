@@ -442,6 +442,10 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
 export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResult => {
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
   const errors = policyPack.rules.flatMap((rule) => {
+    if (injectionPatterns.some((pattern) => pattern.test(rule.statement))) {
+      return [`Policy rule ${rule.id} contains instruction-like text.`];
+    }
+
     if (rule.sourceIds.length === 0) {
       return [`Policy rule ${rule.id} has no sourceIds.`];
     }
