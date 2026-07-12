@@ -11,6 +11,25 @@ describe("policy pack validation", () => {
     });
   });
 
+  it("rejects policy sources without URL or retrieved date", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "bad-source",
+          url: "",
+          retrievedAt: ""
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source bad-source has no url.");
+    expect(validation.errors).toContain("Policy source bad-source has no retrievedAt.");
+  });
+
   it("runs policy validation from check gate", () => {
     expect(packageJson.scripts["policy:validate"]).toBe("vitest run packages/policy-packs");
     expect(packageJson.scripts.check.split(" && ")).toContain("npm run policy:validate");

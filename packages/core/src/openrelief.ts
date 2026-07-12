@@ -446,7 +446,20 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
 
 export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResult => {
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
-  const errors = policyPack.rules.flatMap((rule) => {
+  const sourceErrors = policyPack.sources.flatMap((source) => {
+    const errors: string[] = [];
+
+    if (source.url.trim().length === 0) {
+      errors.push(`Policy source ${source.id} has no url.`);
+    }
+
+    if (source.retrievedAt.trim().length === 0) {
+      errors.push(`Policy source ${source.id} has no retrievedAt.`);
+    }
+
+    return errors;
+  });
+  const ruleErrors = policyPack.rules.flatMap((rule) => {
     if (injectionPatterns.some((pattern) => pattern.test(rule.statement))) {
       return [`Policy rule ${rule.id} contains instruction-like text.`];
     }
@@ -462,6 +475,7 @@ export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResu
 
     return [];
   });
+  const errors = [...sourceErrors, ...ruleErrors];
 
   return {
     valid: errors.length === 0,
