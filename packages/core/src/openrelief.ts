@@ -96,6 +96,13 @@ export interface PolicyValidationResult {
   errors: string[];
 }
 
+export interface AppealDraft {
+  title: string;
+  body: string;
+  sourceIds: string[];
+  needsHumanReview: true;
+}
+
 const injectionPatterns = [
   /ignore all previous instructions/i,
   /developer mode/i,
@@ -335,4 +342,36 @@ export const createCaseExport = (
     "Sources",
     sourceLines
   ].join("\n");
+};
+
+export const createAppealDraft = (
+  letter: LetterAnalysis,
+  checklist: Checklist,
+  policyPack: PolicyPack
+): AppealDraft | null => {
+  if (letter.letterType !== "denial") {
+    return null;
+  }
+
+  const requestedEvidence =
+    letter.detectedRequests.length > 0 ? letter.detectedRequests.join(", ") : "the items requested in the letter";
+  const sourceIds = new Set(checklist.items.flatMap((item) => item.sourceIds));
+
+  if (policyPack.sources.some((source) => source.id === "fema-appeals")) {
+    sourceIds.add("fema-appeals");
+  }
+
+  return {
+    title: "Draft appeal note for human review",
+    body: [
+      "Draft for human review only. This is not legal advice and not a government decision.",
+      "",
+      "I am asking FEMA to review the denial notice for my disaster assistance application.",
+      `The letter says the missing or disputed item is: ${requestedEvidence}.`,
+      "I plan to attach the requested supporting documents and any other records a qualified helper recommends.",
+      "Please review this draft with a qualified helper before sending."
+    ].join("\n"),
+    sourceIds: [...sourceIds],
+    needsHumanReview: true
+  };
 };

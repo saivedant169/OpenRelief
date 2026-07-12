@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   analyzeLetter,
   buildEvidencePacket,
+  createAppealDraft,
   createCaseExport,
   createChecklist,
   validatePolicyPack
@@ -132,5 +133,31 @@ describe("OpenRelief domain core", () => {
     expect(exported).toContain("not a government decision or legal advice");
     expect(exported).toContain("Request human review");
     expect(exported).toContain("Appeal FEMA's Decision");
+  });
+
+  it("creates a bounded appeal draft for denial letters", () => {
+    const letter = analyzeLetter(denialLetter);
+    const checklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: ["denial_or_appeal"]
+      },
+      letter,
+      californiaWildfirePolicyPack
+    );
+    const draft = createAppealDraft(letter, checklist, californiaWildfirePolicyPack);
+
+    expect(draft?.title).toBe("Draft appeal note for human review");
+    expect(draft?.body).toContain("proof of occupancy");
+    expect(draft?.body).toContain("not legal advice");
+    expect(draft?.body).not.toMatch(/will be approved|guaranteed/i);
+    expect(draft?.sourceIds).toContain("fema-appeals");
+  });
+
+  it("does not create appeal drafts for non-denial letters", () => {
+    const letter = analyzeLetter("FEMA Notice\nYour application is approved for rental assistance.");
+
+    expect(createAppealDraft(letter, { items: [] }, californiaWildfirePolicyPack)).toBeNull();
   });
 });
