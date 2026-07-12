@@ -39,4 +39,9 @@ describe("policy pack validation", () => {
     expect(packageJson.scripts["security:audit"]).toBe("npm audit --audit-level=critical");
     expect(packageJson.scripts.check.split(" && ")).toContain("npm run security:audit");
   });
+
+  it("runs eval suite from check gate", () => {
+    expect(packageJson.scripts.evals).toBe("vitest run packages/evals/src");
+    expect(packageJson.scripts.check.split(" && ")).toContain("npm run evals");
+  });
 });
