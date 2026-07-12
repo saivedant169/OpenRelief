@@ -25,6 +25,8 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("The letter says appeal within 60 days.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Needs review" })).toBeInTheDocument();
     expect(screen.getByText("OpenRelief cannot confirm final eligibility or legal options.")).toBeInTheDocument();
+    expect(screen.getByText("https://www.fema.gov/assistance/individual/after-applying/appeals")).toBeInTheDocument();
+    expect(screen.getAllByText(/retrieved 2026-07-13/i).length).toBeGreaterThan(0);
 
     const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
     expect(checklistCard).not.toBeNull();

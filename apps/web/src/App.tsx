@@ -829,6 +829,7 @@ export const App = () => {
                     return (
                       <li key={source.id}>
                         <a href={source.url}>{source.title}</a>
+                        <span>{source.url}</span>
                         <span>
                           {source.publisher}, retrieved {source.retrievedAt}
                         </span>
