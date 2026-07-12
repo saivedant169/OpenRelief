@@ -517,12 +517,19 @@ a:focus-visible,
 }
 
 .checklist,
+.analysis-list,
 .sources {
   display: grid;
   gap: 12px;
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+.analysis-list li {
+  padding-top: 10px;
+  border-top: 1px solid #e5e9ef;
+  color: #344253;
 }
 
 .checklist li {

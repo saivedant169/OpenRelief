@@ -40,6 +40,19 @@ describe("OpenRelief domain core", () => {
     expect(result.needsHumanReview).toBe(true);
   });
 
+  it("separates letter facts from uncertain interpretation", () => {
+    const result = analyzeLetter(denialLetter);
+
+    expect(result.facts).toEqual(
+      expect.arrayContaining([
+        "The letter says the application is denied.",
+        "The letter asks for proof of occupancy.",
+        "The letter says appeal within 60 days."
+      ])
+    );
+    expect(result.uncertainties).toContain("OpenRelief cannot confirm final eligibility or legal options.");
+  });
+
   it("keeps prompt injection out of letter decisions", () => {
     const result = analyzeLetter(injectionLetter);
 

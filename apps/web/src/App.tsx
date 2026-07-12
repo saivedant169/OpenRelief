@@ -657,6 +657,24 @@ export const App = () => {
                 ))}
               </article>
 
+              <article className="result-card">
+                <h2>Letter facts</h2>
+                <ul className="analysis-list">
+                  {analysis.facts.map((fact) => (
+                    <li key={fact}>{fact}</li>
+                  ))}
+                </ul>
+              </article>
+
+              <article className="result-card">
+                <h2>Needs review</h2>
+                <ul className="analysis-list">
+                  {analysis.uncertainties.map((uncertainty) => (
+                    <li key={uncertainty}>{uncertainty}</li>
+                  ))}
+                </ul>
+              </article>
+
               <article className="result-card wide">
                 <h2>Next-step checklist</h2>
                 <ul className="checklist">

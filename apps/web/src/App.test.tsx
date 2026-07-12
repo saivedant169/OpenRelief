@@ -21,6 +21,10 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Collect proof of occupancy")).toBeInTheDocument();
     expect(screen.getByText("Evidence packet outline")).toBeInTheDocument();
     expect(screen.getByText("Appeal FEMA's Decision")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Letter facts" })).toBeInTheDocument();
+    expect(screen.getByText("The letter says appeal within 60 days.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Needs review" })).toBeInTheDocument();
+    expect(screen.getByText("OpenRelief cannot confirm final eligibility or legal options.")).toBeInTheDocument();
 
     const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
     expect(checklistCard).not.toBeNull();

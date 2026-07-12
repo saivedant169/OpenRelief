@@ -50,6 +50,8 @@ export interface Deadline {
 export interface LetterAnalysis {
   letterType: LetterType;
   summary: string;
+  facts: string[];
+  uncertainties: string[];
   detectedDeadlines: Deadline[];
   detectedRequests: string[];
   injectionWarnings: string[];
@@ -127,6 +129,30 @@ const addFlag = (flags: RiskFlag[], flag: RiskFlag) => {
   }
 };
 
+const buildLetterFacts = (normalized: string, requests: string[], deadlines: Deadline[]): string[] => {
+  const facts: string[] = [];
+
+  if (normalized.includes("denied") || normalized.includes("denial")) {
+    facts.push("The letter says the application is denied.");
+  }
+
+  if (normalized.includes("approved") || normalized.includes("approval")) {
+    facts.push("The letter says assistance is approved.");
+  }
+
+  if (requests.includes("proof of occupancy")) {
+    facts.push("The letter asks for proof of occupancy.");
+  }
+
+  if (requests.includes("insurance information")) {
+    facts.push("The letter mentions insurance information.");
+  }
+
+  facts.push(...deadlines.map((deadline) => `The letter says ${deadline.text}.`));
+
+  return facts.length > 0 ? facts : ["The letter needs manual review because no clear action was found."];
+};
+
 export const analyzeLetter = (letterText: string): LetterAnalysis => {
   const normalized = letterText.toLowerCase();
   const injectionWarnings = injectionPatterns
@@ -148,10 +174,15 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     detectedDeadlines.push({ label: "response window", text: "respond within 30 days", source: "uploaded_letter" });
   }
 
+  const facts = buildLetterFacts(normalized, detectedRequests, detectedDeadlines);
+  const uncertainties = ["OpenRelief cannot confirm final eligibility or legal options."];
+
   if (normalized.includes("denied") || normalized.includes("denial")) {
     return {
       letterType: "denial",
       summary: "This letter appears to deny the request and asks for careful human review before next steps.",
+      facts,
+      uncertainties,
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
@@ -163,6 +194,8 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     return {
       letterType: "request_for_information",
       summary: "This letter appears to request more information before a decision can be made.",
+      facts,
+      uncertainties,
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
@@ -174,6 +207,8 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     return {
       letterType: "inspection_notice",
       summary: "This letter appears to describe an inspection step.",
+      facts,
+      uncertainties,
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
@@ -185,6 +220,8 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     return {
       letterType: "deadline_notice",
       summary: "This letter appears to include a response deadline.",
+      facts,
+      uncertainties,
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
@@ -196,6 +233,8 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     return {
       letterType: "approval",
       summary: "This letter appears to approve assistance and should still be reviewed for amounts, dates, and next steps.",
+      facts,
+      uncertainties,
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
@@ -206,6 +245,8 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   return {
     letterType: "unknown",
     summary: "This letter needs human review because OpenRelief could not classify it safely.",
+    facts,
+    uncertainties,
     detectedDeadlines,
     detectedRequests,
     injectionWarnings,
