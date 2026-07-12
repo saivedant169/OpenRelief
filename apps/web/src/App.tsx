@@ -43,6 +43,7 @@ const caseStorageKey = "openrelief:v1:case";
 const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
 const acceptedFileExtensions = [".txt", ".pdf", ".png", ".jpg", ".jpeg"];
+const maxUploadSizeBytes = 10 * 1024 * 1024;
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -392,6 +393,14 @@ export const App = () => {
 
     if (!isAcceptedFile(file)) {
       setFileError("Unsupported file type. Upload TXT, PDF, JPG, or PNG.");
+      setClearArmed(false);
+      setActiveSavedCaseId(null);
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > maxUploadSizeBytes) {
+      setFileError("File too large. Upload a file under 10 MB.");
       setClearArmed(false);
       setActiveSavedCaseId(null);
       event.target.value = "";

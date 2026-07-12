@@ -53,4 +53,15 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByText("Unsupported file type. Upload TXT, PDF, JPG, or PNG.")).toBeInTheDocument();
     expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
   });
+
+  it("rejects oversized uploads", () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const file = new File([new Uint8Array(10 * 1024 * 1024 + 1)], "large.txt", { type: "text/plain" });
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    expect(screen.getByText("File too large. Upload a file under 10 MB.")).toBeInTheDocument();
+    expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
+  });
 });
