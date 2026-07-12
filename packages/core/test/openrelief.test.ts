@@ -109,11 +109,17 @@ describe("OpenRelief domain core", () => {
 
     expect(packet.groups.map((group) => group.category)).toEqual([
       "identity",
-      "occupancy",
+      "residence",
+      "ownership_or_lease",
+      "damage",
+      "receipts",
       "insurance",
-      "damage"
+      "medical_or_transportation",
+      "communications",
+      "other"
     ]);
-    expect(packet.groups.find((group) => group.category === "occupancy")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "residence")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "insurance")?.items[0]?.status).toBe("missing");
   });
 
   it("rejects policy packs with uncited rules", () => {

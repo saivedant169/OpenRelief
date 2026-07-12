@@ -74,7 +74,16 @@ export interface Checklist {
   items: ChecklistItem[];
 }
 
-export type EvidenceCategory = "identity" | "occupancy" | "insurance" | "damage";
+export type EvidenceCategory =
+  | "identity"
+  | "residence"
+  | "ownership_or_lease"
+  | "damage"
+  | "receipts"
+  | "insurance"
+  | "medical_or_transportation"
+  | "communications"
+  | "other";
 
 export interface EvidenceItem {
   label: string;
@@ -298,11 +307,41 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [{ label: "Photo ID or replacement ID note", status: "optional", sourceIds: ["fema-documents"] }]
     },
     {
-      category: "occupancy",
+      category: "residence",
       items: [
         {
           label: "Lease, mortgage, utility bill, or other occupancy proof",
           status: requests.includes("proof of occupancy") ? "missing" : "optional",
+          sourceIds: ["fema-documents"]
+        }
+      ]
+    },
+    {
+      category: "ownership_or_lease",
+      items: [
+        {
+          label: "Deed, lease, mortgage statement, or title record",
+          status: "optional",
+          sourceIds: ["fema-documents"]
+        }
+      ]
+    },
+    {
+      category: "damage",
+      items: [
+        {
+          label: "Damage photos, receipts, or repair estimates",
+          status: "optional",
+          sourceIds: ["fema-documents"]
+        }
+      ]
+    },
+    {
+      category: "receipts",
+      items: [
+        {
+          label: "Repair, hotel, replacement, or cleanup receipts",
+          status: "optional",
           sourceIds: ["fema-documents"]
         }
       ]
@@ -318,8 +357,34 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       ]
     },
     {
-      category: "damage",
-      items: [{ label: "Damage photos, receipts, or repair estimates", status: "optional", sourceIds: ["fema-documents"] }]
+      category: "medical_or_transportation",
+      items: [
+        {
+          label: "Medical, medication, transportation, or accessibility expense notes",
+          status: "optional",
+          sourceIds: ["fema-documents"]
+        }
+      ]
+    },
+    {
+      category: "communications",
+      items: [
+        {
+          label: "Agency letters, emails, call notes, or case messages",
+          status: "optional",
+          sourceIds: ["fema-documents"]
+        }
+      ]
+    },
+    {
+      category: "other",
+      items: [
+        {
+          label: "Other disaster recovery documents named in the letter",
+          status: "optional",
+          sourceIds: ["fema-documents"]
+        }
+      ]
     }
   ]
 });
