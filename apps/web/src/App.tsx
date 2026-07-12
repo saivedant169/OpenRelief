@@ -42,6 +42,7 @@ const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => 
 const caseStorageKey = "openrelief:v1:case";
 const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
+const acceptedFileExtensions = [".txt", ".pdf", ".png", ".jpg", ".jpeg"];
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -195,6 +196,11 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
 
 const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSavedCases(JSON.parse(json) as unknown);
 
+const isAcceptedFile = (file: File) => {
+  const normalizedName = file.name.toLowerCase();
+  return acceptedFileExtensions.some((extension) => normalizedName.endsWith(extension));
+};
+
 const readSavedCases = (): SavedCaseSummary[] => {
   try {
     const saved = window.localStorage.getItem(casesStorageKey);
@@ -219,6 +225,7 @@ export const App = () => {
   const [clearArmed, setClearArmed] = useState(false);
   const [activeSavedCaseId, setActiveSavedCaseId] = useState<string | null>(null);
   const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
+  const [fileError, setFileError] = useState("");
   const [caseArchiveText, setCaseArchiveText] = useState("");
   const [caseArchiveError, setCaseArchiveError] = useState("");
 
@@ -349,6 +356,7 @@ export const App = () => {
     setLetterText(savedCase.letterText);
     setIntakeText(savedCase.intakeText);
     setFileName(savedCase.fileName);
+    setFileError("");
     setAnalysis(analyzeLetter(savedCase.letterText));
     setExportText("");
     setClearArmed(false);
@@ -369,6 +377,7 @@ export const App = () => {
     setClearArmed(false);
     setActiveSavedCaseId(null);
     setFileName("No file selected");
+    setFileError("");
     setCaseArchiveText("");
     setCaseArchiveError("");
     window.localStorage.removeItem(caseStorageKey);
@@ -381,10 +390,19 @@ export const App = () => {
       return;
     }
 
+    if (!isAcceptedFile(file)) {
+      setFileError("Unsupported file type. Upload TXT, PDF, JPG, or PNG.");
+      setClearArmed(false);
+      setActiveSavedCaseId(null);
+      event.target.value = "";
+      return;
+    }
+
+    setFileError("");
     setFileName(file.name);
     setClearArmed(false);
     setActiveSavedCaseId(null);
-    if (file.type.startsWith("text/")) {
+    if (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) {
       setLetterText(await file.text());
     }
   };
@@ -520,6 +538,7 @@ export const App = () => {
                 setExportText("");
                 setClearArmed(false);
                 setActiveSavedCaseId(null);
+                setFileError("");
               }}
             >
               Load sample
@@ -539,6 +558,11 @@ export const App = () => {
               <input type="file" accept=".txt,.pdf,.png,.jpg,.jpeg" onChange={handleFile} />
             </label>
             <span className="file-name">{fileName}</span>
+            {fileError ? (
+              <p className="upload-error" role="alert">
+                {fileError}
+              </p>
+            ) : null}
           </section>
 
           <section className="editor-panel">

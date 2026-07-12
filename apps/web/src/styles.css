@@ -368,6 +368,13 @@ h2 {
   white-space: nowrap;
 }
 
+.upload-error {
+  flex-basis: 100%;
+  margin: 0;
+  color: #8b1a1a;
+  font-weight: 650;
+}
+
 .editor-panel {
   margin-top: 20px;
   padding: 18px;
