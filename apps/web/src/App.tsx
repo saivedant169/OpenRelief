@@ -16,6 +16,7 @@ import {
   createCaseExport,
   createChecklist,
   detectRiskFlags,
+  type ChecklistItem,
   type Deadline,
   type EvidencePacket,
   type LetterAnalysis,
@@ -61,6 +62,8 @@ type EvidenceSummaryItem = {
   sourceIds: string[];
 };
 
+type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason">;
+
 type SavedCaseSummary = {
   id: string;
   title: string;
@@ -70,6 +73,7 @@ type SavedCaseSummary = {
   intakeText: string;
   deadlines: Deadline[];
   missingEvidence: EvidenceSummaryItem[];
+  checklistItems: ChecklistSummaryItem[];
   riskFlags: string[];
   summary: string;
   notes: string;
@@ -109,6 +113,17 @@ const isDeadline = (value: unknown): value is Deadline => {
   return !!candidate && typeof candidate.label === "string" && typeof candidate.text === "string";
 };
 
+const isChecklistSummaryItem = (value: unknown): value is ChecklistSummaryItem => {
+  const candidate = value as Partial<ChecklistSummaryItem> | null;
+  return (
+    !!candidate &&
+    typeof candidate.id === "string" &&
+    typeof candidate.title === "string" &&
+    typeof candidate.category === "string" &&
+    typeof candidate.reason === "string"
+  );
+};
+
 const extractMissingEvidence = (packet: EvidencePacket): EvidenceSummaryItem[] =>
   packet.groups.flatMap((group) =>
     group.items
@@ -144,14 +159,27 @@ const readSavedCases = (): SavedCaseSummary[] => {
         return [];
       }
 
+      const restoredAnalysis = analyzeLetter(candidate.letterText);
       const missingEvidence =
         Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
           ? candidate.missingEvidence
-          : extractMissingEvidence(buildEvidencePacket(analyzeLetter(candidate.letterText).detectedRequests));
+          : extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests));
       const deadlines =
         Array.isArray(candidate.deadlines) && candidate.deadlines.every(isDeadline)
           ? candidate.deadlines
-          : analyzeLetter(candidate.letterText).detectedDeadlines;
+          : restoredAnalysis.detectedDeadlines;
+      const checklistItems =
+        Array.isArray(candidate.checklistItems) && candidate.checklistItems.every(isChecklistSummaryItem)
+          ? candidate.checklistItems
+          : createChecklist(
+              {
+                county: "Los Angeles",
+                disasterType: "wildfire",
+                riskFlags: detectRiskFlags(candidate.intakeText, restoredAnalysis)
+              },
+              restoredAnalysis,
+              californiaWildfirePolicyPack
+            ).items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
 
       return [
         {
@@ -163,6 +191,7 @@ const readSavedCases = (): SavedCaseSummary[] => {
           intakeText: candidate.intakeText,
           deadlines,
           missingEvidence,
+          checklistItems,
           riskFlags: candidate.riskFlags,
           summary: candidate.summary,
           notes: typeof candidate.notes === "string" ? candidate.notes : ""
@@ -247,7 +276,7 @@ export const App = () => {
   };
 
   const handleSaveCaseSnapshot = () => {
-    if (!analysis) {
+    if (!analysis || !checklist) {
       return;
     }
 
@@ -260,6 +289,7 @@ export const App = () => {
       intakeText,
       deadlines: analysis.detectedDeadlines,
       missingEvidence: extractMissingEvidence(evidencePacket),
+      checklistItems: checklist.items.map(({ id, title, category, reason }) => ({ id, title, category, reason })),
       riskFlags,
       summary: analysis.summary,
       notes: ""
@@ -572,6 +602,25 @@ export const App = () => {
                     <span className="quality">{activeSavedCase.id}</span>
                   </div>
                   <div className="case-detail-grid">
+                    <section className="case-detail-section">
+                      <h3>Timeline</h3>
+                      <ul className="case-detail-list">
+                        <li>Letter analyzed</li>
+                        <li>Checklist created</li>
+                        <li>Snapshot saved</li>
+                      </ul>
+                    </section>
+                    <section className="case-detail-section">
+                      <h3>Checklist</h3>
+                      <ul className="case-detail-list">
+                        {activeSavedCase.checklistItems.map((item) => (
+                          <li key={item.id}>
+                            <strong>{item.title}</strong>
+                            <span>{item.reason}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
                     <section className="case-detail-section">
                       <h3>Missing evidence</h3>
                       {activeSavedCase.missingEvidence.length > 0 ? (

@@ -173,6 +173,24 @@ describe("OpenRelief web workflow", () => {
     });
   });
 
+  it("shows timeline and checklist in opened saved case detail", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+
+    const detail = screen.getByRole("region", { name: "Case detail" });
+
+    expect(within(detail).getByRole("heading", { name: "Timeline" })).toBeInTheDocument();
+    expect(within(detail).getByText("Letter analyzed")).toBeInTheDocument();
+    expect(within(detail).getByText("Checklist created")).toBeInTheDocument();
+    expect(within(detail).getByText("Snapshot saved")).toBeInTheDocument();
+    expect(within(detail).getByRole("heading", { name: "Checklist" })).toBeInTheDocument();
+    expect(within(detail).getByText("Request human review")).toBeInTheDocument();
+    expect(within(detail).getByText("Collect proof of occupancy")).toBeInTheDocument();
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);
