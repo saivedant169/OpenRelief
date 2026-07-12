@@ -34,4 +34,9 @@ describe("policy pack validation", () => {
     expect(packageJson.scripts["docs:check"]).toBe("vitest run docs/review.test.ts");
     expect(packageJson.scripts.check.split(" && ")).toContain("npm run docs:check");
   });
+
+  it("runs dependency audit from check gate", () => {
+    expect(packageJson.scripts["security:audit"]).toBe("npm audit --audit-level=critical");
+    expect(packageJson.scripts.check.split(" && ")).toContain("npm run security:audit");
+  });
 });
