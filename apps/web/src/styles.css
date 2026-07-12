@@ -420,6 +420,12 @@ a:focus-visible,
   margin-top: 12px;
 }
 
+.clear-warning {
+  margin: 12px 0 0;
+  color: #8b1a1a;
+  font-weight: 650;
+}
+
 .results-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;

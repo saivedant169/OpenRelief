@@ -23,7 +23,7 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Appeal FEMA's Decision")).toBeInTheDocument();
   });
 
-  it("shows export text and clears local work", async () => {
+  it("shows export text and requires confirmation before clearing local work", async () => {
     render(<App />);
 
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
@@ -33,6 +33,11 @@ describe("OpenRelief web workflow", () => {
     expect(exportField.value).toContain("OpenRelief packet");
 
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
+
+    expect(screen.getByLabelText("Extracted letter text")).not.toHaveValue("");
+    expect(screen.getByRole("button", { name: /confirm clear local data/i })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /confirm clear local data/i }));
 
     expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
@@ -125,6 +130,7 @@ describe("OpenRelief web workflow", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
+    await userEvent.click(screen.getByRole("button", { name: /confirm clear local data/i }));
 
     expect(window.localStorage.getItem("openrelief:v1:case")).toBeNull();
   });

@@ -122,6 +122,7 @@ export const App = () => {
   const [intakeText, setIntakeText] = useState(savedDraft.intakeText ?? "");
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
   const [exportText, setExportText] = useState("");
+  const [clearArmed, setClearArmed] = useState(false);
   const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
 
   useEffect(() => {
@@ -172,6 +173,7 @@ export const App = () => {
   const handleAnalyze = () => {
     setAnalysis(analyzeLetter(letterText));
     setExportText("");
+    setClearArmed(false);
   };
 
   const handleCreatePacketText = () => {
@@ -180,6 +182,7 @@ export const App = () => {
     }
 
     setExportText(createCaseExport(analysis, checklist, evidencePacket, californiaWildfirePolicyPack));
+    setClearArmed(false);
   };
 
   const handleSaveCaseSnapshot = () => {
@@ -199,6 +202,7 @@ export const App = () => {
     };
 
     setSavedCases((current) => [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10));
+    setClearArmed(false);
   };
 
   const handleOpenSavedCase = (savedCase: SavedCaseSummary) => {
@@ -207,14 +211,21 @@ export const App = () => {
     setFileName(savedCase.fileName);
     setAnalysis(analyzeLetter(savedCase.letterText));
     setExportText("");
+    setClearArmed(false);
   };
 
   const handleClearLocalData = () => {
+    if (!clearArmed) {
+      setClearArmed(true);
+      return;
+    }
+
     setLetterText("");
     setIntakeText("");
     setAnalysis(null);
     setExportText("");
     setSavedCases([]);
+    setClearArmed(false);
     setFileName("No file selected");
     window.localStorage.removeItem(caseStorageKey);
     window.localStorage.removeItem(casesStorageKey);
@@ -227,6 +238,7 @@ export const App = () => {
     }
 
     setFileName(file.name);
+    setClearArmed(false);
     if (file.type.startsWith("text/")) {
       setLetterText(await file.text());
     }
@@ -328,6 +340,7 @@ export const App = () => {
                 setFileName(sampleFileName);
                 setAnalysis(null);
                 setExportText("");
+                setClearArmed(false);
               }}
             >
               Load sample
@@ -364,6 +377,7 @@ export const App = () => {
               onChange={(event) => {
                 setIntakeText(event.target.value);
                 setExportText("");
+                setClearArmed(false);
               }}
             />
           </section>
@@ -382,6 +396,7 @@ export const App = () => {
               onChange={(event) => {
                 setLetterText(event.target.value);
                 setExportText("");
+                setClearArmed(false);
               }}
             />
             <div className="panel-footer">
@@ -506,10 +521,13 @@ export const App = () => {
                       Create packet text
                     </button>
                     <button className="secondary-action danger-action" type="button" onClick={handleClearLocalData}>
-                      Clear local data
+                      {clearArmed ? "Confirm clear local data" : "Clear local data"}
                     </button>
                   </div>
                 </div>
+                {clearArmed ? (
+                  <p className="clear-warning">This removes local draft and saved case snapshots from this browser.</p>
+                ) : null}
                 {exportText ? (
                   <textarea className="export-output" aria-label="Export packet text" value={exportText} readOnly />
                 ) : null}
