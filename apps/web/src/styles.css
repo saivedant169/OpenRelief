@@ -327,6 +327,10 @@ textarea {
   resize: vertical;
 }
 
+.intake-textarea {
+  min-height: 120px;
+}
+
 textarea:focus,
 button:focus-visible,
 a:focus-visible,
@@ -494,6 +498,23 @@ a:focus-visible,
   border-radius: 8px;
   font-family: "SF Mono", Menlo, Consolas, monospace;
   line-height: 1.55;
+}
+
+.risk-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.risk-list span {
+  padding: 4px 10px;
+  color: #8b1a1a;
+  background: #ffe7e7;
+  border: 1px solid #e0a0a0;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 750;
 }
 
 .sources a,

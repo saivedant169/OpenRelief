@@ -5,6 +5,7 @@ import {
   createAppealDraft,
   createCaseExport,
   createChecklist,
+  detectRiskFlags,
   validatePolicyPack
 } from "../src/openrelief";
 import { californiaWildfirePolicyPack } from "../../policy-packs/california-wildfire";
@@ -65,6 +66,25 @@ describe("OpenRelief domain core", () => {
       source: "uploaded_letter"
     });
     expect(result.needsHumanReview).toBe(false);
+  });
+
+  it("detects high-risk intake flags from survivor context", () => {
+    const flags = detectRiskFlags(
+      "No place to stay tonight. Need oxygen and medicine. Wheelchair access required. Immigration concern."
+    );
+
+    expect(flags).toEqual([
+      "homelessness",
+      "medical_emergency",
+      "disability_accommodation",
+      "immigration_sensitive"
+    ]);
+  });
+
+  it("adds denial or appeal risk from letter analysis", () => {
+    const flags = detectRiskFlags("", analyzeLetter(denialLetter));
+
+    expect(flags).toEqual(["denial_or_appeal"]);
   });
 
   it("creates source-backed checklist with escalation first", () => {

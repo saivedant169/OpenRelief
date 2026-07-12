@@ -15,6 +15,7 @@ import {
   createAppealDraft,
   createCaseExport,
   createChecklist,
+  detectRiskFlags,
   type LetterAnalysis,
   type LetterType
 } from "../../../packages/core/src/openrelief";
@@ -24,12 +25,6 @@ import "./styles.css";
 const sampleLetter = `FEMA Notice
 Your application is denied because proof of occupancy is missing.
 You may appeal within 60 days from the date of this letter.`;
-
-const caseContext = {
-  county: "Los Angeles",
-  disasterType: "wildfire" as const,
-  riskFlags: ["denial_or_appeal" as const]
-};
 
 const steps = [
   ["Start", "Create a new case"],
@@ -55,6 +50,7 @@ const letterTypeLabels: Record<LetterType, string> = {
 type SavedDraft = {
   letterText?: string;
   fileName?: string;
+  intakeText?: string;
 };
 
 const readSavedDraft = (): SavedDraft => {
@@ -67,7 +63,8 @@ const readSavedDraft = (): SavedDraft => {
     const parsed = JSON.parse(saved) as SavedDraft;
     return {
       letterText: typeof parsed.letterText === "string" ? parsed.letterText : undefined,
-      fileName: typeof parsed.fileName === "string" ? parsed.fileName : undefined
+      fileName: typeof parsed.fileName === "string" ? parsed.fileName : undefined,
+      intakeText: typeof parsed.intakeText === "string" ? parsed.intakeText : undefined
     };
   } catch {
     return {};
@@ -77,6 +74,7 @@ const readSavedDraft = (): SavedDraft => {
 export const App = () => {
   const [savedDraft] = useState(readSavedDraft);
   const [letterText, setLetterText] = useState(savedDraft.letterText ?? sampleLetter);
+  const [intakeText, setIntakeText] = useState(savedDraft.intakeText ?? "");
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
   const [exportText, setExportText] = useState("");
   const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
@@ -86,8 +84,19 @@ export const App = () => {
       return;
     }
 
-    window.localStorage.setItem(caseStorageKey, JSON.stringify({ letterText, fileName }));
-  }, [fileName, letterText]);
+    window.localStorage.setItem(caseStorageKey, JSON.stringify({ letterText, fileName, intakeText }));
+  }, [fileName, intakeText, letterText]);
+
+  const riskFlags = useMemo(() => detectRiskFlags(intakeText, analysis ?? undefined), [analysis, intakeText]);
+
+  const caseContext = useMemo(
+    () => ({
+      county: "Los Angeles",
+      disasterType: "wildfire" as const,
+      riskFlags
+    }),
+    [riskFlags]
+  );
 
   const checklist = useMemo(() => {
     if (!analysis) {
@@ -95,7 +104,7 @@ export const App = () => {
     }
 
     return createChecklist(caseContext, analysis, californiaWildfirePolicyPack);
-  }, [analysis]);
+  }, [analysis, caseContext]);
 
   const evidencePacket = useMemo(() => buildEvidencePacket(analysis?.detectedRequests ?? []), [analysis]);
   const appealDraft = useMemo(() => {
@@ -121,6 +130,7 @@ export const App = () => {
 
   const handleClearLocalData = () => {
     setLetterText("");
+    setIntakeText("");
     setAnalysis(null);
     setExportText("");
     setFileName("No file selected");
@@ -209,6 +219,7 @@ export const App = () => {
               type="button"
               onClick={() => {
                 setLetterText(sampleLetter);
+                setIntakeText("");
                 setFileName(sampleFileName);
                 setAnalysis(null);
                 setExportText("");
@@ -231,6 +242,25 @@ export const App = () => {
               <input type="file" accept=".txt,.pdf,.png,.jpg,.jpeg" onChange={handleFile} />
             </label>
             <span className="file-name">{fileName}</span>
+          </section>
+
+          <section className="editor-panel">
+            <div className="section-heading">
+              <div>
+                <h2>Immediate needs and risks</h2>
+                <p>Add urgent needs that should change human review priority.</p>
+              </div>
+              <span className="quality">Optional</span>
+            </div>
+            <textarea
+              aria-label="Immediate needs and risks"
+              className="intake-textarea"
+              value={intakeText}
+              onChange={(event) => {
+                setIntakeText(event.target.value);
+                setExportText("");
+              }}
+            />
           </section>
 
           <section className="editor-panel">
@@ -272,6 +302,13 @@ export const App = () => {
                   <div className="warning">
                     <AlertTriangle aria-hidden="true" />
                     Uploaded text included instruction-like language. It was treated as document content only.
+                  </div>
+                ) : null}
+                {riskFlags.length > 0 ? (
+                  <div className="risk-list" aria-label="High-risk flags">
+                    {riskFlags.map((flag) => (
+                      <span key={flag}>{flag}</span>
+                    ))}
                   </div>
                 ) : null}
               </article>

@@ -110,6 +110,12 @@ const injectionPatterns = [
   /say .* approved/i
 ];
 
+const addFlag = (flags: RiskFlag[], flag: RiskFlag) => {
+  if (!flags.includes(flag)) {
+    flags.push(flag);
+  }
+};
+
 export const analyzeLetter = (letterText: string): LetterAnalysis => {
   const normalized = letterText.toLowerCase();
   const injectionWarnings = injectionPatterns
@@ -194,6 +200,37 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     injectionWarnings,
     needsHumanReview: true
   };
+};
+
+export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): RiskFlag[] => {
+  const normalized = intakeText.toLowerCase();
+  const flags: RiskFlag[] = [];
+
+  if (letter?.letterType === "denial" || letter?.detectedDeadlines.length) {
+    addFlag(flags, "denial_or_appeal");
+  }
+
+  if (/homeless|no place to stay|nowhere to stay|shelter|evict/i.test(normalized)) {
+    addFlag(flags, "homelessness");
+  }
+
+  if (/medical emergency|oxygen|medicine|dialysis|urgent medical|hospital/i.test(normalized)) {
+    addFlag(flags, "medical_emergency");
+  }
+
+  if (/abuse|domestic violence|unsafe home|violence/i.test(normalized)) {
+    addFlag(flags, "abuse_or_unsafe_home");
+  }
+
+  if (/disability|wheelchair|accessible|accommodation/i.test(normalized)) {
+    addFlag(flags, "disability_accommodation");
+  }
+
+  if (/immigration|undocumented|deportation|visa/i.test(normalized)) {
+    addFlag(flags, "immigration_sensitive");
+  }
+
+  return flags;
 };
 
 export const createChecklist = (

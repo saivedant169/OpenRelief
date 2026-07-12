@@ -61,6 +61,18 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText(/not legal advice/i)).toBeInTheDocument();
   });
 
+  it("adds high-risk intake details to human review", async () => {
+    render(<App />);
+
+    const intakeField = screen.getByLabelText("Immediate needs and risks");
+    await userEvent.type(intakeField, "No place to stay tonight and need oxygen.");
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getAllByText("Human review").length).toBeGreaterThan(0);
+    expect(screen.getByText(/homelessness/)).toBeInTheDocument();
+    expect(screen.getByText(/medical_emergency/)).toBeInTheDocument();
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);
