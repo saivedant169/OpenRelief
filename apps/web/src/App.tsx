@@ -16,6 +16,7 @@ import {
   createCaseExport,
   createChecklist,
   detectRiskFlags,
+  type Deadline,
   type EvidencePacket,
   type LetterAnalysis,
   type LetterType
@@ -67,6 +68,7 @@ type SavedCaseSummary = {
   letterText: string;
   fileName: string;
   intakeText: string;
+  deadlines: Deadline[];
   missingEvidence: EvidenceSummaryItem[];
   riskFlags: string[];
   summary: string;
@@ -99,6 +101,11 @@ const isStringList = (value: unknown): value is string[] =>
 const isEvidenceSummaryItem = (value: unknown): value is EvidenceSummaryItem => {
   const candidate = value as Partial<EvidenceSummaryItem> | null;
   return !!candidate && typeof candidate.label === "string" && isStringList(candidate.sourceIds);
+};
+
+const isDeadline = (value: unknown): value is Deadline => {
+  const candidate = value as Partial<Deadline> | null;
+  return !!candidate && typeof candidate.label === "string" && typeof candidate.text === "string";
 };
 
 const extractMissingEvidence = (packet: EvidencePacket): EvidenceSummaryItem[] =>
@@ -140,6 +147,10 @@ const readSavedCases = (): SavedCaseSummary[] => {
         Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
           ? candidate.missingEvidence
           : extractMissingEvidence(buildEvidencePacket(analyzeLetter(candidate.letterText).detectedRequests));
+      const deadlines =
+        Array.isArray(candidate.deadlines) && candidate.deadlines.every(isDeadline)
+          ? candidate.deadlines
+          : analyzeLetter(candidate.letterText).detectedDeadlines;
 
       return [
         {
@@ -149,6 +160,7 @@ const readSavedCases = (): SavedCaseSummary[] => {
           letterText: candidate.letterText,
           fileName: candidate.fileName,
           intakeText: candidate.intakeText,
+          deadlines,
           missingEvidence,
           riskFlags: candidate.riskFlags,
           summary: candidate.summary
@@ -244,6 +256,7 @@ export const App = () => {
       letterText,
       fileName,
       intakeText,
+      deadlines: analysis.detectedDeadlines,
       missingEvidence: extractMissingEvidence(evidencePacket),
       riskFlags,
       summary: analysis.summary
@@ -553,6 +566,21 @@ export const App = () => {
                         </ul>
                       ) : (
                         <p>No missing evidence marked</p>
+                      )}
+                    </section>
+                    <section className="case-detail-section">
+                      <h3>Deadlines</h3>
+                      {activeSavedCase.deadlines.length > 0 ? (
+                        <ul className="case-detail-list">
+                          {activeSavedCase.deadlines.map((deadline) => (
+                            <li key={deadline.label}>
+                              <strong>{deadline.label}</strong>
+                              <span>{deadline.text}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No deadline found</p>
                       )}
                     </section>
                     <section className="case-detail-section">
