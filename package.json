@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
-    "check": "npm test && npm run policy:validate && npm run lint && npm run test:a11y && npm run test:security && npm run build && npm run test:e2e",
+    "check": "npm test && npm run policy:validate && npm run lint && npm run test:a11y && npm run test:security && npm run docs:check && npm run build && npm run test:e2e",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:a11y": "vitest run apps/web/src/a11y.test.tsx",
@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "lint": "tsc -b --pretty false",
     "evals": "vitest run packages/evals/src",
-    "policy:validate": "vitest run packages/policy-packs"
+    "policy:validate": "vitest run packages/policy-packs",
+    "docs:check": "vitest run docs/review.test.ts"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.7.0",
