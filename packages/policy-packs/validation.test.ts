@@ -15,4 +15,8 @@ describe("policy pack validation", () => {
     expect(packageJson.scripts["policy:validate"]).toBe("vitest run packages/policy-packs");
     expect(packageJson.scripts.check.split(" && ")).toContain("npm run policy:validate");
   });
+
+  it("runs lint from check gate", () => {
+    expect(packageJson.scripts.check.split(" && ")).toContain("npm run lint");
+  });
 });
