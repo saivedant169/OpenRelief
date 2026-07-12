@@ -14,7 +14,8 @@ import {
   buildEvidencePacket,
   createCaseExport,
   createChecklist,
-  type LetterAnalysis
+  type LetterAnalysis,
+  type LetterType
 } from "../../../packages/core/src/openrelief";
 import { californiaWildfirePolicyPack } from "../../../packages/policy-packs/california-wildfire";
 import "./styles.css";
@@ -41,6 +42,14 @@ const steps = [
 const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => [source.id, source]));
 const caseStorageKey = "openrelief:v1:case";
 const sampleFileName = "Sample_FEMA_Denial.txt";
+const letterTypeLabels: Record<LetterType, string> = {
+  approval: "Approval",
+  denial: "Claim denial",
+  request_for_information: "Request for information",
+  deadline_notice: "Deadline notice",
+  inspection_notice: "Inspection notice",
+  unknown: "Needs review"
+};
 
 type SavedDraft = {
   letterText?: string;
@@ -245,8 +254,10 @@ export const App = () => {
             <section className="results-grid" aria-label="Letter analysis results">
               <article className="result-card emphasis">
                 <div className="section-heading">
-                  <h2>Claim denial</h2>
-                  <span className="risk">Human review</span>
+                  <h2>{letterTypeLabels[analysis.letterType]}</h2>
+                  <span className={analysis.needsHumanReview ? "risk" : "quality"}>
+                    {analysis.needsHumanReview ? "Human review" : "Source check"}
+                  </span>
                 </div>
                 <p>{analysis.summary}</p>
                 {analysis.injectionWarnings.length > 0 ? (

@@ -38,6 +38,19 @@ describe("OpenRelief web workflow", () => {
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 
+  it("labels approval analysis without denial wording", async () => {
+    render(<App />);
+
+    const letterField = screen.getByLabelText("Extracted letter text");
+    await userEvent.clear(letterField);
+    await userEvent.type(letterField, "FEMA Notice\nYour application is approved for rental assistance.");
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByRole("heading", { name: "Approval" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Claim denial" })).not.toBeInTheDocument();
+    expect(screen.getByText("Source check")).toBeInTheDocument();
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);
