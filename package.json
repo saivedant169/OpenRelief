@@ -19,11 +19,13 @@
     "security:audit": "npm audit --audit-level=critical"
   },
   "dependencies": {
+    "@tesseract.js-data/eng": "^1.0.0",
     "@vitejs/plugin-react": "^4.7.0",
     "lucide-react": "^0.468.0",
     "pdfjs-dist": "^6.1.200",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "tesseract.js": "^7.0.0",
     "typescript": "^5.8.3",
     "vite": "^7.0.6",
     "zod": "^3.25.76"

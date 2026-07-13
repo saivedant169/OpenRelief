@@ -23,7 +23,7 @@ import {
   type LetterType
 } from "../../../packages/core/src/openrelief";
 import { californiaWildfirePolicyPack } from "../../../packages/policy-packs/california-wildfire";
-import { extractPdfText, readTextFile } from "./documentExtraction";
+import { extractImageText, extractPdfText, readTextFile } from "./documentExtraction";
 import "./styles.css";
 
 const sampleLetter = `FEMA Notice
@@ -430,6 +430,15 @@ export const App = () => {
       return;
     }
 
+    if (file.type.startsWith("image/")) {
+      const extractedText = await extractImageText(file);
+      setLetterText(extractedText);
+      if (!extractedText.trim()) {
+        setFileError(imageExtractionMessage);
+      }
+      return;
+    }
+
     setLetterText("");
     setFileError(imageExtractionMessage);
   };
@@ -586,7 +595,7 @@ export const App = () => {
             </div>
             <div>
               <strong>Upload letter (PDF, JPG, PNG, TXT)</strong>
-              <p>PDF text is parsed locally. Image OCR remains local workflow target.</p>
+              <p>PDF text and image OCR run locally in this browser.</p>
             </div>
             <label className="file-control">
               Choose file

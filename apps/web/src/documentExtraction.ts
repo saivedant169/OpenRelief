@@ -81,3 +81,18 @@ export const extractPdfText = async (file: File): Promise<string> => {
     await loadingTask.destroy().catch(() => undefined);
   }
 };
+
+export const extractImageText = async (file: File): Promise<string> => {
+  try {
+    const { recognize } = await import("tesseract.js");
+    const result = await recognize(file, "eng", {
+      corePath: "/tesseract-core/tesseract-core.wasm.js",
+      langPath: "/tessdata",
+      workerPath: "/tesseract/worker.min.js"
+    });
+
+    return result.data.text.replace(/\s+/g, " ").trim();
+  } catch {
+    return "";
+  }
+};

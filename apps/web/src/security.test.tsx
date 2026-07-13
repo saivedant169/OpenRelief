@@ -1,7 +1,16 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { recognize } from "tesseract.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
+
+vi.mock("tesseract.js", () => ({
+  recognize: vi.fn(async () => ({
+    data: {
+      text: "FEMA Notice Your application is approved for rental assistance."
+    }
+  }))
+}));
 
 const buildPdfWithText = (text: string) => {
   const escapedText = text.replaceAll("\\", "\\\\").replaceAll("(", "\\(").replaceAll(")", "\\)");
@@ -113,7 +122,7 @@ describe("OpenRelief security smoke", () => {
     await waitFor(() => {
       expect((letterField as HTMLTextAreaElement).value).toContain("approved for rental assistance");
     });
-    expect(screen.getByText("PDF text is parsed locally. Image OCR remains local workflow target.")).toBeInTheDocument();
+    expect(screen.getByText("PDF text and image OCR run locally in this browser.")).toBeInTheDocument();
     expect(screen.getByText("notice.pdf")).toBeInTheDocument();
     expect(
       screen.queryByText("PDF and image text extraction is not available yet. Paste extracted text below.")
@@ -139,6 +148,35 @@ describe("OpenRelief security smoke", () => {
       expect(letterField).toHaveValue("FEMA Notice\nYour application is approved for rental assistance.");
     });
     expect(screen.getByText("approval.txt")).toBeInTheDocument();
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
+
+  it("extracts local image OCR text and clears stale analysis", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text");
+    const file = new File([new Uint8Array([137, 80, 78, 71])], "notice.png", { type: "image/png" });
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect((letterField as HTMLTextAreaElement).value).toContain("approved for rental assistance");
+    });
+    expect(vi.mocked(recognize)).toHaveBeenCalledWith(
+      file,
+      "eng",
+      expect.objectContaining({
+        corePath: "/tesseract-core/tesseract-core.wasm.js",
+        langPath: "/tessdata",
+        workerPath: "/tesseract/worker.min.js"
+      })
+    );
+    expect(screen.getByText("notice.png")).toBeInTheDocument();
+    expect(screen.queryByText("Image OCR is not available yet. Paste extracted text below.")).not.toBeInTheDocument();
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 });
