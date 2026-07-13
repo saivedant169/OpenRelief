@@ -38,6 +38,8 @@ describe("policy pack validation", () => {
         {
           ...californiaWildfirePolicyPack.sources[0],
           id: "bad-source",
+          title: "",
+          publisher: "",
           url: "",
           jurisdiction: "",
           disasterType: "",
@@ -49,6 +51,8 @@ describe("policy pack validation", () => {
     });
 
     expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source bad-source has no title.");
+    expect(validation.errors).toContain("Policy source bad-source has no publisher.");
     expect(validation.errors).toContain("Policy source bad-source has no url.");
     expect(validation.errors).toContain("Policy source bad-source has no jurisdiction.");
     expect(validation.errors).toContain("Policy source bad-source has no disasterType.");

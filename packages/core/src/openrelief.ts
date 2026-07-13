@@ -925,7 +925,17 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
   );
   const sourceErrors = policyPack.sources.flatMap((source) => {
     const errors: string[] = [];
+    const trimmedTitle = source.title.trim();
+    const trimmedPublisher = source.publisher.trim();
     const trimmedUrl = source.url.trim();
+
+    if (trimmedTitle.length === 0) {
+      errors.push(`Policy source ${source.id} has no title.`);
+    }
+
+    if (trimmedPublisher.length === 0) {
+      errors.push(`Policy source ${source.id} has no publisher.`);
+    }
 
     if (trimmedUrl.length === 0) {
       errors.push(`Policy source ${source.id} has no url.`);
