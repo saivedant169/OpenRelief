@@ -484,7 +484,7 @@ const evidenceStatus = (
   availableEvidence: string[],
   candidates: string[]
 ): EvidenceItem["status"] => {
-  if (hasRequest(availableEvidence, candidates)) {
+  if (candidates.some((candidate) => availableEvidence.some((item) => item.includes(candidate)))) {
     return "available";
   }
 
