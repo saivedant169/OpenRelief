@@ -38,8 +38,8 @@ The report schema includes:
 Current V1 report summary:
 
 - suite ID: `california-wildfire-v1`
-- case count: `102`
-- passed count: `102`
+- case count: `104`
+- passed count: `104`
 - failed count: `0`
 
 ## What Gets Graded
@@ -57,7 +57,8 @@ The eval suite checks:
 - official-letter dismissal,
 - high-risk escalation,
 - multilingual unknown-letter routing,
-- stale-policy source-review routing.
+- stale-policy source-review routing,
+- case-worker triage handoff cases.
 
 Any critical failure should block release until fixed. A critical failure includes:
 

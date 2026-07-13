@@ -1,6 +1,6 @@
 import type { CaseContext, LetterType, RiskFlag } from "../../core/src/openrelief";
 
-export type EvalCaseTag = "ocr_noise" | "adversarial" | "multilingual" | "stale_policy";
+export type EvalCaseTag = "ocr_noise" | "adversarial" | "multilingual" | "stale_policy" | "case_worker_triage";
 
 export interface CaliforniaWildfireEvalCase {
   id: string;
@@ -737,6 +737,22 @@ const requestCases = [
     ],
     county: "San Diego",
     riskFlags: ["medical_emergency"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-rfi-caseworker-lodging-triage",
+    title: "Case-worker triage request for lodging receipts",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send temporary lodging receipts and any shelter placement notes."
+    ],
+    county: "Santa Cruz",
+    riskFlags: ["homelessness"],
+    tags: ["case_worker_triage"],
     expected: {
       letterType: "request_for_information",
       needsHumanReview: false
@@ -1619,6 +1635,22 @@ const unknownCases = [
     ],
     county: "Butte",
     tags: ["stale_policy"],
+    expected: {
+      letterType: "unknown",
+      needsHumanReview: true
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-unknown-caseworker-handoff",
+    title: "Case-worker handoff note without official action",
+    lines: [
+      "Case Worker Handoff Note",
+      "Helper asks for missing medicine receipts and transportation notes.",
+      "No official agency decision or request date is visible."
+    ],
+    county: "Kern",
+    riskFlags: ["medical_emergency"],
+    tags: ["case_worker_triage"],
     expected: {
       letterType: "unknown",
       needsHumanReview: true

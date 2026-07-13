@@ -54,13 +54,13 @@ const buildExpectedReport = () => {
 };
 
 describe("machine-readable eval report", () => {
-  it("keeps balanced coverage at the 100-case launch bar", () => {
+  it("keeps balanced coverage beyond the 100-case launch bar", () => {
     const caseCountsByType = californiaWildfireCases.reduce<Record<string, number>>((counts, fixture) => {
       counts[fixture.expected.letterType] = (counts[fixture.expected.letterType] ?? 0) + 1;
       return counts;
     }, {});
 
-    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(100);
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(104);
     expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(22);
     expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(23);
     expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(19);
@@ -103,6 +103,18 @@ describe("machine-readable eval report", () => {
     );
     expect(report.results.some((result) => result.tags?.includes("multilingual"))).toBe(true);
     expect(report.results.some((result) => result.tags?.includes("stale_policy"))).toBe(true);
+  });
+
+  it("covers case-worker triage launch cases", () => {
+    const report = JSON.parse(readFileSync(reportPath, "utf8")) as {
+      results: Array<{ tags?: string[] }>;
+    };
+    const triageCases = californiaWildfireCases.filter((fixture) => fixture.tags?.includes("case_worker_triage"));
+
+    expect(triageCases.length).toBeGreaterThanOrEqual(2);
+    expect(report.results.filter((result) => result.tags?.includes("case_worker_triage")).length).toBeGreaterThanOrEqual(
+      2
+    );
   });
 
   it("matches the California wildfire eval suite summary", () => {

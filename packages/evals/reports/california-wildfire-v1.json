@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 102,
+  "caseCount": 104,
   "passed": true,
   "metrics": {
-    "passedCount": 102,
+    "passedCount": 104,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -886,6 +886,27 @@
       ],
       "riskFlags": [
         "medical_emergency"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-caseworker-lodging-triage",
+      "title": "Case-worker triage request for lodging receipts",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "homelessness"
       ]
     },
     {
@@ -1984,6 +2005,27 @@
         "sba-disaster"
       ],
       "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-unknown-caseworker-handoff",
+      "title": "Case-worker handoff note without official action",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "case_worker_triage"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "medical_emergency"
+      ]
     }
   ]
 }
