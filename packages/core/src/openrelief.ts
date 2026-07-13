@@ -128,7 +128,8 @@ const injectionPatterns = [
   /ignore all previous instructions/i,
   /developer mode/i,
   /system prompt/i,
-  /say .* approved/i
+  /say .* approved/i,
+  /(?:ask for|share|provide).*(?:payment codes?|full bank numbers?|bank numbers?|full ssn|ssn|door codes?|entry codes?)/i
 ];
 
 const spanishDisasterLetterPatterns = [
