@@ -339,6 +339,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects cryptocurrency requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked me to pay in cryptocurrency before they would help with disaster paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects unsafe living situation risk from survivor context", () => {
     const flags = detectRiskFlags("I have an unsafe living situation after the wildfire.");
 
