@@ -126,6 +126,17 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("immediate_danger")).toBeInTheDocument();
   });
 
+  it("keeps topbar support links connected to page sections", () => {
+    render(<App />);
+
+    for (const link of screen.getAllByRole("link")) {
+      const target = link.getAttribute("href");
+
+      expect(target).toMatch(/^#/);
+      expect(document.querySelector(target ?? "")).toBeInTheDocument();
+    }
+  });
+
   it("saves analyzed case to a local case queue", async () => {
     render(<App />);
 

@@ -587,7 +587,7 @@ export const App = () => {
           <ShieldCheck aria-hidden="true" />
           <span>OpenRelief</span>
         </div>
-        <div className="local-status">
+        <div className="local-status" id="privacy">
           <Check aria-hidden="true" />
           <strong>Local only</strong>
           <span>All data stays on this device</span>
@@ -725,7 +725,7 @@ export const App = () => {
             </div>
           </section>
 
-          <section className="upload-band" aria-label="Upload letter">
+          <section className="upload-band" id="help" aria-label="Upload letter">
             <div className="upload-icon">
               <Upload aria-hidden="true" />
             </div>
