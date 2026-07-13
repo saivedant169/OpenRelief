@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
@@ -80,6 +80,27 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByText("notice.pdf")).toBeInTheDocument();
     expect(screen.getByText("PDF and image text extraction is not available yet. Paste extracted text below.")).toBeInTheDocument();
     expect(letterField).toHaveValue("");
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
+
+  it("clears stale analysis after TXT uploads", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text");
+    const file = new File(["FEMA Notice\nYour application is approved for rental assistance."], "approval.txt", {
+      type: "text/plain"
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(letterField).toHaveValue("FEMA Notice\nYour application is approved for rental assistance.");
+    });
+    expect(screen.getByText("approval.txt")).toBeInTheDocument();
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 });

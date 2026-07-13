@@ -203,6 +203,19 @@ const isAcceptedFile = (file: File) => {
   return acceptedFileExtensions.some((extension) => normalizedName.endsWith(extension));
 };
 
+const readTextFile = (file: File): Promise<string> => {
+  if (typeof file.text === "function") {
+    return file.text();
+  }
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+    reader.onerror = () => resolve("");
+    reader.readAsText(file);
+  });
+};
+
 const readSavedCases = (): SavedCaseSummary[] => {
   try {
     const saved = window.localStorage.getItem(casesStorageKey);
@@ -412,14 +425,14 @@ export const App = () => {
     setFileName(file.name);
     setClearArmed(false);
     setActiveSavedCaseId(null);
+    setAnalysis(null);
+    setExportText("");
     if (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) {
-      setLetterText(await file.text());
+      setLetterText(await readTextFile(file));
       return;
     }
 
     setLetterText("");
-    setAnalysis(null);
-    setExportText("");
     setFileError(manualExtractionMessage);
   };
 
