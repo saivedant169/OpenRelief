@@ -976,6 +976,22 @@ const approvalCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-approval-tent-shelter-risk",
+    title: "Approval letter with tent shelter risk",
+    lines: [
+      "FEMA Notice",
+      "Your application is approved for rental assistance.",
+      "Family note says we are staying in a tent after the wildfire."
+    ],
+    county: "Plumas",
+    riskFlags: ["homelessness"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "approval",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-approval-cleanup",
     title: "Approval for cleanup assistance",
     lines: [

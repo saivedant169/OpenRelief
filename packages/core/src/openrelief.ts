@@ -689,7 +689,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "immediate_danger");
   }
 
-  if (/homeless|no place to stay|nowhere to stay|sleeping in (?:a |our |my )?(?:car|truck|van|vehicle|rv)|living in (?:a |our |my )?(?:car|truck|van|vehicle|rv)|couch surfing|shelter|evict/i.test(normalized)) {
+  if (/homeless|no place to stay|nowhere to stay|sleeping outside|staying outside|sleeping in (?:a |our |my )?(?:car|truck|van|vehicle|rv|tent)|staying in (?:a |our |my )?tent|living in (?:a |our |my )?(?:car|truck|van|vehicle|rv|tent)|couch surfing|shelter|evict/i.test(normalized)) {
     addFlag(flags, "homelessness");
   }
 

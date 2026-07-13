@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 118,
+  "caseCount": 119,
   "passed": true,
   "metrics": {
-    "passedCount": 118,
+    "passedCount": 119,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1152,6 +1152,27 @@
     {
       "caseId": "ca-wildfire-approval-vehicle-shelter-risk",
       "title": "Approval letter with vehicle shelter risk",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "homelessness"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-approval-tent-shelter-risk",
+      "title": "Approval letter with tent shelter risk",
       "expectedLetterType": "approval",
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
