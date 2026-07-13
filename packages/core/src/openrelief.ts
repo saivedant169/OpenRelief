@@ -214,6 +214,10 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for repair estimates.");
   }
 
+  if (requests.includes("repair records")) {
+    facts.push("The letter asks for repair records.");
+  }
+
   if (requests.includes("medical receipts")) {
     facts.push("The letter asks for medical receipts.");
   }
@@ -242,6 +246,10 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for damage photos.");
   }
 
+  if (requests.includes("damage records")) {
+    facts.push("The letter asks for damage records.");
+  }
+
   if (requests.includes("smoke damage records")) {
     facts.push("The letter asks for smoke damage records.");
   }
@@ -252,6 +260,10 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
 
   if (requests.includes("debris removal records")) {
     facts.push("The letter asks for debris removal records.");
+  }
+
+  if (requests.includes("supporting receipts")) {
+    facts.push("The letter asks for supporting receipts.");
   }
 
   if (requests.includes("replacement item receipts")) {
@@ -291,6 +303,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("repair receipts") ? "repair receipts" : "",
     normalized.includes("contractor estimates") ? "contractor estimates" : "",
     normalized.includes("repair estimates") ? "repair estimates" : "",
+    normalized.includes("repair records") ? "repair records" : "",
     normalized.includes("medical receipts") || normalized.includes("medical, medication, or transportation receipts")
       ? "medical receipts"
       : "",
@@ -307,9 +320,11 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       : "",
     normalized.includes("agency messages") ? "agency messages" : "",
     normalized.includes("damage photos") ? "damage photos" : "",
+    normalized.includes("because damage records") ? "damage records" : "",
     normalized.includes("smoke damage records") ? "smoke damage records" : "",
     normalized.includes("cleanup receipts") ? "cleanup receipts" : "",
     normalized.includes("debris removal records") ? "debris removal records" : "",
+    normalized.includes("supporting receipts") ? "supporting receipts" : "",
     normalized.includes("replacement household item receipts") ||
     normalized.includes("receipts for replacement household items")
       ? "replacement item receipts"
@@ -573,6 +588,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
           status:
             requests.includes("contractor estimates") ||
             requests.includes("damage photos") ||
+            requests.includes("damage records") ||
             requests.includes("smoke damage records") ||
             requests.includes("repair estimates")
               ? "missing"
@@ -591,6 +607,8 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
             requests.includes("temporary lodging receipts") ||
             requests.includes("cleanup receipts") ||
             requests.includes("debris removal records") ||
+            requests.includes("repair records") ||
+            requests.includes("supporting receipts") ||
             requests.includes("replacement item receipts")
               ? "missing"
               : "optional",

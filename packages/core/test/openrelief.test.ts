@@ -272,6 +272,32 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts damage repair and supporting record requests from denial letters", () => {
+    const damageResult = analyzeLetter(
+      "FEMA Notice\nYour application is denied because damage records were incomplete."
+    );
+    const repairResult = analyzeLetter(
+      "FEMA Notice\nYour application is denied because repair records were incomplete."
+    );
+    const receiptsResult = analyzeLetter(
+      "FEMA Notice\nYour application is denied because supporting receipts were not received."
+    );
+
+    expect(damageResult.detectedRequests).toContain("damage records");
+    expect(repairResult.detectedRequests).toContain("repair records");
+    expect(receiptsResult.detectedRequests).toContain("supporting receipts");
+    expect(damageResult.facts).toContain("The letter asks for damage records.");
+    expect(repairResult.facts).toContain("The letter asks for repair records.");
+    expect(receiptsResult.facts).toContain("The letter asks for supporting receipts.");
+  });
+
+  it("marks requested damage repair and supporting evidence as missing", () => {
+    const packet = buildEvidencePacket(["damage records", "repair records", "supporting receipts"]);
+
+    expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+  });
+
   it("extracts medical transportation and lodging requests from information letters", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
