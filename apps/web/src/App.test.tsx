@@ -74,6 +74,20 @@ describe("OpenRelief web workflow", () => {
     expect(within(deadlinesCard as HTMLElement).getByText("No deadline found")).toBeInTheDocument();
   });
 
+  it("clears stale analysis after manual letter edits", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved for rental assistance." }
+    });
+
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+    expect(screen.getByText("Ready to review")).toBeInTheDocument();
+  });
+
   it("shows a bounded appeal draft for denial letters", async () => {
     render(<App />);
 

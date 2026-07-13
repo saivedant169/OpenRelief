@@ -785,6 +785,7 @@ export const App = () => {
               value={letterText}
               onChange={(event) => {
                 setLetterText(event.target.value);
+                setAnalysis(null);
                 setExportText("");
                 setClearArmed(false);
                 setActiveSavedCaseId(null);
