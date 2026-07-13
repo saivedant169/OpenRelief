@@ -139,6 +139,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[email removed]");
   });
 
+  it("redacts compact phone numbers", () => {
+    const redacted = redactRestrictedIdentifiers("Call 5551234567 before saving this note.");
+
+    expect(redacted).not.toContain("5551234567");
+    expect(redacted).toContain("[phone removed]");
+  });
+
   it("redacts contact names", () => {
     const redacted = redactRestrictedIdentifiers("Contact name: Rosa Mills should not stay in local text.");
 

@@ -158,7 +158,7 @@ const restrictedIdentifierPatterns = [
     replacement: "[name removed]"
   },
   {
-    pattern: /(?:\+1[-.\s]?)?(?:\(\d{3}\)|\b\d{3})[-.\s]?\d{3}[-.\s]\d{4}\b/g,
+    pattern: /(?:\+1[-.\s]?)?(?:\(\d{3}\)|\b\d{3})[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
     replacement: "[phone removed]"
   },
   {
