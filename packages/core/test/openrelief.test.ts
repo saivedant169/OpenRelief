@@ -530,6 +530,18 @@ describe("OpenRelief domain core", () => {
     ]);
   });
 
+  it("detects mixed-status households as immigration-sensitive risk", () => {
+    const flags = detectRiskFlags("We are a mixed status household and are worried about applying.");
+
+    expect(flags).toEqual(["immigration_sensitive"]);
+  });
+
+  it("detects asylum concerns as immigration-sensitive risk", () => {
+    const flags = detectRiskFlags("My asylum case is pending and I am afraid to ask for help.");
+
+    expect(flags).toEqual(["immigration_sensitive"]);
+  });
+
   it("detects sleeping in a car as homelessness risk", () => {
     const flags = detectRiskFlags("We are sleeping in our car after the evacuation.");
 

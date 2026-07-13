@@ -651,7 +651,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "disability_accommodation");
   }
 
-  if (/immigration|undocumented|deportation|visa/i.test(normalized)) {
+  if (/immigration|undocumented|deportation|visa|mixed status|asylum/i.test(normalized)) {
     addFlag(flags, "immigration_sensitive");
   }
 
