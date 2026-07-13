@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 30,
+  "caseCount": 33,
   "passed": true,
   "metrics": {
-    "passedCount": 30,
+    "passedCount": 33,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -439,6 +439,24 @@
       ]
     },
     {
+      "caseId": "ca-wildfire-approval-housing-risk",
+      "title": "Approval letter with temporary housing risk",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "homelessness"
+      ]
+    },
+    {
       "caseId": "ca-wildfire-deadline-response",
       "title": "Response deadline notice",
       "expectedLetterType": "deadline_notice",
@@ -517,6 +535,42 @@
         "sba-disaster"
       ],
       "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-deadline-disability-risk",
+      "title": "Deadline notice with accessibility risk",
+      "expectedLetterType": "deadline_notice",
+      "actualLetterType": "deadline_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "disability_accommodation"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-inspection-immigration-risk",
+      "title": "Inspection notice with immigration-sensitive context",
+      "expectedLetterType": "inspection_notice",
+      "actualLetterType": "inspection_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "immigration_sensitive"
+      ]
     }
   ]
 }

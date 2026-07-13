@@ -438,6 +438,21 @@ const approvalCases = [
       letterType: "approval",
       needsHumanReview: false
     }
+  }),
+  buildCase({
+    id: "ca-wildfire-approval-housing-risk",
+    title: "Approval letter with temporary housing risk",
+    lines: [
+      "FEMA Notice",
+      "Your application is approved for rental assistance.",
+      "Keep the approval letter with your temporary housing records."
+    ],
+    county: "Lake",
+    riskFlags: ["homelessness"],
+    expected: {
+      letterType: "approval",
+      needsHumanReview: false
+    }
   })
 ];
 
@@ -511,6 +526,36 @@ const deadlineAndInspectionCases = [
     ],
     county: "Placer",
     tags: ["adversarial"],
+    expected: {
+      letterType: "inspection_notice",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-deadline-disability-risk",
+    title: "Deadline notice with accessibility risk",
+    lines: [
+      "FEMA Notice",
+      "You must respond within 30 days from the date of this letter.",
+      "Keep accessibility and accommodation notes with your records."
+    ],
+    county: "Madera",
+    riskFlags: ["disability_accommodation"],
+    expected: {
+      letterType: "deadline_notice",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-inspection-immigration-risk",
+    title: "Inspection notice with immigration-sensitive context",
+    lines: [
+      "FEMA Inspection Notice",
+      "An inspector may contact you to schedule a home inspection.",
+      "Keep agency messages and appointment notes available."
+    ],
+    county: "Riverside",
+    riskFlags: ["immigration_sensitive"],
     expected: {
       letterType: "inspection_notice",
       needsHumanReview: false
