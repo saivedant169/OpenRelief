@@ -1162,6 +1162,12 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("available");
   });
 
+  it("matches singular available evidence wording", () => {
+    const packet = buildEvidencePacket(["repair receipts"], ["I have a repair receipt"]);
+
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("available");
+  });
+
   it("marks requested and household records as missing evidence", () => {
     const packet = buildEvidencePacket(["requested records", "other household records"]);
 

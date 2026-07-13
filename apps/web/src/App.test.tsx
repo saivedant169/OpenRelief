@@ -153,6 +153,28 @@ describe("OpenRelief web workflow", () => {
     expect(within(evidenceCard as HTMLElement).getByText("available")).toBeInTheDocument();
   });
 
+  it("matches singular available evidence wording", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: {
+        value: [
+          "FEMA Request for Information",
+          "Additional information is needed before a decision can be made.",
+          "Please send repair receipts."
+        ].join("\n")
+      }
+    });
+    fireEvent.change(screen.getByLabelText("Evidence already available"), {
+      target: { value: "I have a repair receipt" }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const evidenceCard = screen.getByRole("heading", { name: "Evidence packet outline" }).closest("article");
+    expect(evidenceCard).not.toBeNull();
+    expect(within(evidenceCard as HTMLElement).getByText("available")).toBeInTheDocument();
+  });
+
   it("adds high-risk intake details to human review", async () => {
     render(<App />);
 

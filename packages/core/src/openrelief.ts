@@ -479,12 +479,27 @@ const includesAny = (value: string, phrases: string[]): boolean =>
 const hasRequest = (requests: string[], candidates: string[]): boolean =>
   candidates.some((request) => requests.includes(request));
 
+const evidencePhraseAlternates = (candidate: string): string[] => {
+  const normalizedCandidate = candidate.toLowerCase();
+
+  return normalizedCandidate.endsWith("s")
+    ? [normalizedCandidate, normalizedCandidate.slice(0, -1)]
+    : [normalizedCandidate];
+};
+
+const hasAvailableEvidence = (availableEvidence: string[], candidates: string[]): boolean =>
+  candidates.some((candidate) =>
+    evidencePhraseAlternates(candidate).some((alternate) =>
+      availableEvidence.some((item) => item.toLowerCase().includes(alternate))
+    )
+  );
+
 const evidenceStatus = (
   requests: string[],
   availableEvidence: string[],
   candidates: string[]
 ): EvidenceItem["status"] => {
-  if (candidates.some((candidate) => availableEvidence.some((item) => item.includes(candidate)))) {
+  if (hasAvailableEvidence(availableEvidence, candidates)) {
     return "available";
   }
 
