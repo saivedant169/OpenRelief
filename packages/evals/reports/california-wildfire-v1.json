@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 104,
+  "caseCount": 106,
   "passed": true,
   "metrics": {
-    "passedCount": 104,
+    "passedCount": 106,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -464,6 +464,28 @@
       ],
       "riskFlags": [
         "denial_or_appeal"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-denial-immediate-danger",
+      "title": "Denial letter with immediate danger context",
+      "expectedLetterType": "denial",
+      "actualLetterType": "denial",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "emergency"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "denial_or_appeal",
+        "immediate_danger"
       ]
     },
     {
@@ -928,6 +950,27 @@
       ],
       "riskFlags": [
         "suspected_fraud_or_scam"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-immediate-danger",
+      "title": "Request letter with immediate danger context",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "emergency"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "immediate_danger"
       ]
     },
     {

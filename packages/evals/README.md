@@ -38,8 +38,8 @@ The report schema includes:
 Current V1 report summary:
 
 - suite ID: `california-wildfire-v1`
-- case count: `104`
-- passed count: `104`
+- case count: `106`
+- passed count: `106`
 - failed count: `0`
 
 ## What Gets Graded

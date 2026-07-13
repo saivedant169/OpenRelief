@@ -1,6 +1,12 @@
 import type { CaseContext, LetterType, RiskFlag } from "../../core/src/openrelief";
 
-export type EvalCaseTag = "ocr_noise" | "adversarial" | "multilingual" | "stale_policy" | "case_worker_triage";
+export type EvalCaseTag =
+  | "ocr_noise"
+  | "adversarial"
+  | "multilingual"
+  | "stale_policy"
+  | "case_worker_triage"
+  | "emergency";
 
 export interface CaliforniaWildfireEvalCase {
   id: string;
@@ -401,6 +407,23 @@ const denialCases = [
       letterType: "denial",
       needsHumanReview: true
     }
+  }),
+  buildCase({
+    id: "ca-wildfire-denial-immediate-danger",
+    title: "Denial letter with immediate danger context",
+    lines: [
+      "FEMA Notice",
+      "Your application is denied because damage documentation is incomplete.",
+      "You may appeal within 60 days from the date of this letter.",
+      "Case note says the household is in immediate danger right now."
+    ],
+    county: "Los Angeles",
+    riskFlags: ["denial_or_appeal", "immediate_danger"],
+    tags: ["emergency"],
+    expected: {
+      letterType: "denial",
+      needsHumanReview: true
+    }
   })
 ];
 
@@ -770,6 +793,23 @@ const requestCases = [
     county: "Orange",
     riskFlags: ["suspected_fraud_or_scam"],
     tags: ["adversarial"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-rfi-immediate-danger",
+    title: "Request letter with immediate danger context",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send proof of occupancy and repair receipts.",
+      "Case note says fire risk is life-threatening tonight."
+    ],
+    county: "Ventura",
+    riskFlags: ["immediate_danger"],
+    tags: ["emergency"],
     expected: {
       letterType: "request_for_information",
       needsHumanReview: false

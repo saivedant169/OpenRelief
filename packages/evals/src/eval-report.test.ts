@@ -60,9 +60,9 @@ describe("machine-readable eval report", () => {
       return counts;
     }, {});
 
-    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(104);
-    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(22);
-    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(23);
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(106);
+    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(23);
+    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(24);
     expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(19);
     expect(caseCountsByType.deadline_notice ?? 0).toBeGreaterThanOrEqual(12);
     expect(caseCountsByType.inspection_notice ?? 0).toBeGreaterThanOrEqual(10);
@@ -74,6 +74,7 @@ describe("machine-readable eval report", () => {
 
     expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(33);
     expect(highRiskCases.length).toBeGreaterThanOrEqual(10);
+    expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("immediate_danger"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("homelessness"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("medical_emergency"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("abuse_or_unsafe_home"))).toBe(true);
@@ -115,6 +116,24 @@ describe("machine-readable eval report", () => {
     expect(report.results.filter((result) => result.tags?.includes("case_worker_triage")).length).toBeGreaterThanOrEqual(
       2
     );
+  });
+
+  it("covers immediate danger emergency escalation cases", () => {
+    const report = JSON.parse(readFileSync(reportPath, "utf8")) as {
+      results: Array<{ tags?: string[]; riskFlags?: string[] }>;
+    };
+    const emergencyCases = californiaWildfireCases.filter((fixture) =>
+      fixture.tags?.some((tag) => String(tag) === "emergency")
+    );
+
+    expect(emergencyCases.length).toBeGreaterThanOrEqual(2);
+    expect(emergencyCases.every((fixture) => fixture.caseContext.riskFlags.includes("immediate_danger"))).toBe(true);
+    expect(report.results.filter((result) => result.tags?.includes("emergency")).length).toBeGreaterThanOrEqual(2);
+    expect(
+      report.results.every(
+        (result) => !result.tags?.includes("emergency") || result.riskFlags?.includes("immediate_danger")
+      )
+    ).toBe(true);
   });
 
   it("matches the California wildfire eval suite summary", () => {
