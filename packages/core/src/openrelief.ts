@@ -1019,6 +1019,12 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       !isIsoCalendarDate(trimmedEffectiveDate)
     ) {
       errors.push(`Policy source ${source.id} has invalid effectiveDate.`);
+    } else if (
+      trimmedEffectiveDate !== undefined &&
+      trimmedEffectiveDate.length > 0 &&
+      daysBetween(asOf, trimmedEffectiveDate) > 0
+    ) {
+      errors.push(`Policy source ${source.id} has future effectiveDate.`);
     }
 
     const trimmedSourceType = source.sourceType.trim();
