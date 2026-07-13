@@ -184,6 +184,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for proof of occupancy."
   },
   {
+    request: "occupancy records",
+    phrases: ["occupancy records"],
+    fact: "The letter asks for occupancy records."
+  },
+  {
     request: "ownership records",
     phrases: ["ownership records"],
     fact: "The letter asks for ownership records."
@@ -212,6 +217,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "other household records",
     phrases: ["other household records"],
     fact: "The letter asks for other household records."
+  },
+  {
+    request: "supporting documents",
+    phrases: ["supporting documents were not received"],
+    fact: "The letter asks for supporting documents."
   },
   {
     request: "insurance information",
@@ -317,6 +327,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "damage records",
     phrases: ["because damage records"],
     fact: "The letter asks for damage records."
+  },
+  {
+    request: "damage documentation",
+    phrases: ["damage documentation"],
+    fact: "The letter asks for damage documentation."
   },
   {
     request: "smoke damage records",
@@ -652,7 +667,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Lease, mortgage, utility bill, or other occupancy proof",
           status:
-            hasRequest(requests, ["proof of occupancy", "utility records", "other household records"])
+            hasRequest(requests, ["proof of occupancy", "occupancy records", "utility records", "other household records"])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
@@ -682,6 +697,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
               "contractor estimates",
               "contractor license records",
               "damage photos",
+              "damage documentation",
               "damage records",
               "smoke damage records",
               "repair estimates"
@@ -776,7 +792,9 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Other disaster recovery documents named in the letter",
-          status: hasRequest(requests, ["account listed records", "requested records"]) ? "missing" : "optional",
+          status: hasRequest(requests, ["account listed records", "requested records", "supporting documents"])
+            ? "missing"
+            : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
