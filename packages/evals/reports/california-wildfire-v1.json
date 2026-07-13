@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 50,
+  "caseCount": 60,
   "passed": true,
   "metrics": {
-    "passedCount": 50,
+    "passedCount": 60,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -215,6 +215,43 @@
     {
       "caseId": "ca-wildfire-denial-scam-risk",
       "title": "Denial letter with suspected scam context",
+      "expectedLetterType": "denial",
+      "actualLetterType": "denial",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "denial_or_appeal",
+        "suspected_fraud_or_scam"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-denial-debris-records",
+      "title": "Denial letter missing debris removal records",
+      "expectedLetterType": "denial",
+      "actualLetterType": "denial",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "denial_or_appeal"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-denial-adversarial-bank-note",
+      "title": "Denial letter with fake bank-record instruction",
       "expectedLetterType": "denial",
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
@@ -448,6 +485,40 @@
       ]
     },
     {
+      "caseId": "ca-wildfire-rfi-power-equipment",
+      "title": "Request for generator and power equipment records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-immigration-sensitive-documents",
+      "title": "Request letter with immigration-sensitive context",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "immigration_sensitive"
+      ]
+    },
+    {
       "caseId": "ca-wildfire-approval-rental",
       "title": "Approval for rental assistance",
       "expectedLetterType": "approval",
@@ -582,6 +653,40 @@
     {
       "caseId": "ca-wildfire-approval-ocr-rental",
       "title": "Noisy approval for rental assistance",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-approval-accessibility-repair",
+      "title": "Approval for accessibility repair support",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "disability_accommodation"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-approval-adversarial-payment",
+      "title": "Approval letter with unsafe payment instruction",
       "expectedLetterType": "approval",
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
@@ -778,6 +883,56 @@
       ]
     },
     {
+      "caseId": "ca-wildfire-deadline-repair-estimates",
+      "title": "Deadline notice for repair estimates",
+      "expectedLetterType": "deadline_notice",
+      "actualLetterType": "deadline_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-deadline-unsafe-home-risk",
+      "title": "Deadline notice with unsafe-home risk",
+      "expectedLetterType": "deadline_notice",
+      "actualLetterType": "deadline_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "abuse_or_unsafe_home"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-inspection-adversarial-access",
+      "title": "Inspection notice with unsafe access instruction",
+      "expectedLetterType": "inspection_notice",
+      "actualLetterType": "inspection_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
       "caseId": "ca-wildfire-unknown-community-note",
       "title": "Community resource note with unclear agency action",
       "expectedLetterType": "unknown",
@@ -844,6 +999,22 @@
     {
       "caseId": "ca-wildfire-unknown-ocr-adversarial",
       "title": "Unreadable resource note with instruction-like text",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-unknown-shelter-flyer",
+      "title": "Shelter flyer without case action",
       "expectedLetterType": "unknown",
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,

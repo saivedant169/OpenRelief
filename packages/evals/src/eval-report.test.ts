@@ -58,13 +58,13 @@ describe("machine-readable eval report", () => {
       return counts;
     }, {});
 
-    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(50);
-    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(12);
-    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(13);
-    expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(9);
-    expect(caseCountsByType.deadline_notice ?? 0).toBeGreaterThanOrEqual(6);
-    expect(caseCountsByType.inspection_notice ?? 0).toBeGreaterThanOrEqual(5);
-    expect(caseCountsByType.unknown ?? 0).toBeGreaterThanOrEqual(5);
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(60);
+    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(14);
+    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(15);
+    expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(11);
+    expect(caseCountsByType.deadline_notice ?? 0).toBeGreaterThanOrEqual(8);
+    expect(caseCountsByType.inspection_notice ?? 0).toBeGreaterThanOrEqual(6);
+    expect(caseCountsByType.unknown ?? 0).toBeGreaterThanOrEqual(6);
   });
 
   it("covers the V1 high-risk escalation matrix", () => {
