@@ -327,6 +327,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects full bank number requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked for my full bank number before helping with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects routing number requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked for my routing number before helping with FEMA paperwork.");
 
