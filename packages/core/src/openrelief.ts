@@ -220,6 +220,10 @@ const restrictedIdentifierPatterns = [
     replacement: "[identity document removed]"
   },
   {
+    pattern: /\b(?:fema|sba)\s+registration\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,}\b/gi,
+    replacement: "[agency ID removed]"
+  },
+  {
     pattern:
       /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}|(?:application|app|case|claim)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,})\b/gi,
     replacement: "[agency ID removed]"
