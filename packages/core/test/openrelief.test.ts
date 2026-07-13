@@ -143,6 +143,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[date of birth removed]");
   });
 
+  it("redacts immigration identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Alien registration number A123456789 should not stay in notes.");
+
+    expect(redacted).not.toContain("A123456789");
+    expect(redacted).toContain("[immigration identifier removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",

@@ -187,6 +187,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:alien registration number|a[-\s]?number|uscis number)\s*[:#-]?\s*A[-\s]?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/gi,
+    replacement: "[immigration identifier removed]"
+  },
+  {
+    pattern:
       /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}|(?:application|app|case|claim)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,})\b/gi,
     replacement: "[agency ID removed]"
   },
