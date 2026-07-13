@@ -129,6 +129,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[credential removed]");
   });
 
+  it("redacts medical record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Medical record number MRN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MRN-123456");
+    expect(redacted).toContain("[medical record removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",
