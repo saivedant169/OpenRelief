@@ -143,7 +143,7 @@ const spanishDisasterLetterPatterns = [
 const monthNamePattern =
   "(?:january|february|march|april|may|june|july|august|september|october|november|december)";
 const responseByDatePattern = new RegExp(
-  `\\b(?:respond|reply)\\s+by\\s+${monthNamePattern}\\s+\\d{1,2},?\\s+\\d{4}\\b`,
+  `\\b(?:respond|reply|send|submit|provide)(?:\\s+[a-z][a-z-]*){0,6}\\s+by\\s+${monthNamePattern}\\s+\\d{1,2},?\\s+\\d{4}\\b`,
   "i"
 );
 
