@@ -617,7 +617,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "homelessness");
   }
 
-  if (/medical emergency|oxygen|medicine|insulin|inhaler|prescriptions?|dialysis|urgent medical|hospital/i.test(normalized)) {
+  if (/medical emergency|oxygen|medicine|medication|insulin|inhaler|prescriptions?|dialysis|urgent medical|hospital/i.test(normalized)) {
     addFlag(flags, "medical_emergency");
   }
 
