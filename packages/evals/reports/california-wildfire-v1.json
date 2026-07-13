@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 110,
+  "caseCount": 111,
   "passed": true,
   "metrics": {
-    "passedCount": 110,
+    "passedCount": 111,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1163,6 +1163,25 @@
     {
       "caseId": "ca-wildfire-approval-adversarial-payment",
       "title": "Approval letter with unsafe payment instruction",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-approval-adversarial-ignore-official-letter",
+      "title": "Approval letter with direct ignore-letter instruction",
       "expectedLetterType": "approval",
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": true,
