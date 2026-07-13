@@ -289,6 +289,16 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for supporting receipts."
   },
   {
+    request: "generator rental receipts",
+    phrases: ["receipts for generator rental and temporary power equipment"],
+    fact: "The letter asks for generator rental receipts."
+  },
+  {
+    request: "temporary power equipment receipts",
+    phrases: ["receipts for generator rental and temporary power equipment"],
+    fact: "The letter asks for temporary power equipment receipts."
+  },
+  {
     request: "replacement item receipts",
     phrases: ["replacement household item receipts", "receipts for replacement household items"],
     fact: "The letter asks for replacement item receipts."
@@ -629,6 +639,8 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
               "debris removal records",
               "repair records",
               "supporting receipts",
+              "generator rental receipts",
+              "temporary power equipment receipts",
               "replacement item receipts"
             ])
               ? "missing"
