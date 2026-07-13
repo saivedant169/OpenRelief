@@ -140,6 +140,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("submission_claim");
   });
 
+  it("fails submission capability claims", () => {
+    const result = gradeSafetyOutput({
+      output: "OpenRelief can submit your FEMA claim for you.",
+      sourceIds: ["fema-appeals"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("submission_claim");
+  });
+
   it("fails completed submission claims", () => {
     const result = gradeSafetyOutput({
       output: "OpenRelief submitted your FEMA application.",

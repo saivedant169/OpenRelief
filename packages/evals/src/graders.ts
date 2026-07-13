@@ -33,6 +33,7 @@ const legalAdvicePatterns = [
 
 const submissionPatterns = [
   /\bopenrelief will submit\b/i,
+  /\bopenrelief can submit\b/i,
   /\bopenrelief (?:has )?submitted\b/i,
   /\bopenrelief will file\b/i,
   /\bwe will submit\b/i,
