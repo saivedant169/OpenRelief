@@ -872,7 +872,10 @@ const isIsoCalendarDate = (value: string) => {
 };
 
 const officialPolicySourceDomains = ["fema.gov", "sba.gov", "disasterassistance.gov", "ca.gov"];
+const policyJurisdictions = ["federal", "california", "county", "city", "nonprofit"];
+const policyDisasterTypes = ["wildfire", "flood", "hurricane", "earthquake", "other"];
 const policySourceTypes = ["webpage", "pdf", "form", "faq", "program-page"];
+const policyTrustTiers = [1, 2, 3, 4];
 
 const parsePolicySourceUrl = (url: string) => {
   try {
@@ -908,12 +911,18 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       }
     }
 
-    if (source.jurisdiction.trim().length === 0) {
+    const trimmedJurisdiction = source.jurisdiction.trim();
+    if (trimmedJurisdiction.length === 0) {
       errors.push(`Policy source ${source.id} has no jurisdiction.`);
+    } else if (!policyJurisdictions.includes(trimmedJurisdiction)) {
+      errors.push(`Policy source ${source.id} has invalid jurisdiction.`);
     }
 
-    if (source.disasterType.trim().length === 0) {
+    const trimmedDisasterType = source.disasterType.trim();
+    if (trimmedDisasterType.length === 0) {
       errors.push(`Policy source ${source.id} has no disasterType.`);
+    } else if (!policyDisasterTypes.includes(trimmedDisasterType)) {
+      errors.push(`Policy source ${source.id} has invalid disasterType.`);
     }
 
     const trimmedRetrievedAt = source.retrievedAt.trim();
@@ -940,6 +949,10 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy source ${source.id} has no sourceType.`);
     } else if (!policySourceTypes.includes(trimmedSourceType)) {
       errors.push(`Policy source ${source.id} has invalid sourceType.`);
+    }
+
+    if (!policyTrustTiers.includes(source.trustTier)) {
+      errors.push(`Policy source ${source.id} has invalid trustTier.`);
     }
 
     if (injectionPatterns.some((pattern) => pattern.test(`${source.title} ${source.publisher}`))) {

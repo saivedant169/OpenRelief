@@ -56,6 +56,27 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source bad-source-type has invalid sourceType.");
   });
 
+  it("rejects policy sources with invalid classification metadata", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "bad-classification-source",
+          jurisdiction: "statewide" as never,
+          disasterType: "volcano" as never,
+          trustTier: 5 as never
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source bad-classification-source has invalid jurisdiction.");
+    expect(validation.errors).toContain("Policy source bad-classification-source has invalid disasterType.");
+    expect(validation.errors).toContain("Policy source bad-classification-source has invalid trustTier.");
+  });
+
   it("rejects policy sources outside official domains", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
