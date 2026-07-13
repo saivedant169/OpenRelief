@@ -64,4 +64,22 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByText("File too large. Upload a file under 10 MB.")).toBeInTheDocument();
     expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
   });
+
+  it("clears stale sample text for PDF uploads that need manual extraction", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text");
+    const file = new File(["%PDF-1.4"], "notice.pdf", { type: "application/pdf" });
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    expect(screen.getByText("notice.pdf")).toBeInTheDocument();
+    expect(screen.getByText("PDF and image text extraction is not available yet. Paste extracted text below.")).toBeInTheDocument();
+    expect(letterField).toHaveValue("");
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
 });

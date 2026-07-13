@@ -44,6 +44,7 @@ const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
 const acceptedFileExtensions = [".txt", ".pdf", ".png", ".jpg", ".jpeg"];
 const maxUploadSizeBytes = 10 * 1024 * 1024;
+const manualExtractionMessage = "PDF and image text extraction is not available yet. Paste extracted text below.";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -413,7 +414,13 @@ export const App = () => {
     setActiveSavedCaseId(null);
     if (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) {
       setLetterText(await file.text());
+      return;
     }
+
+    setLetterText("");
+    setAnalysis(null);
+    setExportText("");
+    setFileError(manualExtractionMessage);
   };
 
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
