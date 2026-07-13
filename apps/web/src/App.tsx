@@ -55,7 +55,7 @@ const acceptedFileTypes = [
 ];
 const maxUploadSizeBytes = 10 * 1024 * 1024;
 const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text below.";
-const imageExtractionMessage = "Image OCR is not available yet. Paste extracted text below.";
+const imageExtractionMessage = "Could not extract image text. Paste extracted text below.";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",

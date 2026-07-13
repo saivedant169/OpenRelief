@@ -214,7 +214,7 @@ describe("OpenRelief security smoke", () => {
       })
     );
     expect(screen.getByText("notice.png")).toBeInTheDocument();
-    expect(screen.queryByText("Image OCR is not available yet. Paste extracted text below.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Could not extract image text. Paste extracted text below.")).not.toBeInTheDocument();
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 
@@ -244,7 +244,19 @@ describe("OpenRelief security smoke", () => {
       })
     );
     expect(screen.getByText("notice.png")).toBeInTheDocument();
-    expect(screen.queryByText("Image OCR is not available yet. Paste extracted text below.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Could not extract image text. Paste extracted text below.")).not.toBeInTheDocument();
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
+
+  it("shows an accurate fallback when image OCR returns no text", async () => {
+    vi.mocked(recognize).mockRejectedValueOnce(new Error("OCR failed"));
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const file = new File([new Uint8Array([137, 80, 78, 71])], "blank.png", { type: "image/png" });
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await screen.findByText("Could not extract image text. Paste extracted text below.");
+    expect(screen.getByText("blank.png")).toBeInTheDocument();
   });
 });
