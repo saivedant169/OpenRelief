@@ -117,12 +117,6 @@ const readSavedDraft = (): SavedDraft => {
   }
 };
 
-const isLetterType = (value: unknown): value is LetterType =>
-  typeof value === "string" && value in letterTypeLabels;
-
-const isStringList = (value: unknown): value is string[] =>
-  Array.isArray(value) && value.every((item) => typeof item === "string");
-
 const redactStringList = (items: string[]): string[] => items.map((item) => redactRestrictedIdentifiers(item));
 
 const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
@@ -185,20 +179,18 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     if (
       !candidate ||
       typeof candidate.id !== "string" ||
-      typeof candidate.title !== "string" ||
-      !isLetterType(candidate.letterType) ||
-      typeof candidate.letterText !== "string" ||
-      typeof candidate.fileName !== "string" ||
-      typeof candidate.intakeText !== "string" ||
-      !isStringList(candidate.riskFlags) ||
-      typeof candidate.summary !== "string"
+      typeof candidate.letterText !== "string"
     ) {
       return [];
     }
 
     const sanitizedLetterText = redactRestrictedIdentifiers(candidate.letterText);
-    const sanitizedIntakeText = redactRestrictedIdentifiers(candidate.intakeText);
-    const sanitizedFileName = redactRestrictedIdentifiers(candidate.fileName);
+    const sanitizedIntakeText = redactRestrictedIdentifiers(
+      typeof candidate.intakeText === "string" ? candidate.intakeText : ""
+    );
+    const sanitizedFileName = redactRestrictedIdentifiers(
+      typeof candidate.fileName === "string" ? candidate.fileName : "Imported saved case"
+    );
     const sanitizedId = redactRestrictedIdentifiers(candidate.id);
     const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);

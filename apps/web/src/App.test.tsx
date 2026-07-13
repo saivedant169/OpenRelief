@@ -425,6 +425,41 @@ describe("OpenRelief web workflow", () => {
     expect(exported[0]?.notes).toBe("Preserve local reviewer note.");
   });
 
+  it("imports minimal saved case archives by deriving missing safety fields", async () => {
+    const archive = JSON.stringify([
+      {
+        id: "OR-CA-2026-779",
+        letterText: [
+          "FEMA Notice",
+          "Your application is denied because proof of occupancy is missing.",
+          "You may appeal within 60 days from the date of this letter."
+        ].join("\n")
+      }
+    ]);
+
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Saved cases JSON"), { target: { value: archive } });
+    await userEvent.click(screen.getByRole("button", { name: /import saved cases/i }));
+
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+    const exported = JSON.parse(archiveField.value) as Array<{
+      fileName: string;
+      letterType: string;
+      checklistItems: Array<{ id: string }>;
+      riskFlags: string[];
+    }>;
+
+    expect(exported[0]?.fileName).toBe("Imported saved case");
+    expect(exported[0]?.letterType).toBe("denial");
+    expect(exported[0]?.checklistItems.map((item) => item.id)).toContain("human-review");
+    expect(exported[0]?.riskFlags).toContain("denial_or_appeal");
+  });
+
   it("redacts restricted identifiers from imported saved case metadata", async () => {
     const archive = JSON.stringify([
       {
