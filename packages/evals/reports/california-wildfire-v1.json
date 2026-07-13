@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 115,
+  "caseCount": 116,
   "passed": true,
   "metrics": {
-    "passedCount": 115,
+    "passedCount": 116,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -955,6 +955,27 @@
     {
       "caseId": "ca-wildfire-rfi-immediate-danger",
       "title": "Request letter with immediate danger context",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "emergency"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "immediate_danger"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-live-wire-danger",
+      "title": "Request letter with live-wire danger context",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

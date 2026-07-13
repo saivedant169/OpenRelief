@@ -814,6 +814,23 @@ const requestCases = [
       letterType: "request_for_information",
       needsHumanReview: false
     }
+  }),
+  buildCase({
+    id: "ca-wildfire-rfi-live-wire-danger",
+    title: "Request letter with live-wire danger context",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send proof of occupancy and repair receipts.",
+      "Case note says there is a live wire near the front door."
+    ],
+    county: "Shasta",
+    riskFlags: ["immediate_danger"],
+    tags: ["emergency"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
   })
 ];
 
