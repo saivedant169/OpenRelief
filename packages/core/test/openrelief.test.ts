@@ -327,6 +327,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects upfront fee requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone said I must pay an upfront fee before they can help with disaster aid.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects unsafe living situation risk from survivor context", () => {
     const flags = detectRiskFlags("I have an unsafe living situation after the wildfire.");
 
