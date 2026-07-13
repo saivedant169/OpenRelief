@@ -151,6 +151,10 @@ const restrictedIdentifierPatterns = [
     pattern:
       /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}|(?:application|app|case|claim)\s*(?:id|number|no\.?)\s*[:#-]?\s*\d{6,})\b/gi,
     replacement: "[agency ID removed]"
+  },
+  {
+    pattern: /\b(?:undocumented|deportation risk|expired visa|visa expired)\b/gi,
+    replacement: "[immigration status removed]"
   }
 ];
 
