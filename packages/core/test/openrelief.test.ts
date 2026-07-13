@@ -920,6 +920,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["denial_or_appeal"]);
   });
 
+  it("detects appeal intent from survivor context", () => {
+    const flags = detectRiskFlags("I need to appeal by Friday.");
+
+    expect(flags).toEqual(["denial_or_appeal"]);
+  });
+
+  it("detects denied assistance from survivor context", () => {
+    const flags = detectRiskFlags("I was denied assistance after the wildfire.");
+
+    expect(flags).toEqual(["denial_or_appeal"]);
+  });
+
   it("creates source-backed checklist with escalation first", () => {
     const letter = analyzeLetter(denialLetter);
     const checklist = createChecklist(
