@@ -155,6 +155,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[credential removed]");
   });
 
+  it("redacts OTP credentials", () => {
+    const redacted = redactRestrictedIdentifiers("OTP 123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("123456");
+    expect(redacted).toContain("[credential removed]");
+  });
+
   it("redacts medical record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medical record number MRN-123456 should not stay in notes.");
 
