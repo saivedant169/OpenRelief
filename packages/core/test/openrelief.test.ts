@@ -249,6 +249,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["medical_emergency"]);
   });
 
+  it("detects service animal needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I need my service animal with me at the recovery center.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
   it("detects suspected scam or fraud risk from survivor context", () => {
     const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
 
