@@ -3,6 +3,35 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 
+const buildPdfWithText = (text: string) => {
+  const escapedText = text.replaceAll("\\", "\\\\").replaceAll("(", "\\(").replaceAll(")", "\\)");
+  const content = `BT\n/F1 12 Tf\n72 720 Td\n(${escapedText}) Tj\nET`;
+  const objects = [
+    "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n",
+    "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n",
+    "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n",
+    "4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n",
+    `5 0 obj\n<< /Length ${content.length} >>\nstream\n${content}\nendstream\nendobj\n`
+  ];
+
+  let pdf = "%PDF-1.4\n";
+  const offsets = objects.map((object) => {
+    const offset = pdf.length;
+    pdf += object;
+    return offset;
+  });
+  const startxref = pdf.length;
+  const xrefEntries = offsets.map((offset) => `${offset.toString().padStart(10, "0")} 00000 n \n`).join("");
+
+  return [
+    pdf,
+    `xref\n0 ${objects.length + 1}\n`,
+    "0000000000 65535 f \n",
+    xrefEntries,
+    `trailer\n<< /Root 1 0 R /Size ${objects.length + 1} >>\nstartxref\n${startxref}\n%%EOF`
+  ].join("");
+};
+
 describe("OpenRelief security smoke", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -65,21 +94,30 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
   });
 
-  it("clears stale sample text for PDF uploads that need manual extraction", async () => {
+  it("extracts local PDF text and clears stale analysis", async () => {
     render(<App />);
 
     const upload = screen.getByLabelText("Choose file");
     const letterField = screen.getByLabelText("Extracted letter text");
-    const file = new File(["%PDF-1.4"], "notice.pdf", { type: "application/pdf" });
+    const file = new File(
+      [buildPdfWithText("FEMA Notice Your application is approved for rental assistance.")],
+      "notice.pdf",
+      { type: "application/pdf" }
+    );
 
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
     expect(screen.getByText("Claim denial")).toBeInTheDocument();
 
     fireEvent.change(upload, { target: { files: [file] } });
 
+    await waitFor(() => {
+      expect((letterField as HTMLTextAreaElement).value).toContain("approved for rental assistance");
+    });
+    expect(screen.getByText("PDF text is parsed locally. Image OCR remains local workflow target.")).toBeInTheDocument();
     expect(screen.getByText("notice.pdf")).toBeInTheDocument();
-    expect(screen.getByText("PDF and image text extraction is not available yet. Paste extracted text below.")).toBeInTheDocument();
-    expect(letterField).toHaveValue("");
+    expect(
+      screen.queryByText("PDF and image text extraction is not available yet. Paste extracted text below.")
+    ).not.toBeInTheDocument();
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 

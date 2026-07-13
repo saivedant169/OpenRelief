@@ -23,6 +23,7 @@ import {
   type LetterType
 } from "../../../packages/core/src/openrelief";
 import { californiaWildfirePolicyPack } from "../../../packages/policy-packs/california-wildfire";
+import { extractPdfText, readTextFile } from "./documentExtraction";
 import "./styles.css";
 
 const sampleLetter = `FEMA Notice
@@ -44,7 +45,8 @@ const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
 const acceptedFileExtensions = [".txt", ".pdf", ".png", ".jpg", ".jpeg"];
 const maxUploadSizeBytes = 10 * 1024 * 1024;
-const manualExtractionMessage = "PDF and image text extraction is not available yet. Paste extracted text below.";
+const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text below.";
+const imageExtractionMessage = "Image OCR is not available yet. Paste extracted text below.";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -201,19 +203,6 @@ const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSaved
 const isAcceptedFile = (file: File) => {
   const normalizedName = file.name.toLowerCase();
   return acceptedFileExtensions.some((extension) => normalizedName.endsWith(extension));
-};
-
-const readTextFile = (file: File): Promise<string> => {
-  if (typeof file.text === "function") {
-    return file.text();
-  }
-
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
-    reader.onerror = () => resolve("");
-    reader.readAsText(file);
-  });
 };
 
 const readSavedCases = (): SavedCaseSummary[] => {
@@ -432,8 +421,17 @@ export const App = () => {
       return;
     }
 
+    if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+      const extractedText = await extractPdfText(file);
+      setLetterText(extractedText);
+      if (!extractedText.trim()) {
+        setFileError(pdfExtractionMessage);
+      }
+      return;
+    }
+
     setLetterText("");
-    setFileError(manualExtractionMessage);
+    setFileError(imageExtractionMessage);
   };
 
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
@@ -588,7 +586,7 @@ export const App = () => {
             </div>
             <div>
               <strong>Upload letter (PDF, JPG, PNG, TXT)</strong>
-              <p>Text files are read directly. PDF and image parsing remain local workflow targets.</p>
+              <p>PDF text is parsed locally. Image OCR remains local workflow target.</p>
             </div>
             <label className="file-control">
               Choose file
