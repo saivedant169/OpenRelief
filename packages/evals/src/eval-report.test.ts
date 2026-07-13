@@ -60,7 +60,7 @@ describe("machine-readable eval report", () => {
       return counts;
     }, {});
 
-    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(106);
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(108);
     expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(23);
     expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(24);
     expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(19);
