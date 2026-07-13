@@ -243,6 +243,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toContain("immediate_danger");
   });
 
+  it("detects insulin needs as medical emergency risk", () => {
+    const flags = detectRiskFlags("I lost access to insulin after the evacuation.");
+
+    expect(flags).toEqual(["medical_emergency"]);
+  });
+
   it("detects suspected scam or fraud risk from survivor context", () => {
     const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
 
