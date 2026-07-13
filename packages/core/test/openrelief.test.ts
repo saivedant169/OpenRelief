@@ -114,6 +114,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[identity document removed]");
   });
 
+  it("redacts passport identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Passport number P12345678 should not stay in local text.");
+
+    expect(redacted).not.toContain("P12345678");
+    expect(redacted).toContain("[identity document removed]");
+  });
+
   it("redacts contact identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Call 555-123-4567 or email survivor@example.test before saving this note."

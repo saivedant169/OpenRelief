@@ -371,6 +371,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails passport identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Passport number P12345678 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails immigration identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Alien registration number A123456789 should not stay in notes.",
