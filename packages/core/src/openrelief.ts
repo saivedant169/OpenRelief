@@ -609,7 +609,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "denial_or_appeal");
   }
 
-  if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|life[-\s]?threatening/i.test(normalized)) {
+  if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|can't evacuate|life[-\s]?threatening/i.test(normalized)) {
     addFlag(flags, "immediate_danger");
   }
 
