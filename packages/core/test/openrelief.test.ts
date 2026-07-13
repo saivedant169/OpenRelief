@@ -432,6 +432,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects PIN requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked for my PIN before helping with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects access code requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked for my access code before helping with FEMA paperwork.");
 
