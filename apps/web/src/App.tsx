@@ -44,7 +44,12 @@ const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => 
 const caseStorageKey = "openrelief:v1:case";
 const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
-const acceptedFileExtensions = [".txt", ".pdf", ".png", ".jpg", ".jpeg"];
+const acceptedFileTypes = [
+  { extensions: [".txt"], mimeTypes: ["text/plain"] },
+  { extensions: [".pdf"], mimeTypes: ["application/pdf"] },
+  { extensions: [".png"], mimeTypes: ["image/png"] },
+  { extensions: [".jpg", ".jpeg"], mimeTypes: ["image/jpeg"] }
+];
 const maxUploadSizeBytes = 10 * 1024 * 1024;
 const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text below.";
 const imageExtractionMessage = "Image OCR is not available yet. Paste extracted text below.";
@@ -263,7 +268,13 @@ const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSaved
 
 const isAcceptedFile = (file: File) => {
   const normalizedName = file.name.toLowerCase();
-  return acceptedFileExtensions.some((extension) => normalizedName.endsWith(extension));
+  const normalizedType = file.type.toLowerCase();
+
+  return acceptedFileTypes.some(
+    ({ extensions, mimeTypes }) =>
+      extensions.some((extension) => normalizedName.endsWith(extension)) &&
+      (normalizedType === "" || mimeTypes.includes(normalizedType))
+  );
 };
 
 const readSavedCases = (): SavedCaseSummary[] => {
