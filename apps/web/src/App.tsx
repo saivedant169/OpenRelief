@@ -660,6 +660,7 @@ export const App = () => {
               <p>No saved cases</p>
             )}
             <section className="case-archive" aria-label="Saved case archive">
+              <p>Saved-case archives may include personal information.</p>
               <label className="case-archive-label">
                 <span>Saved cases JSON</span>
                 <textarea

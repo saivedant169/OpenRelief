@@ -375,6 +375,8 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
     await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
 
+    expect(screen.getByText("Saved-case archives may include personal information.")).toBeInTheDocument();
+
     const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
     const archive = JSON.parse(archiveField.value) as { id: string; letterType: string; letterText: string }[];
 
