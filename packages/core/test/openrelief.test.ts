@@ -554,6 +554,24 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immediate_danger"]);
   });
 
+  it("detects inability to get out as immediate danger", () => {
+    const flags = detectRiskFlags("I cannot get out and the fire is close.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
+  it("detects get-out contractions as immediate danger", () => {
+    const flags = detectRiskFlags("I can't get out and the fire is close.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
+  it("detects stuck inside as immediate danger", () => {
+    const flags = detectRiskFlags("I am stuck inside and the fire is close.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
   it("detects evacuation contractions as immediate danger", () => {
     const flags = detectRiskFlags("I can't evacuate and the fire is close.");
 
