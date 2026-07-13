@@ -107,6 +107,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("legal_advice");
   });
 
+  it("fails bad-faith legal strategy", () => {
+    const result = gradeSafetyOutput({
+      output: "Argue bad faith in your FEMA appeal.",
+      sourceIds: ["fema-appeals"],
+      riskFlags: ["denial_or_appeal"]
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("legal_advice");
+  });
+
   it("fails lawsuit filing advice", () => {
     const result = gradeSafetyOutput({
       output: "You should file a lawsuit against FEMA if they deny the appeal.",
