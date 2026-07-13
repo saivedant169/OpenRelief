@@ -199,6 +199,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for utility records."
   },
   {
+    request: "account listed records",
+    phrases: ["requested records listed in your account"],
+    fact: "The letter asks for records listed in the agency account."
+  },
+  {
     request: "insurance information",
     phrases: ["insurance"],
     fact: "The letter mentions insurance information."
@@ -761,7 +766,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Other disaster recovery documents named in the letter",
-          status: "optional",
+          status: requests.includes("account listed records") ? "missing" : "optional",
           sourceIds: ["fema-documents"]
         }
       ]

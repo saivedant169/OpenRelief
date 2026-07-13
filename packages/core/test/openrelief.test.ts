@@ -227,10 +227,27 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for insurance settlement records.");
   });
 
+  it("extracts requested account record requests", () => {
+    const result = analyzeLetter([
+      "FEMA Notice",
+      "You must respond within 30 days from the date of this letter.",
+      "Send the requested records listed in your account."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("account listed records");
+    expect(result.facts).toContain("The letter asks for records listed in the agency account.");
+  });
+
   it("marks requested insurance settlement records as missing insurance evidence", () => {
     const packet = buildEvidencePacket(["insurance settlement records"]);
 
     expect(packet.groups.find((group) => group.category === "insurance")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested account records as missing other evidence", () => {
+    const packet = buildEvidencePacket(["account listed records"]);
+
+    expect(packet.groups.find((group) => group.category === "other")?.items[0]?.status).toBe("missing");
   });
 
   it("extracts ownership lease and utility record requests from denial letters", () => {
