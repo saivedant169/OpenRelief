@@ -654,6 +654,21 @@ a:focus-visible,
   overflow-wrap: anywhere;
 }
 
+.case-task-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #344253;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.case-task-status input {
+  width: 18px;
+  height: 18px;
+}
+
 .case-notes {
   min-height: 120px;
 }

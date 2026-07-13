@@ -205,6 +205,22 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("Collect proof of occupancy")).toBeInTheDocument();
   });
 
+  it("tracks checklist status in the local case queue", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    const queue = screen.getByRole("region", { name: "Local case queue" });
+    expect(within(queue).getByText("Tasks: 0/4 done")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+    await userEvent.click(screen.getByRole("checkbox", { name: "Mark Request human review done" }));
+
+    expect(within(queue).getByText("Tasks: 1/4 done")).toBeInTheDocument();
+    expect(window.localStorage.getItem("openrelief:v1:cases")).toContain('"human-review":"done"');
+  });
+
   it("exports saved case JSON", async () => {
     render(<App />);
 
@@ -251,6 +267,9 @@ describe("OpenRelief web workflow", () => {
             reason: "Imported case needs human review."
           }
         ],
+        checklistStatuses: {
+          "human-review": "done"
+        },
         riskFlags: ["denial_or_appeal"],
         summary: "Imported denial summary.",
         notes: "Imported case note."
@@ -269,6 +288,7 @@ describe("OpenRelief web workflow", () => {
     const letterField = screen.getByLabelText("Extracted letter text") as HTMLTextAreaElement;
     expect(letterField.value).toContain("proof of occupancy");
     expect(screen.getByLabelText("Case notes")).toHaveValue("Imported case note.");
+    expect(screen.getByRole("checkbox", { name: "Mark Request human review done" })).toBeChecked();
   });
 
   it("restores a saved local draft and clears stored data", async () => {

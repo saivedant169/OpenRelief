@@ -69,6 +69,10 @@ type EvidenceSummaryItem = {
 
 type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason">;
 
+type ChecklistStatus = "todo" | "done";
+
+type ChecklistStatusMap = Record<string, ChecklistStatus>;
+
 type SavedCaseSummary = {
   id: string;
   title: string;
@@ -79,6 +83,7 @@ type SavedCaseSummary = {
   deadlines: Deadline[];
   missingEvidence: EvidenceSummaryItem[];
   checklistItems: ChecklistSummaryItem[];
+  checklistStatuses: ChecklistStatusMap;
   riskFlags: string[];
   summary: string;
   notes: string;
@@ -129,6 +134,30 @@ const isChecklistSummaryItem = (value: unknown): value is ChecklistSummaryItem =
   );
 };
 
+const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
+
+const defaultChecklistStatuses = (items: ChecklistSummaryItem[]): ChecklistStatusMap =>
+  items.reduce<ChecklistStatusMap>((statuses, item) => {
+    statuses[item.id] = "todo";
+    return statuses;
+  }, {});
+
+const normalizeChecklistStatuses = (items: ChecklistSummaryItem[], value: unknown): ChecklistStatusMap => {
+  const candidate =
+    typeof value === "object" && value !== null && !Array.isArray(value)
+      ? (value as Record<string, unknown>)
+      : {};
+
+  return items.reduce<ChecklistStatusMap>((statuses, item) => {
+    const status = candidate[item.id];
+    statuses[item.id] = isChecklistStatus(status) ? status : "todo";
+    return statuses;
+  }, {});
+};
+
+const completedChecklistCount = (savedCase: SavedCaseSummary): number =>
+  savedCase.checklistItems.filter((item) => savedCase.checklistStatuses[item.id] === "done").length;
+
 const extractMissingEvidence = (packet: EvidencePacket): EvidenceSummaryItem[] =>
   packet.groups.flatMap((group) =>
     group.items
@@ -178,6 +207,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
             restoredAnalysis,
             californiaWildfirePolicyPack
           ).items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
+    const checklistStatuses = normalizeChecklistStatuses(checklistItems, candidate.checklistStatuses);
 
     return [
       {
@@ -190,6 +220,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         deadlines,
         missingEvidence,
         checklistItems,
+        checklistStatuses,
         riskFlags: candidate.riskFlags,
         summary: candidate.summary,
         notes: typeof candidate.notes === "string" ? candidate.notes : ""
@@ -299,6 +330,7 @@ export const App = () => {
       return;
     }
 
+    const checklistItems = checklist.items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
     const snapshot: SavedCaseSummary = {
       id: "OR-CA-2026-001",
       title: letterTypeLabels[analysis.letterType],
@@ -308,7 +340,8 @@ export const App = () => {
       intakeText,
       deadlines: analysis.detectedDeadlines,
       missingEvidence: extractMissingEvidence(evidencePacket),
-      checklistItems: checklist.items.map(({ id, title, category, reason }) => ({ id, title, category, reason })),
+      checklistItems,
+      checklistStatuses: defaultChecklistStatuses(checklistItems),
       riskFlags,
       summary: analysis.summary,
       notes: ""
@@ -352,6 +385,23 @@ export const App = () => {
 
     setSavedCases((current) =>
       current.map((savedCase) => (savedCase.id === activeSavedCaseId ? { ...savedCase, notes } : savedCase))
+    );
+    setClearArmed(false);
+  };
+
+  const handleChecklistStatus = (savedCaseId: string, itemId: string, checked: boolean) => {
+    setSavedCases((current) =>
+      current.map((savedCase) =>
+        savedCase.id === savedCaseId
+          ? {
+              ...savedCase,
+              checklistStatuses: {
+                ...savedCase.checklistStatuses,
+                [itemId]: checked ? "done" : "todo"
+              }
+            }
+          : savedCase
+      )
     );
     setClearArmed(false);
   };
@@ -515,6 +565,9 @@ export const App = () => {
                     >
                       <strong>Saved case: {savedCase.title}</strong>
                       <span>Missing: {savedCase.missingEvidence.length}</span>
+                      <span>
+                        Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done
+                      </span>
                       <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
                       <span>Flags: {savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "None"}</span>
                     </button>
@@ -767,6 +820,16 @@ export const App = () => {
                         {activeSavedCase.checklistItems.map((item) => (
                           <li key={item.id}>
                             <strong>{item.title}</strong>
+                            <label className="case-task-status">
+                              <input
+                                type="checkbox"
+                                checked={activeSavedCase.checklistStatuses[item.id] === "done"}
+                                onChange={(event) =>
+                                  handleChecklistStatus(activeSavedCase.id, item.id, event.target.checked)
+                                }
+                              />
+                              Mark {item.title} done
+                            </label>
                             <span>{item.reason}</span>
                           </li>
                         ))}
