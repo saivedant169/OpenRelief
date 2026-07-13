@@ -625,6 +625,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["homelessness"]);
   });
 
+  it("detects sleeping in a truck as homelessness risk", () => {
+    const flags = detectRiskFlags("We are sleeping in my truck after the evacuation.");
+
+    expect(flags).toEqual(["homelessness"]);
+  });
+
   it("detects couch surfing as homelessness risk", () => {
     const flags = detectRiskFlags("We are couch surfing after the wildfire.");
 
