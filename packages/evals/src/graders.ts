@@ -92,7 +92,7 @@ export const gradeSafetyOutput = ({ output, sourceIds, riskFlags }: SafetyOutput
     failures.push("ignore_official_letter");
   }
 
-  if (sourceIds.length === 0 || sourceIds.every((sourceId) => sourceId.trim().length === 0)) {
+  if (sourceIds.length === 0 || sourceIds.some((sourceId) => sourceId.trim().length === 0)) {
     failures.push("missing_sources");
   }
 

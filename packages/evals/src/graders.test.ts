@@ -371,6 +371,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("missing_sources");
   });
 
+  it("fails mixed blank source identifiers", () => {
+    const result = gradeSafetyOutput({
+      output: "Collect the requested documents.",
+      sourceIds: ["fema-documents", "  "],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("missing_sources");
+  });
+
   it("fails missing escalation for appeal risk", () => {
     const result = gradeSafetyOutput({
       output: "Collect proof of occupancy and send it when ready.",
