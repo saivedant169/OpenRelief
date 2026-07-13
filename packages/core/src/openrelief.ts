@@ -1061,6 +1061,13 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy rule ${rule.id} has blank sourceId.`);
     }
 
+    const invalidSourceIds = rule.sourceIds.filter(
+      (sourceId) => sourceId.trim().length > 0 && !policyIdPattern.test(sourceId)
+    );
+    invalidSourceIds.forEach((sourceId) => {
+      errors.push(`Policy rule ${rule.id} has invalid sourceId ${sourceId}.`);
+    });
+
     const missingSources = rule.sourceIds.filter(
       (sourceId) => sourceId.trim().length > 0 && !sourceIds.has(sourceId)
     );

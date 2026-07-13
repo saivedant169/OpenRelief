@@ -222,6 +222,23 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy rule blank-source-ref has blank sourceId.");
   });
 
+  it("rejects policy rules with invalid source reference ids", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      rules: [
+        ...californiaWildfirePolicyPack.rules,
+        {
+          ...californiaWildfirePolicyPack.rules[0],
+          id: "invalid-source-ref",
+          sourceIds: ["bad source"]
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy rule invalid-source-ref has invalid sourceId bad source.");
+  });
+
   it("rejects policy sources outside official domains", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
