@@ -661,6 +661,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
   const flags: RiskFlag[] = [];
   const hasDenialOrAppealContext =
     /appeal deadline|response deadline|deadline is (?:today|tomorrow)|need to appeal|appeal by|denied assistance|legal strategy|sue fema|lawsuit|legal action/i.test(normalized) ||
+    /\b(?:fema|sba|agency|appeal|response|paperwork|documents?|records?).{0,40}\bdue (?:today|tomorrow)\b/i.test(normalized) ||
     /(?:openrelief|you) (?:can )?(?:submit|file) (?:my |our )?(?:fema |sba )?(?:application|appeal|claim) for (?:me|us)/i.test(normalized) ||
     /(?:submit|file) (?:my|our) (?:fema |sba )?(?:application|appeal|claim) for (?:me|us)/i.test(normalized);
   const asksForFinalEligibility =
