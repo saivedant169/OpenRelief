@@ -818,6 +818,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["abuse_or_unsafe_home"]);
   });
 
+  it("detects threats where someone is staying as unsafe living risk", () => {
+    const flags = detectRiskFlags("Someone threatened me where I am staying after the wildfire.");
+
+    expect(flags).toEqual(["abuse_or_unsafe_home"]);
+  });
+
   it("adds denial or appeal risk from letter analysis", () => {
     const flags = detectRiskFlags("", analyzeLetter(denialLetter));
 
