@@ -884,6 +884,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["abuse_or_unsafe_home"]);
   });
 
+  it("detects stalking as unsafe-home risk", () => {
+    const flags = detectRiskFlags("My ex is stalking me at the temporary address.");
+
+    expect(flags).toEqual(["abuse_or_unsafe_home"]);
+  });
+
+  it("detects restraining orders as unsafe-home risk", () => {
+    const flags = detectRiskFlags("I have a restraining order and cannot safely stay there.");
+
+    expect(flags).toEqual(["abuse_or_unsafe_home"]);
+  });
+
   it("adds denial or appeal risk from letter analysis", () => {
     const flags = detectRiskFlags("", analyzeLetter(denialLetter));
 
