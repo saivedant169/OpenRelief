@@ -21,9 +21,11 @@ const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md
 const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack-contribution.md");
 const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
+const demoVideoRunbookPath = path.join(process.cwd(), "docs", "demo-video-runbook.md");
 const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
 const packageJsonPath = path.join(process.cwd(), "package.json");
 const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
+const demoVideoPreflightPath = path.join(process.cwd(), "scripts", "demo-video-preflight.mjs");
 const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "pages.yml");
 const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
 
@@ -188,9 +190,11 @@ describe("release readiness", () => {
 
   it("includes public launch demo and partner outreach artifacts", () => {
     expect(existsSync(demoScriptPath)).toBe(true);
+    expect(existsSync(demoVideoRunbookPath)).toBe(true);
     expect(existsSync(partnerOutreachPath)).toBe(true);
 
     const demoScript = readFileSync(demoScriptPath, "utf8");
+    const demoVideoRunbook = readFileSync(demoVideoRunbookPath, "utf8");
     const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
 
     expect(demoScript).toContain("OpenRelief Demo Script");
@@ -199,11 +203,33 @@ describe("release readiness", () => {
     expect(demoScript).toContain("No live submission");
     expect(demoScript).toContain("local browser storage");
 
+    expect(demoVideoRunbook).toContain("OpenRelief Demo Video Runbook");
+    expect(demoVideoRunbook).toContain("npm run demo:video:preflight");
+    expect(demoVideoRunbook).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
+    expect(demoVideoRunbook).toContain("No real survivor PII");
+    expect(demoVideoRunbook).toContain("Video Evidence Template");
+    expect(demoVideoRunbook).toContain("Hosted synthetic sandbox");
+
     expect(partnerOutreach).toContain("Partner Outreach");
     expect(partnerOutreach).toContain("legal aid");
     expect(partnerOutreach).toContain("disaster case worker");
     expect(partnerOutreach).toContain("No real survivor PII");
     expect(partnerOutreach).toContain("consent");
+  });
+
+  it("defines a demo video preflight command", () => {
+    expect(existsSync(demoVideoPreflightPath)).toBe(true);
+
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
+    const preflightScript = readFileSync(demoVideoPreflightPath, "utf8");
+    const readme = readFileSync(readmePath, "utf8");
+
+    expect(packageJson.scripts["demo:video:preflight"]).toBe("node scripts/demo-video-preflight.mjs");
+    expect(readme).toContain("Demo video runbook");
+    expect(preflightScript).toContain("demo-video-runbook.md");
+    expect(preflightScript).toContain("denial-occupancy-proof.txt");
+    expect(preflightScript).toContain("No real survivor PII");
+    expect(preflightScript).toContain("Hosted synthetic sandbox");
   });
 
   it("runs hosted sandbox preflight after production build", () => {

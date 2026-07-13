@@ -36,4 +36,5 @@ Manual safety review must confirm:
 - [Policy pack contribution guide](policy-pack-contribution.md)
 - [Hosted sandbox guide](hosted-sandbox.md)
 - [Demo script](demo-script.md)
+- [Demo video runbook](demo-video-runbook.md)
 - [Partner outreach](partner-outreach.md)

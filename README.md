@@ -73,6 +73,7 @@ Start here:
 - [Policy pack contribution guide](docs/policy-pack-contribution.md)
 - [Hosted sandbox guide](docs/hosted-sandbox.md)
 - [Demo script](docs/demo-script.md)
+- [Demo video runbook](docs/demo-video-runbook.md)
 - [Partner outreach](docs/partner-outreach.md)
 - [Technical report](docs/technical-report.md)
 - [Baseline failure examples](docs/baseline-failure-examples.md)
