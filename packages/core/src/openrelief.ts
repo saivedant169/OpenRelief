@@ -922,12 +922,16 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy source ${source.id} has no retrievedAt.`);
     } else if (!isIsoCalendarDate(trimmedRetrievedAt)) {
       errors.push(`Policy source ${source.id} has invalid retrievedAt.`);
+    } else if (daysBetween(asOf, trimmedRetrievedAt) > 0) {
+      errors.push(`Policy source ${source.id} has future retrievedAt.`);
     }
 
     if (trimmedLastReviewedAt.length === 0) {
       errors.push(`Policy source ${source.id} has no lastReviewedAt.`);
     } else if (!isIsoCalendarDate(trimmedLastReviewedAt)) {
       errors.push(`Policy source ${source.id} has invalid lastReviewedAt.`);
+    } else if (daysBetween(asOf, trimmedLastReviewedAt) > 0) {
+      errors.push(`Policy source ${source.id} has future lastReviewedAt.`);
     }
 
     if (source.sourceType.trim().length === 0) {
