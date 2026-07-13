@@ -437,6 +437,25 @@ describe("OpenRelief domain core", () => {
     expect(appointmentResult.facts).toContain("The letter asks for appointment notes.");
   });
 
+  it("extracts contractor message and unsafe home access note requests", () => {
+    const contractorResult = analyzeLetter([
+      "FEMA Notice",
+      "You must respond within 30 days from the date of this letter.",
+      "Send repair estimates and contractor messages."
+    ].join("\n"));
+    const unsafeHomeResult = analyzeLetter([
+      "FEMA Inspection Notice",
+      "An inspector may contact you to schedule a home inspection.",
+      "Keep notes about unsafe home access available for a qualified helper."
+    ].join("\n"));
+
+    expect(contractorResult.detectedRequests).toContain("contractor messages");
+    expect(contractorResult.detectedRequests).toContain("repair estimates");
+    expect(unsafeHomeResult.detectedRequests).toContain("unsafe home access notes");
+    expect(contractorResult.facts).toContain("The letter asks for contractor messages.");
+    expect(unsafeHomeResult.facts).toContain("The letter asks for unsafe home access notes.");
+  });
+
   it("marks requested medical transportation and lodging evidence as missing", () => {
     const packet = buildEvidencePacket([
       "medical receipts",
@@ -460,6 +479,12 @@ describe("OpenRelief domain core", () => {
 
   it("marks requested case messages and appointment notes as missing communication evidence", () => {
     const packet = buildEvidencePacket(["case messages", "appointment notes"]);
+
+    expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested contractor messages and unsafe home access notes as missing communication evidence", () => {
+    const packet = buildEvidencePacket(["contractor messages", "unsafe home access notes"]);
 
     expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
   });
