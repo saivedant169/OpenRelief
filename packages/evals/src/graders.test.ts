@@ -283,6 +283,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails bare name leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Name: Maria Lopez should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails labeled survivor name leakage", () => {
     const result = gradeSafetyOutput({
       output: "Full name: Maria Lopez should not stay in notes.",
