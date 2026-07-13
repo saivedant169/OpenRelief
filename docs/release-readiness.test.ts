@@ -18,6 +18,7 @@ const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-l
 const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.md");
 const baselineFailureExamplesPath = path.join(process.cwd(), "docs", "baseline-failure-examples.md");
 const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md");
+const evalReportPath = path.join(process.cwd(), "packages", "evals", "reports", "california-wildfire-v1.json");
 const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack-contribution.md");
 const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
@@ -162,6 +163,29 @@ describe("release readiness", () => {
     expect(evalsReadme).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(evalsReadme).toContain("synthetic");
     expect(evalsReadme).toContain("critical failure");
+  });
+
+  it("keeps published benchmark counts synced with the eval report", () => {
+    const report = JSON.parse(readFileSync(evalReportPath, "utf8")) as {
+      caseCount: number;
+      metrics: {
+        passedCount: number;
+      };
+    };
+    const technicalReport = readFileSync(technicalReportPath, "utf8");
+    const baselineFailures = readFileSync(baselineFailureExamplesPath, "utf8");
+    const evalsReadme = readFileSync(evalsReadmePath, "utf8");
+    const demoVideoRunbook = readFileSync(demoVideoRunbookPath, "utf8");
+
+    expect(report.metrics.passedCount).toBe(report.caseCount);
+    expect(demoVideoRunbook).toContain(`Benchmark has ${report.caseCount} synthetic cases passing.`);
+    expect(technicalReport).toContain(`case count: \`${report.caseCount}\``);
+    expect(technicalReport).toContain(`passed count: \`${report.metrics.passedCount}\``);
+    expect(baselineFailures).toContain(
+      `Current benchmark status: \`${report.metrics.passedCount}/${report.caseCount}\` synthetic cases pass`
+    );
+    expect(evalsReadme).toContain(`case count: \`${report.caseCount}\``);
+    expect(evalsReadme).toContain(`passed count: \`${report.metrics.passedCount}\``);
   });
 
   it("documents how to contribute policy packs", () => {
