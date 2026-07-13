@@ -139,6 +139,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[email removed]");
   });
 
+  it("redacts contact names", () => {
+    const redacted = redactRestrictedIdentifiers("Contact name: Rosa Mills should not stay in local text.");
+
+    expect(redacted).not.toContain("Rosa Mills");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts labeled survivor names", () => {
     const redacted = redactRestrictedIdentifiers("Full name: Maria Lopez should not stay in local text.");
 
