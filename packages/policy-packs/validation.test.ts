@@ -73,6 +73,25 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source insecure-source must use https.");
   });
 
+  it("rejects policy sources with invalid review dates", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "bad-date-source",
+          retrievedAt: "2026-13-01",
+          lastReviewedAt: "not-a-date"
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source bad-date-source has invalid retrievedAt.");
+    expect(validation.errors).toContain("Policy source bad-date-source has invalid lastReviewedAt.");
+  });
+
   it("rejects policy sources with instruction-like metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

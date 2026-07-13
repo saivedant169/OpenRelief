@@ -855,6 +855,22 @@ const daysBetween = (fromDate: string, toDate: string): number => {
   return Math.floor((to - from) / 86_400_000);
 };
 
+const isIsoCalendarDate = (value: string) => {
+  const trimmedValue = value.trim();
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(trimmedValue);
+
+  if (match === null) {
+    return false;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+};
+
 const officialPolicySourceDomains = ["fema.gov", "sba.gov", "disasterassistance.gov", "ca.gov"];
 
 const parsePolicySourceUrl = (url: string) => {
@@ -899,12 +915,19 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy source ${source.id} has no disasterType.`);
     }
 
-    if (source.retrievedAt.trim().length === 0) {
+    const trimmedRetrievedAt = source.retrievedAt.trim();
+    const trimmedLastReviewedAt = source.lastReviewedAt.trim();
+
+    if (trimmedRetrievedAt.length === 0) {
       errors.push(`Policy source ${source.id} has no retrievedAt.`);
+    } else if (!isIsoCalendarDate(trimmedRetrievedAt)) {
+      errors.push(`Policy source ${source.id} has invalid retrievedAt.`);
     }
 
-    if (source.lastReviewedAt.trim().length === 0) {
+    if (trimmedLastReviewedAt.length === 0) {
       errors.push(`Policy source ${source.id} has no lastReviewedAt.`);
+    } else if (!isIsoCalendarDate(trimmedLastReviewedAt)) {
+      errors.push(`Policy source ${source.id} has invalid lastReviewedAt.`);
     }
 
     if (source.sourceType.trim().length === 0) {
