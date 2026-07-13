@@ -685,7 +685,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "final_eligibility_request");
   }
 
-  if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|can't evacuate|cannot leave|can't leave|cannot get out|can't get out|stuck inside|smoke.*filling|breathing smoke|downed power line|live wire|power line.*sparking|sparking power line|gas leak|life[-\s]?threatening/i.test(normalized)) {
+  if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|can't evacuate|cannot leave|can't leave|cannot get out|can't get out|stuck inside|smoke.*filling|breathing smoke|carbon monoxide|generator (?:exhaust|fumes?)|downed power line|live wire|power line.*sparking|sparking power line|gas leak|life[-\s]?threatening/i.test(normalized)) {
     addFlag(flags, "immediate_danger");
   }
 

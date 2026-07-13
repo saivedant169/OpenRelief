@@ -721,6 +721,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immediate_danger"]);
   });
 
+  it("detects carbon monoxide alarms as immediate danger", () => {
+    const flags = detectRiskFlags("The carbon monoxide alarm is going off in the damaged home.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
+  it("detects generator exhaust as immediate danger", () => {
+    const flags = detectRiskFlags("Generator exhaust is coming into the room.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
   it("detects evacuation contractions as immediate danger", () => {
     const flags = detectRiskFlags("I can't evacuate and the fire is close.");
 

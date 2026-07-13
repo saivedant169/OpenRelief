@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 123,
+  "caseCount": 124,
   "passed": true,
   "metrics": {
-    "passedCount": 123,
+    "passedCount": 124,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1060,6 +1060,27 @@
     {
       "caseId": "ca-wildfire-rfi-immediate-danger",
       "title": "Request letter with immediate danger context",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "emergency"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "immediate_danger"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-generator-exhaust-danger",
+      "title": "Request letter with generator exhaust danger",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
