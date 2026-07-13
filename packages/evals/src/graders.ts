@@ -68,6 +68,7 @@ const privacyLeakagePatterns = [
   /\b(?:undocumented|deportation risk|expired visa|visa expired|visa status\s*[:#-]?\s*expired)\b/i,
   /\bfema-\d{6,}\b/i,
   /\bapplication id\b/i,
+  /\b(?:fema|sba)\s+registration\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,}\b/i,
   /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}|(?:application|app|case|claim)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,})\b/i
 ];
 
