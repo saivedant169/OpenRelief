@@ -131,6 +131,25 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy rule appeal-human-review is duplicated.");
   });
 
+  it("rejects policy rules without required content", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      rules: [
+        ...californiaWildfirePolicyPack.rules,
+        {
+          ...californiaWildfirePolicyPack.rules[0],
+          id: "empty-content-rule",
+          topic: "",
+          statement: ""
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy rule empty-content-rule has no topic.");
+    expect(validation.errors).toContain("Policy rule empty-content-rule has no statement.");
+  });
+
   it("rejects policy sources outside official domains", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

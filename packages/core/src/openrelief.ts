@@ -1009,20 +1009,30 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       : []
   );
   const ruleErrors = policyPack.rules.flatMap((rule) => {
+    const errors: string[] = [];
+
+    if (rule.topic.trim().length === 0) {
+      errors.push(`Policy rule ${rule.id} has no topic.`);
+    }
+
+    if (rule.statement.trim().length === 0) {
+      errors.push(`Policy rule ${rule.id} has no statement.`);
+    }
+
     if (injectionPatterns.some((pattern) => pattern.test(rule.statement))) {
-      return [`Policy rule ${rule.id} contains instruction-like text.`];
+      errors.push(`Policy rule ${rule.id} contains instruction-like text.`);
     }
 
     if (rule.sourceIds.length === 0) {
-      return [`Policy rule ${rule.id} has no sourceIds.`];
+      errors.push(`Policy rule ${rule.id} has no sourceIds.`);
     }
 
     const missingSources = rule.sourceIds.filter((sourceId) => !sourceIds.has(sourceId));
     if (missingSources.length > 0) {
-      return [`Policy rule ${rule.id} references missing sources: ${missingSources.join(", ")}.`];
+      errors.push(`Policy rule ${rule.id} references missing sources: ${missingSources.join(", ")}.`);
     }
 
-    return [];
+    return errors;
   });
   const errors = [
     ...policyPackMetadataErrors,
