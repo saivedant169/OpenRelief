@@ -104,6 +104,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[address removed]");
   });
 
+  it("redacts insurance claim identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Insurance claim number ABC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("ABC-123456");
+    expect(redacted).toContain("[insurance claim removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",

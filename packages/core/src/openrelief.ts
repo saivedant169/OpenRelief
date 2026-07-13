@@ -155,6 +155,10 @@ const restrictedIdentifierPatterns = [
     replacement: "[address removed]"
   },
   {
+    pattern: /\binsurance\s+claim\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[insurance claim removed]"
+  },
+  {
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
     replacement: "[SSN removed]"
   },
