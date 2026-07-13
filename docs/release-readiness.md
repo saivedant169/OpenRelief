@@ -29,3 +29,4 @@ Manual safety review must confirm:
 - [Evals and quality plan](../plans/07-evals-quality-plan.md)
 - [Security, privacy, and safety plan](../plans/06-security-privacy-safety-plan.md)
 - [Roadmap and launch ops plan](../plans/08-roadmap-launch-ops-plan.md)
+- [Incident response playbook](incident-response.md)

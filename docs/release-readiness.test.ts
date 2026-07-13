@@ -5,6 +5,7 @@ import path from "node:path";
 const releaseReadinessPath = path.join(process.cwd(), "docs/release-readiness.md");
 const codeOfConductPath = path.join(process.cwd(), "CODE_OF_CONDUCT.md");
 const contributingPath = path.join(process.cwd(), "CONTRIBUTING.md");
+const incidentResponsePath = path.join(process.cwd(), "docs", "incident-response.md");
 const licensePath = path.join(process.cwd(), "LICENSE");
 const labelsPath = path.join(process.cwd(), ".github", "labels.yml");
 const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-license.md");
@@ -49,5 +50,17 @@ describe("release readiness", () => {
     expect(labels).toContain("good first issue");
     expect(syntheticDataLicense).toContain("OpenRelief Synthetic Data License");
     expect(syntheticDataLicense).toContain("No real survivor data");
+  });
+
+  it("documents incident response before hosted demo", () => {
+    expect(existsSync(incidentResponsePath)).toBe(true);
+
+    const incidentResponse = readFileSync(incidentResponsePath, "utf8");
+
+    expect(incidentResponse).toContain("Severity Levels");
+    expect(incidentResponse).toContain("Security Contact");
+    expect(incidentResponse).toContain("Reporting Process");
+    expect(incidentResponse).toContain("Takedown Path");
+    expect(incidentResponse).toContain("No real survivor data");
   });
 });
