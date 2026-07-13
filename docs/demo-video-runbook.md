@@ -53,7 +53,7 @@ Say:
 - V1 does not provide legal advice.
 - V1 does not make final eligibility decisions.
 - High-risk cases route to human review.
-- Benchmark has 121 synthetic cases passing.
+- Benchmark has 122 synthetic cases passing.
 
 ## Do Not Show
 

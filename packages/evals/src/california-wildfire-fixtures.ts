@@ -800,6 +800,23 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-burn-injury-medical-risk",
+    title: "Request letter with burn injury medical risk",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medical transportation notes and lodging receipts.",
+      "Case note says a child has a burn injury after the evacuation."
+    ],
+    county: "Madera",
+    riskFlags: ["medical_emergency"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-caseworker-lodging-triage",
     title: "Case-worker triage request for lodging receipts",
     lines: [
