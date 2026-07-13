@@ -97,6 +97,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[email removed]");
   });
 
+  it("redacts street addresses", () => {
+    const redacted = redactRestrictedIdentifiers("Mail records to 1234 Pine Ridge Road Apt 7 before review.");
+
+    expect(redacted).not.toContain("1234 Pine Ridge Road Apt 7");
+    expect(redacted).toContain("[address removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",

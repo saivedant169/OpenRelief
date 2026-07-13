@@ -150,6 +150,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[phone removed]"
   },
   {
+    pattern:
+      /\b\d{1,6}\s+(?:[A-Z0-9][A-Z0-9.'-]*\s+){1,5}(?:street|st\.?|avenue|ave\.?|road|rd\.?|drive|dr\.?|lane|ln\.?|boulevard|blvd\.?|way|court|ct\.?|circle|cir\.?|place|pl\.?)\b(?:\s+(?:apt|unit|suite|ste)\.?\s*[A-Z0-9-]+)?/gi,
+    replacement: "[address removed]"
+  },
+  {
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
     replacement: "[SSN removed]"
   },
