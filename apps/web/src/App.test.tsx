@@ -455,6 +455,8 @@ describe("OpenRelief web workflow", () => {
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);
+    window.localStorage.setItem("openrelief:v1:future-draft", "sensitive case note");
+    window.localStorage.setItem("other-app:key", "keep me");
 
     const letterField = screen.getByLabelText("Extracted letter text");
     await userEvent.clear(letterField);
@@ -475,6 +477,8 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: /confirm clear local data/i }));
 
     expect(window.localStorage.getItem("openrelief:v1:case")).toBeNull();
+    expect(window.localStorage.getItem("openrelief:v1:future-draft")).toBeNull();
+    expect(window.localStorage.getItem("other-app:key")).toBe("keep me");
     expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
   });
 });

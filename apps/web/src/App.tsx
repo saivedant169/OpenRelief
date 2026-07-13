@@ -41,6 +41,7 @@ const steps = [
 ];
 
 const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => [source.id, source]));
+const storageKeyPrefix = "openrelief:v1:";
 const caseStorageKey = "openrelief:v1:case";
 const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
@@ -268,6 +269,15 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
 };
 
 const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSavedCases(JSON.parse(json) as unknown);
+
+const clearOpenReliefLocalStorage = () => {
+  const keysToRemove = Array.from({ length: window.localStorage.length }, (_value, index) => window.localStorage.key(index))
+    .filter((key): key is string => typeof key === "string" && key.startsWith(storageKeyPrefix));
+
+  for (const key of keysToRemove) {
+    window.localStorage.removeItem(key);
+  }
+};
 
 const hasFileExtension = (file: File, extensions: string[]) => {
   const normalizedName = file.name.toLowerCase();
@@ -499,8 +509,7 @@ export const App = () => {
     setFileError("");
     setCaseArchiveText("");
     setCaseArchiveError("");
-    window.localStorage.removeItem(caseStorageKey);
-    window.localStorage.removeItem(casesStorageKey);
+    clearOpenReliefLocalStorage();
   };
 
   const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
