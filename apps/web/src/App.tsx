@@ -44,9 +44,12 @@ const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => 
 const caseStorageKey = "openrelief:v1:case";
 const casesStorageKey = "openrelief:v1:cases";
 const sampleFileName = "Sample_FEMA_Denial.txt";
+const textFileExtensions = [".txt"];
+const pdfFileExtensions = [".pdf"];
+const imageFileExtensions = [".png", ".jpg", ".jpeg"];
 const acceptedFileTypes = [
-  { extensions: [".txt"], mimeTypes: ["text/plain"] },
-  { extensions: [".pdf"], mimeTypes: ["application/pdf"] },
+  { extensions: textFileExtensions, mimeTypes: ["text/plain"] },
+  { extensions: pdfFileExtensions, mimeTypes: ["application/pdf"] },
   { extensions: [".png"], mimeTypes: ["image/png"] },
   { extensions: [".jpg", ".jpeg"], mimeTypes: ["image/jpeg"] }
 ];
@@ -266,14 +269,17 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
 
 const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSavedCases(JSON.parse(json) as unknown);
 
-const isAcceptedFile = (file: File) => {
+const hasFileExtension = (file: File, extensions: string[]) => {
   const normalizedName = file.name.toLowerCase();
+  return extensions.some((extension) => normalizedName.endsWith(extension));
+};
+
+const isAcceptedFile = (file: File) => {
   const normalizedType = file.type.toLowerCase();
 
   return acceptedFileTypes.some(
     ({ extensions, mimeTypes }) =>
-      extensions.some((extension) => normalizedName.endsWith(extension)) &&
-      (normalizedType === "" || mimeTypes.includes(normalizedType))
+      hasFileExtension(file, extensions) && (normalizedType === "" || mimeTypes.includes(normalizedType))
   );
 };
 
@@ -525,12 +531,12 @@ export const App = () => {
     setActiveSavedCaseId(null);
     setAnalysis(null);
     setExportText("");
-    if (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) {
+    if (file.type.startsWith("text/") || hasFileExtension(file, textFileExtensions)) {
       setLetterText(await readTextFile(file));
       return;
     }
 
-    if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+    if (file.type === "application/pdf" || hasFileExtension(file, pdfFileExtensions)) {
       const extractedText = await extractPdfText(file);
       setLetterText(extractedText);
       if (!extractedText.trim()) {
@@ -539,7 +545,7 @@ export const App = () => {
       return;
     }
 
-    if (file.type.startsWith("image/")) {
+    if (file.type.startsWith("image/") || hasFileExtension(file, imageFileExtensions)) {
       const extractedText = await extractImageText(file);
       setLetterText(extractedText);
       if (!extractedText.trim()) {

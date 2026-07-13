@@ -217,4 +217,34 @@ describe("OpenRelief security smoke", () => {
     expect(screen.queryByText("Image OCR is not available yet. Paste extracted text below.")).not.toBeInTheDocument();
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
+
+  it("extracts image OCR text when the browser omits the MIME type", async () => {
+    render(<App />);
+    await loadSampleLetter();
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text");
+    const file = new File([new Uint8Array([137, 80, 78, 71])], "notice.png");
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect((letterField as HTMLTextAreaElement).value).toContain("approved for rental assistance");
+    });
+    expect(vi.mocked(recognize)).toHaveBeenCalledWith(
+      file,
+      "eng",
+      expect.objectContaining({
+        corePath: "/tesseract-core/tesseract-core.wasm.js",
+        langPath: "/tessdata",
+        workerPath: "/tesseract/worker.min.js"
+      })
+    );
+    expect(screen.getByText("notice.png")).toBeInTheDocument();
+    expect(screen.queryByText("Image OCR is not available yet. Paste extracted text below.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
 });
