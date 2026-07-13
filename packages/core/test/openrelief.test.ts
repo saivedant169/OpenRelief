@@ -333,6 +333,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects application fee requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked for an application fee before they would help with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects upfront fee requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone said I must pay an upfront fee before they can help with disaster aid.");
 
