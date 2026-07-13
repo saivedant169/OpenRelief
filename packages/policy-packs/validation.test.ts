@@ -12,6 +12,24 @@ describe("policy pack validation", () => {
     });
   });
 
+  it("rejects policy packs without required metadata", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      id: "",
+      name: "",
+      jurisdiction: "",
+      disasterType: "",
+      version: ""
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy pack has no id.");
+    expect(validation.errors).toContain("Policy pack has no name.");
+    expect(validation.errors).toContain("Policy pack has no jurisdiction.");
+    expect(validation.errors).toContain("Policy pack has no disasterType.");
+    expect(validation.errors).toContain("Policy pack has no version.");
+  });
+
   it("rejects policy sources without required metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
