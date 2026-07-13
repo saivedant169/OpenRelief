@@ -317,13 +317,22 @@ export const createChecklist = (
   policyPack: PolicyPack
 ): Checklist => {
   const items: ChecklistItem[] = [];
+  const sourceWarnings = validatePolicyPack(policyPack).warnings;
+  const needsPolicyReview = sourceWarnings.length > 0;
 
-  if (letter.needsHumanReview || caseContext.riskFlags.length > 0) {
+  if (letter.needsHumanReview || caseContext.riskFlags.length > 0 || needsPolicyReview) {
+    const humanReviewReasons = [
+      letter.needsHumanReview || caseContext.riskFlags.length > 0
+        ? "Denial, appeal, or risk flags should be reviewed by a qualified helper."
+        : "",
+      needsPolicyReview ? "Policy sources need review before relying on generated next steps." : ""
+    ].filter(Boolean);
+
     items.push({
       id: "human-review",
       title: "Request human review",
       category: "human_review",
-      reason: "Denial, appeal, or risk flags should be reviewed by a qualified helper.",
+      reason: humanReviewReasons.join(" "),
       editable: true,
       sourceIds: ["fema-appeals"]
     });
@@ -364,7 +373,6 @@ export const createChecklist = (
     });
   }
 
-  const sourceWarnings = validatePolicyPack(policyPack).warnings;
   const sourceReviewReason = [
     `Use the ${policyPack.name} source list before relying on policy details.`,
     ...sourceWarnings

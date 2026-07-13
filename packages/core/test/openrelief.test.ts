@@ -174,7 +174,7 @@ describe("OpenRelief domain core", () => {
     });
   });
 
-  it("surfaces stale policy sources in the source review checklist item", () => {
+  it("routes stale policy sources to human review", () => {
     const stalePolicyPack = {
       ...californiaWildfirePolicyPack,
       sources: californiaWildfirePolicyPack.sources.map((source) =>
@@ -182,14 +182,12 @@ describe("OpenRelief domain core", () => {
       )
     };
     const checklist = createChecklist(
-      { county: "Los Angeles", disasterType: "wildfire", riskFlags: ["denial_or_appeal"] },
-      analyzeLetter(denialLetter),
+      { county: "Los Angeles", disasterType: "wildfire", riskFlags: [] },
+      analyzeLetter("FEMA Notice\nYour application is approved for rental assistance."),
       stalePolicyPack
     );
-
-    const sourceReviewItem = checklist.items.find((item) => item.category === "source_review");
-
-    expect(sourceReviewItem?.reason).toContain("Policy source fema-documents last reviewed more than 30 days ago.");
+    expect(checklist.items.find((item) => item.category === "human_review")?.reason ?? "").toContain("Policy sources need review before relying on generated next steps.");
+    expect(checklist.items.find((item) => item.category === "source_review")?.reason).toContain("Policy source fema-documents last reviewed more than 30 days ago.");
   });
 
   it("builds an evidence packet grouped by recovery category", () => {
