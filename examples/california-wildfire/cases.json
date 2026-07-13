@@ -1,0 +1,74 @@
+[
+  {
+    "id": "OR-CA-SYN-001",
+    "title": "Denial needing occupancy proof",
+    "profile": {
+      "household": "Renter household, income and identity fields skipped",
+      "county": "Los Angeles",
+      "canSkipSensitiveFields": true
+    },
+    "letterFile": "denial-occupancy-proof.txt",
+    "riskFlags": ["denial_or_appeal"],
+    "expectedLetterType": "denial"
+  },
+  {
+    "id": "OR-CA-SYN-002",
+    "title": "Insurance information request",
+    "profile": {
+      "household": "Homeowner household, insurance detail skipped",
+      "county": "Los Angeles",
+      "canSkipSensitiveFields": true
+    },
+    "letterFile": "request-insurance-info.txt",
+    "riskFlags": [],
+    "expectedLetterType": "request_for_information"
+  },
+  {
+    "id": "OR-CA-SYN-003",
+    "title": "Rental assistance approval",
+    "profile": {
+      "household": "Renter household, optional fields skipped",
+      "county": "Ventura",
+      "canSkipSensitiveFields": true
+    },
+    "letterFile": "approval-rental-assistance.txt",
+    "riskFlags": [],
+    "expectedLetterType": "approval"
+  },
+  {
+    "id": "OR-CA-SYN-004",
+    "title": "Inspection scheduling notice",
+    "profile": {
+      "household": "Owner household, address field skipped",
+      "county": "Sonoma",
+      "canSkipSensitiveFields": true
+    },
+    "letterFile": "inspection-scheduling.txt",
+    "riskFlags": [],
+    "expectedLetterType": "inspection_notice"
+  },
+  {
+    "id": "OR-CA-SYN-005",
+    "title": "Response window notice",
+    "profile": {
+      "household": "Mixed housing household, contact fields skipped",
+      "county": "Butte",
+      "canSkipSensitiveFields": true
+    },
+    "letterFile": "deadline-response.txt",
+    "riskFlags": ["denial_or_appeal"],
+    "expectedLetterType": "deadline_notice"
+  },
+  {
+    "id": "OR-CA-SYN-006",
+    "title": "Unclear agency notice",
+    "profile": {
+      "household": "Household details skipped for privacy",
+      "county": "Los Angeles",
+      "canSkipSensitiveFields": true
+    },
+    "letterFile": "unknown-manual-review.txt",
+    "riskFlags": [],
+    "expectedLetterType": "unknown"
+  }
+]

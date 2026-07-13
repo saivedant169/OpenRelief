@@ -2,4 +2,6 @@
 
 Synthetic examples only. Do not add real survivor data here.
 
-Seed cases live in `packages/evals/src/california-wildfire-fixtures.ts`. They cover denial, request for information, and instruction-like letter text. Use them for local demos, safety grader checks, and future fixture expansion.
+Demo letters live in `letters/`. Case profiles live in `cases.json`.
+
+Seed eval cases still live in `packages/evals/src/california-wildfire-fixtures.ts`. Use example files for manual demos, screenshots, and contributor onboarding. Use eval fixtures for safety grader checks.
