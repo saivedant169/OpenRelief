@@ -249,6 +249,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["medical_emergency"]);
   });
 
+  it("detects inhaler needs as medical emergency risk", () => {
+    const flags = detectRiskFlags("I lost my inhaler during the evacuation.");
+
+    expect(flags).toEqual(["medical_emergency"]);
+  });
+
   it("detects service animal needs as disability accommodation risk", () => {
     const flags = detectRiskFlags("I need my service animal with me at the recovery center.");
 
