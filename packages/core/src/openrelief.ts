@@ -234,8 +234,16 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for damage photos.");
   }
 
+  if (requests.includes("smoke damage records")) {
+    facts.push("The letter asks for smoke damage records.");
+  }
+
   if (requests.includes("cleanup receipts")) {
     facts.push("The letter asks for cleanup receipts.");
+  }
+
+  if (requests.includes("debris removal records")) {
+    facts.push("The letter asks for debris removal records.");
   }
 
   if (requests.includes("replacement item receipts")) {
@@ -289,7 +297,9 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       : "",
     normalized.includes("agency messages") ? "agency messages" : "",
     normalized.includes("damage photos") ? "damage photos" : "",
+    normalized.includes("smoke damage records") ? "smoke damage records" : "",
     normalized.includes("cleanup receipts") ? "cleanup receipts" : "",
+    normalized.includes("debris removal records") ? "debris removal records" : "",
     normalized.includes("replacement household item receipts") ||
     normalized.includes("receipts for replacement household items")
       ? "replacement item receipts"
@@ -553,6 +563,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
           status:
             requests.includes("contractor estimates") ||
             requests.includes("damage photos") ||
+            requests.includes("smoke damage records") ||
             requests.includes("repair estimates")
               ? "missing"
               : "optional",
@@ -569,6 +580,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
             requests.includes("repair receipts") ||
             requests.includes("temporary lodging receipts") ||
             requests.includes("cleanup receipts") ||
+            requests.includes("debris removal records") ||
             requests.includes("replacement item receipts")
               ? "missing"
               : "optional",

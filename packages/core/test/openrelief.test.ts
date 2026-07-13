@@ -390,6 +390,27 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts debris removal and smoke damage record requests", () => {
+    const debrisResult = analyzeLetter(
+      "FEMA Notice\nYour application is denied because debris removal records were not received."
+    );
+    const smokeResult = analyzeLetter(
+      "FEMA Notice\nYour application is denied because smoke damage records were incomplete."
+    );
+
+    expect(debrisResult.detectedRequests).toContain("debris removal records");
+    expect(smokeResult.detectedRequests).toContain("smoke damage records");
+    expect(debrisResult.facts).toContain("The letter asks for debris removal records.");
+    expect(smokeResult.facts).toContain("The letter asks for smoke damage records.");
+  });
+
+  it("marks requested debris removal and smoke damage evidence as missing", () => {
+    const packet = buildEvidencePacket(["debris removal records", "smoke damage records"]);
+
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
+  });
+
   it("rejects policy packs with uncited rules", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
