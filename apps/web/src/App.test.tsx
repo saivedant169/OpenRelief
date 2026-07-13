@@ -119,6 +119,31 @@ describe("OpenRelief web workflow", () => {
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });
 
+  it("saves multiple local case snapshots with distinct IDs", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved for rental assistance." }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    expect(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Open saved case OR-CA-2026-002" })).toBeInTheDocument();
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(screen.getByText("Saved case: Approval")).toBeInTheDocument();
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+    const exported = JSON.parse(archiveField.value) as Array<{ id: string; letterType: string }>;
+
+    expect(exported.map((savedCase) => savedCase.id)).toEqual(["OR-CA-2026-002", "OR-CA-2026-001"]);
+    expect(exported.map((savedCase) => savedCase.letterType)).toEqual(["approval", "denial"]);
+  });
+
   it("redacts restricted identifiers before local draft storage and saved case export", async () => {
     render(<App />);
 

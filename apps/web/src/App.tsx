@@ -44,6 +44,7 @@ const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => 
 const storageKeyPrefix = "openrelief:v1:";
 const caseStorageKey = "openrelief:v1:case";
 const casesStorageKey = "openrelief:v1:cases";
+const localCaseIdPrefix = "OR-CA-2026-";
 const sampleFileName = "Sample_FEMA_Denial.txt";
 const textFileExtensions = [".txt"];
 const pdfFileExtensions = [".pdf"];
@@ -235,6 +236,20 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
 
 const parseSavedCasesJson = (json: string): SavedCaseSummary[] => normalizeSavedCases(JSON.parse(json) as unknown);
 
+const parseLocalCaseIdNumber = (id: string): number => {
+  if (!id.startsWith(localCaseIdPrefix)) {
+    return 0;
+  }
+
+  const parsed = Number(id.slice(localCaseIdPrefix.length));
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 0;
+};
+
+const nextLocalCaseId = (savedCases: SavedCaseSummary[]): string => {
+  const nextNumber = Math.max(0, ...savedCases.map((savedCase) => parseLocalCaseIdNumber(savedCase.id))) + 1;
+  return `${localCaseIdPrefix}${String(nextNumber).padStart(3, "0")}`;
+};
+
 const clearOpenReliefLocalStorage = () => {
   const keysToRemove = Array.from({ length: window.localStorage.length }, (_value, index) => window.localStorage.key(index))
     .filter((key): key is string => typeof key === "string" && key.startsWith(storageKeyPrefix));
@@ -367,23 +382,25 @@ export const App = () => {
       reason,
       sourceIds
     }));
-    const snapshot: SavedCaseSummary = {
-      id: "OR-CA-2026-001",
-      title: letterTypeLabels[analysis.letterType],
-      letterType: analysis.letterType,
-      letterText: redactRestrictedIdentifiers(letterText),
-      fileName: redactRestrictedIdentifiers(fileName),
-      intakeText: redactRestrictedIdentifiers(intakeText),
-      deadlines: analysis.detectedDeadlines,
-      missingEvidence: extractMissingEvidence(evidencePacket),
-      checklistItems,
-      checklistStatuses: defaultChecklistStatuses(checklistItems),
-      riskFlags,
-      summary: analysis.summary,
-      notes: ""
-    };
+    setSavedCases((current) => {
+      const snapshot: SavedCaseSummary = {
+        id: activeSavedCaseId ?? nextLocalCaseId(current),
+        title: letterTypeLabels[analysis.letterType],
+        letterType: analysis.letterType,
+        letterText: redactRestrictedIdentifiers(letterText),
+        fileName: redactRestrictedIdentifiers(fileName),
+        intakeText: redactRestrictedIdentifiers(intakeText),
+        deadlines: analysis.detectedDeadlines,
+        missingEvidence: extractMissingEvidence(evidencePacket),
+        checklistItems,
+        checklistStatuses: defaultChecklistStatuses(checklistItems),
+        riskFlags,
+        summary: analysis.summary,
+        notes: ""
+      };
 
-    setSavedCases((current) => [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10));
+      return [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10);
+    });
     setClearArmed(false);
   };
 
@@ -534,6 +551,7 @@ export const App = () => {
 
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
   const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
+  const currentCaseId = activeSavedCase?.id ?? nextLocalCaseId(savedCases);
   const activeCaseSourceIds = activeSavedCase
     ? [
         ...new Set([
@@ -583,7 +601,7 @@ export const App = () => {
             <dl>
               <div>
                 <dt>Case ID</dt>
-                <dd>OR-CA-2026-001</dd>
+                <dd>{currentCaseId}</dd>
               </div>
               <div>
                 <dt>Incident</dt>
