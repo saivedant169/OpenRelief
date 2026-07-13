@@ -17,6 +17,13 @@ describe("OpenRelief PWA shell", () => {
     expect(html).toContain('<link rel="manifest" href="%BASE_URL%manifest.webmanifest" />');
     expect(html).toContain('<link rel="icon" href="%BASE_URL%openrelief.svg" type="image/svg+xml" />');
     expect(html).toContain('<meta name="theme-color" content="#155e63" />');
+    expect(html).toContain('http-equiv="Content-Security-Policy"');
+    expect(html).toContain("default-src 'self'");
+    expect(html).toContain("script-src 'self' 'wasm-unsafe-eval'");
+    expect(html).toContain("worker-src 'self' blob:");
+    expect(html).toContain("connect-src 'self'");
+    expect(html).toContain("object-src 'none'");
+    expect(html).toContain("frame-ancestors 'none'");
 
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as {
       name: string;
