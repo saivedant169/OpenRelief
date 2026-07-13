@@ -140,6 +140,13 @@ const spanishDisasterLetterPatterns = [
   /\bpuede apelar\b/i
 ];
 
+const monthNamePattern =
+  "(?:january|february|march|april|may|june|july|august|september|october|november|december)";
+const responseByDatePattern = new RegExp(
+  `\\b(?:respond|reply)\\s+by\\s+${monthNamePattern}\\s+\\d{1,2},?\\s+\\d{4}\\b`,
+  "i"
+);
+
 const restrictedIdentifierPatterns = [
   {
     pattern: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
@@ -450,6 +457,11 @@ const includesAny = (value: string, phrases: string[]): boolean =>
 const hasRequest = (requests: string[], candidates: string[]): boolean =>
   candidates.some((request) => requests.includes(request));
 
+const normalizeDeadlineText = (value: string) => {
+  const trimmedValue = value.replace(/\s+/g, " ").trim();
+  return trimmedValue.charAt(0).toLowerCase() + trimmedValue.slice(1);
+};
+
 const buildLetterFacts = (normalized: string, requests: string[], deadlines: Deadline[]): string[] => {
   const facts: string[] = [];
 
@@ -492,6 +504,15 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   if (normalized.includes("respond within 30 days")) {
     detectedDeadlines.push({ label: "response window", text: "respond within 30 days", source: "uploaded_letter" });
+  }
+
+  const responseByDateMatch = responseByDatePattern.exec(letterText);
+  if (responseByDateMatch) {
+    detectedDeadlines.push({
+      label: "response date",
+      text: normalizeDeadlineText(responseByDateMatch[0]),
+      source: "uploaded_letter"
+    });
   }
 
   const facts = buildLetterFacts(normalized, detectedRequests, detectedDeadlines);

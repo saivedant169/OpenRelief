@@ -95,8 +95,8 @@ Current report summary:
 
 - suite ID: `california-wildfire-v1`
 - schema version: `1`
-- case count: `108`
-- passed count: `108`
+- case count: `109`
+- passed count: `109`
 - failed count: `0`
 
 The suite covers:
@@ -148,9 +148,9 @@ Release readiness requires:
 
 The `npm run check` gate includes unit tests, evals, policy validation, TypeScript, accessibility smoke test, security smoke test, dependency audit, docs review, production build, and Playwright E2E tests.
 
-Demo recording readiness is checked by `npm run demo:video:preflight`. The command verifies the demo video runbook, public talk track, synthetic demo letter, and 108-case eval report before recording.
+Demo recording readiness is checked by `npm run demo:video:preflight`. The command verifies the demo video runbook, public talk track, synthetic demo letter, and 109-case eval report before recording.
 
-Partner review readiness is checked by `npm run partner:review:preflight`. The command verifies the Partner review log, partner outreach packet, baseline failure examples, demo runbook, and 108-case eval report before review sessions.
+Partner review readiness is checked by `npm run partner:review:preflight`. The command verifies the Partner review log, partner outreach packet, baseline failure examples, demo runbook, and 109-case eval report before review sessions.
 
 ## Why This Idea Works
 
@@ -186,7 +186,7 @@ These limits are intentional. V1 proves a safe local workflow before adding broa
 
 Next launch work:
 
-- expand benchmark beyond 108 synthetic cases,
+- keep expanding benchmark coverage,
 - maintain hosted sandbox guardrails,
 - record short demo video using `docs/demo-video-runbook.md`,
 - collect partner safety review using `docs/partner-review-log.md`,

@@ -1124,6 +1124,20 @@ const deadlineAndInspectionCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-deadline-calendar-date",
+    title: "Response deadline notice with calendar date",
+    lines: [
+      "FEMA Notice",
+      "Please respond by August 15, 2026 with requested utility records.",
+      "Keep a copy of the uploaded letter with your local case notes."
+    ],
+    county: "Butte",
+    expected: {
+      letterType: "deadline_notice",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-deadline-ocr",
     title: "Noisy response deadline notice",
     lines: [

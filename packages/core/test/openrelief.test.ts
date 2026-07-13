@@ -204,6 +204,20 @@ describe("OpenRelief domain core", () => {
     expect(result.needsHumanReview).toBe(false);
   });
 
+  it("detects explicit response date deadlines from uploaded letters", () => {
+    const result = analyzeLetter(
+      "FEMA Notice\nPlease respond by August 15, 2026 with requested utility records."
+    );
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response date",
+      text: "respond by August 15, 2026",
+      source: "uploaded_letter"
+    });
+    expect(result.facts).toContain("The letter says respond by August 15, 2026.");
+  });
+
   it("detects high-risk intake flags from survivor context", () => {
     const flags = detectRiskFlags(
       "No place to stay tonight. Need oxygen and medicine. Wheelchair access required. Immigration concern."
