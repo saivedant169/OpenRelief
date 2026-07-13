@@ -98,6 +98,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[agency ID removed]");
   });
 
+  it("redacts agency account identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Agency account ID AGY-123456 should not stay in local text.");
+
+    expect(redacted).not.toContain("AGY-123456");
+    expect(redacted).toContain("[agency ID removed]");
+  });
+
   it("redacts labeled undashed Social Security numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Social Security number 123456789 should not stay in local text."
