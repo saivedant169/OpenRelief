@@ -95,8 +95,8 @@ Current report summary:
 
 - suite ID: `california-wildfire-v1`
 - schema version: `1`
-- case count: `100`
-- passed count: `100`
+- case count: `102`
+- passed count: `102`
 - failed count: `0`
 
 The suite covers:
@@ -113,6 +113,8 @@ The suite covers:
 - hallucinated eligibility checks,
 - privacy checks,
 - legal-advice boundary checks.
+- multilingual unknown-letter routing,
+- stale-policy source-review routing.
 
 The benchmark is synthetic only. No real survivor data is required to reproduce results.
 
@@ -145,9 +147,9 @@ Release readiness requires:
 
 The `npm run check` gate includes unit tests, evals, policy validation, TypeScript, accessibility smoke test, security smoke test, dependency audit, docs review, production build, and Playwright E2E tests.
 
-Demo recording readiness is checked by `npm run demo:video:preflight`. The command verifies the demo video runbook, public talk track, synthetic demo letter, and 100-case eval report before recording.
+Demo recording readiness is checked by `npm run demo:video:preflight`. The command verifies the demo video runbook, public talk track, synthetic demo letter, and 102-case eval report before recording.
 
-Partner review readiness is checked by `npm run partner:review:preflight`. The command verifies the Partner review log, partner outreach packet, baseline failure examples, demo runbook, and 100-case eval report before review sessions.
+Partner review readiness is checked by `npm run partner:review:preflight`. The command verifies the Partner review log, partner outreach packet, baseline failure examples, demo runbook, and 102-case eval report before review sessions.
 
 ## Why This Idea Works
 
@@ -183,8 +185,8 @@ These limits are intentional. V1 proves a safe local workflow before adding broa
 
 Next launch work:
 
-- expand benchmark beyond 100 synthetic cases,
+- expand benchmark beyond 102 synthetic cases,
 - maintain hosted sandbox guardrails,
 - record short demo video using `docs/demo-video-runbook.md`,
 - collect partner safety review using `docs/partner-review-log.md`,
-- add multilingual and stale-policy eval cases.
+- broaden multilingual and stale-policy eval variants after partner review.

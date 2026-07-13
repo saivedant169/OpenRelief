@@ -31,6 +31,7 @@ const buildExpectedReport = () => {
         actualLetterType,
         expectedNeedsHumanReview,
         actualNeedsHumanReview,
+        tags,
         passed,
         failures,
         sourceIds,
@@ -42,6 +43,7 @@ const buildExpectedReport = () => {
         actualLetterType,
         expectedNeedsHumanReview,
         actualNeedsHumanReview,
+        tags,
         passed,
         failures,
         sourceIds,
@@ -86,6 +88,21 @@ describe("machine-readable eval report", () => {
     expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(36);
     expect(unknownCases.length).toBeGreaterThanOrEqual(3);
     expect(unknownCases.every((fixture) => fixture.expected.needsHumanReview)).toBe(true);
+  });
+
+  it("covers multilingual and stale-policy launch gaps", () => {
+    const report = JSON.parse(readFileSync(reportPath, "utf8")) as {
+      results: Array<{ tags?: string[] }>;
+    };
+
+    expect(californiaWildfireCases.some((fixture) => fixture.tags?.some((tag) => String(tag) === "multilingual"))).toBe(
+      true
+    );
+    expect(californiaWildfireCases.some((fixture) => fixture.tags?.some((tag) => String(tag) === "stale_policy"))).toBe(
+      true
+    );
+    expect(report.results.some((result) => result.tags?.includes("multilingual"))).toBe(true);
+    expect(report.results.some((result) => result.tags?.includes("stale_policy"))).toBe(true);
   });
 
   it("matches the California wildfire eval suite summary", () => {

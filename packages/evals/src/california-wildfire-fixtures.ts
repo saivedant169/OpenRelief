@@ -1,6 +1,6 @@
 import type { CaseContext, LetterType, RiskFlag } from "../../core/src/openrelief";
 
-export type EvalCaseTag = "ocr_noise" | "adversarial";
+export type EvalCaseTag = "ocr_noise" | "adversarial" | "multilingual" | "stale_policy";
 
 export interface CaliforniaWildfireEvalCase {
   id: string;
@@ -1588,6 +1588,37 @@ const unknownCases = [
     ],
     county: "Los Angeles",
     tags: ["adversarial"],
+    expected: {
+      letterType: "unknown",
+      needsHumanReview: true
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-unknown-spanish-denial",
+    title: "Spanish denial notice routes to manual review",
+    lines: [
+      "Aviso de FEMA",
+      "Su solicitud fue denegada porque falta prueba de ocupacion.",
+      "Puede apelar dentro de 60 dias desde la fecha de esta carta."
+    ],
+    county: "Los Angeles",
+    riskFlags: ["denial_or_appeal"],
+    tags: ["multilingual"],
+    expected: {
+      letterType: "unknown",
+      needsHumanReview: true
+    }
+  }),
+  buildCase({
+    id: "ca-wildfire-unknown-stale-policy-note",
+    title: "Stale policy source note routes to manual review",
+    lines: [
+      "Policy Source Review Note",
+      "Older printed guidance says source dates may be out of date.",
+      "Confirm current official FEMA and SBA sources before relying on any policy detail."
+    ],
+    county: "Butte",
+    tags: ["stale_policy"],
     expected: {
       letterType: "unknown",
       needsHumanReview: true

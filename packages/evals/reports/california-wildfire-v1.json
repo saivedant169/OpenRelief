@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 100,
+  "caseCount": 102,
   "passed": true,
   "metrics": {
-    "passedCount": 100,
+    "passedCount": 102,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -16,6 +16,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -34,6 +35,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -52,6 +56,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -70,6 +77,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -88,6 +98,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -106,6 +119,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -125,6 +139,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -144,6 +159,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -163,6 +179,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -182,6 +199,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -201,6 +221,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -219,6 +240,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -238,6 +262,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -256,6 +281,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -275,6 +303,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -294,6 +325,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -312,6 +346,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -330,6 +367,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -348,6 +388,7 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -367,6 +408,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -386,6 +430,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -405,6 +452,9 @@
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -423,6 +473,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -439,6 +490,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -455,6 +509,10 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise",
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -471,6 +529,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -487,6 +548,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -503,6 +567,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -519,6 +586,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -537,6 +605,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -553,6 +624,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -569,6 +641,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -585,6 +658,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -603,6 +677,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -621,6 +698,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -639,6 +719,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -655,6 +738,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -673,6 +757,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -691,6 +778,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -709,6 +799,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -725,6 +816,10 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial",
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -743,6 +838,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -759,6 +857,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -777,6 +876,7 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -795,6 +895,9 @@
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -813,6 +916,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -829,6 +933,10 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise",
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -845,6 +953,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -861,6 +972,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -877,6 +991,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -895,6 +1010,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -913,6 +1029,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -929,6 +1046,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -945,6 +1065,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -961,6 +1084,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -979,6 +1103,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -995,6 +1122,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1013,6 +1141,10 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial",
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1029,6 +1161,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1045,6 +1180,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1061,6 +1199,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1077,6 +1216,9 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1093,6 +1235,7 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1111,6 +1254,10 @@
       "actualLetterType": "approval",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial",
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1127,6 +1274,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1143,6 +1293,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1159,6 +1312,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1175,6 +1331,7 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1191,6 +1348,9 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1207,6 +1367,7 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1225,6 +1386,7 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1243,6 +1405,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1259,6 +1424,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1275,6 +1443,9 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1291,6 +1462,7 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1309,6 +1481,7 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1325,6 +1498,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1343,6 +1519,9 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1359,6 +1538,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1375,6 +1557,7 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1393,6 +1576,7 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1411,6 +1595,10 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "adversarial",
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1427,6 +1615,9 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1443,6 +1634,7 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1461,6 +1653,7 @@
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1477,6 +1670,9 @@
       "actualLetterType": "inspection_notice",
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1495,6 +1691,7 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1511,6 +1708,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1527,6 +1727,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1543,6 +1746,7 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1559,6 +1763,10 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise",
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1575,6 +1783,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1591,6 +1802,7 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1607,6 +1819,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1625,6 +1840,7 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1641,6 +1857,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1659,6 +1878,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "ocr_noise"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1675,6 +1897,9 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1691,6 +1916,7 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
@@ -1707,6 +1933,49 @@
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,
       "actualNeedsHumanReview": true,
+      "tags": [
+        "adversarial"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-unknown-spanish-denial",
+      "title": "Spanish denial notice routes to manual review",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "multilingual"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "denial_or_appeal"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-unknown-stale-policy-note",
+      "title": "Stale policy source note routes to manual review",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "stale_policy"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [

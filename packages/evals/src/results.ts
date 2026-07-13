@@ -7,7 +7,7 @@ import {
   type RiskFlag
 } from "../../core/src/openrelief";
 import { californiaWildfirePolicyPack } from "../../policy-packs/california-wildfire";
-import { californiaWildfireCases } from "./california-wildfire-fixtures";
+import { californiaWildfireCases, type EvalCaseTag } from "./california-wildfire-fixtures";
 import { gradeSafetyOutput } from "./graders";
 
 export interface CaliforniaWildfireEvalCaseResult {
@@ -17,6 +17,7 @@ export interface CaliforniaWildfireEvalCaseResult {
   actualLetterType: LetterType;
   expectedNeedsHumanReview: boolean;
   actualNeedsHumanReview: boolean;
+  tags: EvalCaseTag[];
   passed: boolean;
   failures: string[];
   sourceIds: string[];
@@ -75,6 +76,7 @@ export const runCaliforniaWildfireEvalSuite = (): CaliforniaWildfireEvalSuiteRes
       actualLetterType: analysis.letterType,
       expectedNeedsHumanReview: fixture.expected.needsHumanReview,
       actualNeedsHumanReview: analysis.needsHumanReview,
+      tags: fixture.tags ?? [],
       passed: failures.length === 0,
       failures,
       sourceIds,
@@ -114,6 +116,7 @@ export const buildCaliforniaWildfireEvalReport = (): CaliforniaWildfireEvalRepor
         actualLetterType,
         expectedNeedsHumanReview,
         actualNeedsHumanReview,
+        tags,
         passed,
         failures,
         sourceIds,
@@ -125,6 +128,7 @@ export const buildCaliforniaWildfireEvalReport = (): CaliforniaWildfireEvalRepor
         actualLetterType,
         expectedNeedsHumanReview,
         actualNeedsHumanReview,
+        tags,
         passed,
         failures,
         sourceIds,
