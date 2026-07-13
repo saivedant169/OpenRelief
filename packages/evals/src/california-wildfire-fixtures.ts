@@ -470,7 +470,7 @@ const requestCases = [
     tags: ["ocr_noise", "adversarial"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -501,7 +501,7 @@ const requestCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -517,7 +517,7 @@ const requestCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -607,7 +607,7 @@ const requestCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -686,7 +686,7 @@ const requestCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -717,7 +717,7 @@ const requestCases = [
     tags: ["adversarial", "ocr_noise"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -795,7 +795,7 @@ const requestCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "request_for_information",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -845,7 +845,7 @@ const approvalCases = [
     tags: ["ocr_noise", "adversarial"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -860,7 +860,7 @@ const approvalCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -934,7 +934,7 @@ const approvalCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -979,7 +979,7 @@ const approvalCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1010,7 +1010,7 @@ const approvalCases = [
     tags: ["adversarial", "ocr_noise"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1041,7 +1041,7 @@ const approvalCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1071,7 +1071,7 @@ const approvalCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1102,7 +1102,7 @@ const approvalCases = [
     tags: ["adversarial", "ocr_noise"],
     expected: {
       letterType: "approval",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   })
 ];
@@ -1150,7 +1150,7 @@ const deadlineAndInspectionCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "deadline_notice",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1179,7 +1179,7 @@ const deadlineAndInspectionCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "inspection_notice",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1239,7 +1239,7 @@ const deadlineAndInspectionCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "deadline_notice",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1314,7 +1314,7 @@ const deadlineAndInspectionCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "inspection_notice",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1330,7 +1330,7 @@ const deadlineAndInspectionCases = [
     tags: ["adversarial"],
     expected: {
       letterType: "deadline_notice",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({
@@ -1376,7 +1376,7 @@ const deadlineAndInspectionCases = [
     tags: ["adversarial", "ocr_noise"],
     expected: {
       letterType: "inspection_notice",
-      needsHumanReview: false
+      needsHumanReview: true
     }
   }),
   buildCase({

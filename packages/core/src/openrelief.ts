@@ -477,6 +477,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   const injectionWarnings = injectionPatterns
     .filter((pattern) => pattern.test(letterText))
     .map((pattern) => `Prompt injection pattern detected: ${pattern.source}`);
+  const needsInjectionReview = injectionWarnings.length > 0;
   const appearsSpanish = spanishDisasterLetterPatterns.some((pattern) => pattern.test(letterText));
 
   const detectedRequests = requestDetectionRules
@@ -524,7 +525,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
-      needsHumanReview: false
+      needsHumanReview: needsInjectionReview
     };
   }
 
@@ -537,7 +538,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
-      needsHumanReview: false
+      needsHumanReview: needsInjectionReview
     };
   }
 
@@ -550,7 +551,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
-      needsHumanReview: false
+      needsHumanReview: needsInjectionReview
     };
   }
 
@@ -563,7 +564,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       detectedDeadlines,
       detectedRequests,
       injectionWarnings,
-      needsHumanReview: false
+      needsHumanReview: needsInjectionReview
     };
   }
 
