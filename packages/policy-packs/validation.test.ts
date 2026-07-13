@@ -77,6 +77,18 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source bad-classification-source has invalid trustTier.");
   });
 
+  it("rejects duplicate policy source and rule ids", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [...californiaWildfirePolicyPack.sources, californiaWildfirePolicyPack.sources[0]],
+      rules: [...californiaWildfirePolicyPack.rules, californiaWildfirePolicyPack.rules[0]]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source fema-appeals is duplicated.");
+    expect(validation.errors).toContain("Policy rule appeal-human-review is duplicated.");
+  });
+
   it("rejects policy sources outside official domains", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

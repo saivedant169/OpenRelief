@@ -888,8 +888,28 @@ const parsePolicySourceUrl = (url: string) => {
 const isOfficialPolicySourceHost = (host: string) =>
   officialPolicySourceDomains.some((domain) => host === domain || host.endsWith(`.${domain}`));
 
+const duplicateIds = (ids: string[]) => {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+
+  ids.forEach((id) => {
+    if (seen.has(id)) {
+      duplicates.add(id);
+    }
+    seen.add(id);
+  });
+
+  return [...duplicates];
+};
+
 export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"): PolicyValidationResult => {
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
+  const duplicateSourceErrors = duplicateIds(policyPack.sources.map((source) => source.id)).map(
+    (sourceId) => `Policy source ${sourceId} is duplicated.`
+  );
+  const duplicateRuleErrors = duplicateIds(policyPack.rules.map((rule) => rule.id)).map(
+    (ruleId) => `Policy rule ${ruleId} is duplicated.`
+  );
   const sourceErrors = policyPack.sources.flatMap((source) => {
     const errors: string[] = [];
     const trimmedUrl = source.url.trim();
@@ -982,7 +1002,7 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
 
     return [];
   });
-  const errors = [...sourceErrors, ...ruleErrors];
+  const errors = [...duplicateSourceErrors, ...sourceErrors, ...duplicateRuleErrors, ...ruleErrors];
 
   return {
     valid: errors.length === 0,
