@@ -190,6 +190,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[immigration identifier removed]");
   });
 
+  it("redacts immigration status labels", () => {
+    const redacted = redactRestrictedIdentifiers("Visa status: expired should not stay in notes.");
+
+    expect(redacted).not.toContain("expired");
+    expect(redacted).toContain("[immigration status removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",
