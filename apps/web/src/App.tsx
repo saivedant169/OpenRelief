@@ -144,6 +144,22 @@ const normalizeChecklistStatuses = (items: ChecklistSummaryItem[], value: unknow
 const completedChecklistCount = (savedCase: SavedCaseSummary): number =>
   savedCase.checklistItems.filter((item) => savedCase.checklistStatuses[item.id] === "done").length;
 
+const caseQueueStatus = (savedCase: SavedCaseSummary): string => {
+  if (savedCase.riskFlags.length > 0 || savedCase.letterType === "denial" || savedCase.letterType === "unknown") {
+    return "Needs review";
+  }
+
+  if (savedCase.missingEvidence.length > 0) {
+    return "Missing evidence";
+  }
+
+  if (savedCase.checklistItems.length > 0 && completedChecklistCount(savedCase) === savedCase.checklistItems.length) {
+    return "Checklist complete";
+  }
+
+  return "In progress";
+};
+
 const redactDeadline = (deadline: Deadline): Deadline => ({
   ...deadline,
   label: redactRestrictedIdentifiers(deadline.label),
@@ -626,6 +642,7 @@ export const App = () => {
                       onClick={() => handleOpenSavedCase(savedCase)}
                     >
                       <strong>Saved case: {savedCase.title}</strong>
+                      <span>Status: {caseQueueStatus(savedCase)}</span>
                       <span>Missing: {savedCase.missingEvidence.length}</span>
                       <span>
                         Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done

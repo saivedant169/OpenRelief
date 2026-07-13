@@ -259,6 +259,7 @@ describe("OpenRelief web workflow", () => {
 
     const queue = screen.getByRole("region", { name: "Local case queue" });
 
+    expect(within(queue).getByText("Status: Needs review")).toBeInTheDocument();
     expect(within(queue).getByText("Missing: 1")).toBeInTheDocument();
     expect(within(queue).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
     expect(within(queue).getByText("Flags: denial_or_appeal")).toBeInTheDocument();
