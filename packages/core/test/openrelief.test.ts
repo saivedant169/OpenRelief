@@ -303,6 +303,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects guaranteed approval claims as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone said they could guarantee FEMA approval if I worked with them.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects payment code requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked for my payment code before helping.");
 
