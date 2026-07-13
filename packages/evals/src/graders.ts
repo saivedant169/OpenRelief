@@ -16,6 +16,7 @@ const eligibilityPatterns = [
   /\byou are approved\b/i,
   /\byou qualify\b/i,
   /\bwill be approved\b/i,
+  /\bwill pay you\b/i,
   /\bguaranteed\b/i,
   /\byou will receive\b/i
 ];
