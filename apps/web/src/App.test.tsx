@@ -236,6 +236,11 @@ describe("OpenRelief web workflow", () => {
     expect(within(appendix as HTMLElement).getByText("Appeal FEMA's Decision")).toBeInTheDocument();
     expect(within(appendix as HTMLElement).getByText("Documents Needed for FEMA Assistance")).toBeInTheDocument();
     expect(within(appendix as HTMLElement).getByText("Disaster Assistance")).toBeInTheDocument();
+    expect(
+      within(appendix as HTMLElement).getByText("https://www.fema.gov/assistance/individual/after-applying/appeals")
+    ).toBeInTheDocument();
+    expect(within(appendix as HTMLElement).getAllByText(/retrieved 2026-07-13/i).length).toBeGreaterThan(0);
+    expect(within(appendix as HTMLElement).getAllByText(/last reviewed 2026-07-13/i).length).toBeGreaterThan(0);
   });
 
   it("shows deadline in opened saved case detail", async () => {
