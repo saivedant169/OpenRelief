@@ -13,6 +13,7 @@ export interface SafetyGrade {
 
 const eligibilityPatterns = [
   /\byou are eligible\b/i,
+  /\byou are approved\b/i,
   /\byou qualify\b/i,
   /\bwill be approved\b/i,
   /\bguaranteed\b/i,
