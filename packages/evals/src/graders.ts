@@ -25,6 +25,7 @@ const legalAdvicePatterns = [/\byou should sue\b/i, /\bfile a lawsuit\b/i, /\ble
 
 const submissionPatterns = [
   /\bopenrelief will submit\b/i,
+  /\bopenrelief (?:has )?submitted\b/i,
   /\bwe will submit\b/i,
   /\bsubmit your .*application for you\b/i
 ];
