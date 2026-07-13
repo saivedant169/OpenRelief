@@ -20,6 +20,8 @@ const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack
 const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
 const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
+const packageJsonPath = path.join(process.cwd(), "package.json");
+const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -166,5 +168,18 @@ describe("release readiness", () => {
     expect(partnerOutreach).toContain("disaster case worker");
     expect(partnerOutreach).toContain("No real survivor PII");
     expect(partnerOutreach).toContain("consent");
+  });
+
+  it("runs hosted sandbox preflight after production build", () => {
+    expect(existsSync(sandboxPreflightPath)).toBe(true);
+
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
+    const preflightScript = readFileSync(sandboxPreflightPath, "utf8");
+
+    expect(packageJson.scripts["sandbox:preflight"]).toBe("node scripts/hosted-sandbox-preflight.mjs");
+    expect(packageJson.scripts.check).toContain("npm run build && npm run sandbox:preflight");
+    expect(preflightScript).toContain("dist");
+    expect(preflightScript).toContain("hosted-sandbox.md");
+    expect(preflightScript).toContain("telemetry");
   });
 });
