@@ -2,6 +2,8 @@
 
 Hosted OpenRelief demos must use synthetic data only. The sandbox exists to show the local-first workflow, policy grounding, evals, and case-worker handoff without collecting real survivor data.
 
+Current hosted sandbox: https://saivedant169.github.io/OpenRelief/
+
 ## Guardrails
 
 - No real survivor PII.

@@ -4,6 +4,8 @@ Open-source operating layer for disaster recovery paperwork.
 
 Initial focus: California wildfire recovery.
 
+Hosted synthetic sandbox: https://saivedant169.github.io/OpenRelief/
+
 ## V1 Demo
 
 OpenRelief V1 helps a survivor or case worker:

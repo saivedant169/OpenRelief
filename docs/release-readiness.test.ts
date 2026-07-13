@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const releaseReadinessPath = path.join(process.cwd(), "docs/release-readiness.md");
+const readmePath = path.join(process.cwd(), "README.md");
 const codeOfConductPath = path.join(process.cwd(), "CODE_OF_CONDUCT.md");
 const contributingPath = path.join(process.cwd(), "CONTRIBUTING.md");
 const incidentResponsePath = path.join(process.cwd(), "docs", "incident-response.md");
@@ -200,5 +201,13 @@ describe("release readiness", () => {
     expect(workflow).toContain("pages: write");
     expect(workflow).toContain("id-token: write");
     expect(viteConfig).toContain('base: process.env.OPENRELIEF_BASE_PATH ?? "/"');
+  });
+
+  it("publishes the hosted sandbox URL", () => {
+    const readme = readFileSync(readmePath, "utf8");
+    const hostedSandboxGuide = readFileSync(hostedSandboxPath, "utf8");
+
+    expect(readme).toContain("https://saivedant169.github.io/OpenRelief/");
+    expect(hostedSandboxGuide).toContain("https://saivedant169.github.io/OpenRelief/");
   });
 });
