@@ -142,6 +142,23 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source bad-date-source has invalid lastReviewedAt.");
   });
 
+  it("rejects policy sources with invalid effective dates", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "bad-effective-date-source",
+          effectiveDate: "2026-02-30"
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source bad-effective-date-source has invalid effectiveDate.");
+  });
+
   it("rejects policy sources with future review dates", () => {
     const validation = validatePolicyPack(
       {
