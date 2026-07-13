@@ -6,6 +6,7 @@ import {
   createCaseExport,
   createChecklist,
   detectRiskFlags,
+  redactRestrictedIdentifiers,
   validatePolicyPack
 } from "../src/openrelief";
 import { californiaWildfirePolicyPack } from "../../policy-packs/california-wildfire";
@@ -73,6 +74,16 @@ describe("OpenRelief domain core", () => {
     expect(result.letterType).toBe("denial");
     expect(result.injectionWarnings.length).toBeGreaterThan(0);
     expect(result.summary).not.toContain("approved");
+  });
+
+  it("redacts generic agency case numbers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Case # 123456789 and claim no. 987654321 should not stay in local text."
+    );
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).not.toContain("987654321");
+    expect(redacted).toContain("[agency ID removed]");
   });
 
   it("detects unsafe collection instructions as injection warnings", () => {
