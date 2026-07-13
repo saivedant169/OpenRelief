@@ -381,6 +381,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects MoneyGram requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked me to send money through MoneyGram before they would help with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects cashier check requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked me to send a cashier check before they would help with FEMA paperwork.");
 
