@@ -258,6 +258,28 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts damage photo cleanup and replacement receipt requests from information letters", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send damage photos, cleanup receipts, and receipts for replacement household items."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("damage photos");
+    expect(result.detectedRequests).toContain("cleanup receipts");
+    expect(result.detectedRequests).toContain("replacement item receipts");
+    expect(result.facts).toContain("The letter asks for damage photos.");
+    expect(result.facts).toContain("The letter asks for cleanup receipts.");
+    expect(result.facts).toContain("The letter asks for replacement item receipts.");
+  });
+
+  it("marks requested damage cleanup and replacement evidence as missing", () => {
+    const packet = buildEvidencePacket(["damage photos", "cleanup receipts", "replacement item receipts"]);
+
+    expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+  });
+
   it("rejects policy packs with uncited rules", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
