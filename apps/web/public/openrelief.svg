@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="OpenRelief">
+  <rect width="512" height="512" rx="96" fill="#155e63" />
+  <path
+    d="M256 88 392 140v100c0 86-54 156-136 184-82-28-136-98-136-184V140l136-52Z"
+    fill="#f8faf7"
+  />
+  <path d="M256 146v224M176 258h160" stroke="#155e63" stroke-width="42" stroke-linecap="round" />
+</svg>
