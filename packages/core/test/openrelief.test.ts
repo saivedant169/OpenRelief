@@ -108,6 +108,12 @@ describe("OpenRelief domain core", () => {
     ]);
   });
 
+  it("detects immediate danger from survivor context", () => {
+    const flags = detectRiskFlags("There is fire outside right now and I am in immediate danger.");
+
+    expect(flags).toContain("immediate_danger");
+  });
+
   it("detects suspected scam or fraud risk from survivor context", () => {
     const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
 

@@ -294,6 +294,7 @@ export const App = () => {
   }, [savedCases]);
 
   const riskFlags = useMemo(() => detectRiskFlags(intakeText, analysis ?? undefined), [analysis, intakeText]);
+  const hasImmediateDanger = riskFlags.includes("immediate_danger");
 
   const caseContext = useMemo(
     () => ({
@@ -708,6 +709,13 @@ export const App = () => {
                 setActiveSavedCaseId(null);
               }}
             />
+            {hasImmediateDanger ? (
+              <div className="warning" role="alert" aria-label="Immediate danger guidance">
+                <AlertTriangle aria-hidden="true" />
+                If you are in immediate danger, contact local emergency services now. Return to paperwork after
+                immediate safety needs are handled.
+              </div>
+            ) : null}
           </section>
 
           <section className="editor-panel">

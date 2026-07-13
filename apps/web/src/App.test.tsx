@@ -92,6 +92,22 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText(/medical_emergency/)).toBeInTheDocument();
   });
 
+  it("shows emergency guidance without guessing hotlines", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Immediate needs and risks"), {
+      target: { value: "There is fire outside right now and I am in immediate danger." }
+    });
+
+    const emergencyAlert = screen.getByRole("alert", { name: "Immediate danger guidance" });
+    expect(emergencyAlert).toHaveTextContent("If you are in immediate danger, contact local emergency services now.");
+    expect(emergencyAlert).not.toHaveTextContent(/hotline|911|988/i);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByText("immediate_danger")).toBeInTheDocument();
+  });
+
   it("saves analyzed case to a local case queue", async () => {
     render(<App />);
 

@@ -7,6 +7,7 @@ export type LetterType =
   | "unknown";
 
 export type RiskFlag =
+  | "immediate_danger"
   | "denial_or_appeal"
   | "homelessness"
   | "medical_emergency"
@@ -308,6 +309,10 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
 
   if (letter?.letterType === "denial" || letter?.detectedDeadlines.length) {
     addFlag(flags, "denial_or_appeal");
+  }
+
+  if (/immediate danger|in danger right now|fire.*right now|trapped|life[-\s]?threatening/i.test(normalized)) {
+    addFlag(flags, "immediate_danger");
   }
 
   if (/homeless|no place to stay|nowhere to stay|shelter|evict/i.test(normalized)) {
