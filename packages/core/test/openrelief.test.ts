@@ -255,6 +255,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["disability_accommodation"]);
   });
 
+  it("detects ASL interpreter needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I need an ASL interpreter for the FEMA appointment.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
   it("detects suspected scam or fraud risk from survivor context", () => {
     const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
 

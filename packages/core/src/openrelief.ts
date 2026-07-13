@@ -625,7 +625,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "abuse_or_unsafe_home");
   }
 
-  if (/disability|wheelchair|accessible|accommodation|service animal/i.test(normalized)) {
+  if (/disability|wheelchair|accessible|accommodation|service animal|asl interpreter/i.test(normalized)) {
     addFlag(flags, "disability_accommodation");
   }
 
