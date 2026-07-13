@@ -633,7 +633,9 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "immigration_sensitive");
   }
 
-  if (/scam|fraud|fraudulent|fake fema|asked for.*fema code|asked for.*application id/i.test(normalized)) {
+  if (
+    /scam|fraud|fraudulent|fake fema|asked for.*(?:fema code|application id|payment code)/i.test(normalized)
+  ) {
     addFlag(flags, "suspected_fraud_or_scam");
   }
 

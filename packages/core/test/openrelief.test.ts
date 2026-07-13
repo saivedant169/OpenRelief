@@ -249,6 +249,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects payment code requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked for my payment code before helping.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects unsafe living situation risk from survivor context", () => {
     const flags = detectRiskFlags("I have an unsafe living situation after the wildfire.");
 
