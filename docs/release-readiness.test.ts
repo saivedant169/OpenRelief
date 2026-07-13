@@ -14,6 +14,7 @@ const policySourceIssuePath = path.join(process.cwd(), ".github", "ISSUE_TEMPLAT
 const prTemplatePath = path.join(process.cwd(), ".github", "pull_request_template.md");
 const securityPath = path.join(process.cwd(), "SECURITY.md");
 const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-license.md");
+const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.md");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -87,5 +88,20 @@ describe("release readiness", () => {
     expect(incidentResponse).toContain("Reporting Process");
     expect(incidentResponse).toContain("Takedown Path");
     expect(incidentResponse).toContain("No real survivor data");
+  });
+
+  it("includes public technical report for V1 launch", () => {
+    expect(existsSync(technicalReportPath)).toBe(true);
+
+    const technicalReport = readFileSync(technicalReportPath, "utf8");
+
+    expect(technicalReport).toContain("Evaluating Disaster Recovery Workflows");
+    expect(technicalReport).toContain("Local-first architecture");
+    expect(technicalReport).toContain("Safety model");
+    expect(technicalReport).toContain("Benchmark");
+    expect(technicalReport).toContain("Limitations");
+    expect(technicalReport).toContain("No legal advice");
+    expect(technicalReport).toContain("No live submission");
+    expect(technicalReport).toContain("packages/evals/reports/california-wildfire-v1.json");
   });
 });
