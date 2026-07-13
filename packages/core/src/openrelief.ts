@@ -190,6 +190,14 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter mentions insurance information.");
   }
 
+  if (requests.includes("repair receipts")) {
+    facts.push("The letter asks for repair receipts.");
+  }
+
+  if (requests.includes("contractor estimates")) {
+    facts.push("The letter asks for contractor estimates.");
+  }
+
   facts.push(...deadlines.map((deadline) => `The letter says ${deadline.text}.`));
 
   return facts.length > 0 ? facts : ["The letter needs manual review because no clear action was found."];
@@ -204,7 +212,9 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   const detectedRequests = [
     normalized.includes("proof of occupancy") ? "proof of occupancy" : "",
-    normalized.includes("insurance") ? "insurance information" : ""
+    normalized.includes("insurance") ? "insurance information" : "",
+    normalized.includes("repair receipts") ? "repair receipts" : "",
+    normalized.includes("contractor estimates") ? "contractor estimates" : ""
   ].filter(Boolean);
 
   const detectedDeadlines: Deadline[] = [];
@@ -452,7 +462,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Damage photos, receipts, or repair estimates",
-          status: "optional",
+          status: requests.includes("contractor estimates") ? "missing" : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
@@ -462,7 +472,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Repair, hotel, replacement, or cleanup receipts",
-          status: "optional",
+          status: requests.includes("repair receipts") ? "missing" : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
