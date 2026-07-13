@@ -621,7 +621,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "medical_emergency");
   }
 
-  if (/abuse|domestic violence|unsafe home|violence/i.test(normalized)) {
+  if (/abuse|domestic violence|unsafe (?:home|living)|violence/i.test(normalized)) {
     addFlag(flags, "abuse_or_unsafe_home");
   }
 

@@ -243,6 +243,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects unsafe living situation risk from survivor context", () => {
+    const flags = detectRiskFlags("I have an unsafe living situation after the wildfire.");
+
+    expect(flags).toEqual(["abuse_or_unsafe_home"]);
+  });
+
   it("adds denial or appeal risk from letter analysis", () => {
     const flags = detectRiskFlags("", analyzeLetter(denialLetter));
 
