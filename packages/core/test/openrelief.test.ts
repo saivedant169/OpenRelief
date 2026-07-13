@@ -53,6 +53,20 @@ describe("OpenRelief domain core", () => {
     expect(result.uncertainties).toContain("OpenRelief cannot confirm final eligibility or legal options.");
   });
 
+  it("routes non-English letters to human review with English-first uncertainty", () => {
+    const result = analyzeLetter(`
+      Aviso de FEMA
+      Su solicitud fue denegada porque falta prueba de ocupacion.
+      Puede apelar dentro de 60 dias desde la fecha de esta carta.
+    `);
+
+    expect(result.letterType).toBe("unknown");
+    expect(result.needsHumanReview).toBe(true);
+    expect(result.uncertainties).toContain(
+      "OpenRelief is English-first in V1 and cannot safely classify this letter without human review."
+    );
+  });
+
   it("keeps prompt injection out of letter decisions", () => {
     const result = analyzeLetter(injectionLetter);
 

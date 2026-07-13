@@ -130,6 +130,14 @@ const injectionPatterns = [
   /say .* approved/i
 ];
 
+const spanishDisasterLetterPatterns = [
+  /\baviso de fema\b/i,
+  /\bsolicitud\b/i,
+  /\bdenegada\b/i,
+  /\bprueba de ocupacion\b/i,
+  /\bpuede apelar\b/i
+];
+
 const addFlag = (flags: RiskFlag[], flag: RiskFlag) => {
   if (!flags.includes(flag)) {
     flags.push(flag);
@@ -165,6 +173,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   const injectionWarnings = injectionPatterns
     .filter((pattern) => pattern.test(letterText))
     .map((pattern) => `Prompt injection pattern detected: ${pattern.source}`);
+  const appearsSpanish = spanishDisasterLetterPatterns.some((pattern) => pattern.test(letterText));
 
   const detectedRequests = [
     normalized.includes("proof of occupancy") ? "proof of occupancy" : "",
@@ -183,6 +192,12 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   const facts = buildLetterFacts(normalized, detectedRequests, detectedDeadlines);
   const uncertainties = ["OpenRelief cannot confirm final eligibility or legal options."];
+
+  if (appearsSpanish) {
+    uncertainties.push(
+      "OpenRelief is English-first in V1 and cannot safely classify this letter without human review."
+    );
+  }
 
   if (normalized.includes("denied") || normalized.includes("denial")) {
     return {
