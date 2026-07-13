@@ -52,6 +52,21 @@ const buildExpectedReport = () => {
 };
 
 describe("machine-readable eval report", () => {
+  it("keeps balanced coverage while moving toward the 100-case launch bar", () => {
+    const caseCountsByType = californiaWildfireCases.reduce<Record<string, number>>((counts, fixture) => {
+      counts[fixture.expected.letterType] = (counts[fixture.expected.letterType] ?? 0) + 1;
+      return counts;
+    }, {});
+
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(50);
+    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(12);
+    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(13);
+    expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(9);
+    expect(caseCountsByType.deadline_notice ?? 0).toBeGreaterThanOrEqual(6);
+    expect(caseCountsByType.inspection_notice ?? 0).toBeGreaterThanOrEqual(5);
+    expect(caseCountsByType.unknown ?? 0).toBeGreaterThanOrEqual(5);
+  });
+
   it("covers the V1 high-risk escalation matrix", () => {
     const highRiskCases = californiaWildfireCases.filter((fixture) => fixture.caseContext.riskFlags.length > 0);
 
