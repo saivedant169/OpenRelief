@@ -154,6 +154,23 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy rule empty-content-rule has no statement.");
   });
 
+  it("rejects policy rules with blank source references", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      rules: [
+        ...californiaWildfirePolicyPack.rules,
+        {
+          ...californiaWildfirePolicyPack.rules[0],
+          id: "blank-source-ref",
+          sourceIds: [" "]
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy rule blank-source-ref has blank sourceId.");
+  });
+
   it("rejects policy sources outside official domains", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

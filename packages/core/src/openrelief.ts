@@ -1037,7 +1037,14 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy rule ${rule.id} has no sourceIds.`);
     }
 
-    const missingSources = rule.sourceIds.filter((sourceId) => !sourceIds.has(sourceId));
+    const hasBlankSourceId = rule.sourceIds.some((sourceId) => sourceId.trim().length === 0);
+    if (hasBlankSourceId) {
+      errors.push(`Policy rule ${rule.id} has blank sourceId.`);
+    }
+
+    const missingSources = rule.sourceIds.filter(
+      (sourceId) => sourceId.trim().length > 0 && !sourceIds.has(sourceId)
+    );
     if (missingSources.length > 0) {
       errors.push(`Policy rule ${rule.id} references missing sources: ${missingSources.join(", ")}.`);
     }
