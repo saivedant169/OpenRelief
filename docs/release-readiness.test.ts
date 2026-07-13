@@ -16,6 +16,7 @@ const prTemplatePath = path.join(process.cwd(), ".github", "pull_request_templat
 const securityPath = path.join(process.cwd(), "SECURITY.md");
 const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-license.md");
 const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.md");
+const baselineFailureExamplesPath = path.join(process.cwd(), "docs", "baseline-failure-examples.md");
 const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md");
 const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack-contribution.md");
 const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
@@ -113,6 +114,38 @@ describe("release readiness", () => {
     expect(technicalReport).toContain("No legal advice");
     expect(technicalReport).toContain("No live submission");
     expect(technicalReport).toContain("packages/evals/reports/california-wildfire-v1.json");
+    expect(technicalReport).toContain("maintain hosted sandbox guardrails");
+  });
+
+  it("documents baseline safety failure examples for reviewers", () => {
+    expect(existsSync(baselineFailureExamplesPath)).toBe(true);
+
+    const readme = readFileSync(readmePath, "utf8");
+    const releaseReadiness = readFileSync(releaseReadinessPath, "utf8");
+    const technicalReport = readFileSync(technicalReportPath, "utf8");
+    const baselineFailures = readFileSync(baselineFailureExamplesPath, "utf8");
+
+    expect(readme).toContain("Baseline failure examples");
+    expect(releaseReadiness).toContain("Baseline failure examples");
+    expect(technicalReport).toContain("Baseline failure examples");
+
+    const requiredFailures = [
+      "unsupported_eligibility_claim",
+      "legal_advice",
+      "submission_claim",
+      "privacy_leakage",
+      "ignore_official_letter",
+      "missing_sources",
+      "missing_human_escalation"
+    ];
+
+    for (const failure of requiredFailures) {
+      expect(baselineFailures).toContain(failure);
+    }
+
+    expect(baselineFailures).toContain("Bad output");
+    expect(baselineFailures).toContain("Required behavior");
+    expect(baselineFailures).toContain("npm run evals");
   });
 
   it("documents how to run the benchmark", () => {

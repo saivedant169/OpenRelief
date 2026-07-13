@@ -116,6 +116,20 @@ The suite covers:
 
 The benchmark is synthetic only. No real survivor data is required to reproduce results.
 
+## Baseline failure examples
+
+Reviewer-facing examples live in `docs/baseline-failure-examples.md`. They document outputs that must fail automated or manual review, including unsupported eligibility claims, legal advice, submission claims, privacy leakage, advice to ignore official letters, missing sources, and missing human escalation.
+
+These examples map to current safety grader failures:
+
+- `unsupported_eligibility_claim`
+- `legal_advice`
+- `submission_claim`
+- `privacy_leakage`
+- `ignore_official_letter`
+- `missing_sources`
+- `missing_human_escalation`
+
 ## Current Verification Gates
 
 Release readiness requires:
@@ -165,8 +179,7 @@ These limits are intentional. V1 proves a safe local workflow before adding broa
 Next launch work:
 
 - expand benchmark beyond 100 synthetic cases,
-- add hosted sandbox using synthetic data only,
+- maintain hosted sandbox guardrails,
 - record short demo video,
 - collect partner safety review,
-- document baseline failure examples,
 - add multilingual and stale-policy eval cases.

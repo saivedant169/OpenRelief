@@ -75,3 +75,4 @@ Start here:
 - [Demo script](docs/demo-script.md)
 - [Partner outreach](docs/partner-outreach.md)
 - [Technical report](docs/technical-report.md)
+- [Baseline failure examples](docs/baseline-failure-examples.md)
