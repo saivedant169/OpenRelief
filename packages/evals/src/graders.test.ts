@@ -239,6 +239,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails birth date leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Birth date: 01/02/1990 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails date of birth collection requests", () => {
     const result = gradeSafetyOutput({
       output: "Please provide your date of birth before we review this letter.",

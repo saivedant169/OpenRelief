@@ -290,6 +290,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[date of birth removed]");
   });
 
+  it("redacts birth date labels", () => {
+    const redacted = redactRestrictedIdentifiers("Birth date: January 2, 1990 should not stay in notes.");
+
+    expect(redacted).not.toContain("January 2, 1990");
+    expect(redacted).toContain("[date of birth removed]");
+  });
+
   it("redacts immigration identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Alien registration number A123456789 should not stay in notes.");
 
