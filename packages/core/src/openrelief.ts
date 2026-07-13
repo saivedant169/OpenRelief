@@ -900,6 +900,10 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy source ${source.id} has no sourceType.`);
     }
 
+    if (injectionPatterns.some((pattern) => pattern.test(`${source.title} ${source.publisher}`))) {
+      errors.push(`Policy source ${source.id} contains instruction-like metadata.`);
+    }
+
     return errors;
   });
   const sourceWarnings = policyPack.sources.flatMap((source) =>
