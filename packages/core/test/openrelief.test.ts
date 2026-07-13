@@ -126,6 +126,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[agency ID removed]");
   });
 
+  it("redacts alphanumeric application identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Application ID ABC-123456 should not stay in local text.");
+
+    expect(redacted).not.toContain("ABC-123456");
+    expect(redacted).toContain("[agency ID removed]");
+  });
+
   it("redacts labeled undashed Social Security numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Social Security number 123456789 should not stay in local text."

@@ -305,6 +305,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails alphanumeric app identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Keep App ID ABC-123456 in the packet.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails contact identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Call 555-123-4567 or email survivor@example.test before saving this note.",

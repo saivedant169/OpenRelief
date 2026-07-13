@@ -344,7 +344,7 @@ describe("OpenRelief web workflow", () => {
       }
     });
     fireEvent.change(screen.getByLabelText("Immediate needs and risks"), {
-      target: { value: "DOB 01/02/1980. Application ID 987654321. I am undocumented." }
+      target: { value: "DOB 01/02/1980. Application ID 987654321. App ID ABC-123456. I am undocumented." }
     });
 
     await waitFor(() => {
@@ -353,6 +353,7 @@ describe("OpenRelief web workflow", () => {
       expect(draft).not.toContain("FEMA-123456789");
       expect(draft).not.toContain("01/02/1980");
       expect(draft).not.toContain("987654321");
+      expect(draft).not.toContain("ABC-123456");
       expect(draft).not.toContain("undocumented");
     });
 
@@ -366,6 +367,7 @@ describe("OpenRelief web workflow", () => {
     expect(archiveField.value).not.toContain("FEMA-123456789");
     expect(archiveField.value).not.toContain("01/02/1980");
     expect(archiveField.value).not.toContain("987654321");
+    expect(archiveField.value).not.toContain("ABC-123456");
     expect(archiveField.value).not.toContain("undocumented");
     expect(archiveField.value).toContain("[SSN removed]");
     expect(archiveField.value).toContain("[agency ID removed]");
