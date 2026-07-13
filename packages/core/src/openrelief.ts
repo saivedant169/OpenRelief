@@ -908,7 +908,9 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
     policyPack.name.trim().length === 0 ? "Policy pack has no name." : undefined,
     policyPack.jurisdiction.trim().length === 0 ? "Policy pack has no jurisdiction." : undefined,
     policyPack.disasterType.trim().length === 0 ? "Policy pack has no disasterType." : undefined,
-    policyPack.version.trim().length === 0 ? "Policy pack has no version." : undefined
+    policyPack.version.trim().length === 0 ? "Policy pack has no version." : undefined,
+    policyPack.sources.length === 0 ? "Policy pack has no sources." : undefined,
+    policyPack.rules.length === 0 ? "Policy pack has no rules." : undefined
   ].filter((error): error is string => error !== undefined);
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
   const sourceIdErrors = policyPack.sources.flatMap((source) =>

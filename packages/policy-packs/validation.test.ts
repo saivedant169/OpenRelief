@@ -30,6 +30,18 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy pack has no version.");
   });
 
+  it("rejects policy packs without sources or rules", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [],
+      rules: []
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy pack has no sources.");
+    expect(validation.errors).toContain("Policy pack has no rules.");
+  });
+
   it("rejects policy sources without required metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
