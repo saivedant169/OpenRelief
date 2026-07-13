@@ -42,6 +42,18 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy pack has no rules.");
   });
 
+  it("rejects policy packs with invalid classification metadata", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      jurisdiction: "statewide",
+      disasterType: "volcano"
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy pack has invalid jurisdiction.");
+    expect(validation.errors).toContain("Policy pack has invalid disasterType.");
+  });
+
   it("rejects policy sources without required metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

@@ -872,6 +872,7 @@ const isIsoCalendarDate = (value: string) => {
 };
 
 const officialPolicySourceDomains = ["fema.gov", "sba.gov", "disasterassistance.gov", "ca.gov"];
+const policyPackJurisdictions = ["California"];
 const policyJurisdictions = ["federal", "california", "county", "city", "nonprofit"];
 const policyDisasterTypes = ["wildfire", "flood", "hurricane", "earthquake", "other"];
 const policySourceTypes = ["webpage", "pdf", "form", "faq", "program-page"];
@@ -911,7 +912,13 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       : undefined,
     policyPack.name.trim().length === 0 ? "Policy pack has no name." : undefined,
     policyPack.jurisdiction.trim().length === 0 ? "Policy pack has no jurisdiction." : undefined,
+    policyPack.jurisdiction.trim().length > 0 && !policyPackJurisdictions.includes(policyPack.jurisdiction.trim())
+      ? "Policy pack has invalid jurisdiction."
+      : undefined,
     policyPack.disasterType.trim().length === 0 ? "Policy pack has no disasterType." : undefined,
+    policyPack.disasterType.trim().length > 0 && !policyDisasterTypes.includes(policyPack.disasterType.trim())
+      ? "Policy pack has invalid disasterType."
+      : undefined,
     policyPack.version.trim().length === 0 ? "Policy pack has no version." : undefined,
     policyPack.sources.length === 0 ? "Policy pack has no sources." : undefined,
     policyPack.rules.length === 0 ? "Policy pack has no rules." : undefined
