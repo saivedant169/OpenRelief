@@ -41,6 +41,10 @@ const buildPdfWithText = (text: string) => {
   ].join("");
 };
 
+const loadSampleLetter = async () => {
+  await userEvent.click(screen.getByRole("button", { name: /load sample/i }));
+};
+
 describe("OpenRelief security smoke", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -105,6 +109,7 @@ describe("OpenRelief security smoke", () => {
 
   it("extracts local PDF text and clears stale analysis", async () => {
     render(<App />);
+    await loadSampleLetter();
 
     const upload = screen.getByLabelText("Choose file");
     const letterField = screen.getByLabelText("Extracted letter text");
@@ -132,6 +137,7 @@ describe("OpenRelief security smoke", () => {
 
   it("clears stale analysis after TXT uploads", async () => {
     render(<App />);
+    await loadSampleLetter();
 
     const upload = screen.getByLabelText("Choose file");
     const letterField = screen.getByLabelText("Extracted letter text");
@@ -153,6 +159,7 @@ describe("OpenRelief security smoke", () => {
 
   it("extracts local image OCR text and clears stale analysis", async () => {
     render(<App />);
+    await loadSampleLetter();
 
     const upload = screen.getByLabelText("Choose file");
     const letterField = screen.getByLabelText("Extracted letter text");
