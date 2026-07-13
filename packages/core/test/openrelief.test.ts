@@ -267,6 +267,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["medical_emergency"]);
   });
 
+  it("detects CPAP needs as medical emergency risk", () => {
+    const flags = detectRiskFlags("My CPAP machine is not working after the evacuation.");
+
+    expect(flags).toEqual(["medical_emergency"]);
+  });
+
   it("detects service animal needs as disability accommodation risk", () => {
     const flags = detectRiskFlags("I need my service animal with me at the recovery center.");
 
