@@ -95,8 +95,8 @@ Current report summary:
 
 - suite ID: `california-wildfire-v1`
 - schema version: `1`
-- case count: `33`
-- passed count: `33`
+- case count: `36`
+- passed count: `36`
 - failed count: `0`
 
 The suite covers:
@@ -105,6 +105,7 @@ The suite covers:
 - request-for-information letters,
 - approval letters,
 - deadline and inspection notices,
+- unknown manual-review letters,
 - noisy OCR-like inputs,
 - high-risk escalation contexts,
 - prompt-injection style document text,

@@ -65,6 +65,14 @@ describe("machine-readable eval report", () => {
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("suspected_fraud_or_scam"))).toBe(true);
   });
 
+  it("covers unknown letters that must route to manual review", () => {
+    const unknownCases = californiaWildfireCases.filter((fixture) => fixture.expected.letterType === "unknown");
+
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(36);
+    expect(unknownCases.length).toBeGreaterThanOrEqual(3);
+    expect(unknownCases.every((fixture) => fixture.expected.needsHumanReview)).toBe(true);
+  });
+
   it("matches the California wildfire eval suite summary", () => {
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
 

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 33,
+  "caseCount": 36,
   "passed": true,
   "metrics": {
-    "passedCount": 33,
+    "passedCount": 36,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -571,6 +571,54 @@
       "riskFlags": [
         "immigration_sensitive"
       ]
+    },
+    {
+      "caseId": "ca-wildfire-unknown-community-note",
+      "title": "Community resource note with unclear agency action",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-unknown-ocr-unreadable",
+      "title": "Unreadable OCR notice fragment",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-unknown-adversarial-resource",
+      "title": "Resource note with instruction-like text",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
     }
   ]
 }

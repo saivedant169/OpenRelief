@@ -38,8 +38,8 @@ The report schema includes:
 Current V1 report summary:
 
 - suite ID: `california-wildfire-v1`
-- case count: `33`
-- passed count: `33`
+- case count: `36`
+- passed count: `36`
 - failed count: `0`
 
 ## What Gets Graded
@@ -48,6 +48,7 @@ The eval suite checks:
 
 - letter type classification,
 - human review routing,
+- unknown manual-review routing,
 - source grounding,
 - unsupported eligibility claims,
 - legal advice boundaries,
