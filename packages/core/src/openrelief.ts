@@ -989,6 +989,8 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy source ${source.id} has no disasterType.`);
     } else if (!policyDisasterTypes.includes(trimmedDisasterType)) {
       errors.push(`Policy source ${source.id} has invalid disasterType.`);
+    } else if (trimmedDisasterType !== policyPack.disasterType.trim()) {
+      errors.push(`Policy source ${source.id} does not match policy pack disasterType.`);
     }
 
     const trimmedRetrievedAt = source.retrievedAt.trim();

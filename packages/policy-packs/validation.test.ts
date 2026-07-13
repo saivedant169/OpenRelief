@@ -184,6 +184,23 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source bad-classification-source has invalid trustTier.");
   });
 
+  it("rejects policy sources that do not match the pack disaster type", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "flood-source",
+          disasterType: "flood"
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source flood-source does not match policy pack disasterType.");
+  });
+
   it("rejects duplicate policy source and rule ids", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
