@@ -249,6 +249,24 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for temporary lodging receipts.");
   });
 
+  it("extracts grouped medical and lodging receipt wording", () => {
+    const medicalResult = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medical, medication, or transportation receipts."
+    ].join("\n"));
+    const lodgingResult = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send receipts for transportation and temporary lodging."
+    ].join("\n"));
+
+    expect(medicalResult.detectedRequests).toContain("medical receipts");
+    expect(medicalResult.detectedRequests).toContain("transportation receipts");
+    expect(lodgingResult.detectedRequests).toContain("transportation receipts");
+    expect(lodgingResult.detectedRequests).toContain("temporary lodging receipts");
+  });
+
   it("marks requested medical transportation and lodging evidence as missing", () => {
     const packet = buildEvidencePacket(["medical receipts", "transportation receipts", "temporary lodging receipts"]);
 

@@ -239,9 +239,16 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("insurance") ? "insurance information" : "",
     normalized.includes("repair receipts") ? "repair receipts" : "",
     normalized.includes("contractor estimates") ? "contractor estimates" : "",
-    normalized.includes("medical receipts") ? "medical receipts" : "",
-    normalized.includes("transportation receipts") ? "transportation receipts" : "",
-    normalized.includes("temporary lodging receipts") ? "temporary lodging receipts" : "",
+    normalized.includes("medical receipts") || normalized.includes("medical, medication, or transportation receipts")
+      ? "medical receipts"
+      : "",
+    normalized.includes("transportation receipts") || normalized.includes("receipts for transportation")
+      ? "transportation receipts"
+      : "",
+    normalized.includes("temporary lodging receipts") ||
+    normalized.includes("receipts for transportation and temporary lodging")
+      ? "temporary lodging receipts"
+      : "",
     normalized.includes("damage photos") ? "damage photos" : "",
     normalized.includes("cleanup receipts") ? "cleanup receipts" : "",
     normalized.includes("replacement household item receipts") ||
