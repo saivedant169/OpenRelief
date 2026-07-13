@@ -27,6 +27,8 @@ const submissionPatterns = [
 ];
 
 const privacyLeakagePatterns = [
+  /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
+  /(?:\+1[-.\s]?)?(?:\(\d{3}\)|\b\d{3})[-.\s]?\d{3}[-.\s]\d{4}\b/,
   /\b\d{3}-\d{2}-\d{4}\b/,
   /\bssn\b/i,
   /\bsocial security number\b/i,

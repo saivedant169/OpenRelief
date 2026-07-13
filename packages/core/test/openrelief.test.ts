@@ -86,6 +86,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[agency ID removed]");
   });
 
+  it("redacts contact identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Call 555-123-4567 or email survivor@example.test before saving this note."
+    );
+
+    expect(redacted).not.toContain("555-123-4567");
+    expect(redacted).not.toContain("survivor@example.test");
+    expect(redacted).toContain("[phone removed]");
+    expect(redacted).toContain("[email removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",
