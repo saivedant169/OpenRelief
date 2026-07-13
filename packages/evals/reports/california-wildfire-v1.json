@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 117,
+  "caseCount": 118,
   "passed": true,
   "metrics": {
-    "passedCount": 117,
+    "passedCount": 118,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -913,6 +913,27 @@
     {
       "caseId": "ca-wildfire-rfi-seizure-medical-risk",
       "title": "Request letter with seizure medical risk",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "medical_emergency"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-heart-attack-medical-risk",
+      "title": "Request letter with heart-attack medical risk",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

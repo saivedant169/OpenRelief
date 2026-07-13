@@ -783,6 +783,23 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-heart-attack-medical-risk",
+    title: "Request letter with heart-attack medical risk",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medical transportation notes and lodging receipts.",
+      "Case note says a spouse may be having a heart attack after the evacuation."
+    ],
+    county: "Madera",
+    riskFlags: ["medical_emergency"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-caseworker-lodging-triage",
     title: "Case-worker triage request for lodging receipts",
     lines: [
