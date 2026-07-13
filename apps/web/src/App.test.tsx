@@ -137,6 +137,22 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("Documents Needed for FEMA Assistance")).toBeInTheDocument();
   });
 
+  it("shows checklist sources in opened saved case appendix", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+
+    const detail = screen.getByRole("region", { name: "Case detail" });
+    const appendix = within(detail).getByRole("heading", { name: "Source appendix" }).closest("section");
+
+    expect(appendix).not.toBeNull();
+    expect(within(appendix as HTMLElement).getByText("Appeal FEMA's Decision")).toBeInTheDocument();
+    expect(within(appendix as HTMLElement).getByText("Documents Needed for FEMA Assistance")).toBeInTheDocument();
+    expect(within(appendix as HTMLElement).getByText("Disaster Assistance")).toBeInTheDocument();
+  });
+
   it("shows deadline in opened saved case detail", async () => {
     render(<App />);
 

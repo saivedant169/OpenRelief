@@ -67,7 +67,7 @@ type EvidenceSummaryItem = {
   sourceIds: string[];
 };
 
-type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason">;
+type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason" | "sourceIds">;
 
 type ChecklistStatus = "todo" | "done";
 
@@ -130,7 +130,8 @@ const isChecklistSummaryItem = (value: unknown): value is ChecklistSummaryItem =
     typeof candidate.id === "string" &&
     typeof candidate.title === "string" &&
     typeof candidate.category === "string" &&
-    typeof candidate.reason === "string"
+    typeof candidate.reason === "string" &&
+    isStringList(candidate.sourceIds)
   );
 };
 
@@ -206,7 +207,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
             },
             restoredAnalysis,
             californiaWildfirePolicyPack
-          ).items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
+          ).items.map(({ id, title, category, reason, sourceIds }) => ({ id, title, category, reason, sourceIds }));
     const checklistStatuses = normalizeChecklistStatuses(checklistItems, candidate.checklistStatuses);
 
     return [
@@ -330,7 +331,13 @@ export const App = () => {
       return;
     }
 
-    const checklistItems = checklist.items.map(({ id, title, category, reason }) => ({ id, title, category, reason }));
+    const checklistItems = checklist.items.map(({ id, title, category, reason, sourceIds }) => ({
+      id,
+      title,
+      category,
+      reason,
+      sourceIds
+    }));
     const snapshot: SavedCaseSummary = {
       id: "OR-CA-2026-001",
       title: letterTypeLabels[analysis.letterType],
@@ -496,7 +503,12 @@ export const App = () => {
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
   const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
   const activeCaseSourceIds = activeSavedCase
-    ? [...new Set(activeSavedCase.missingEvidence.flatMap((item) => item.sourceIds))]
+    ? [
+        ...new Set([
+          ...activeSavedCase.missingEvidence.flatMap((item) => item.sourceIds),
+          ...activeSavedCase.checklistItems.flatMap((item) => item.sourceIds)
+        ])
+      ]
     : [];
 
   return (
