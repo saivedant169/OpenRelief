@@ -214,6 +214,10 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for temporary lodging receipts.");
   }
 
+  if (requests.includes("agency messages")) {
+    facts.push("The letter asks for agency messages.");
+  }
+
   if (requests.includes("damage photos")) {
     facts.push("The letter asks for damage photos.");
   }
@@ -263,9 +267,12 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       ? "transportation receipts"
       : "",
     normalized.includes("temporary lodging receipts") ||
+    normalized.includes("evacuation lodging receipts") ||
+    normalized.includes("temporary lodging records") ||
     normalized.includes("receipts for transportation and temporary lodging")
       ? "temporary lodging receipts"
       : "",
+    normalized.includes("agency messages") ? "agency messages" : "",
     normalized.includes("damage photos") ? "damage photos" : "",
     normalized.includes("cleanup receipts") ? "cleanup receipts" : "",
     normalized.includes("replacement household item receipts") ||
@@ -580,7 +587,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Agency letters, emails, call notes, or case messages",
-          status: "optional",
+          status: requests.includes("agency messages") ? "missing" : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
