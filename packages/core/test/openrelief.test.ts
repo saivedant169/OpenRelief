@@ -315,6 +315,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects prepaid debit card requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked me to buy a prepaid debit card before they would help with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects wire transfer requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked me to send a wire transfer before they would help.");
 
