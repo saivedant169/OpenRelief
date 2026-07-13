@@ -71,6 +71,7 @@ type SavedDraft = {
   letterText?: string;
   fileName?: string;
   intakeText?: string;
+  availableEvidenceText?: string;
 };
 
 type EvidenceSummaryItem = {
@@ -91,6 +92,7 @@ type SavedCaseSummary = {
   letterText: string;
   fileName: string;
   intakeText: string;
+  availableEvidenceText: string;
   deadlines: Deadline[];
   missingEvidence: EvidenceSummaryItem[];
   checklistItems: ChecklistSummaryItem[];
@@ -111,7 +113,11 @@ const readSavedDraft = (): SavedDraft => {
     return {
       letterText: typeof parsed.letterText === "string" ? redactRestrictedIdentifiers(parsed.letterText) : undefined,
       fileName: typeof parsed.fileName === "string" ? redactRestrictedIdentifiers(parsed.fileName) : undefined,
-      intakeText: typeof parsed.intakeText === "string" ? redactRestrictedIdentifiers(parsed.intakeText) : undefined
+      intakeText: typeof parsed.intakeText === "string" ? redactRestrictedIdentifiers(parsed.intakeText) : undefined,
+      availableEvidenceText:
+        typeof parsed.availableEvidenceText === "string"
+          ? redactRestrictedIdentifiers(parsed.availableEvidenceText)
+          : undefined
     };
   } catch {
     return {};
@@ -119,6 +125,13 @@ const readSavedDraft = (): SavedDraft => {
 };
 
 const redactStringList = (items: string[]): string[] => items.map((item) => redactRestrictedIdentifiers(item));
+
+const parseAvailableEvidenceText = (value: string): string[] =>
+  redactRestrictedIdentifiers(value)
+    .toLowerCase()
+    .split(/[\n,;]+/)
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
 
 const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
 
@@ -208,6 +221,9 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     const sanitizedFileName = redactRestrictedIdentifiers(
       typeof candidate.fileName === "string" ? candidate.fileName : "Imported saved case"
     );
+    const sanitizedAvailableEvidenceText = redactRestrictedIdentifiers(
+      typeof candidate.availableEvidenceText === "string" ? candidate.availableEvidenceText : ""
+    );
     const sanitizedId = redactRestrictedIdentifiers(candidate.id);
     const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
@@ -221,9 +237,9 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
       restoredAnalysis,
       californiaWildfirePolicyPack
     );
-    const missingEvidence = extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests)).map(
-      redactEvidenceSummaryItem
-    );
+    const missingEvidence = extractMissingEvidence(
+      buildEvidencePacket(restoredAnalysis.detectedRequests, parseAvailableEvidenceText(sanitizedAvailableEvidenceText))
+    ).map(redactEvidenceSummaryItem);
     const deadlines = restoredAnalysis.detectedDeadlines.map(redactDeadline);
     const checklistItems = restoredChecklist.items
       .map(({ id, title, category, reason, sourceIds }) => ({ id, title, category, reason, sourceIds }))
@@ -238,6 +254,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         letterText: sanitizedLetterText,
         fileName: sanitizedFileName,
         intakeText: sanitizedIntakeText,
+        availableEvidenceText: sanitizedAvailableEvidenceText,
         deadlines,
         missingEvidence,
         checklistItems,
@@ -308,6 +325,7 @@ export const App = () => {
   const [savedCases, setSavedCases] = useState(readSavedCases);
   const [letterText, setLetterText] = useState(savedDraft.letterText ?? sampleLetter);
   const [intakeText, setIntakeText] = useState(savedDraft.intakeText ?? "");
+  const [availableEvidenceText, setAvailableEvidenceText] = useState(savedDraft.availableEvidenceText ?? "");
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
   const [exportText, setExportText] = useState("");
   const [clearArmed, setClearArmed] = useState(false);
@@ -327,10 +345,11 @@ export const App = () => {
       JSON.stringify({
         letterText: redactRestrictedIdentifiers(letterText),
         fileName: redactRestrictedIdentifiers(fileName),
-        intakeText: redactRestrictedIdentifiers(intakeText)
+        intakeText: redactRestrictedIdentifiers(intakeText),
+        availableEvidenceText: redactRestrictedIdentifiers(availableEvidenceText)
       })
     );
-  }, [fileName, intakeText, letterText]);
+  }, [availableEvidenceText, fileName, intakeText, letterText]);
 
   useEffect(() => {
     if (savedCases.length === 0) {
@@ -361,7 +380,11 @@ export const App = () => {
     return createChecklist(caseContext, analysis, californiaWildfirePolicyPack);
   }, [analysis, caseContext]);
 
-  const evidencePacket = useMemo(() => buildEvidencePacket(analysis?.detectedRequests ?? []), [analysis]);
+  const availableEvidence = useMemo(() => parseAvailableEvidenceText(availableEvidenceText), [availableEvidenceText]);
+  const evidencePacket = useMemo(
+    () => buildEvidencePacket(analysis?.detectedRequests ?? [], availableEvidence),
+    [analysis, availableEvidence]
+  );
   const appealDraft = useMemo(() => {
     if (!analysis || !checklist) {
       return null;
@@ -408,6 +431,7 @@ export const App = () => {
         letterText: redactRestrictedIdentifiers(letterText),
         fileName: redactRestrictedIdentifiers(fileName),
         intakeText: redactRestrictedIdentifiers(intakeText),
+        availableEvidenceText: redactRestrictedIdentifiers(availableEvidenceText),
         deadlines: analysis.detectedDeadlines,
         missingEvidence: extractMissingEvidence(evidencePacket),
         checklistItems,
@@ -485,6 +509,7 @@ export const App = () => {
   const handleOpenSavedCase = (savedCase: SavedCaseSummary) => {
     setLetterText(savedCase.letterText);
     setIntakeText(savedCase.intakeText);
+    setAvailableEvidenceText(savedCase.availableEvidenceText);
     setFileName(savedCase.fileName);
     setFileError("");
     setAnalysis(analyzeLetter(savedCase.letterText));
@@ -501,6 +526,7 @@ export const App = () => {
 
     setLetterText("");
     setIntakeText("");
+    setAvailableEvidenceText("");
     setAnalysis(null);
     setExportText("");
     setSavedCases([]);
@@ -713,6 +739,7 @@ export const App = () => {
                 onClick={() => {
                   setLetterText(sampleLetter);
                   setIntakeText("");
+                  setAvailableEvidenceText("");
                   setFileName(sampleFileName);
                   setAnalysis(null);
                   setExportText("");
@@ -747,6 +774,27 @@ export const App = () => {
                 {fileError}
               </p>
             ) : null}
+          </section>
+
+          <section className="editor-panel">
+            <div className="section-heading">
+              <div>
+                <h2>Evidence already available</h2>
+                <p>List documents already found so requested evidence is not treated as missing.</p>
+              </div>
+              <span className="quality">Optional</span>
+            </div>
+            <textarea
+              aria-label="Evidence already available"
+              className="intake-textarea"
+              value={availableEvidenceText}
+              onChange={(event) => {
+                setAvailableEvidenceText(event.target.value);
+                setExportText("");
+                setClearArmed(false);
+                setActiveSavedCaseId(null);
+              }}
+            />
           </section>
 
           <section className="editor-panel">
