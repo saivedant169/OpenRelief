@@ -911,8 +911,14 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
     policyPack.version.trim().length === 0 ? "Policy pack has no version." : undefined
   ].filter((error): error is string => error !== undefined);
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
+  const sourceIdErrors = policyPack.sources.flatMap((source) =>
+    source.id.trim().length === 0 ? ["Policy source has no id."] : []
+  );
   const duplicateSourceErrors = duplicateIds(policyPack.sources.map((source) => source.id)).map(
     (sourceId) => `Policy source ${sourceId} is duplicated.`
+  );
+  const ruleIdErrors = policyPack.rules.flatMap((rule) =>
+    rule.id.trim().length === 0 ? ["Policy rule has no id."] : []
   );
   const duplicateRuleErrors = duplicateIds(policyPack.rules.map((rule) => rule.id)).map(
     (ruleId) => `Policy rule ${ruleId} is duplicated.`
@@ -1020,8 +1026,10 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
   });
   const errors = [
     ...policyPackMetadataErrors,
+    ...sourceIdErrors,
     ...duplicateSourceErrors,
     ...sourceErrors,
+    ...ruleIdErrors,
     ...duplicateRuleErrors,
     ...ruleErrors
   ];
