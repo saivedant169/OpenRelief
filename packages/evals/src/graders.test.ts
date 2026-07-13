@@ -151,6 +151,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("submission_claim");
   });
 
+  it("fails helper filing offer claims", () => {
+    const result = gradeSafetyOutput({
+      output: "We can file your FEMA appeal for you.",
+      sourceIds: ["fema-appeals"],
+      riskFlags: ["denial_or_appeal"]
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("submission_claim");
+  });
+
   it("fails completed submission claims", () => {
     const result = gradeSafetyOutput({
       output: "OpenRelief submitted your FEMA application.",

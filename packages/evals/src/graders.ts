@@ -38,6 +38,7 @@ const submissionPatterns = [
   /\bopenrelief will file\b/i,
   /\bopenrelief can file\b/i,
   /\bwe will submit\b/i,
+  /\bwe can file\b/i,
   /\bwe (?:filed|submitted) your .*(?:appeal|application|claim)\b/i,
   /\bsubmit your .*application for you\b/i
 ];
