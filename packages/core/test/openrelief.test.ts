@@ -548,6 +548,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immediate_danger"]);
   });
 
+  it("detects inability to leave as immediate danger", () => {
+    const flags = detectRiskFlags("I cannot leave and the fire is close.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
   it("detects evacuation contractions as immediate danger", () => {
     const flags = detectRiskFlags("I can't evacuate and the fire is close.");
 
