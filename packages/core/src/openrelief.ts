@@ -186,6 +186,18 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for proof of occupancy.");
   }
 
+  if (requests.includes("ownership records")) {
+    facts.push("The letter asks for ownership records.");
+  }
+
+  if (requests.includes("lease records")) {
+    facts.push("The letter asks for lease records.");
+  }
+
+  if (requests.includes("utility records")) {
+    facts.push("The letter asks for utility records.");
+  }
+
   if (requests.includes("insurance information")) {
     facts.push("The letter mentions insurance information.");
   }
@@ -256,6 +268,9 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   const detectedRequests = [
     normalized.includes("proof of occupancy") ? "proof of occupancy" : "",
+    normalized.includes("ownership records") ? "ownership records" : "",
+    normalized.includes("lease records") ? "lease records" : "",
+    normalized.includes("utility records") ? "utility records" : "",
     normalized.includes("insurance") ? "insurance information" : "",
     normalized.includes("repair receipts") ? "repair receipts" : "",
     normalized.includes("contractor estimates") ? "contractor estimates" : "",
@@ -509,7 +524,10 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Lease, mortgage, utility bill, or other occupancy proof",
-          status: requests.includes("proof of occupancy") ? "missing" : "optional",
+          status:
+            requests.includes("proof of occupancy") || requests.includes("utility records")
+              ? "missing"
+              : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
@@ -519,7 +537,10 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Deed, lease, mortgage statement, or title record",
-          status: "optional",
+          status:
+            requests.includes("ownership records") || requests.includes("lease records")
+              ? "missing"
+              : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
