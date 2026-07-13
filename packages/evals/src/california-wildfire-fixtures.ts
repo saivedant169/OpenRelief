@@ -1666,6 +1666,21 @@ const unknownCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-unknown-spanish-approval",
+    title: "Spanish approval notice routes to manual review",
+    lines: [
+      "Aviso de FEMA",
+      "Su solicitud fue aprobada para asistencia de alquiler temporal.",
+      "Revise la fecha, el monto y los pasos siguientes con un ayudante calificado."
+    ],
+    county: "Ventura",
+    tags: ["multilingual"],
+    expected: {
+      letterType: "unknown",
+      needsHumanReview: true
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-unknown-stale-policy-note",
     title: "Stale policy source note routes to manual review",
     lines: [

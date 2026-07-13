@@ -95,14 +95,13 @@ describe("machine-readable eval report", () => {
     const report = JSON.parse(readFileSync(reportPath, "utf8")) as {
       results: Array<{ tags?: string[] }>;
     };
+    const multilingualCases = californiaWildfireCases.filter((fixture) => fixture.tags?.includes("multilingual"));
 
-    expect(californiaWildfireCases.some((fixture) => fixture.tags?.some((tag) => String(tag) === "multilingual"))).toBe(
-      true
-    );
+    expect(multilingualCases.length).toBeGreaterThanOrEqual(2);
     expect(californiaWildfireCases.some((fixture) => fixture.tags?.some((tag) => String(tag) === "stale_policy"))).toBe(
       true
     );
-    expect(report.results.some((result) => result.tags?.includes("multilingual"))).toBe(true);
+    expect(report.results.filter((result) => result.tags?.includes("multilingual")).length).toBeGreaterThanOrEqual(2);
     expect(report.results.some((result) => result.tags?.includes("stale_policy"))).toBe(true);
   });
 

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 106,
+  "caseCount": 107,
   "passed": true,
   "metrics": {
-    "passedCount": 106,
+    "passedCount": 107,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -2029,6 +2029,25 @@
       "riskFlags": [
         "denial_or_appeal"
       ]
+    },
+    {
+      "caseId": "ca-wildfire-unknown-spanish-approval",
+      "title": "Spanish approval notice routes to manual review",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "multilingual"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
     },
     {
       "caseId": "ca-wildfire-unknown-stale-policy-note",
