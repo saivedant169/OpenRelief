@@ -218,8 +218,16 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for medical receipts.");
   }
 
+  if (requests.includes("medicine storage receipts")) {
+    facts.push("The letter asks for medicine storage receipts.");
+  }
+
   if (requests.includes("transportation receipts")) {
     facts.push("The letter asks for transportation receipts.");
+  }
+
+  if (requests.includes("transportation notes")) {
+    facts.push("The letter asks for transportation notes.");
   }
 
   if (requests.includes("temporary lodging receipts")) {
@@ -286,9 +294,11 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("medical receipts") || normalized.includes("medical, medication, or transportation receipts")
       ? "medical receipts"
       : "",
+    normalized.includes("medicine storage receipts") ? "medicine storage receipts" : "",
     normalized.includes("transportation receipts") || normalized.includes("receipts for transportation")
       ? "transportation receipts"
       : "",
+    normalized.includes("transportation notes") ? "transportation notes" : "",
     normalized.includes("temporary lodging receipts") ||
     normalized.includes("evacuation lodging receipts") ||
     normalized.includes("temporary lodging records") ||
@@ -605,7 +615,9 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
           label: "Medical, medication, transportation, or accessibility expense notes",
           status:
             requests.includes("medical receipts") ||
+            requests.includes("medicine storage receipts") ||
             requests.includes("transportation receipts") ||
+            requests.includes("transportation notes") ||
             requests.includes("accessibility expense records") ||
             requests.includes("accommodation expense records") ||
             requests.includes("accommodation receipts")

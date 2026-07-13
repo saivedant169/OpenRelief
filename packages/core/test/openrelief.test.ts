@@ -339,6 +339,27 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts medicine storage receipt and transportation note requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medicine storage receipts and transportation notes."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("medicine storage receipts");
+    expect(result.detectedRequests).toContain("transportation notes");
+    expect(result.facts).toContain("The letter asks for medicine storage receipts.");
+    expect(result.facts).toContain("The letter asks for transportation notes.");
+  });
+
+  it("marks requested medicine storage and transportation note evidence as missing", () => {
+    const packet = buildEvidencePacket(["medicine storage receipts", "transportation notes"]);
+
+    expect(packet.groups.find((group) => group.category === "medical_or_transportation")?.items[0]?.status).toBe(
+      "missing"
+    );
+  });
+
   it("extracts accessibility and accommodation evidence requests", () => {
     const recordsResult = analyzeLetter([
       "FEMA Request for Information",
