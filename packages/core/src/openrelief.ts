@@ -198,6 +198,10 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for contractor estimates.");
   }
 
+  if (requests.includes("repair estimates")) {
+    facts.push("The letter asks for repair estimates.");
+  }
+
   if (requests.includes("medical receipts")) {
     facts.push("The letter asks for medical receipts.");
   }
@@ -251,6 +255,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("insurance") ? "insurance information" : "",
     normalized.includes("repair receipts") ? "repair receipts" : "",
     normalized.includes("contractor estimates") ? "contractor estimates" : "",
+    normalized.includes("repair estimates") ? "repair estimates" : "",
     normalized.includes("medical receipts") || normalized.includes("medical, medication, or transportation receipts")
       ? "medical receipts"
       : "",
@@ -518,7 +523,9 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Damage photos, receipts, or repair estimates",
           status:
-            requests.includes("contractor estimates") || requests.includes("damage photos")
+            requests.includes("contractor estimates") ||
+            requests.includes("damage photos") ||
+            requests.includes("repair estimates")
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]

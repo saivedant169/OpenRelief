@@ -227,8 +227,20 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for contractor estimates.");
   });
 
+  it("extracts repair estimate wording from information letters", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send cleanup receipts and repair estimates."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("cleanup receipts");
+    expect(result.detectedRequests).toContain("repair estimates");
+    expect(result.facts).toContain("The letter asks for repair estimates.");
+  });
+
   it("marks requested repair evidence as missing", () => {
-    const packet = buildEvidencePacket(["repair receipts", "contractor estimates"]);
+    const packet = buildEvidencePacket(["repair receipts", "contractor estimates", "repair estimates"]);
 
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
