@@ -844,6 +844,7 @@ export const App = () => {
                   <div>
                     <h2>Export packet</h2>
                     <p>Save plain text for printing or case-worker review.</p>
+                    <p>This export may include personal information.</p>
                   </div>
                   <div className="export-actions">
                     <button className="secondary-action" type="button" onClick={handleSaveCaseSnapshot}>

@@ -37,10 +37,13 @@ describe("OpenRelief web workflow", () => {
     render(<App />);
 
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("This export may include personal information.")).toBeInTheDocument();
+
     await userEvent.click(screen.getByRole("button", { name: /create packet text/i }));
 
     const exportField = screen.getByLabelText("Export packet text") as HTMLTextAreaElement;
     expect(exportField.value).toContain("OpenRelief packet");
+    expect(exportField.value).toContain("This export may include personal information.");
 
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
 

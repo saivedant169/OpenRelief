@@ -504,6 +504,7 @@ export const createCaseExport = (
     "OpenRelief packet",
     "",
     "Safety note: this is not a government decision or legal advice.",
+    "Privacy note: This export may include personal information.",
     "",
     `Letter type: ${letter.letterType}`,
     `Summary: ${letter.summary}`,
