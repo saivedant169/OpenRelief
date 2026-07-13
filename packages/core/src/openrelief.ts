@@ -159,6 +159,10 @@ const restrictedIdentifierPatterns = [
     replacement: "[insurance claim removed]"
   },
   {
+    pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
+    replacement: "[bank identifier removed]"
+  },
+  {
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
     replacement: "[SSN removed]"
   },

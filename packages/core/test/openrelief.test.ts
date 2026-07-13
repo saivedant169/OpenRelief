@@ -111,6 +111,16 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance claim removed]");
   });
 
+  it("redacts bank identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Bank account number 123456789012 and routing number 021000021 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("123456789012");
+    expect(redacted).not.toContain("021000021");
+    expect(redacted).toContain("[bank identifier removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",
