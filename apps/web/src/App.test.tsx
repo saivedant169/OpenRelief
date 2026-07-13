@@ -68,6 +68,10 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("heading", { name: "Approval" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Claim denial" })).not.toBeInTheDocument();
     expect(screen.getByText("Source check")).toBeInTheDocument();
+
+    const deadlinesCard = screen.getByRole("heading", { name: "Deadlines" }).closest("article");
+    expect(deadlinesCard).not.toBeNull();
+    expect(within(deadlinesCard as HTMLElement).getByText("No deadline found")).toBeInTheDocument();
   });
 
   it("shows a bounded appeal draft for denial letters", async () => {

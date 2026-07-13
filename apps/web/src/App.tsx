@@ -826,12 +826,16 @@ export const App = () => {
 
               <article className="result-card">
                 <h2>Deadlines</h2>
-                {analysis.detectedDeadlines.map((deadline) => (
-                  <div className="data-row" key={deadline.label}>
-                    <span>{deadline.label}</span>
-                    <strong>{deadline.text}</strong>
-                  </div>
-                ))}
+                {analysis.detectedDeadlines.length > 0 ? (
+                  analysis.detectedDeadlines.map((deadline) => (
+                    <div className="data-row" key={deadline.label}>
+                      <span>{deadline.label}</span>
+                      <strong>{deadline.text}</strong>
+                    </div>
+                  ))
+                ) : (
+                  <p>No deadline found</p>
+                )}
               </article>
 
               <article className="result-card">
