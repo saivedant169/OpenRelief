@@ -125,28 +125,6 @@ const isStringList = (value: unknown): value is string[] =>
 
 const redactStringList = (items: string[]): string[] => items.map((item) => redactRestrictedIdentifiers(item));
 
-const isEvidenceSummaryItem = (value: unknown): value is EvidenceSummaryItem => {
-  const candidate = value as Partial<EvidenceSummaryItem> | null;
-  return !!candidate && typeof candidate.label === "string" && isStringList(candidate.sourceIds);
-};
-
-const isDeadline = (value: unknown): value is Deadline => {
-  const candidate = value as Partial<Deadline> | null;
-  return !!candidate && typeof candidate.label === "string" && typeof candidate.text === "string";
-};
-
-const isChecklistSummaryItem = (value: unknown): value is ChecklistSummaryItem => {
-  const candidate = value as Partial<ChecklistSummaryItem> | null;
-  return (
-    !!candidate &&
-    typeof candidate.id === "string" &&
-    typeof candidate.title === "string" &&
-    typeof candidate.category === "string" &&
-    typeof candidate.reason === "string" &&
-    isStringList(candidate.sourceIds)
-  );
-};
-
 const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
 
 const defaultChecklistStatuses = (items: ChecklistSummaryItem[]): ChecklistStatusMap =>
@@ -222,37 +200,32 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     const sanitizedIntakeText = redactRestrictedIdentifiers(candidate.intakeText);
     const sanitizedFileName = redactRestrictedIdentifiers(candidate.fileName);
     const sanitizedId = redactRestrictedIdentifiers(candidate.id);
-    const sanitizedTitle = redactRestrictedIdentifiers(candidate.title);
-    const sanitizedSummary = redactRestrictedIdentifiers(candidate.summary);
     const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
-    const missingEvidence =
-      Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
-        ? candidate.missingEvidence.map(redactEvidenceSummaryItem)
-        : extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests));
-    const deadlines =
-      Array.isArray(candidate.deadlines) && candidate.deadlines.every(isDeadline)
-        ? candidate.deadlines.map(redactDeadline)
-        : restoredAnalysis.detectedDeadlines;
-    const checklistItems =
-      Array.isArray(candidate.checklistItems) && candidate.checklistItems.every(isChecklistSummaryItem)
-        ? candidate.checklistItems.map(redactChecklistSummaryItem)
-        : createChecklist(
-            {
-              county: "Los Angeles",
-              disasterType: "wildfire",
-              riskFlags: detectRiskFlags(sanitizedIntakeText, restoredAnalysis)
-            },
-            restoredAnalysis,
-            californiaWildfirePolicyPack
-          ).items.map(({ id, title, category, reason, sourceIds }) => ({ id, title, category, reason, sourceIds }));
+    const restoredRiskFlags = detectRiskFlags(sanitizedIntakeText, restoredAnalysis);
+    const restoredChecklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: restoredRiskFlags
+      },
+      restoredAnalysis,
+      californiaWildfirePolicyPack
+    );
+    const missingEvidence = extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests)).map(
+      redactEvidenceSummaryItem
+    );
+    const deadlines = restoredAnalysis.detectedDeadlines.map(redactDeadline);
+    const checklistItems = restoredChecklist.items
+      .map(({ id, title, category, reason, sourceIds }) => ({ id, title, category, reason, sourceIds }))
+      .map(redactChecklistSummaryItem);
     const checklistStatuses = normalizeChecklistStatuses(checklistItems, candidate.checklistStatuses);
 
     return [
       {
         id: sanitizedId,
-        title: sanitizedTitle,
-        letterType: candidate.letterType,
+        title: letterTypeLabels[restoredAnalysis.letterType],
+        letterType: restoredAnalysis.letterType,
         letterText: sanitizedLetterText,
         fileName: sanitizedFileName,
         intakeText: sanitizedIntakeText,
@@ -260,8 +233,8 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         missingEvidence,
         checklistItems,
         checklistStatuses,
-        riskFlags: redactStringList(candidate.riskFlags),
-        summary: sanitizedSummary,
+        riskFlags: redactStringList(restoredRiskFlags),
+        summary: redactRestrictedIdentifiers(restoredAnalysis.summary),
         notes: sanitizedNotes
       }
     ];

@@ -367,6 +367,64 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("checkbox", { name: "Mark Request human review done" })).toBeChecked();
   });
 
+  it("recomputes imported saved case safety fields from letter text", async () => {
+    const archive = JSON.stringify([
+      {
+        id: "OR-CA-2026-778",
+        title: "Approval",
+        letterType: "approval",
+        letterText: [
+          "FEMA Notice",
+          "Your application is denied because proof of occupancy is missing.",
+          "You may appeal within 60 days from the date of this letter."
+        ].join("\n"),
+        fileName: "Imported_FEMA_Denial.txt",
+        intakeText: "",
+        deadlines: [],
+        missingEvidence: [],
+        checklistItems: [
+          {
+            id: "review-sources",
+            title: "Review official sources",
+            category: "source_review",
+            reason: "Imported archive omitted review steps.",
+            sourceIds: ["fema-documents"]
+          }
+        ],
+        checklistStatuses: {},
+        riskFlags: [],
+        summary: "Imported archive says assistance is approved.",
+        notes: "Preserve local reviewer note."
+      }
+    ]);
+
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Saved cases JSON"), { target: { value: archive } });
+    await userEvent.click(screen.getByRole("button", { name: /import saved cases/i }));
+
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+    const exported = JSON.parse(archiveField.value) as Array<{
+      letterType: string;
+      summary: string;
+      deadlines: Array<{ text: string }>;
+      checklistItems: Array<{ id: string }>;
+      riskFlags: string[];
+      notes: string;
+    }>;
+
+    expect(exported[0]?.letterType).toBe("denial");
+    expect(exported[0]?.summary).toContain("deny");
+    expect(exported[0]?.deadlines.map((deadline) => deadline.text)).toContain("appeal within 60 days");
+    expect(exported[0]?.checklistItems.map((item) => item.id)).toContain("human-review");
+    expect(exported[0]?.riskFlags).toContain("denial_or_appeal");
+    expect(exported[0]?.notes).toBe("Preserve local reviewer note.");
+  });
+
   it("redacts restricted identifiers from imported saved case metadata", async () => {
     const archive = JSON.stringify([
       {
@@ -398,9 +456,9 @@ describe("OpenRelief web workflow", () => {
     expect(archiveField.value).not.toContain("123-45-6789");
     expect(archiveField.value).not.toContain("01-02-1990");
     expect(archiveField.value).not.toContain("case number 123456789");
-    expect(archiveField.value).toContain("[SSN removed]");
     expect(archiveField.value).toContain("[agency ID removed]");
     expect(archiveField.value).toContain("[date of birth removed]");
+    expect(archiveField.value).toContain("Claim denial");
   });
 
   it("redacts restricted identifiers from imported saved case details", async () => {
@@ -447,9 +505,8 @@ describe("OpenRelief web workflow", () => {
     expect(archiveField.value).not.toContain("123-45-6789");
     expect(archiveField.value).not.toContain("01/02/1990");
     expect(archiveField.value).not.toContain("case number 123456789");
-    expect(archiveField.value).toContain("[agency ID removed]");
-    expect(archiveField.value).toContain("[SSN removed]");
-    expect(archiveField.value).toContain("[date of birth removed]");
+    expect(archiveField.value).toContain("Request human review");
+    expect(archiveField.value).toContain("fema-appeals");
   });
 
   it("restores a saved local draft and clears stored data", async () => {
