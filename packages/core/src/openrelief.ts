@@ -850,13 +850,34 @@ const daysBetween = (fromDate: string, toDate: string): number => {
   return Math.floor((to - from) / 86_400_000);
 };
 
+const officialPolicySourceDomains = ["fema.gov", "sba.gov", "disasterassistance.gov", "ca.gov"];
+
+const getPolicySourceHost = (url: string) => {
+  try {
+    return new URL(url).hostname.toLowerCase().replace(/\.$/, "");
+  } catch {
+    return "";
+  }
+};
+
+const isOfficialPolicySourceHost = (host: string) =>
+  officialPolicySourceDomains.some((domain) => host === domain || host.endsWith(`.${domain}`));
+
 export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"): PolicyValidationResult => {
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
   const sourceErrors = policyPack.sources.flatMap((source) => {
     const errors: string[] = [];
+    const trimmedUrl = source.url.trim();
 
-    if (source.url.trim().length === 0) {
+    if (trimmedUrl.length === 0) {
       errors.push(`Policy source ${source.id} has no url.`);
+    } else {
+      const host = getPolicySourceHost(trimmedUrl);
+      if (host.length === 0) {
+        errors.push(`Policy source ${source.id} has invalid url.`);
+      } else if (!isOfficialPolicySourceHost(host)) {
+        errors.push(`Policy source ${source.id} uses unapproved domain ${host}.`);
+      }
     }
 
     if (source.jurisdiction.trim().length === 0) {
