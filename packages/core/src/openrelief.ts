@@ -693,7 +693,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "homelessness");
   }
 
-  if (/medical emergency|oxygen|medicine|medication|insulin|inhaler|prescriptions?|cpap|dialysis|urgent medical|hospital|cannot breathe|can't breathe|chest pain|heart attack|bleeding|severe burns?|burn injur(?:y|ies)|seizure|stroke/i.test(normalized)) {
+  if (/medical emergency|oxygen|medicine|medication|insulin|inhaler|prescriptions?|cpap|dialysis|urgent medical|hospital|cannot breathe|can't breathe|not breathing|unconscious|chest pain|heart attack|bleeding|severe burns?|burn injur(?:y|ies)|seizure|stroke/i.test(normalized)) {
     addFlag(flags, "medical_emergency");
   }
 

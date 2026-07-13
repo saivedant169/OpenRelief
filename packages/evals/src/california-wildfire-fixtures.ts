@@ -817,6 +817,23 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-not-breathing-medical-risk",
+    title: "Request letter with not-breathing medical risk",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medical transportation notes and lodging receipts.",
+      "Case note says a spouse is not breathing after the smoke exposure."
+    ],
+    county: "Madera",
+    riskFlags: ["medical_emergency"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-caseworker-lodging-triage",
     title: "Case-worker triage request for lodging receipts",
     lines: [
