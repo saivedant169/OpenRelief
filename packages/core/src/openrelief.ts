@@ -876,6 +876,7 @@ const policyJurisdictions = ["federal", "california", "county", "city", "nonprof
 const policyDisasterTypes = ["wildfire", "flood", "hurricane", "earthquake", "other"];
 const policySourceTypes = ["webpage", "pdf", "form", "faq", "program-page"];
 const policyTrustTiers = [1, 2, 3, 4];
+const policyIdPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const parsePolicySourceUrl = (url: string) => {
   try {
@@ -905,6 +906,9 @@ const duplicateIds = (ids: string[]) => {
 export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"): PolicyValidationResult => {
   const policyPackMetadataErrors = [
     policyPack.id.trim().length === 0 ? "Policy pack has no id." : undefined,
+    policyPack.id.trim().length > 0 && !policyIdPattern.test(policyPack.id)
+      ? "Policy pack has invalid id."
+      : undefined,
     policyPack.name.trim().length === 0 ? "Policy pack has no name." : undefined,
     policyPack.jurisdiction.trim().length === 0 ? "Policy pack has no jurisdiction." : undefined,
     policyPack.disasterType.trim().length === 0 ? "Policy pack has no disasterType." : undefined,
@@ -913,15 +917,21 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
     policyPack.rules.length === 0 ? "Policy pack has no rules." : undefined
   ].filter((error): error is string => error !== undefined);
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
-  const sourceIdErrors = policyPack.sources.flatMap((source) =>
-    source.id.trim().length === 0 ? ["Policy source has no id."] : []
-  );
+  const sourceIdErrors = policyPack.sources.flatMap((source) => {
+    if (source.id.trim().length === 0) {
+      return ["Policy source has no id."];
+    }
+    return policyIdPattern.test(source.id) ? [] : [`Policy source ${source.id} has invalid id.`];
+  });
   const duplicateSourceErrors = duplicateIds(policyPack.sources.map((source) => source.id)).map(
     (sourceId) => `Policy source ${sourceId} is duplicated.`
   );
-  const ruleIdErrors = policyPack.rules.flatMap((rule) =>
-    rule.id.trim().length === 0 ? ["Policy rule has no id."] : []
-  );
+  const ruleIdErrors = policyPack.rules.flatMap((rule) => {
+    if (rule.id.trim().length === 0) {
+      return ["Policy rule has no id."];
+    }
+    return policyIdPattern.test(rule.id) ? [] : [`Policy rule ${rule.id} has invalid id.`];
+  });
   const duplicateRuleErrors = duplicateIds(policyPack.rules.map((rule) => rule.id)).map(
     (ruleId) => `Policy rule ${ruleId} is duplicated.`
   );

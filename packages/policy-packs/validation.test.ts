@@ -97,6 +97,33 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy rule has no id.");
   });
 
+  it("rejects policy ids outside slug format", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      id: "California Wildfire",
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "bad source"
+        }
+      ],
+      rules: [
+        ...californiaWildfirePolicyPack.rules,
+        {
+          ...californiaWildfirePolicyPack.rules[0],
+          id: "bad rule",
+          sourceIds: ["bad source"]
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy pack has invalid id.");
+    expect(validation.errors).toContain("Policy source bad source has invalid id.");
+    expect(validation.errors).toContain("Policy rule bad rule has invalid id.");
+  });
+
   it("rejects policy sources with invalid source types", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
