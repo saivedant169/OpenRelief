@@ -369,6 +369,18 @@ describe("OpenRelief domain core", () => {
     expect(lodgingResult.facts).toContain("The letter asks for agency messages.");
   });
 
+  it("extracts shelter placement note requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send temporary lodging receipts and any shelter placement notes."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("temporary lodging receipts");
+    expect(result.detectedRequests).toContain("shelter placement notes");
+    expect(result.facts).toContain("The letter asks for shelter placement notes.");
+  });
+
   it("marks requested medical transportation and lodging evidence as missing", () => {
     const packet = buildEvidencePacket([
       "medical receipts",
@@ -381,6 +393,12 @@ describe("OpenRelief domain core", () => {
       "missing"
     );
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested shelter placement notes as missing communication evidence", () => {
+    const packet = buildEvidencePacket(["shelter placement notes"]);
+
     expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
   });
 

@@ -259,6 +259,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for agency messages."
   },
   {
+    request: "shelter placement notes",
+    phrases: ["shelter placement notes"],
+    fact: "The letter asks for shelter placement notes."
+  },
+  {
     request: "damage photos",
     phrases: ["damage photos"],
     fact: "The letter asks for damage photos."
@@ -685,7 +690,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Agency letters, emails, call notes, or case messages",
-          status: requests.includes("agency messages") ? "missing" : "optional",
+          status: hasRequest(requests, ["agency messages", "shelter placement notes"]) ? "missing" : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
