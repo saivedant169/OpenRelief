@@ -34,3 +34,5 @@ Manual safety review must confirm:
 - [Evals README](../packages/evals/README.md)
 - [Policy pack contribution guide](policy-pack-contribution.md)
 - [Hosted sandbox guide](hosted-sandbox.md)
+- [Demo script](demo-script.md)
+- [Partner outreach](partner-outreach.md)

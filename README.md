@@ -70,4 +70,6 @@ Start here:
 - [Evals README](packages/evals/README.md)
 - [Policy pack contribution guide](docs/policy-pack-contribution.md)
 - [Hosted sandbox guide](docs/hosted-sandbox.md)
+- [Demo script](docs/demo-script.md)
+- [Partner outreach](docs/partner-outreach.md)
 - [Technical report](docs/technical-report.md)

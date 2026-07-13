@@ -18,6 +18,8 @@ const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.m
 const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md");
 const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack-contribution.md");
 const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
+const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
+const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -144,5 +146,25 @@ describe("release readiness", () => {
     expect(guide).toContain("local browser storage");
     expect(guide).toContain("npm run check");
     expect(guide).toContain("manual safety review");
+  });
+
+  it("includes public launch demo and partner outreach artifacts", () => {
+    expect(existsSync(demoScriptPath)).toBe(true);
+    expect(existsSync(partnerOutreachPath)).toBe(true);
+
+    const demoScript = readFileSync(demoScriptPath, "utf8");
+    const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
+
+    expect(demoScript).toContain("OpenRelief Demo Script");
+    expect(demoScript).toContain("synthetic");
+    expect(demoScript).toContain("No legal advice");
+    expect(demoScript).toContain("No live submission");
+    expect(demoScript).toContain("local browser storage");
+
+    expect(partnerOutreach).toContain("Partner Outreach");
+    expect(partnerOutreach).toContain("legal aid");
+    expect(partnerOutreach).toContain("disaster case worker");
+    expect(partnerOutreach).toContain("No real survivor PII");
+    expect(partnerOutreach).toContain("consent");
   });
 });
