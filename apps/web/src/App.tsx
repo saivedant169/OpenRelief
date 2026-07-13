@@ -114,6 +114,8 @@ const isLetterType = (value: unknown): value is LetterType =>
 const isStringList = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((item) => typeof item === "string");
 
+const redactStringList = (items: string[]): string[] => items.map((item) => redactRestrictedIdentifiers(item));
+
 const isEvidenceSummaryItem = (value: unknown): value is EvidenceSummaryItem => {
   const candidate = value as Partial<EvidenceSummaryItem> | null;
   return !!candidate && typeof candidate.label === "string" && isStringList(candidate.sourceIds);
@@ -160,6 +162,25 @@ const normalizeChecklistStatuses = (items: ChecklistSummaryItem[], value: unknow
 const completedChecklistCount = (savedCase: SavedCaseSummary): number =>
   savedCase.checklistItems.filter((item) => savedCase.checklistStatuses[item.id] === "done").length;
 
+const redactDeadline = (deadline: Deadline): Deadline => ({
+  ...deadline,
+  label: redactRestrictedIdentifiers(deadline.label),
+  text: redactRestrictedIdentifiers(deadline.text)
+});
+
+const redactEvidenceSummaryItem = (item: EvidenceSummaryItem): EvidenceSummaryItem => ({
+  label: redactRestrictedIdentifiers(item.label),
+  sourceIds: redactStringList(item.sourceIds)
+});
+
+const redactChecklistSummaryItem = (item: ChecklistSummaryItem): ChecklistSummaryItem => ({
+  ...item,
+  id: redactRestrictedIdentifiers(item.id),
+  title: redactRestrictedIdentifiers(item.title),
+  reason: redactRestrictedIdentifiers(item.reason),
+  sourceIds: redactStringList(item.sourceIds)
+});
+
 const extractMissingEvidence = (packet: EvidencePacket): EvidenceSummaryItem[] =>
   packet.groups.flatMap((group) =>
     group.items
@@ -198,15 +219,15 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
     const missingEvidence =
       Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
-        ? candidate.missingEvidence
+        ? candidate.missingEvidence.map(redactEvidenceSummaryItem)
         : extractMissingEvidence(buildEvidencePacket(restoredAnalysis.detectedRequests));
     const deadlines =
       Array.isArray(candidate.deadlines) && candidate.deadlines.every(isDeadline)
-        ? candidate.deadlines
+        ? candidate.deadlines.map(redactDeadline)
         : restoredAnalysis.detectedDeadlines;
     const checklistItems =
       Array.isArray(candidate.checklistItems) && candidate.checklistItems.every(isChecklistSummaryItem)
-        ? candidate.checklistItems
+        ? candidate.checklistItems.map(redactChecklistSummaryItem)
         : createChecklist(
             {
               county: "Los Angeles",
@@ -230,7 +251,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         missingEvidence,
         checklistItems,
         checklistStatuses,
-        riskFlags: candidate.riskFlags,
+        riskFlags: redactStringList(candidate.riskFlags),
         summary: sanitizedSummary,
         notes: sanitizedNotes
       }

@@ -403,6 +403,55 @@ describe("OpenRelief web workflow", () => {
     expect(archiveField.value).toContain("[date of birth removed]");
   });
 
+  it("redacts restricted identifiers from imported saved case details", async () => {
+    const archive = JSON.stringify([
+      {
+        id: "OR-CA-2026-888",
+        title: "Claim denial",
+        letterType: "denial",
+        letterText: "FEMA Notice\nYour application is denied because proof of occupancy is missing.",
+        fileName: "Imported_FEMA_Denial.txt",
+        intakeText: "",
+        deadlines: [{ label: "DOB 01/02/1990", text: "respond with FEMA-123456789", source: "uploaded_letter" }],
+        missingEvidence: [
+          {
+            label: "SSN 123-45-6789 record",
+            sourceIds: ["fema-documents", "FEMA-123456789"]
+          }
+        ],
+        checklistItems: [
+          {
+            id: "FEMA-123456789",
+            title: "Collect DOB 01/02/1990",
+            category: "evidence",
+            reason: "Use case number 123456789.",
+            sourceIds: ["fema-documents", "SSN 123-45-6789"]
+          }
+        ],
+        checklistStatuses: {},
+        riskFlags: ["denial_or_appeal", "FEMA-123456789"],
+        summary: "Imported denial summary.",
+        notes: ""
+      }
+    ]);
+
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Saved cases JSON"), { target: { value: archive } });
+    await userEvent.click(screen.getByRole("button", { name: /import saved cases/i }));
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+
+    expect(archiveField.value).not.toContain("FEMA-123456789");
+    expect(archiveField.value).not.toContain("123-45-6789");
+    expect(archiveField.value).not.toContain("01/02/1990");
+    expect(archiveField.value).not.toContain("case number 123456789");
+    expect(archiveField.value).toContain("[agency ID removed]");
+    expect(archiveField.value).toContain("[SSN removed]");
+    expect(archiveField.value).toContain("[date of birth removed]");
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);
