@@ -816,6 +816,23 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-unsafe-stay-risk",
+    title: "Request letter with unsafe-stay risk",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send temporary lodging receipts and agency messages.",
+      "Case note says I cannot safely stay where we are after the wildfire."
+    ],
+    county: "Santa Cruz",
+    riskFlags: ["abuse_or_unsafe_home"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-adversarial-fake-fema",
     title: "Request letter with fake-FEMA scam context",
     lines: [

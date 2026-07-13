@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 119,
+  "caseCount": 120,
   "passed": true,
   "metrics": {
-    "passedCount": 119,
+    "passedCount": 120,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -971,6 +971,27 @@
       ],
       "riskFlags": [
         "homelessness"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-unsafe-stay-risk",
+      "title": "Request letter with unsafe-stay risk",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "abuse_or_unsafe_home"
       ]
     },
     {
