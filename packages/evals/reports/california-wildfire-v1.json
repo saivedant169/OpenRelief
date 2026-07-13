@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 107,
+  "caseCount": 108,
   "passed": true,
   "metrics": {
-    "passedCount": 107,
+    "passedCount": 108,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -2052,6 +2052,25 @@
     {
       "caseId": "ca-wildfire-unknown-stale-policy-note",
       "title": "Stale policy source note routes to manual review",
+      "expectedLetterType": "unknown",
+      "actualLetterType": "unknown",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [
+        "stale_policy"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-unknown-old-guidance-printout",
+      "title": "Old recovery guidance printout routes to manual review",
       "expectedLetterType": "unknown",
       "actualLetterType": "unknown",
       "expectedNeedsHumanReview": true,

@@ -96,13 +96,12 @@ describe("machine-readable eval report", () => {
       results: Array<{ tags?: string[] }>;
     };
     const multilingualCases = californiaWildfireCases.filter((fixture) => fixture.tags?.includes("multilingual"));
+    const stalePolicyCases = californiaWildfireCases.filter((fixture) => fixture.tags?.includes("stale_policy"));
 
     expect(multilingualCases.length).toBeGreaterThanOrEqual(2);
-    expect(californiaWildfireCases.some((fixture) => fixture.tags?.some((tag) => String(tag) === "stale_policy"))).toBe(
-      true
-    );
+    expect(stalePolicyCases.length).toBeGreaterThanOrEqual(2);
     expect(report.results.filter((result) => result.tags?.includes("multilingual")).length).toBeGreaterThanOrEqual(2);
-    expect(report.results.some((result) => result.tags?.includes("stale_policy"))).toBe(true);
+    expect(report.results.filter((result) => result.tags?.includes("stale_policy")).length).toBeGreaterThanOrEqual(2);
   });
 
   it("covers case-worker triage launch cases", () => {

@@ -1696,6 +1696,21 @@ const unknownCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-unknown-old-guidance-printout",
+    title: "Old recovery guidance printout routes to manual review",
+    lines: [
+      "Printed recovery guidance",
+      "This handout was copied before current disaster assistance sources were reviewed.",
+      "Confirm current official FEMA and SBA policy pages before using any checklist detail."
+    ],
+    county: "Napa",
+    tags: ["stale_policy"],
+    expected: {
+      letterType: "unknown",
+      needsHumanReview: true
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-unknown-caseworker-handoff",
     title: "Case-worker handoff note without official action",
     lines: [
