@@ -98,7 +98,7 @@ export type EvidenceCategory =
 
 export interface EvidenceItem {
   label: string;
-  status: "missing" | "optional";
+  status: "missing" | "available" | "optional";
   sourceIds: string[];
 }
 
@@ -479,6 +479,18 @@ const includesAny = (value: string, phrases: string[]): boolean =>
 const hasRequest = (requests: string[], candidates: string[]): boolean =>
   candidates.some((request) => requests.includes(request));
 
+const evidenceStatus = (
+  requests: string[],
+  availableEvidence: string[],
+  candidates: string[]
+): EvidenceItem["status"] => {
+  if (hasRequest(availableEvidence, candidates)) {
+    return "available";
+  }
+
+  return hasRequest(requests, candidates) ? "missing" : "optional";
+};
+
 const normalizeDeadlineText = (value: string) => {
   const trimmedValue = value.replace(/\s+/g, " ").trim();
   return trimmedValue.charAt(0).toLowerCase() + trimmedValue.slice(1);
@@ -751,21 +763,29 @@ export const createChecklist = (
   return { items };
 };
 
-export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
+export const buildEvidencePacket = (requests: string[], availableEvidence: string[] = []): EvidencePacket => ({
   groups: [
     {
       category: "identity",
-      items: [{ label: "Photo ID or replacement ID note", status: "optional", sourceIds: ["fema-documents"] }]
+      items: [
+        {
+          label: "Photo ID or replacement ID note",
+          status: evidenceStatus(requests, availableEvidence, ["photo id", "replacement id note"]),
+          sourceIds: ["fema-documents"]
+        }
+      ]
     },
     {
       category: "residence",
       items: [
         {
           label: "Lease, mortgage, utility bill, or other occupancy proof",
-          status:
-            hasRequest(requests, ["proof of occupancy", "occupancy records", "utility records", "other household records"])
-              ? "missing"
-              : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "proof of occupancy",
+            "occupancy records",
+            "utility records",
+            "other household records"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -775,10 +795,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Deed, lease, mortgage statement, or title record",
-          status:
-            hasRequest(requests, ["ownership records", "lease records"])
-              ? "missing"
-              : "optional",
+          status: evidenceStatus(requests, availableEvidence, ["ownership records", "lease records"]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -788,18 +805,15 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Damage photos, receipts, or repair estimates",
-          status:
-            hasRequest(requests, [
-              "contractor estimates",
-              "contractor license records",
-              "damage photos",
-              "damage documentation",
-              "damage records",
-              "smoke damage records",
-              "repair estimates"
-            ])
-              ? "missing"
-              : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "contractor estimates",
+            "contractor license records",
+            "damage photos",
+            "damage documentation",
+            "damage records",
+            "smoke damage records",
+            "repair estimates"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -809,20 +823,17 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Repair, hotel, replacement, or cleanup receipts",
-          status:
-            hasRequest(requests, [
-              "repair receipts",
-              "temporary lodging receipts",
-              "cleanup receipts",
-              "debris removal records",
-              "repair records",
-              "supporting receipts",
-              "generator rental receipts",
-              "temporary power equipment receipts",
-              "replacement item receipts"
-            ])
-              ? "missing"
-              : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "repair receipts",
+            "temporary lodging receipts",
+            "cleanup receipts",
+            "debris removal records",
+            "repair records",
+            "supporting receipts",
+            "generator rental receipts",
+            "temporary power equipment receipts",
+            "replacement item receipts"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -832,9 +843,10 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Insurance claim status or denial note",
-          status: hasRequest(requests, ["insurance information", "insurance settlement records"])
-            ? "missing"
-            : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "insurance information",
+            "insurance settlement records"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -844,21 +856,18 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Medical, medication, transportation, or accessibility expense notes",
-          status:
-            hasRequest(requests, [
-              "medical receipts",
-              "medicine storage receipts",
-              "transportation receipts",
-              "transportation notes",
-              "accessibility expense records",
-              "accessibility notes",
-              "accommodation expense records",
-              "accommodation notes",
-              "accommodation receipts",
-              "medical access notes"
-            ])
-              ? "missing"
-              : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "medical receipts",
+            "medicine storage receipts",
+            "transportation receipts",
+            "transportation notes",
+            "accessibility expense records",
+            "accessibility notes",
+            "accommodation expense records",
+            "accommodation notes",
+            "accommodation receipts",
+            "medical access notes"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -868,17 +877,14 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Agency letters, emails, call notes, or case messages",
-          status:
-            hasRequest(requests, [
-              "agency messages",
-              "shelter placement notes",
-              "case messages",
-              "appointment notes",
-              "contractor messages",
-              "unsafe home access notes"
-            ])
-              ? "missing"
-              : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "agency messages",
+            "shelter placement notes",
+            "case messages",
+            "appointment notes",
+            "contractor messages",
+            "unsafe home access notes"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
@@ -888,9 +894,11 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Other disaster recovery documents named in the letter",
-          status: hasRequest(requests, ["account listed records", "requested records", "supporting documents"])
-            ? "missing"
-            : "optional",
+          status: evidenceStatus(requests, availableEvidence, [
+            "account listed records",
+            "requested records",
+            "supporting documents"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
