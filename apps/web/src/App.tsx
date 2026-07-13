@@ -698,6 +698,10 @@ export const App = () => {
                 <h1>Letter Review</h1>
               </div>
               <p>Upload a letter, review extracted text, and create a safe next-step plan.</p>
+              <p>
+                OpenRelief helps organize and explain paperwork. It is not a government agency, official eligibility
+                decision, or legal advice.
+              </p>
               {clearArmed ? (
                 <p className="clear-warning">This removes local draft and saved case snapshots from this browser.</p>
               ) : null}

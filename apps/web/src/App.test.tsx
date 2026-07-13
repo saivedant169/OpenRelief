@@ -34,6 +34,16 @@ describe("OpenRelief web workflow", () => {
     expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
   });
 
+  it("shows safety boundary before upload", () => {
+    render(<App />);
+
+    expect(
+      screen.getByText(
+        "OpenRelief helps organize and explain paperwork. It is not a government agency, official eligibility decision, or legal advice."
+      )
+    ).toBeInTheDocument();
+  });
+
   it("shows export text and requires confirmation before clearing local work", async () => {
     render(<App />);
 
