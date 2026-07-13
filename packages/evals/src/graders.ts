@@ -30,6 +30,7 @@ const legalAdvicePatterns = [
   /\blegal strategy\b/i,
   /\bargue negligence\b/i,
   /\bargue bad faith\b/i,
+  /\bthreaten\b.{0,80}\bwith legal action\b/i,
   /\btake .* to court\b/i
 ];
 
