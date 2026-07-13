@@ -39,6 +39,23 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source bad-source has no sourceType.");
   });
 
+  it("rejects policy sources with invalid source types", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "bad-source-type",
+          sourceType: "social-post" as never
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source bad-source-type has invalid sourceType.");
+  });
+
   it("rejects policy sources outside official domains", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

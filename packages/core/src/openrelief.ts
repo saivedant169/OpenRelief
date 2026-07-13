@@ -872,6 +872,7 @@ const isIsoCalendarDate = (value: string) => {
 };
 
 const officialPolicySourceDomains = ["fema.gov", "sba.gov", "disasterassistance.gov", "ca.gov"];
+const policySourceTypes = ["webpage", "pdf", "form", "faq", "program-page"];
 
 const parsePolicySourceUrl = (url: string) => {
   try {
@@ -934,8 +935,11 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       errors.push(`Policy source ${source.id} has future lastReviewedAt.`);
     }
 
-    if (source.sourceType.trim().length === 0) {
+    const trimmedSourceType = source.sourceType.trim();
+    if (trimmedSourceType.length === 0) {
       errors.push(`Policy source ${source.id} has no sourceType.`);
+    } else if (!policySourceTypes.includes(trimmedSourceType)) {
+      errors.push(`Policy source ${source.id} has invalid sourceType.`);
     }
 
     if (injectionPatterns.some((pattern) => pattern.test(`${source.title} ${source.publisher}`))) {
