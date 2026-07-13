@@ -1,0 +1,31 @@
+- name: safety
+  color: d73a4a
+  description: Safety, privacy, legal-risk, or escalation issue.
+
+- name: policy-source
+  color: 0e8a16
+  description: Policy pack source, citation, or validation work.
+
+- name: evals
+  color: 5319e7
+  description: Synthetic fixtures, graders, or eval reporting.
+
+- name: accessibility
+  color: 0052cc
+  description: WCAG, keyboard, screen-reader, or mobile accessibility work.
+
+- name: good first issue
+  color: 7057ff
+  description: Small, scoped contribution suitable for new contributors.
+
+- name: documentation
+  color: 0075ca
+  description: README, planning, architecture, safety, or contribution docs.
+
+- name: local-first
+  color: 1d76db
+  description: Browser-local storage, import, export, upload, or no-telemetry work.
+
+- name: V1
+  color: fbca04
+  description: Required for OpenRelief V1 readiness.
