@@ -629,8 +629,12 @@ export const createChecklist = (
   const needsPolicyReview = sourceWarnings.length > 0;
 
   if (letter.needsHumanReview || caseContext.riskFlags.length > 0 || needsPolicyReview) {
+    const needsInjectionReview = letter.injectionWarnings.length > 0;
+    const needsLetterReview = letter.needsHumanReview && !needsInjectionReview;
+    const needsRiskReview = caseContext.riskFlags.length > 0;
     const humanReviewReasons = [
-      letter.needsHumanReview || caseContext.riskFlags.length > 0
+      needsInjectionReview ? "Prompt injection or unsafe instructions should be reviewed by a qualified helper." : "",
+      needsLetterReview || needsRiskReview
         ? "Denial, appeal, or risk flags should be reviewed by a qualified helper."
         : "",
       needsPolicyReview ? "Policy sources need review before relying on generated next steps." : ""
