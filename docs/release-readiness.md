@@ -32,3 +32,4 @@ Manual safety review must confirm:
 - [Incident response playbook](incident-response.md)
 - [Technical report](technical-report.md)
 - [Evals README](../packages/evals/README.md)
+- [Policy pack contribution guide](policy-pack-contribution.md)

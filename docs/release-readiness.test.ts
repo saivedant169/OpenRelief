@@ -16,6 +16,7 @@ const securityPath = path.join(process.cwd(), "SECURITY.md");
 const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-license.md");
 const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.md");
 const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md");
+const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack-contribution.md");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -116,5 +117,18 @@ describe("release readiness", () => {
     expect(evalsReadme).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(evalsReadme).toContain("synthetic");
     expect(evalsReadme).toContain("critical failure");
+  });
+
+  it("documents how to contribute policy packs", () => {
+    expect(existsSync(policyPackContributionPath)).toBe(true);
+
+    const guide = readFileSync(policyPackContributionPath, "utf8");
+
+    expect(guide).toContain("Policy Pack Contribution Guide");
+    expect(guide).toContain("official source");
+    expect(guide).toContain("retrievedAt");
+    expect(guide).toContain("lastReviewedAt");
+    expect(guide).toContain("No real survivor PII");
+    expect(guide).toContain("npm run policy:validate");
   });
 });
