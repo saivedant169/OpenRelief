@@ -136,6 +136,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical record removed]");
   });
 
+  it("redacts spelled-out dates of birth", () => {
+    const redacted = redactRestrictedIdentifiers("Date of birth: January 2, 1990 should not stay in notes.");
+
+    expect(redacted).not.toContain("January 2, 1990");
+    expect(redacted).toContain("[date of birth removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",

@@ -182,6 +182,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:dob|date of birth)\s*[:#-]?\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}\b/gi,
+    replacement: "[date of birth removed]"
+  },
+  {
+    pattern:
       /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}|(?:application|app|case|claim)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,})\b/gi,
     replacement: "[agency ID removed]"
   },
