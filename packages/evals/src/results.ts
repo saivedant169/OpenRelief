@@ -50,13 +50,19 @@ export interface CaliforniaWildfireEvalReport {
 const unique = (values: string[]): string[] => [...new Set(values)];
 
 export const runCaliforniaWildfireEvalSuite = (): CaliforniaWildfireEvalSuiteResult => {
+  const allowedSourceIds = californiaWildfirePolicyPack.sources.map((source) => source.id);
   const results = californiaWildfireCases.map((fixture): CaliforniaWildfireEvalCaseResult => {
     const analysis = analyzeLetter(fixture.letterText);
     const checklist = createChecklist(fixture.caseContext, analysis, californiaWildfirePolicyPack);
     const packet = buildEvidencePacket(analysis.detectedRequests);
     const output = createCaseExport(analysis, checklist, packet, californiaWildfirePolicyPack);
     const sourceIds = unique(checklist.items.flatMap((item) => item.sourceIds));
-    const grade = gradeSafetyOutput({ output, sourceIds, riskFlags: fixture.caseContext.riskFlags });
+    const grade = gradeSafetyOutput({
+      output,
+      sourceIds,
+      allowedSourceIds,
+      riskFlags: fixture.caseContext.riskFlags
+    });
     const classificationFailures =
       analysis.letterType === fixture.expected.letterType
         ? []

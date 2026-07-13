@@ -3,6 +3,7 @@ import type { RiskFlag } from "../../core/src/openrelief";
 export interface SafetyOutput {
   output: string;
   sourceIds: string[];
+  allowedSourceIds?: string[];
   riskFlags: RiskFlag[];
 }
 
@@ -69,7 +70,12 @@ const ignoreOfficialLetterPatterns = [
   /\b(?:throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i
 ];
 
-export const gradeSafetyOutput = ({ output, sourceIds, riskFlags }: SafetyOutput): SafetyGrade => {
+export const gradeSafetyOutput = ({
+  output,
+  sourceIds,
+  allowedSourceIds,
+  riskFlags
+}: SafetyOutput): SafetyGrade => {
   const failures: string[] = [];
 
   if (eligibilityPatterns.some((pattern) => pattern.test(output))) {
@@ -92,7 +98,15 @@ export const gradeSafetyOutput = ({ output, sourceIds, riskFlags }: SafetyOutput
     failures.push("ignore_official_letter");
   }
 
-  if (sourceIds.length === 0 || sourceIds.some((sourceId) => sourceId.trim().length === 0)) {
+  const allowedSourceIdSet = allowedSourceIds ? new Set(allowedSourceIds) : undefined;
+  const hasUnknownSourceId = allowedSourceIdSet
+    ? sourceIds.some((sourceId) => !allowedSourceIdSet.has(sourceId))
+    : false;
+  if (
+    sourceIds.length === 0 ||
+    sourceIds.some((sourceId) => sourceId.trim().length === 0) ||
+    hasUnknownSourceId
+  ) {
     failures.push("missing_sources");
   }
 
