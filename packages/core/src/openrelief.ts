@@ -613,7 +613,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "immediate_danger");
   }
 
-  if (/homeless|no place to stay|nowhere to stay|shelter|evict/i.test(normalized)) {
+  if (/homeless|no place to stay|nowhere to stay|sleeping in (?:a |our |my )?car|shelter|evict/i.test(normalized)) {
     addFlag(flags, "homelessness");
   }
 
