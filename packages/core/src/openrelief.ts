@@ -219,6 +219,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for contractor estimates."
   },
   {
+    request: "contractor license records",
+    phrases: ["contractor license records"],
+    fact: "The letter asks for contractor license records."
+  },
+  {
     request: "repair estimates",
     phrases: ["repair estimates"],
     fact: "The letter asks for repair estimates."
@@ -635,6 +640,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
           status:
             hasRequest(requests, [
               "contractor estimates",
+              "contractor license records",
               "damage photos",
               "damage records",
               "smoke damage records",

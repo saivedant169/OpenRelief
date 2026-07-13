@@ -284,10 +284,28 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for repair estimates.");
   });
 
+  it("extracts contractor license record requests", () => {
+    const result = analyzeLetter([
+      "FEMA Notice",
+      "You must respond within 30 days from the date of this letter.",
+      "Send contractor license records and repair estimates."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("contractor license records");
+    expect(result.detectedRequests).toContain("repair estimates");
+    expect(result.facts).toContain("The letter asks for contractor license records.");
+  });
+
   it("marks requested repair evidence as missing", () => {
     const packet = buildEvidencePacket(["repair receipts", "contractor estimates", "repair estimates"]);
 
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested contractor license records as missing damage evidence", () => {
+    const packet = buildEvidencePacket(["contractor license records"]);
+
     expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
   });
 
