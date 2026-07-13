@@ -12,7 +12,11 @@ export const californiaWildfirePolicyPack: PolicyPack = {
       title: "Appeal FEMA's Decision",
       publisher: "FEMA",
       url: "https://www.fema.gov/assistance/individual/after-applying/appeals",
+      jurisdiction: "federal",
+      disasterType: "wildfire",
       retrievedAt: "2026-07-13",
+      lastReviewedAt: "2026-07-13",
+      sourceType: "webpage",
       trustTier: 1
     },
     {
@@ -20,7 +24,11 @@ export const californiaWildfirePolicyPack: PolicyPack = {
       title: "Documents Needed for FEMA Assistance",
       publisher: "FEMA",
       url: "https://www.fema.gov/assistance/individual/after-applying",
+      jurisdiction: "federal",
+      disasterType: "wildfire",
       retrievedAt: "2026-07-13",
+      lastReviewedAt: "2026-07-13",
+      sourceType: "webpage",
       trustTier: 1
     },
     {
@@ -28,7 +36,11 @@ export const californiaWildfirePolicyPack: PolicyPack = {
       title: "Disaster Assistance",
       publisher: "U.S. Small Business Administration",
       url: "https://www.sba.gov/funding-programs/disaster-assistance",
+      jurisdiction: "federal",
+      disasterType: "wildfire",
       retrievedAt: "2026-07-13",
+      lastReviewedAt: "2026-07-13",
+      sourceType: "program-page",
       trustTier: 1
     }
   ],
@@ -59,4 +71,3 @@ export const californiaWildfirePolicyPack: PolicyPack = {
     }
   ]
 };
-

@@ -866,7 +866,7 @@ export const App = () => {
                         <a href={source.url}>{source.title}</a>
                         <span>{source.url}</span>
                         <span>
-                          {source.publisher}, retrieved {source.retrievedAt}
+                          {source.publisher}, retrieved {source.retrievedAt}, last reviewed {source.lastReviewedAt}
                         </span>
                       </li>
                     );

@@ -7,11 +7,12 @@ describe("policy pack validation", () => {
   it("validates the California wildfire policy pack", () => {
     expect(validatePolicyPack(californiaWildfirePolicyPack)).toEqual({
       valid: true,
-      errors: []
+      errors: [],
+      warnings: []
     });
   });
 
-  it("rejects policy sources without URL or retrieved date", () => {
+  it("rejects policy sources without required metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
       sources: [
@@ -20,14 +21,38 @@ describe("policy pack validation", () => {
           ...californiaWildfirePolicyPack.sources[0],
           id: "bad-source",
           url: "",
-          retrievedAt: ""
+          jurisdiction: "",
+          disasterType: "",
+          retrievedAt: "",
+          lastReviewedAt: "",
+          sourceType: ""
         }
       ]
     });
 
     expect(validation.valid).toBe(false);
     expect(validation.errors).toContain("Policy source bad-source has no url.");
+    expect(validation.errors).toContain("Policy source bad-source has no jurisdiction.");
+    expect(validation.errors).toContain("Policy source bad-source has no disasterType.");
     expect(validation.errors).toContain("Policy source bad-source has no retrievedAt.");
+    expect(validation.errors).toContain("Policy source bad-source has no lastReviewedAt.");
+    expect(validation.errors).toContain("Policy source bad-source has no sourceType.");
+  });
+
+  it("warns when policy sources are stale", () => {
+    const validation = validatePolicyPack(
+      {
+        ...californiaWildfirePolicyPack,
+        sources: californiaWildfirePolicyPack.sources.map((source) =>
+          source.id === "fema-appeals" ? { ...source, lastReviewedAt: "2026-01-01" } : source
+        )
+      },
+      "2026-07-13"
+    );
+
+    expect(validation.valid).toBe(true);
+    expect(validation.errors).toEqual([]);
+    expect(validation.warnings).toContain("Policy source fema-appeals last reviewed more than 30 days ago.");
   });
 
   it("runs policy validation from check gate", () => {

@@ -20,7 +20,12 @@ export interface SourceRecord {
   title: string;
   publisher: string;
   url: string;
+  jurisdiction: "federal" | "california" | "county" | "city" | "nonprofit";
+  disasterType: "wildfire" | "flood" | "hurricane" | "earthquake" | "other";
   retrievedAt: string;
+  effectiveDate?: string;
+  lastReviewedAt: string;
+  sourceType: "webpage" | "pdf" | "form" | "faq" | "program-page";
   trustTier: 1 | 2 | 3 | 4;
 }
 
@@ -108,6 +113,7 @@ export interface EvidencePacket {
 export interface PolicyValidationResult {
   valid: boolean;
   errors: string[];
+  warnings: string[];
 }
 
 export interface AppealDraft {
@@ -444,7 +450,18 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
   ]
 });
 
-export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResult => {
+const daysBetween = (fromDate: string, toDate: string): number => {
+  const from = Date.parse(`${fromDate}T00:00:00.000Z`);
+  const to = Date.parse(`${toDate}T00:00:00.000Z`);
+
+  if (Number.isNaN(from) || Number.isNaN(to)) {
+    return 0;
+  }
+
+  return Math.floor((to - from) / 86_400_000);
+};
+
+export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"): PolicyValidationResult => {
   const sourceIds = new Set(policyPack.sources.map((source) => source.id));
   const sourceErrors = policyPack.sources.flatMap((source) => {
     const errors: string[] = [];
@@ -453,12 +470,33 @@ export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResu
       errors.push(`Policy source ${source.id} has no url.`);
     }
 
+    if (source.jurisdiction.trim().length === 0) {
+      errors.push(`Policy source ${source.id} has no jurisdiction.`);
+    }
+
+    if (source.disasterType.trim().length === 0) {
+      errors.push(`Policy source ${source.id} has no disasterType.`);
+    }
+
     if (source.retrievedAt.trim().length === 0) {
       errors.push(`Policy source ${source.id} has no retrievedAt.`);
     }
 
+    if (source.lastReviewedAt.trim().length === 0) {
+      errors.push(`Policy source ${source.id} has no lastReviewedAt.`);
+    }
+
+    if (source.sourceType.trim().length === 0) {
+      errors.push(`Policy source ${source.id} has no sourceType.`);
+    }
+
     return errors;
   });
+  const sourceWarnings = policyPack.sources.flatMap((source) =>
+    source.lastReviewedAt.trim().length > 0 && daysBetween(source.lastReviewedAt, asOf) > 30
+      ? [`Policy source ${source.id} last reviewed more than 30 days ago.`]
+      : []
+  );
   const ruleErrors = policyPack.rules.flatMap((rule) => {
     if (injectionPatterns.some((pattern) => pattern.test(rule.statement))) {
       return [`Policy rule ${rule.id} contains instruction-like text.`];
@@ -479,7 +517,8 @@ export const validatePolicyPack = (policyPack: PolicyPack): PolicyValidationResu
 
   return {
     valid: errors.length === 0,
-    errors
+    errors,
+    warnings: sourceWarnings
   };
 };
 
@@ -497,7 +536,10 @@ export const createCaseExport = (
     })
     .join("\n\n");
   const sourceLines = policyPack.sources
-    .map((source) => `- ${source.title}: ${source.url} (retrieved ${source.retrievedAt})`)
+    .map(
+      (source) =>
+        `- ${source.title}: ${source.url} (retrieved ${source.retrievedAt}, last reviewed ${source.lastReviewedAt})`
+    )
     .join("\n");
 
   return [
