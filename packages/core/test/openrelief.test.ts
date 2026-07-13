@@ -656,6 +656,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["medical_emergency"]);
   });
 
+  it("detects inability to breathe as medical emergency risk", () => {
+    const flags = detectRiskFlags("I cannot breathe well after the smoke exposure.");
+
+    expect(flags).toEqual(["medical_emergency"]);
+  });
+
+  it("detects chest pain as medical emergency risk", () => {
+    const flags = detectRiskFlags("I have chest pain after the evacuation.");
+
+    expect(flags).toEqual(["medical_emergency"]);
+  });
+
   it("detects service animal needs as disability accommodation risk", () => {
     const flags = detectRiskFlags("I need my service animal with me at the recovery center.");
 
