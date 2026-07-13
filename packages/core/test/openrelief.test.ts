@@ -944,6 +944,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["denial_or_appeal"]);
   });
 
+  it("detects imminent response deadline risk from survivor context", () => {
+    const flags = detectRiskFlags("FEMA says my response deadline is tomorrow.");
+
+    expect(flags).toEqual(["denial_or_appeal"]);
+  });
+
   it("detects appeal intent from survivor context", () => {
     const flags = detectRiskFlags("I need to appeal by Friday.");
 
