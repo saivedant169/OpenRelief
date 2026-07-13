@@ -334,14 +334,29 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for accessibility expense records."
   },
   {
+    request: "accessibility notes",
+    phrases: ["accessibility and accommodation notes"],
+    fact: "The letter asks for accessibility notes."
+  },
+  {
     request: "accommodation expense records",
     phrases: ["accessibility and accommodation expense records"],
     fact: "The letter asks for accommodation expense records."
   },
   {
+    request: "accommodation notes",
+    phrases: ["accessibility and accommodation notes", "accommodation notes"],
+    fact: "The letter asks for accommodation notes."
+  },
+  {
     request: "accommodation receipts",
     phrases: ["accommodation receipts"],
     fact: "The letter asks for accommodation receipts."
+  },
+  {
+    request: "medical access notes",
+    phrases: ["medical access notes"],
+    fact: "The letter asks for medical access notes."
   }
 ];
 
@@ -699,8 +714,11 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
               "transportation receipts",
               "transportation notes",
               "accessibility expense records",
+              "accessibility notes",
               "accommodation expense records",
-              "accommodation receipts"
+              "accommodation notes",
+              "accommodation receipts",
+              "medical access notes"
             ])
               ? "missing"
               : "optional",

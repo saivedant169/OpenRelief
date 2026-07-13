@@ -506,8 +506,36 @@ describe("OpenRelief domain core", () => {
     expect(receiptsResult.facts).toContain("The letter asks for accommodation receipts.");
   });
 
+  it("extracts accommodation and medical access note requests", () => {
+    const accommodationResult = analyzeLetter([
+      "FEMA Notice",
+      "You must respond within 30 days from the date of this letter.",
+      "Keep accessibility and accommodation notes with your records."
+    ].join("\n"));
+    const medicalResult = analyzeLetter([
+      "FEMA Inspection Notice",
+      "An inspector may contact you to schedule a home inspection.",
+      "Keep medical access notes available for the appointment."
+    ].join("\n"));
+
+    expect(accommodationResult.detectedRequests).toContain("accessibility notes");
+    expect(accommodationResult.detectedRequests).toContain("accommodation notes");
+    expect(medicalResult.detectedRequests).toContain("medical access notes");
+    expect(accommodationResult.facts).toContain("The letter asks for accessibility notes.");
+    expect(accommodationResult.facts).toContain("The letter asks for accommodation notes.");
+    expect(medicalResult.facts).toContain("The letter asks for medical access notes.");
+  });
+
   it("marks requested accommodation evidence as missing", () => {
     const packet = buildEvidencePacket(["accessibility expense records", "accommodation receipts"]);
+
+    expect(packet.groups.find((group) => group.category === "medical_or_transportation")?.items[0]?.status).toBe(
+      "missing"
+    );
+  });
+
+  it("marks requested accommodation and medical access notes as missing", () => {
+    const packet = buildEvidencePacket(["accessibility notes", "accommodation notes", "medical access notes"]);
 
     expect(packet.groups.find((group) => group.category === "medical_or_transportation")?.items[0]?.status).toBe(
       "missing"
