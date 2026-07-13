@@ -17,6 +17,7 @@ const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-l
 const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.md");
 const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md");
 const policyPackContributionPath = path.join(process.cwd(), "docs", "policy-pack-contribution.md");
+const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -130,5 +131,18 @@ describe("release readiness", () => {
     expect(guide).toContain("lastReviewedAt");
     expect(guide).toContain("No real survivor PII");
     expect(guide).toContain("npm run policy:validate");
+  });
+
+  it("documents hosted synthetic sandbox guardrails", () => {
+    expect(existsSync(hostedSandboxPath)).toBe(true);
+
+    const guide = readFileSync(hostedSandboxPath, "utf8");
+
+    expect(guide).toContain("Hosted Sandbox");
+    expect(guide).toContain("synthetic data only");
+    expect(guide).toContain("No real survivor PII");
+    expect(guide).toContain("local browser storage");
+    expect(guide).toContain("npm run check");
+    expect(guide).toContain("manual safety review");
   });
 });

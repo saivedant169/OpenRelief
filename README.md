@@ -69,4 +69,5 @@ Start here:
 - [Evals and quality](plans/07-evals-quality-plan.md)
 - [Evals README](packages/evals/README.md)
 - [Policy pack contribution guide](docs/policy-pack-contribution.md)
+- [Hosted sandbox guide](docs/hosted-sandbox.md)
 - [Technical report](docs/technical-report.md)
