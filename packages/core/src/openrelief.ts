@@ -138,6 +138,28 @@ const spanishDisasterLetterPatterns = [
   /\bpuede apelar\b/i
 ];
 
+const restrictedIdentifierPatterns = [
+  {
+    pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
+    replacement: "[SSN removed]"
+  },
+  {
+    pattern: /\b(?:dob|date of birth)\s*[:#-]?\s*\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/gi,
+    replacement: "[date of birth removed]"
+  },
+  {
+    pattern:
+      /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}|(?:application|app|case|claim)\s*(?:id|number|no\.?)\s*[:#-]?\s*\d{6,})\b/gi,
+    replacement: "[agency ID removed]"
+  }
+];
+
+export const redactRestrictedIdentifiers = (text: string): string =>
+  restrictedIdentifierPatterns.reduce(
+    (redactedText, { pattern, replacement }) => redactedText.replace(pattern, replacement),
+    text
+  );
+
 const addFlag = (flags: RiskFlag[], flag: RiskFlag) => {
   if (!flags.includes(flag)) {
     flags.push(flag);

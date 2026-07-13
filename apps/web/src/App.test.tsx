@@ -103,6 +103,46 @@ describe("OpenRelief web workflow", () => {
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });
 
+  it("redacts restricted identifiers before local draft storage and saved case export", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: {
+        value: [
+          "FEMA Notice",
+          "SSN 123-45-6789",
+          "FEMA-123456789",
+          "Your application is denied because proof of occupancy is missing."
+        ].join("\n")
+      }
+    });
+    fireEvent.change(screen.getByLabelText("Immediate needs and risks"), {
+      target: { value: "DOB 01/02/1980. Application ID 987654321." }
+    });
+
+    await waitFor(() => {
+      const draft = window.localStorage.getItem("openrelief:v1:case") ?? "";
+      expect(draft).not.toContain("123-45-6789");
+      expect(draft).not.toContain("FEMA-123456789");
+      expect(draft).not.toContain("01/02/1980");
+      expect(draft).not.toContain("987654321");
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+
+    expect(archiveField.value).not.toContain("123-45-6789");
+    expect(archiveField.value).not.toContain("FEMA-123456789");
+    expect(archiveField.value).not.toContain("01/02/1980");
+    expect(archiveField.value).not.toContain("987654321");
+    expect(archiveField.value).toContain("[SSN removed]");
+    expect(archiveField.value).toContain("[agency ID removed]");
+    expect(archiveField.value).toContain("[date of birth removed]");
+  });
+
   it("opens a saved case snapshot from the local queue", async () => {
     render(<App />);
 

@@ -16,6 +16,7 @@ import {
   createCaseExport,
   createChecklist,
   detectRiskFlags,
+  redactRestrictedIdentifiers,
   type ChecklistItem,
   type Deadline,
   type EvidencePacket,
@@ -98,9 +99,9 @@ const readSavedDraft = (): SavedDraft => {
 
     const parsed = JSON.parse(saved) as SavedDraft;
     return {
-      letterText: typeof parsed.letterText === "string" ? parsed.letterText : undefined,
+      letterText: typeof parsed.letterText === "string" ? redactRestrictedIdentifiers(parsed.letterText) : undefined,
       fileName: typeof parsed.fileName === "string" ? parsed.fileName : undefined,
-      intakeText: typeof parsed.intakeText === "string" ? parsed.intakeText : undefined
+      intakeText: typeof parsed.intakeText === "string" ? redactRestrictedIdentifiers(parsed.intakeText) : undefined
     };
   } catch {
     return {};
@@ -187,7 +188,10 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
       return [];
     }
 
-    const restoredAnalysis = analyzeLetter(candidate.letterText);
+    const sanitizedLetterText = redactRestrictedIdentifiers(candidate.letterText);
+    const sanitizedIntakeText = redactRestrictedIdentifiers(candidate.intakeText);
+    const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
+    const restoredAnalysis = analyzeLetter(sanitizedLetterText);
     const missingEvidence =
       Array.isArray(candidate.missingEvidence) && candidate.missingEvidence.every(isEvidenceSummaryItem)
         ? candidate.missingEvidence
@@ -203,7 +207,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
             {
               county: "Los Angeles",
               disasterType: "wildfire",
-              riskFlags: detectRiskFlags(candidate.intakeText, restoredAnalysis)
+              riskFlags: detectRiskFlags(sanitizedIntakeText, restoredAnalysis)
             },
             restoredAnalysis,
             californiaWildfirePolicyPack
@@ -215,16 +219,16 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         id: candidate.id,
         title: candidate.title,
         letterType: candidate.letterType,
-        letterText: candidate.letterText,
+        letterText: sanitizedLetterText,
         fileName: candidate.fileName,
-        intakeText: candidate.intakeText,
+        intakeText: sanitizedIntakeText,
         deadlines,
         missingEvidence,
         checklistItems,
         checklistStatuses,
         riskFlags: candidate.riskFlags,
         summary: candidate.summary,
-        notes: typeof candidate.notes === "string" ? candidate.notes : ""
+        notes: sanitizedNotes
       }
     ];
   });
@@ -270,7 +274,14 @@ export const App = () => {
       return;
     }
 
-    window.localStorage.setItem(caseStorageKey, JSON.stringify({ letterText, fileName, intakeText }));
+    window.localStorage.setItem(
+      caseStorageKey,
+      JSON.stringify({
+        letterText: redactRestrictedIdentifiers(letterText),
+        fileName,
+        intakeText: redactRestrictedIdentifiers(intakeText)
+      })
+    );
   }, [fileName, intakeText, letterText]);
 
   useEffect(() => {
@@ -342,9 +353,9 @@ export const App = () => {
       id: "OR-CA-2026-001",
       title: letterTypeLabels[analysis.letterType],
       letterType: analysis.letterType,
-      letterText,
+      letterText: redactRestrictedIdentifiers(letterText),
       fileName,
-      intakeText,
+      intakeText: redactRestrictedIdentifiers(intakeText),
       deadlines: analysis.detectedDeadlines,
       missingEvidence: extractMissingEvidence(evidencePacket),
       checklistItems,
@@ -391,7 +402,11 @@ export const App = () => {
     }
 
     setSavedCases((current) =>
-      current.map((savedCase) => (savedCase.id === activeSavedCaseId ? { ...savedCase, notes } : savedCase))
+      current.map((savedCase) =>
+        savedCase.id === activeSavedCaseId
+          ? { ...savedCase, notes: redactRestrictedIdentifiers(notes) }
+          : savedCase
+      )
     );
     setClearArmed(false);
   };
