@@ -294,6 +294,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails child name leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Child name: Nora Kim should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails case worker name leakage", () => {
     const result = gradeSafetyOutput({
       output: "Case worker name: Priya Shah should not stay in notes.",
