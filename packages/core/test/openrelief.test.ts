@@ -274,6 +274,24 @@ describe("OpenRelief domain core", () => {
     expect(humanReview?.reason).not.toContain("Denial, appeal, or risk flags");
   });
 
+  it("explains unknown letter human review on checklist", () => {
+    const letter = analyzeLetter("Community update\nA recovery fair is scheduled at the library.");
+    const checklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: []
+      },
+      letter,
+      californiaWildfirePolicyPack
+    );
+
+    const humanReview = checklist.items.find((item) => item.category === "human_review");
+
+    expect(humanReview?.reason).toContain("Unclear or unsupported letters");
+    expect(humanReview?.reason).not.toContain("Denial, appeal, or risk flags");
+  });
+
   it("marks checklist items as editable", () => {
     const letter = analyzeLetter(denialLetter);
     const checklist = createChecklist(
