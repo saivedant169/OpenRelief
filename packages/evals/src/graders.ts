@@ -30,8 +30,10 @@ const privacyLeakagePatterns = [
   /\b\d{3}-\d{2}-\d{4}\b/,
   /\bssn\b/i,
   /\bsocial security number\b/i,
+  /\b(?:dob|date of birth)\s*[:#-]?\s*\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/i,
   /\bfema-\d{6,}\b/i,
-  /\bapplication id\b/i
+  /\bapplication id\b/i,
+  /\b(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*\d{6,}\b/i
 ];
 
 const ignoreOfficialLetterPatterns = [
