@@ -18,7 +18,8 @@ const eligibilityPatterns = [
   /\bwill be approved\b/i,
   /\bwill pay you\b/i,
   /\bguaranteed\b/i,
-  /\byou will receive\b/i
+  /\byou will receive\b/i,
+  /\bfema owes you\b/i
 ];
 
 const legalAdvicePatterns = [
