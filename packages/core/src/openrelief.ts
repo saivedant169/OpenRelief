@@ -657,8 +657,12 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): RiskFlag[] => {
   const normalized = intakeText.toLowerCase();
   const flags: RiskFlag[] = [];
+  const hasDenialOrAppealContext =
+    /appeal deadline|response deadline|deadline is (?:today|tomorrow)|need to appeal|appeal by|denied assistance|legal strategy|sue fema|lawsuit|legal action/i.test(normalized) ||
+    /(?:openrelief|you) (?:can )?(?:submit|file) (?:my |our )?(?:fema |sba )?(?:application|appeal|claim) for (?:me|us)/i.test(normalized) ||
+    /(?:submit|file) (?:my|our) (?:fema |sba )?(?:application|appeal|claim) for (?:me|us)/i.test(normalized);
 
-  if (letter?.letterType === "denial" || letter?.detectedDeadlines.length || /appeal deadline|response deadline|deadline is (?:today|tomorrow)|need to appeal|appeal by|denied assistance|legal strategy|sue fema|lawsuit|legal action/i.test(normalized)) {
+  if (letter?.letterType === "denial" || letter?.detectedDeadlines.length || hasDenialOrAppealContext) {
     addFlag(flags, "denial_or_appeal");
   }
 

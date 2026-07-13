@@ -215,6 +215,22 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText(/denial_or_appeal/)).toBeInTheDocument();
   });
 
+  it("routes submission requests to human review", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved for rental assistance." }
+    });
+    await userEvent.type(
+      screen.getByLabelText("Immediate needs and risks"),
+      "Can OpenRelief submit my FEMA application for me?"
+    );
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByText("Request human review")).toBeInTheDocument();
+    expect(screen.getByText(/denial_or_appeal/)).toBeInTheDocument();
+  });
+
   it("shows emergency guidance without guessing hotlines", async () => {
     render(<App />);
 
