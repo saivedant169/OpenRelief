@@ -171,6 +171,153 @@ const addFlag = (flags: RiskFlag[], flag: RiskFlag) => {
   }
 };
 
+interface RequestDetectionRule {
+  request: string;
+  phrases: string[];
+  fact: string;
+}
+
+const requestDetectionRules: RequestDetectionRule[] = [
+  {
+    request: "proof of occupancy",
+    phrases: ["proof of occupancy"],
+    fact: "The letter asks for proof of occupancy."
+  },
+  {
+    request: "ownership records",
+    phrases: ["ownership records"],
+    fact: "The letter asks for ownership records."
+  },
+  {
+    request: "lease records",
+    phrases: ["lease records"],
+    fact: "The letter asks for lease records."
+  },
+  {
+    request: "utility records",
+    phrases: ["utility records"],
+    fact: "The letter asks for utility records."
+  },
+  {
+    request: "insurance information",
+    phrases: ["insurance"],
+    fact: "The letter mentions insurance information."
+  },
+  {
+    request: "repair receipts",
+    phrases: ["repair receipts"],
+    fact: "The letter asks for repair receipts."
+  },
+  {
+    request: "contractor estimates",
+    phrases: ["contractor estimates"],
+    fact: "The letter asks for contractor estimates."
+  },
+  {
+    request: "repair estimates",
+    phrases: ["repair estimates"],
+    fact: "The letter asks for repair estimates."
+  },
+  {
+    request: "repair records",
+    phrases: ["repair records"],
+    fact: "The letter asks for repair records."
+  },
+  {
+    request: "medical receipts",
+    phrases: ["medical receipts", "medical, medication, or transportation receipts"],
+    fact: "The letter asks for medical receipts."
+  },
+  {
+    request: "medicine storage receipts",
+    phrases: ["medicine storage receipts"],
+    fact: "The letter asks for medicine storage receipts."
+  },
+  {
+    request: "transportation receipts",
+    phrases: ["transportation receipts", "receipts for transportation"],
+    fact: "The letter asks for transportation receipts."
+  },
+  {
+    request: "transportation notes",
+    phrases: ["transportation notes"],
+    fact: "The letter asks for transportation notes."
+  },
+  {
+    request: "temporary lodging receipts",
+    phrases: [
+      "temporary lodging receipts",
+      "evacuation lodging receipts",
+      "temporary lodging records",
+      "receipts for transportation and temporary lodging"
+    ],
+    fact: "The letter asks for temporary lodging receipts."
+  },
+  {
+    request: "agency messages",
+    phrases: ["agency messages"],
+    fact: "The letter asks for agency messages."
+  },
+  {
+    request: "damage photos",
+    phrases: ["damage photos"],
+    fact: "The letter asks for damage photos."
+  },
+  {
+    request: "damage records",
+    phrases: ["because damage records"],
+    fact: "The letter asks for damage records."
+  },
+  {
+    request: "smoke damage records",
+    phrases: ["smoke damage records"],
+    fact: "The letter asks for smoke damage records."
+  },
+  {
+    request: "cleanup receipts",
+    phrases: ["cleanup receipts"],
+    fact: "The letter asks for cleanup receipts."
+  },
+  {
+    request: "debris removal records",
+    phrases: ["debris removal records"],
+    fact: "The letter asks for debris removal records."
+  },
+  {
+    request: "supporting receipts",
+    phrases: ["supporting receipts"],
+    fact: "The letter asks for supporting receipts."
+  },
+  {
+    request: "replacement item receipts",
+    phrases: ["replacement household item receipts", "receipts for replacement household items"],
+    fact: "The letter asks for replacement item receipts."
+  },
+  {
+    request: "accessibility expense records",
+    phrases: ["accessibility and accommodation expense records"],
+    fact: "The letter asks for accessibility expense records."
+  },
+  {
+    request: "accommodation expense records",
+    phrases: ["accessibility and accommodation expense records"],
+    fact: "The letter asks for accommodation expense records."
+  },
+  {
+    request: "accommodation receipts",
+    phrases: ["accommodation receipts"],
+    fact: "The letter asks for accommodation receipts."
+  }
+];
+
+const requestFactByName = new Map(requestDetectionRules.map(({ request, fact }) => [request, fact]));
+
+const includesAny = (value: string, phrases: string[]): boolean =>
+  phrases.some((phrase) => value.includes(phrase));
+
+const hasRequest = (requests: string[], candidates: string[]): boolean =>
+  candidates.some((request) => requests.includes(request));
+
 const buildLetterFacts = (normalized: string, requests: string[], deadlines: Deadline[]): string[] => {
   const facts: string[] = [];
 
@@ -182,105 +329,11 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter says assistance is approved.");
   }
 
-  if (requests.includes("proof of occupancy")) {
-    facts.push("The letter asks for proof of occupancy.");
-  }
-
-  if (requests.includes("ownership records")) {
-    facts.push("The letter asks for ownership records.");
-  }
-
-  if (requests.includes("lease records")) {
-    facts.push("The letter asks for lease records.");
-  }
-
-  if (requests.includes("utility records")) {
-    facts.push("The letter asks for utility records.");
-  }
-
-  if (requests.includes("insurance information")) {
-    facts.push("The letter mentions insurance information.");
-  }
-
-  if (requests.includes("repair receipts")) {
-    facts.push("The letter asks for repair receipts.");
-  }
-
-  if (requests.includes("contractor estimates")) {
-    facts.push("The letter asks for contractor estimates.");
-  }
-
-  if (requests.includes("repair estimates")) {
-    facts.push("The letter asks for repair estimates.");
-  }
-
-  if (requests.includes("repair records")) {
-    facts.push("The letter asks for repair records.");
-  }
-
-  if (requests.includes("medical receipts")) {
-    facts.push("The letter asks for medical receipts.");
-  }
-
-  if (requests.includes("medicine storage receipts")) {
-    facts.push("The letter asks for medicine storage receipts.");
-  }
-
-  if (requests.includes("transportation receipts")) {
-    facts.push("The letter asks for transportation receipts.");
-  }
-
-  if (requests.includes("transportation notes")) {
-    facts.push("The letter asks for transportation notes.");
-  }
-
-  if (requests.includes("temporary lodging receipts")) {
-    facts.push("The letter asks for temporary lodging receipts.");
-  }
-
-  if (requests.includes("agency messages")) {
-    facts.push("The letter asks for agency messages.");
-  }
-
-  if (requests.includes("damage photos")) {
-    facts.push("The letter asks for damage photos.");
-  }
-
-  if (requests.includes("damage records")) {
-    facts.push("The letter asks for damage records.");
-  }
-
-  if (requests.includes("smoke damage records")) {
-    facts.push("The letter asks for smoke damage records.");
-  }
-
-  if (requests.includes("cleanup receipts")) {
-    facts.push("The letter asks for cleanup receipts.");
-  }
-
-  if (requests.includes("debris removal records")) {
-    facts.push("The letter asks for debris removal records.");
-  }
-
-  if (requests.includes("supporting receipts")) {
-    facts.push("The letter asks for supporting receipts.");
-  }
-
-  if (requests.includes("replacement item receipts")) {
-    facts.push("The letter asks for replacement item receipts.");
-  }
-
-  if (requests.includes("accessibility expense records")) {
-    facts.push("The letter asks for accessibility expense records.");
-  }
-
-  if (requests.includes("accommodation expense records")) {
-    facts.push("The letter asks for accommodation expense records.");
-  }
-
-  if (requests.includes("accommodation receipts")) {
-    facts.push("The letter asks for accommodation receipts.");
-  }
+  facts.push(
+    ...requests
+      .map((request) => requestFactByName.get(request))
+      .filter((fact): fact is string => fact !== undefined)
+  );
 
   facts.push(...deadlines.map((deadline) => `The letter says ${deadline.text}.`));
 
@@ -294,45 +347,9 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     .map((pattern) => `Prompt injection pattern detected: ${pattern.source}`);
   const appearsSpanish = spanishDisasterLetterPatterns.some((pattern) => pattern.test(letterText));
 
-  const detectedRequests = [
-    normalized.includes("proof of occupancy") ? "proof of occupancy" : "",
-    normalized.includes("ownership records") ? "ownership records" : "",
-    normalized.includes("lease records") ? "lease records" : "",
-    normalized.includes("utility records") ? "utility records" : "",
-    normalized.includes("insurance") ? "insurance information" : "",
-    normalized.includes("repair receipts") ? "repair receipts" : "",
-    normalized.includes("contractor estimates") ? "contractor estimates" : "",
-    normalized.includes("repair estimates") ? "repair estimates" : "",
-    normalized.includes("repair records") ? "repair records" : "",
-    normalized.includes("medical receipts") || normalized.includes("medical, medication, or transportation receipts")
-      ? "medical receipts"
-      : "",
-    normalized.includes("medicine storage receipts") ? "medicine storage receipts" : "",
-    normalized.includes("transportation receipts") || normalized.includes("receipts for transportation")
-      ? "transportation receipts"
-      : "",
-    normalized.includes("transportation notes") ? "transportation notes" : "",
-    normalized.includes("temporary lodging receipts") ||
-    normalized.includes("evacuation lodging receipts") ||
-    normalized.includes("temporary lodging records") ||
-    normalized.includes("receipts for transportation and temporary lodging")
-      ? "temporary lodging receipts"
-      : "",
-    normalized.includes("agency messages") ? "agency messages" : "",
-    normalized.includes("damage photos") ? "damage photos" : "",
-    normalized.includes("because damage records") ? "damage records" : "",
-    normalized.includes("smoke damage records") ? "smoke damage records" : "",
-    normalized.includes("cleanup receipts") ? "cleanup receipts" : "",
-    normalized.includes("debris removal records") ? "debris removal records" : "",
-    normalized.includes("supporting receipts") ? "supporting receipts" : "",
-    normalized.includes("replacement household item receipts") ||
-    normalized.includes("receipts for replacement household items")
-      ? "replacement item receipts"
-      : "",
-    normalized.includes("accessibility and accommodation expense records") ? "accessibility expense records" : "",
-    normalized.includes("accessibility and accommodation expense records") ? "accommodation expense records" : "",
-    normalized.includes("accommodation receipts") ? "accommodation receipts" : ""
-  ].filter(Boolean);
+  const detectedRequests = requestDetectionRules
+    .filter(({ phrases }) => includesAny(normalized, phrases))
+    .map(({ request }) => request);
 
   const detectedDeadlines: Deadline[] = [];
 
@@ -560,7 +577,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Lease, mortgage, utility bill, or other occupancy proof",
           status:
-            requests.includes("proof of occupancy") || requests.includes("utility records")
+            hasRequest(requests, ["proof of occupancy", "utility records"])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
@@ -573,7 +590,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Deed, lease, mortgage statement, or title record",
           status:
-            requests.includes("ownership records") || requests.includes("lease records")
+            hasRequest(requests, ["ownership records", "lease records"])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
@@ -586,11 +603,13 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Damage photos, receipts, or repair estimates",
           status:
-            requests.includes("contractor estimates") ||
-            requests.includes("damage photos") ||
-            requests.includes("damage records") ||
-            requests.includes("smoke damage records") ||
-            requests.includes("repair estimates")
+            hasRequest(requests, [
+              "contractor estimates",
+              "damage photos",
+              "damage records",
+              "smoke damage records",
+              "repair estimates"
+            ])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
@@ -603,13 +622,15 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Repair, hotel, replacement, or cleanup receipts",
           status:
-            requests.includes("repair receipts") ||
-            requests.includes("temporary lodging receipts") ||
-            requests.includes("cleanup receipts") ||
-            requests.includes("debris removal records") ||
-            requests.includes("repair records") ||
-            requests.includes("supporting receipts") ||
-            requests.includes("replacement item receipts")
+            hasRequest(requests, [
+              "repair receipts",
+              "temporary lodging receipts",
+              "cleanup receipts",
+              "debris removal records",
+              "repair records",
+              "supporting receipts",
+              "replacement item receipts"
+            ])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
@@ -632,13 +653,15 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Medical, medication, transportation, or accessibility expense notes",
           status:
-            requests.includes("medical receipts") ||
-            requests.includes("medicine storage receipts") ||
-            requests.includes("transportation receipts") ||
-            requests.includes("transportation notes") ||
-            requests.includes("accessibility expense records") ||
-            requests.includes("accommodation expense records") ||
-            requests.includes("accommodation receipts")
+            hasRequest(requests, [
+              "medical receipts",
+              "medicine storage receipts",
+              "transportation receipts",
+              "transportation notes",
+              "accessibility expense records",
+              "accommodation expense records",
+              "accommodation receipts"
+            ])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
