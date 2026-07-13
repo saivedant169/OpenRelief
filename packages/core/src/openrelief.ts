@@ -204,6 +204,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter mentions insurance information."
   },
   {
+    request: "insurance settlement records",
+    phrases: ["insurance settlement records"],
+    fact: "The letter asks for insurance settlement records."
+  },
+  {
     request: "repair receipts",
     phrases: ["repair receipts"],
     fact: "The letter asks for repair receipts."
@@ -669,7 +674,9 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Insurance claim status or denial note",
-          status: requests.includes("insurance information") ? "missing" : "optional",
+          status: hasRequest(requests, ["insurance information", "insurance settlement records"])
+            ? "missing"
+            : "optional",
           sourceIds: ["fema-documents"]
         }
       ]

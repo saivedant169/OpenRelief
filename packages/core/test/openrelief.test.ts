@@ -214,6 +214,25 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "insurance")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts insurance settlement record requests", () => {
+    const result = analyzeLetter([
+      "FEMA Notice",
+      "You must respond within 30 days from the date of this letter.",
+      "Send insurance settlement records and repair receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("insurance settlement records");
+    expect(result.detectedRequests).toContain("insurance information");
+    expect(result.detectedRequests).toContain("repair receipts");
+    expect(result.facts).toContain("The letter asks for insurance settlement records.");
+  });
+
+  it("marks requested insurance settlement records as missing insurance evidence", () => {
+    const packet = buildEvidencePacket(["insurance settlement records"]);
+
+    expect(packet.groups.find((group) => group.category === "insurance")?.items[0]?.status).toBe("missing");
+  });
+
   it("extracts ownership lease and utility record requests from denial letters", () => {
     const ownershipResult = analyzeLetter(
       "FEMA Notice\nYour application is denied because ownership records were not received."
