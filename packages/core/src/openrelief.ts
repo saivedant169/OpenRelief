@@ -878,6 +878,7 @@ const policyDisasterTypes = ["wildfire", "flood", "hurricane", "earthquake", "ot
 const policySourceTypes = ["webpage", "pdf", "form", "faq", "program-page"];
 const policyTrustTiers = [1, 2, 3, 4];
 const policyIdPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const policyVersionPattern = /^\d+\.\d+\.\d+$/;
 
 const parsePolicySourceUrl = (url: string) => {
   try {
@@ -920,6 +921,9 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
       ? "Policy pack has invalid disasterType."
       : undefined,
     policyPack.version.trim().length === 0 ? "Policy pack has no version." : undefined,
+    policyPack.version.trim().length > 0 && !policyVersionPattern.test(policyPack.version.trim())
+      ? "Policy pack has invalid version."
+      : undefined,
     policyPack.sources.length === 0 ? "Policy pack has no sources." : undefined,
     policyPack.rules.length === 0 ? "Policy pack has no rules." : undefined
   ].filter((error): error is string => error !== undefined);

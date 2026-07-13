@@ -42,6 +42,16 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy pack has no rules.");
   });
 
+  it("rejects policy packs with invalid versions", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      version: "latest"
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy pack has invalid version.");
+  });
+
   it("rejects policy packs with invalid classification metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
