@@ -19,7 +19,8 @@ const eligibilityPatterns = [
   /\bwill pay you\b/i,
   /\bguaranteed\b/i,
   /\byou will receive\b/i,
-  /\bfema owes you\b/i
+  /\bfema owes you\b/i,
+  /\byou are entitled to\b/i
 ];
 
 const legalAdvicePatterns = [
