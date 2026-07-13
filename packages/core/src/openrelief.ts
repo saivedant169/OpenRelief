@@ -222,6 +222,18 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for replacement item receipts.");
   }
 
+  if (requests.includes("accessibility expense records")) {
+    facts.push("The letter asks for accessibility expense records.");
+  }
+
+  if (requests.includes("accommodation expense records")) {
+    facts.push("The letter asks for accommodation expense records.");
+  }
+
+  if (requests.includes("accommodation receipts")) {
+    facts.push("The letter asks for accommodation receipts.");
+  }
+
   facts.push(...deadlines.map((deadline) => `The letter says ${deadline.text}.`));
 
   return facts.length > 0 ? facts : ["The letter needs manual review because no clear action was found."];
@@ -254,7 +266,10 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("replacement household item receipts") ||
     normalized.includes("receipts for replacement household items")
       ? "replacement item receipts"
-      : ""
+      : "",
+    normalized.includes("accessibility and accommodation expense records") ? "accessibility expense records" : "",
+    normalized.includes("accessibility and accommodation expense records") ? "accommodation expense records" : "",
+    normalized.includes("accommodation receipts") ? "accommodation receipts" : ""
   ].filter(Boolean);
 
   const detectedDeadlines: Deadline[] = [];
@@ -542,7 +557,11 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Medical, medication, transportation, or accessibility expense notes",
           status:
-            requests.includes("medical receipts") || requests.includes("transportation receipts")
+            requests.includes("medical receipts") ||
+            requests.includes("transportation receipts") ||
+            requests.includes("accessibility expense records") ||
+            requests.includes("accommodation expense records") ||
+            requests.includes("accommodation receipts")
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
