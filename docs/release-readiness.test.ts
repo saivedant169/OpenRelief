@@ -22,6 +22,8 @@ const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
 const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
 const packageJsonPath = path.join(process.cwd(), "package.json");
 const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
+const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "pages.yml");
+const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -181,5 +183,22 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("dist");
     expect(preflightScript).toContain("hosted-sandbox.md");
     expect(preflightScript).toContain("telemetry");
+  });
+
+  it("defines the hosted sandbox deployment workflow", () => {
+    expect(existsSync(pagesWorkflowPath)).toBe(true);
+
+    const workflow = readFileSync(pagesWorkflowPath, "utf8");
+    const viteConfig = readFileSync(viteConfigPath, "utf8");
+
+    expect(workflow).toContain("OpenRelief Sandbox");
+    expect(workflow).toContain("actions/configure-pages@v5");
+    expect(workflow).toContain("actions/upload-pages-artifact@v4");
+    expect(workflow).toContain("actions/deploy-pages@v4");
+    expect(workflow).toContain("OPENRELIEF_BASE_PATH: /OpenRelief/");
+    expect(workflow).toContain("npm run sandbox:preflight");
+    expect(workflow).toContain("pages: write");
+    expect(workflow).toContain("id-token: write");
+    expect(viteConfig).toContain('base: process.env.OPENRELIEF_BASE_PATH ?? "/"');
   });
 });

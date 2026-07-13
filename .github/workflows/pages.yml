@@ -1,0 +1,65 @@
+name: OpenRelief Sandbox
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/pages.yml"
+      - "apps/web/**"
+      - "docs/hosted-sandbox.md"
+      - "package-lock.json"
+      - "package.json"
+      - "packages/core/**"
+      - "packages/policy-packs/**"
+      - "scripts/hosted-sandbox-preflight.mjs"
+      - "vite.config.ts"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build sandbox
+        env:
+          OPENRELIEF_BASE_PATH: /OpenRelief/
+        run: npm run build
+
+      - name: Verify sandbox guardrails
+        run: npm run sandbox:preflight
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload sandbox artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+      - name: Deploy sandbox
+        id: deployment
+        uses: actions/deploy-pages@v4

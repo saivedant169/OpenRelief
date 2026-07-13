@@ -2,14 +2,14 @@
   "name": "OpenRelief",
   "short_name": "OpenRelief",
   "description": "Local-first disaster paperwork helper for California wildfire recovery.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#f8faf7",
   "theme_color": "#155e63",
   "icons": [
     {
-      "src": "/openrelief.svg",
+      "src": "openrelief.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

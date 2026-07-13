@@ -1,27 +1,30 @@
 const CACHE_NAME = "openrelief-v1";
+const appShellPath = new URL(".", self.registration.scope).pathname;
+const withScopePath = (assetPath) => new URL(assetPath, self.registration.scope).pathname;
 const APP_SHELL = [
-  "/",
-  "/manifest.webmanifest",
-  "/openrelief.svg",
-  "/tesseract/worker.min.js",
-  "/tesseract-core/tesseract-core.wasm.js",
-  "/tesseract-core/tesseract-core.wasm",
-  "/tessdata/eng.traineddata.gz"
-];
+  "",
+  "manifest.webmanifest",
+  "openrelief.svg",
+  "tesseract/worker.min.js",
+  "tesseract-core/tesseract-core.wasm.js",
+  "tesseract-core/tesseract-core.wasm",
+  "tessdata/eng.traineddata.gz"
+].map(withScopePath);
 
 const cacheDocumentAssets = async (cache) => {
-  const response = await fetch("/");
+  const response = await fetch(appShellPath);
 
   if (!response.ok) {
     return;
   }
 
   const html = await response.clone().text();
-  await cache.put("/", response.clone());
+  await cache.put(appShellPath, response.clone());
 
   const assetPaths = [...html.matchAll(/(?:href|src)="([^"]+)"/g)]
-    .map((match) => match[1])
-    .filter((assetPath) => assetPath.startsWith("/") && !assetPath.startsWith("//"));
+    .map((match) => new URL(match[1], self.registration.scope))
+    .filter((url) => url.origin === self.location.origin && url.pathname.startsWith(appShellPath))
+    .map((url) => url.pathname);
 
   await Promise.all(assetPaths.map((assetPath) => cache.add(assetPath).catch(() => undefined)));
 };
@@ -77,7 +80,7 @@ self.addEventListener("fetch", (event) => {
         }
 
         if (request.mode === "navigate") {
-          const shell = await cache.match("/");
+          const shell = await cache.match(appShellPath);
 
           if (shell) {
             return shell;
