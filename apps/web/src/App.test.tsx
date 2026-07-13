@@ -328,6 +328,27 @@ describe("OpenRelief web workflow", () => {
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain('"human-review":"done"');
   });
 
+  it("preserves case notes and checklist status when re-saving an opened case", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
+    await userEvent.type(screen.getByLabelText("Case notes"), "Called survivor about occupancy proof.");
+    await userEvent.click(screen.getByRole("checkbox", { name: "Mark Request human review done" }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+    const exported = JSON.parse(archiveField.value) as Array<{
+      notes: string;
+      checklistStatuses: Record<string, string>;
+    }>;
+
+    expect(exported[0]?.notes).toBe("Called survivor about occupancy proof.");
+    expect(exported[0]?.checklistStatuses["human-review"]).toBe("done");
+  });
+
   it("exports saved case JSON", async () => {
     render(<App />);
 

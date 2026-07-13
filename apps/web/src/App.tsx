@@ -399,6 +399,9 @@ export const App = () => {
       sourceIds
     }));
     setSavedCases((current) => {
+      const existingCase = activeSavedCaseId
+        ? current.find((savedCase) => savedCase.id === activeSavedCaseId)
+        : undefined;
       const snapshot: SavedCaseSummary = {
         id: activeSavedCaseId ?? nextLocalCaseId(current),
         title: letterTypeLabels[analysis.letterType],
@@ -409,10 +412,10 @@ export const App = () => {
         deadlines: analysis.detectedDeadlines,
         missingEvidence: extractMissingEvidence(evidencePacket),
         checklistItems,
-        checklistStatuses: defaultChecklistStatuses(checklistItems),
+        checklistStatuses: normalizeChecklistStatuses(checklistItems, existingCase?.checklistStatuses),
         riskFlags,
         summary: analysis.summary,
-        notes: ""
+        notes: existingCase?.notes ?? ""
       };
 
       return [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10);
