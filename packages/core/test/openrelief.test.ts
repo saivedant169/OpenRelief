@@ -549,6 +549,17 @@ describe("OpenRelief domain core", () => {
     });
   });
 
+  it("detects submit-within-days deadlines from uploaded letters", () => {
+    const result = analyzeLetter("FEMA Notice\nPlease submit requested receipts within 10 days.");
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response window",
+      text: "submit requested receipts within 10 days",
+      source: "uploaded_letter"
+    });
+  });
+
   it("detects explicit response date deadlines from uploaded letters", () => {
     const result = analyzeLetter(
       "FEMA Notice\nPlease respond by August 15, 2026 with requested utility records."

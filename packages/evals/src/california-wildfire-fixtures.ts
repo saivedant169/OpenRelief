@@ -1182,6 +1182,20 @@ const deadlineAndInspectionCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-deadline-submit-receipts",
+    title: "Deadline notice with submit-within-days wording",
+    lines: [
+      "FEMA Notice",
+      "Please submit requested receipts within 10 days.",
+      "Keep a copy of everything you send."
+    ],
+    county: "Butte",
+    expected: {
+      letterType: "deadline_notice",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-deadline-ocr",
     title: "Noisy response deadline notice",
     lines: [

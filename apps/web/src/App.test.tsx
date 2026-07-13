@@ -113,6 +113,20 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText(/The uploaded letter says: send the requested records by August 15, 2026/)).toBeInTheDocument();
   });
 
+  it("shows submit-within-days deadlines from uploaded letters", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: {
+        value: "FEMA Notice\nPlease submit requested receipts within 10 days."
+      }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByRole("heading", { name: "Deadline notice" })).toBeInTheDocument();
+    expect(screen.getByText("submit requested receipts within 10 days")).toBeInTheDocument();
+  });
+
   it("shows a bounded appeal draft for denial letters", async () => {
     render(<App />);
 

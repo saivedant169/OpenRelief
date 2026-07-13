@@ -144,7 +144,7 @@ const spanishDisasterLetterPatterns = [
 
 const monthNamePattern =
   "(?:january|february|march|april|may|june|july|august|september|october|november|december)";
-const responseWithinDaysPattern = /\brespond within \d{1,3} days\b/i;
+const responseWithinDaysPattern = /\b(?:respond|reply|send|submit|provide)(?:\s+[a-z][a-z-]*){0,6}\s+within\s+\d{1,3}\s+days\b/i;
 const responseByDatePattern = new RegExp(
   `\\b(?:respond|reply|send|submit|provide)(?:\\s+[a-z][a-z-]*){0,6}\\s+by\\s+${monthNamePattern}\\s+\\d{1,2},?\\s+\\d{4}\\b`,
   "i"
