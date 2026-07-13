@@ -857,11 +857,11 @@ const daysBetween = (fromDate: string, toDate: string): number => {
 
 const officialPolicySourceDomains = ["fema.gov", "sba.gov", "disasterassistance.gov", "ca.gov"];
 
-const getPolicySourceHost = (url: string) => {
+const parsePolicySourceUrl = (url: string) => {
   try {
-    return new URL(url).hostname.toLowerCase().replace(/\.$/, "");
+    return new URL(url);
   } catch {
-    return "";
+    return undefined;
   }
 };
 
@@ -877,11 +877,17 @@ export const validatePolicyPack = (policyPack: PolicyPack, asOf = "2026-07-13"):
     if (trimmedUrl.length === 0) {
       errors.push(`Policy source ${source.id} has no url.`);
     } else {
-      const host = getPolicySourceHost(trimmedUrl);
-      if (host.length === 0) {
+      const parsedUrl = parsePolicySourceUrl(trimmedUrl);
+      if (parsedUrl === undefined) {
         errors.push(`Policy source ${source.id} has invalid url.`);
-      } else if (!isOfficialPolicySourceHost(host)) {
-        errors.push(`Policy source ${source.id} uses unapproved domain ${host}.`);
+      } else {
+        const host = parsedUrl.hostname.toLowerCase().replace(/\.$/, "");
+        if (parsedUrl.protocol !== "https:") {
+          errors.push(`Policy source ${source.id} must use https.`);
+        }
+        if (!isOfficialPolicySourceHost(host)) {
+          errors.push(`Policy source ${source.id} uses unapproved domain ${host}.`);
+        }
       }
     }
 

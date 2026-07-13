@@ -56,6 +56,23 @@ describe("policy pack validation", () => {
     expect(validation.errors).toContain("Policy source bad-source uses unapproved domain example.com.");
   });
 
+  it("rejects policy sources without https", () => {
+    const validation = validatePolicyPack({
+      ...californiaWildfirePolicyPack,
+      sources: [
+        ...californiaWildfirePolicyPack.sources,
+        {
+          ...californiaWildfirePolicyPack.sources[0],
+          id: "insecure-source",
+          url: "http://www.fema.gov/assistance/individual/after-applying/appeals"
+        }
+      ]
+    });
+
+    expect(validation.valid).toBe(false);
+    expect(validation.errors).toContain("Policy source insecure-source must use https.");
+  });
+
   it("rejects policy sources with instruction-like metadata", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,
