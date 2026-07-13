@@ -1168,6 +1168,20 @@ const deadlineAndInspectionCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-deadline-15-day-response",
+    title: "Response deadline notice with 15-day window",
+    lines: [
+      "FEMA Notice",
+      "You must respond within 15 days from the date of this letter.",
+      "Send the requested records listed in your account."
+    ],
+    county: "Butte",
+    expected: {
+      letterType: "deadline_notice",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-deadline-ocr",
     title: "Noisy response deadline notice",
     lines: [

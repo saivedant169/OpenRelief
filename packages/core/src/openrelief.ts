@@ -144,6 +144,7 @@ const spanishDisasterLetterPatterns = [
 
 const monthNamePattern =
   "(?:january|february|march|april|may|june|july|august|september|october|november|december)";
+const responseWithinDaysPattern = /\brespond within \d{1,3} days\b/i;
 const responseByDatePattern = new RegExp(
   `\\b(?:respond|reply|send|submit|provide)(?:\\s+[a-z][a-z-]*){0,6}\\s+by\\s+${monthNamePattern}\\s+\\d{1,2},?\\s+\\d{4}\\b`,
   "i"
@@ -557,8 +558,13 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     detectedDeadlines.push({ label: "appeal window", text: "appeal within 60 days", source: "uploaded_letter" });
   }
 
-  if (normalized.includes("respond within 30 days")) {
-    detectedDeadlines.push({ label: "response window", text: "respond within 30 days", source: "uploaded_letter" });
+  const responseWithinDaysMatch = responseWithinDaysPattern.exec(letterText);
+  if (responseWithinDaysMatch) {
+    detectedDeadlines.push({
+      label: "response window",
+      text: normalizeDeadlineText(responseWithinDaysMatch[0]),
+      source: "uploaded_letter"
+    });
   }
 
   const responseByDateMatch = responseByDatePattern.exec(letterText);

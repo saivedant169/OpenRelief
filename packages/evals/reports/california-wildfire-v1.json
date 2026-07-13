@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 111,
+  "caseCount": 112,
   "passed": true,
   "metrics": {
-    "passedCount": 111,
+    "passedCount": 112,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1391,6 +1391,23 @@
     {
       "caseId": "ca-wildfire-deadline-calendar-date",
       "title": "Response deadline notice with calendar date",
+      "expectedLetterType": "deadline_notice",
+      "actualLetterType": "deadline_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-deadline-15-day-response",
+      "title": "Response deadline notice with 15-day window",
       "expectedLetterType": "deadline_notice",
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
