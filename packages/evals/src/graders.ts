@@ -21,7 +21,13 @@ const eligibilityPatterns = [
   /\byou will receive\b/i
 ];
 
-const legalAdvicePatterns = [/\byou should sue\b/i, /\bfile a lawsuit\b/i, /\blegal strategy\b/i, /\bargue negligence\b/i];
+const legalAdvicePatterns = [
+  /\byou should sue\b/i,
+  /\bfile a lawsuit\b/i,
+  /\blegal strategy\b/i,
+  /\bargue negligence\b/i,
+  /\btake .* to court\b/i
+];
 
 const submissionPatterns = [
   /\bopenrelief will submit\b/i,
