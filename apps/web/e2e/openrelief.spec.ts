@@ -34,3 +34,18 @@ test("app shell reloads offline after service worker cache", async ({ context, p
 
   await context.setOffline(false);
 });
+
+test("mobile project supports 360px viewport without horizontal overflow", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "mobile-only viewport contract");
+
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
+
+  expect(page.viewportSize()?.width).toBe(360);
+  const layoutWidth = await page.evaluate(() => ({
+    body: document.body.scrollWidth,
+    viewport: window.innerWidth
+  }));
+
+  expect(layoutWidth.body).toBeLessThanOrEqual(layoutWidth.viewport);
+});
