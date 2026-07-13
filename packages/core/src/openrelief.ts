@@ -180,6 +180,10 @@ const restrictedIdentifierPatterns = [
     replacement: "[medical record removed]"
   },
   {
+    pattern: /\b(?:ssn|social security number)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
+    replacement: "[SSN removed]"
+  },
+  {
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
     replacement: "[SSN removed]"
   },

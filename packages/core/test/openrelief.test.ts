@@ -98,6 +98,15 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[agency ID removed]");
   });
 
+  it("redacts labeled undashed Social Security numbers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Social Security number 123456789 should not stay in local text."
+    );
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[SSN removed]");
+  });
+
   it("redacts contact identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Call 555-123-4567 or email survivor@example.test before saving this note."
