@@ -100,7 +100,7 @@ const readSavedDraft = (): SavedDraft => {
     const parsed = JSON.parse(saved) as SavedDraft;
     return {
       letterText: typeof parsed.letterText === "string" ? redactRestrictedIdentifiers(parsed.letterText) : undefined,
-      fileName: typeof parsed.fileName === "string" ? parsed.fileName : undefined,
+      fileName: typeof parsed.fileName === "string" ? redactRestrictedIdentifiers(parsed.fileName) : undefined,
       intakeText: typeof parsed.intakeText === "string" ? redactRestrictedIdentifiers(parsed.intakeText) : undefined
     };
   } catch {
@@ -190,6 +190,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
 
     const sanitizedLetterText = redactRestrictedIdentifiers(candidate.letterText);
     const sanitizedIntakeText = redactRestrictedIdentifiers(candidate.intakeText);
+    const sanitizedFileName = redactRestrictedIdentifiers(candidate.fileName);
     const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
     const missingEvidence =
@@ -220,7 +221,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         title: candidate.title,
         letterType: candidate.letterType,
         letterText: sanitizedLetterText,
-        fileName: candidate.fileName,
+        fileName: sanitizedFileName,
         intakeText: sanitizedIntakeText,
         deadlines,
         missingEvidence,
@@ -278,7 +279,7 @@ export const App = () => {
       caseStorageKey,
       JSON.stringify({
         letterText: redactRestrictedIdentifiers(letterText),
-        fileName,
+        fileName: redactRestrictedIdentifiers(fileName),
         intakeText: redactRestrictedIdentifiers(intakeText)
       })
     );
@@ -355,7 +356,7 @@ export const App = () => {
       title: letterTypeLabels[analysis.letterType],
       letterType: analysis.letterType,
       letterText: redactRestrictedIdentifiers(letterText),
-      fileName,
+      fileName: redactRestrictedIdentifiers(fileName),
       intakeText: redactRestrictedIdentifiers(intakeText),
       deadlines: analysis.detectedDeadlines,
       missingEvidence: extractMissingEvidence(evidencePacket),
@@ -484,7 +485,7 @@ export const App = () => {
     }
 
     setFileError("");
-    setFileName(file.name);
+    setFileName(redactRestrictedIdentifiers(file.name));
     setClearArmed(false);
     setActiveSavedCaseId(null);
     setAnalysis(null);

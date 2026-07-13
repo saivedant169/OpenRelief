@@ -107,6 +107,26 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
   });
 
+  it("redacts restricted identifiers from uploaded file names in local storage", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const file = new File(
+      ["FEMA Notice\nYour application is approved for rental assistance."],
+      "FEMA-123456789-DOB-01-02-1990.txt",
+      { type: "text/plain" }
+    );
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      const stored = window.localStorage.getItem("openrelief:v1:case") ?? "";
+      expect(stored).not.toContain("FEMA-123456789");
+      expect(stored).not.toContain("01-02-1990");
+      expect(stored).toContain("[agency ID removed]");
+      expect(stored).toContain("[date of birth removed]");
+    });
+  });
+
   it("extracts local PDF text and clears stale analysis", async () => {
     render(<App />);
     await loadSampleLetter();
