@@ -367,6 +367,42 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("checkbox", { name: "Mark Request human review done" })).toBeChecked();
   });
 
+  it("redacts restricted identifiers from imported saved case metadata", async () => {
+    const archive = JSON.stringify([
+      {
+        id: "OR-FEMA-123456789",
+        title: "Claim denial SSN 123-45-6789",
+        letterType: "denial",
+        letterText: "FEMA Notice\nYour application is denied because proof of occupancy is missing.",
+        fileName: "DOB-01-02-1990.txt",
+        intakeText: "",
+        deadlines: [],
+        missingEvidence: [],
+        checklistItems: [],
+        checklistStatuses: {},
+        riskFlags: ["denial_or_appeal"],
+        summary: "Summary references FEMA case number 123456789.",
+        notes: ""
+      }
+    ]);
+
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Saved cases JSON"), { target: { value: archive } });
+    await userEvent.click(screen.getByRole("button", { name: /import saved cases/i }));
+    await userEvent.click(screen.getByRole("button", { name: /export saved cases/i }));
+
+    const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
+
+    expect(archiveField.value).not.toContain("FEMA-123456789");
+    expect(archiveField.value).not.toContain("123-45-6789");
+    expect(archiveField.value).not.toContain("01-02-1990");
+    expect(archiveField.value).not.toContain("case number 123456789");
+    expect(archiveField.value).toContain("[SSN removed]");
+    expect(archiveField.value).toContain("[agency ID removed]");
+    expect(archiveField.value).toContain("[date of birth removed]");
+  });
+
   it("restores a saved local draft and clears stored data", async () => {
     const savedLetter = "FEMA Notice\nYour application is approved for rental assistance.";
     const { unmount } = render(<App />);

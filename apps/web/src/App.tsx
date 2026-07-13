@@ -191,6 +191,9 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     const sanitizedLetterText = redactRestrictedIdentifiers(candidate.letterText);
     const sanitizedIntakeText = redactRestrictedIdentifiers(candidate.intakeText);
     const sanitizedFileName = redactRestrictedIdentifiers(candidate.fileName);
+    const sanitizedId = redactRestrictedIdentifiers(candidate.id);
+    const sanitizedTitle = redactRestrictedIdentifiers(candidate.title);
+    const sanitizedSummary = redactRestrictedIdentifiers(candidate.summary);
     const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
     const missingEvidence =
@@ -217,8 +220,8 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
 
     return [
       {
-        id: candidate.id,
-        title: candidate.title,
+        id: sanitizedId,
+        title: sanitizedTitle,
         letterType: candidate.letterType,
         letterText: sanitizedLetterText,
         fileName: sanitizedFileName,
@@ -228,7 +231,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         checklistItems,
         checklistStatuses,
         riskFlags: candidate.riskFlags,
-        summary: candidate.summary,
+        summary: sanitizedSummary,
         notes: sanitizedNotes
       }
     ];
