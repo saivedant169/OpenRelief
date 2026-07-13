@@ -115,6 +115,7 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
 
     expect(screen.getByRole("region", { name: "Local case queue" })).toBeInTheDocument();
+    expect(within(screen.getByRole("region", { name: "Current case" })).getByText("OR-CA-2026-001")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });

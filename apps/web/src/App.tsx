@@ -398,12 +398,11 @@ export const App = () => {
       reason,
       sourceIds
     }));
+    const snapshotId = activeSavedCaseId ?? nextLocalCaseId(savedCases);
     setSavedCases((current) => {
-      const existingCase = activeSavedCaseId
-        ? current.find((savedCase) => savedCase.id === activeSavedCaseId)
-        : undefined;
+      const existingCase = current.find((savedCase) => savedCase.id === snapshotId);
       const snapshot: SavedCaseSummary = {
-        id: activeSavedCaseId ?? nextLocalCaseId(current),
+        id: snapshotId,
         title: letterTypeLabels[analysis.letterType],
         letterType: analysis.letterType,
         letterText: redactRestrictedIdentifiers(letterText),
@@ -420,6 +419,7 @@ export const App = () => {
 
       return [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10);
     });
+    setActiveSavedCaseId(snapshotId);
     setClearArmed(false);
   };
 
