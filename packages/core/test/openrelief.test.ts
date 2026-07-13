@@ -584,6 +584,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immediate_danger"]);
   });
 
+  it("detects downed power lines as immediate danger", () => {
+    const flags = detectRiskFlags("There is a downed power line across the driveway.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
+  it("detects gas leaks as immediate danger", () => {
+    const flags = detectRiskFlags("We smell a gas leak near the damaged home.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
   it("detects evacuation contractions as immediate danger", () => {
     const flags = detectRiskFlags("I can't evacuate and the fire is close.");
 

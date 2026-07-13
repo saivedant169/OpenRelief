@@ -631,7 +631,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     addFlag(flags, "denial_or_appeal");
   }
 
-  if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|can't evacuate|cannot leave|can't leave|cannot get out|can't get out|stuck inside|smoke.*filling|breathing smoke|life[-\s]?threatening/i.test(normalized)) {
+  if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|can't evacuate|cannot leave|can't leave|cannot get out|can't get out|stuck inside|smoke.*filling|breathing smoke|downed power line|gas leak|life[-\s]?threatening/i.test(normalized)) {
     addFlag(flags, "immediate_danger");
   }
 
