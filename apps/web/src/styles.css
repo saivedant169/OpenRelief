@@ -209,6 +209,7 @@ a:hover {
   display: grid;
   gap: 4px;
   width: 100%;
+  min-height: 44px;
   padding: 0;
   color: inherit;
   text-align: left;

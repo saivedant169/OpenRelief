@@ -39,4 +39,11 @@ describe("OpenRelief accessibility smoke", () => {
 
     expect(archiveActionRule).toContain("min-height: 44px");
   });
+
+  it("keeps saved-case queue rows at least 44px tall", () => {
+    const styles = readFileSync(stylesPath, "utf8");
+    const queueRowRule = styles.match(/\.queue-row\s*\{[^}]+\}/)?.[0] ?? "";
+
+    expect(queueRowRule).toContain("min-height: 44px");
+  });
 });
