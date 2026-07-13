@@ -234,6 +234,30 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts medical transportation and lodging requests from information letters", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medical receipts, transportation receipts, and temporary lodging receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("medical receipts");
+    expect(result.detectedRequests).toContain("transportation receipts");
+    expect(result.detectedRequests).toContain("temporary lodging receipts");
+    expect(result.facts).toContain("The letter asks for medical receipts.");
+    expect(result.facts).toContain("The letter asks for transportation receipts.");
+    expect(result.facts).toContain("The letter asks for temporary lodging receipts.");
+  });
+
+  it("marks requested medical transportation and lodging evidence as missing", () => {
+    const packet = buildEvidencePacket(["medical receipts", "transportation receipts", "temporary lodging receipts"]);
+
+    expect(packet.groups.find((group) => group.category === "medical_or_transportation")?.items[0]?.status).toBe(
+      "missing"
+    );
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+  });
+
   it("rejects policy packs with uncited rules", () => {
     const validation = validatePolicyPack({
       ...californiaWildfirePolicyPack,

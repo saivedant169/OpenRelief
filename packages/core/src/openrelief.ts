@@ -198,6 +198,18 @@ const buildLetterFacts = (normalized: string, requests: string[], deadlines: Dea
     facts.push("The letter asks for contractor estimates.");
   }
 
+  if (requests.includes("medical receipts")) {
+    facts.push("The letter asks for medical receipts.");
+  }
+
+  if (requests.includes("transportation receipts")) {
+    facts.push("The letter asks for transportation receipts.");
+  }
+
+  if (requests.includes("temporary lodging receipts")) {
+    facts.push("The letter asks for temporary lodging receipts.");
+  }
+
   facts.push(...deadlines.map((deadline) => `The letter says ${deadline.text}.`));
 
   return facts.length > 0 ? facts : ["The letter needs manual review because no clear action was found."];
@@ -214,7 +226,10 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     normalized.includes("proof of occupancy") ? "proof of occupancy" : "",
     normalized.includes("insurance") ? "insurance information" : "",
     normalized.includes("repair receipts") ? "repair receipts" : "",
-    normalized.includes("contractor estimates") ? "contractor estimates" : ""
+    normalized.includes("contractor estimates") ? "contractor estimates" : "",
+    normalized.includes("medical receipts") ? "medical receipts" : "",
+    normalized.includes("transportation receipts") ? "transportation receipts" : "",
+    normalized.includes("temporary lodging receipts") ? "temporary lodging receipts" : ""
   ].filter(Boolean);
 
   const detectedDeadlines: Deadline[] = [];
@@ -472,7 +487,10 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Repair, hotel, replacement, or cleanup receipts",
-          status: requests.includes("repair receipts") ? "missing" : "optional",
+          status:
+            requests.includes("repair receipts") || requests.includes("temporary lodging receipts")
+              ? "missing"
+              : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
@@ -492,7 +510,10 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Medical, medication, transportation, or accessibility expense notes",
-          status: "optional",
+          status:
+            requests.includes("medical receipts") || requests.includes("transportation receipts")
+              ? "missing"
+              : "optional",
           sourceIds: ["fema-documents"]
         }
       ]
