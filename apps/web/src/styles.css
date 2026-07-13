@@ -278,6 +278,13 @@ a:hover {
   margin-bottom: 24px;
 }
 
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .review-header p,
 .section-heading p,
 .upload-band p,

@@ -289,10 +289,10 @@ describe("OpenRelief web workflow", () => {
 
     expect(screen.getByLabelText("Extracted letter text")).toHaveValue(savedLetter);
 
-    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
     await userEvent.click(screen.getByRole("button", { name: /confirm clear local data/i }));
 
     expect(window.localStorage.getItem("openrelief:v1:case")).toBeNull();
+    expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
   });
 });

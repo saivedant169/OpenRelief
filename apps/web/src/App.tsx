@@ -555,23 +555,31 @@ export const App = () => {
                 <h1>Letter Review</h1>
               </div>
               <p>Upload a letter, review extracted text, and create a safe next-step plan.</p>
+              {clearArmed ? (
+                <p className="clear-warning">This removes local draft and saved case snapshots from this browser.</p>
+              ) : null}
             </div>
-            <button
-              className="secondary-action"
-              type="button"
-              onClick={() => {
-                setLetterText(sampleLetter);
-                setIntakeText("");
-                setFileName(sampleFileName);
-                setAnalysis(null);
-                setExportText("");
-                setClearArmed(false);
-                setActiveSavedCaseId(null);
-                setFileError("");
-              }}
-            >
-              Load sample
-            </button>
+            <div className="review-actions">
+              <button
+                className="secondary-action"
+                type="button"
+                onClick={() => {
+                  setLetterText(sampleLetter);
+                  setIntakeText("");
+                  setFileName(sampleFileName);
+                  setAnalysis(null);
+                  setExportText("");
+                  setClearArmed(false);
+                  setActiveSavedCaseId(null);
+                  setFileError("");
+                }}
+              >
+                Load sample
+              </button>
+              <button className="secondary-action danger-action" type="button" onClick={handleClearLocalData}>
+                {clearArmed ? "Confirm clear local data" : "Clear local data"}
+              </button>
+            </div>
           </section>
 
           <section className="upload-band" aria-label="Upload letter">
@@ -873,14 +881,8 @@ export const App = () => {
                     <button className="secondary-action" type="button" onClick={handleCreatePacketText}>
                       Create packet text
                     </button>
-                    <button className="secondary-action danger-action" type="button" onClick={handleClearLocalData}>
-                      {clearArmed ? "Confirm clear local data" : "Clear local data"}
-                    </button>
                   </div>
                 </div>
-                {clearArmed ? (
-                  <p className="clear-warning">This removes local draft and saved case snapshots from this browser.</p>
-                ) : null}
                 {exportText ? (
                   <textarea className="export-output" aria-label="Export packet text" value={exportText} readOnly />
                 ) : null}
