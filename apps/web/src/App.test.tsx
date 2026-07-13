@@ -231,6 +231,25 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText(/denial_or_appeal/)).toBeInTheDocument();
   });
 
+  it("routes final eligibility requests to source-backed human review", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved for rental assistance." }
+    });
+    await userEvent.type(
+      screen.getByLabelText("Immediate needs and risks"),
+      "Can you tell me if I am eligible for FEMA assistance?"
+    );
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByText("Request human review")).toBeInTheDocument();
+    expect(screen.getByText(/final_eligibility_request/)).toBeInTheDocument();
+    expect(screen.getByText("OpenRelief cannot confirm final eligibility or legal options.")).toBeInTheDocument();
+    expect(screen.getByText("https://www.fema.gov/assistance/individual/after-applying")).toBeInTheDocument();
+    expect(screen.queryByText(/you are eligible/i)).not.toBeInTheDocument();
+  });
+
   it("shows emergency guidance without guessing hotlines", async () => {
     render(<App />);
 

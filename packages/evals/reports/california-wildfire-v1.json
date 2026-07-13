@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 109,
+  "caseCount": 110,
   "passed": true,
   "metrics": {
-    "passedCount": 109,
+    "passedCount": 110,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1330,6 +1330,25 @@
         "sba-disaster"
       ],
       "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-approval-final-eligibility-request",
+      "title": "Approval letter with final eligibility request context",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-documents",
+        "fema-appeals",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "final_eligibility_request"
+      ]
     },
     {
       "caseId": "ca-wildfire-deadline-response",

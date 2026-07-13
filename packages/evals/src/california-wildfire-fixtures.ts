@@ -1104,6 +1104,21 @@ const approvalCases = [
       letterType: "approval",
       needsHumanReview: true
     }
+  }),
+  buildCase({
+    id: "ca-wildfire-approval-final-eligibility-request",
+    title: "Approval letter with final eligibility request context",
+    lines: [
+      "FEMA Notice",
+      "Your application is approved for rental assistance.",
+      "Keep the approval letter with your temporary housing records."
+    ],
+    county: "Yuba",
+    riskFlags: ["final_eligibility_request"],
+    expected: {
+      letterType: "approval",
+      needsHumanReview: false
+    }
   })
 ];
 

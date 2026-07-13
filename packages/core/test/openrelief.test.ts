@@ -1004,6 +1004,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["denial_or_appeal"]);
   });
 
+  it("detects final eligibility requests as review risk", () => {
+    const flags = detectRiskFlags("Can you tell me if I am eligible for FEMA assistance?");
+
+    expect(flags).toEqual(["final_eligibility_request"]);
+  });
+
   it("creates source-backed checklist with escalation first", () => {
     const letter = analyzeLetter(denialLetter);
     const checklist = createChecklist(

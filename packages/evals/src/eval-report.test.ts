@@ -77,6 +77,7 @@ describe("machine-readable eval report", () => {
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("immediate_danger"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("homelessness"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("medical_emergency"))).toBe(true);
+    expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("final_eligibility_request"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("abuse_or_unsafe_home"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("disability_accommodation"))).toBe(true);
     expect(highRiskCases.some((fixture) => fixture.caseContext.riskFlags.includes("immigration_sensitive"))).toBe(true);

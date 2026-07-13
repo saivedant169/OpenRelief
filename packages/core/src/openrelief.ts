@@ -9,6 +9,7 @@ export type LetterType =
 export type RiskFlag =
   | "immediate_danger"
   | "denial_or_appeal"
+  | "final_eligibility_request"
   | "homelessness"
   | "medical_emergency"
   | "abuse_or_unsafe_home"
@@ -661,9 +662,19 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
     /appeal deadline|response deadline|deadline is (?:today|tomorrow)|need to appeal|appeal by|denied assistance|legal strategy|sue fema|lawsuit|legal action/i.test(normalized) ||
     /(?:openrelief|you) (?:can )?(?:submit|file) (?:my |our )?(?:fema |sba )?(?:application|appeal|claim) for (?:me|us)/i.test(normalized) ||
     /(?:submit|file) (?:my|our) (?:fema |sba )?(?:application|appeal|claim) for (?:me|us)/i.test(normalized);
+  const asksForFinalEligibility =
+    /\b(?:am i|are we) eligible\b/i.test(normalized) ||
+    /\b(?:do i|do we) qualify\b/i.test(normalized) ||
+    /\b(?:can|could) (?:you|openrelief) (?:tell|determine|confirm).{0,40}\b(?:eligible|qualify)\b/i.test(normalized) ||
+    /\bwill (?:fema|sba|the agency) (?:approve|pay|cover)\b/i.test(normalized) ||
+    /\bhow much (?:will|can) (?:fema|sba|the agency) (?:pay|cover|give)\b/i.test(normalized);
 
   if (letter?.letterType === "denial" || letter?.detectedDeadlines.length || hasDenialOrAppealContext) {
     addFlag(flags, "denial_or_appeal");
+  }
+
+  if (asksForFinalEligibility) {
+    addFlag(flags, "final_eligibility_request");
   }
 
   if (/immediate danger|in danger right now|fire.*right now|trapped|cannot evacuate|can't evacuate|cannot leave|can't leave|cannot get out|can't get out|stuck inside|smoke.*filling|breathing smoke|downed power line|gas leak|life[-\s]?threatening/i.test(normalized)) {
@@ -710,7 +721,8 @@ export const createChecklist = (
 
   if (letter.needsHumanReview || caseContext.riskFlags.length > 0 || needsPolicyReview) {
     const needsInjectionReview = letter.injectionWarnings.length > 0;
-    const needsRiskReview = caseContext.riskFlags.length > 0;
+    const needsEligibilityReview = caseContext.riskFlags.includes("final_eligibility_request");
+    const needsRiskReview = caseContext.riskFlags.some((riskFlag) => riskFlag !== "final_eligibility_request");
     const needsDenialReview = letter.needsHumanReview && letter.letterType === "denial";
     const needsAppealReview = letter.needsHumanReview && letter.detectedDeadlines.length > 0;
     const needsDenialOrAppealReview = needsDenialReview || needsAppealReview || needsRiskReview;
@@ -721,8 +733,10 @@ export const createChecklist = (
       needsDenialOrAppealReview
         ? "Denial, appeal, or risk flags should be reviewed by a qualified helper."
         : "",
+      needsEligibilityReview ? "Final eligibility questions should be reviewed by a qualified helper." : "",
       needsPolicyReview ? "Policy sources need review before relying on generated next steps." : ""
     ].filter(Boolean);
+    const humanReviewSourceIds = needsEligibilityReview ? ["fema-documents", "fema-appeals"] : ["fema-appeals"];
 
     items.push({
       id: "human-review",
@@ -730,7 +744,7 @@ export const createChecklist = (
       category: "human_review",
       reason: humanReviewReasons.join(" "),
       editable: true,
-      sourceIds: ["fema-appeals"]
+      sourceIds: humanReviewSourceIds
     });
   }
 
