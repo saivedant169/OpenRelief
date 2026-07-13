@@ -171,7 +171,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:password|passcode|(?:access|door|entry|payment)\s+code)\s*[:#-]?\s*[A-Z0-9!@#$%^&*._-]{4,}\b/gi,
+      /\b(?:password|passcode|(?:access|door|entry|payment|verification)\s+code)\s*[:#-]?\s*[A-Z0-9!@#$%^&*._-]{4,}\b/gi,
     replacement: "[credential removed]"
   },
   {
