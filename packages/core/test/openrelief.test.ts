@@ -255,6 +255,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["denial_or_appeal"]);
   });
 
+  it("detects appeal deadline risk from survivor context", () => {
+    const flags = detectRiskFlags("My appeal deadline is tomorrow.");
+
+    expect(flags).toEqual(["denial_or_appeal"]);
+  });
+
   it("creates source-backed checklist with escalation first", () => {
     const letter = analyzeLetter(denialLetter);
     const checklist = createChecklist(

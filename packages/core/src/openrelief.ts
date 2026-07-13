@@ -605,7 +605,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
   const normalized = intakeText.toLowerCase();
   const flags: RiskFlag[] = [];
 
-  if (letter?.letterType === "denial" || letter?.detectedDeadlines.length) {
+  if (letter?.letterType === "denial" || letter?.detectedDeadlines.length || /appeal deadline/i.test(normalized)) {
     addFlag(flags, "denial_or_appeal");
   }
 
