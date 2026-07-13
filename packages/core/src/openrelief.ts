@@ -364,11 +364,17 @@ export const createChecklist = (
     });
   }
 
+  const sourceWarnings = validatePolicyPack(policyPack).warnings;
+  const sourceReviewReason = [
+    `Use the ${policyPack.name} source list before relying on policy details.`,
+    ...sourceWarnings
+  ].join(" ");
+
   items.push({
     id: "review-sources",
     title: "Review official sources",
     category: "source_review",
-    reason: `Use the ${policyPack.name} source list before relying on policy details.`,
+    reason: sourceReviewReason,
     editable: true,
     sourceIds: policyPack.sources.map((source) => source.id)
   });

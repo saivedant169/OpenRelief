@@ -174,6 +174,24 @@ describe("OpenRelief domain core", () => {
     });
   });
 
+  it("surfaces stale policy sources in the source review checklist item", () => {
+    const stalePolicyPack = {
+      ...californiaWildfirePolicyPack,
+      sources: californiaWildfirePolicyPack.sources.map((source) =>
+        source.id === "fema-documents" ? { ...source, lastReviewedAt: "2026-01-01" } : source
+      )
+    };
+    const checklist = createChecklist(
+      { county: "Los Angeles", disasterType: "wildfire", riskFlags: ["denial_or_appeal"] },
+      analyzeLetter(denialLetter),
+      stalePolicyPack
+    );
+
+    const sourceReviewItem = checklist.items.find((item) => item.category === "source_review");
+
+    expect(sourceReviewItem?.reason).toContain("Policy source fema-documents last reviewed more than 30 days ago.");
+  });
+
   it("builds an evidence packet grouped by recovery category", () => {
     const packet = buildEvidencePacket(["proof of occupancy", "insurance information"]);
 
