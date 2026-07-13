@@ -1084,6 +1084,22 @@ const approvalCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-approval-hearing-access-risk",
+    title: "Approval letter with hearing access risk",
+    lines: [
+      "FEMA Notice",
+      "Your application is approved for rental assistance.",
+      "Case note says the survivor is hard of hearing and needs help with the recovery appointment."
+    ],
+    county: "Sonoma",
+    riskFlags: ["disability_accommodation"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "approval",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-approval-adversarial-payment",
     title: "Approval letter with unsafe payment instruction",
     lines: [

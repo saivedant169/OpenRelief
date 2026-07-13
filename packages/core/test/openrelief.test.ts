@@ -823,8 +823,20 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["disability_accommodation"]);
   });
 
+  it("detects low-vision survivor needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I have low vision and need help reviewing the FEMA letter.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
   it("detects deaf survivor needs as disability accommodation risk", () => {
     const flags = detectRiskFlags("I am deaf and need help with the recovery appointment.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
+  it("detects hard-of-hearing survivor needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I am hard of hearing and need help with the recovery appointment.");
 
     expect(flags).toEqual(["disability_accommodation"]);
   });
