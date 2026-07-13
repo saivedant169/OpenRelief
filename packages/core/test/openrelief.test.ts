@@ -420,6 +420,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects OTP requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked for my OTP before helping with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects gift card requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked me to buy gift cards before they would help with FEMA paperwork.");
 
