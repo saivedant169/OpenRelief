@@ -15,6 +15,7 @@ const prTemplatePath = path.join(process.cwd(), ".github", "pull_request_templat
 const securityPath = path.join(process.cwd(), "SECURITY.md");
 const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-license.md");
 const technicalReportPath = path.join(process.cwd(), "docs", "technical-report.md");
+const evalsReadmePath = path.join(process.cwd(), "packages", "evals", "README.md");
 
 describe("release readiness", () => {
   it("documents required V1 release gates", () => {
@@ -103,5 +104,17 @@ describe("release readiness", () => {
     expect(technicalReport).toContain("No legal advice");
     expect(technicalReport).toContain("No live submission");
     expect(technicalReport).toContain("packages/evals/reports/california-wildfire-v1.json");
+  });
+
+  it("documents how to run the benchmark", () => {
+    expect(existsSync(evalsReadmePath)).toBe(true);
+
+    const evalsReadme = readFileSync(evalsReadmePath, "utf8");
+
+    expect(evalsReadme).toContain("OpenRelief Evals");
+    expect(evalsReadme).toContain("npm run evals");
+    expect(evalsReadme).toContain("packages/evals/reports/california-wildfire-v1.json");
+    expect(evalsReadme).toContain("synthetic");
+    expect(evalsReadme).toContain("critical failure");
   });
 });

@@ -31,3 +31,4 @@ Manual safety review must confirm:
 - [Roadmap and launch ops plan](../plans/08-roadmap-launch-ops-plan.md)
 - [Incident response playbook](incident-response.md)
 - [Technical report](technical-report.md)
+- [Evals README](../packages/evals/README.md)

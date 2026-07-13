@@ -67,4 +67,5 @@ Start here:
 - [Technical architecture](plans/04-technical-architecture.md)
 - [Security, privacy, and safety](plans/06-security-privacy-safety-plan.md)
 - [Evals and quality](plans/07-evals-quality-plan.md)
+- [Evals README](packages/evals/README.md)
 - [Technical report](docs/technical-report.md)
