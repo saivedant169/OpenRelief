@@ -163,6 +163,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[bank identifier removed]"
   },
   {
+    pattern:
+      /\b(?:password|passcode|(?:door|entry|payment)\s+code)\s*[:#-]?\s*[A-Z0-9!@#$%^&*._-]{4,}\b/gi,
+    replacement: "[credential removed]"
+  },
+  {
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
     replacement: "[SSN removed]"
   },

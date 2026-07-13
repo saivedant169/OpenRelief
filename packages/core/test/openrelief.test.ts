@@ -121,6 +121,14 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[bank identifier removed]");
   });
 
+  it("redacts account credentials and access codes", () => {
+    const redacted = redactRestrictedIdentifiers("Password: River999 and door code 1234 should not stay in notes.");
+
+    expect(redacted).not.toContain("River999");
+    expect(redacted).not.toContain("1234");
+    expect(redacted).toContain("[credential removed]");
+  });
+
   it("detects unsafe collection instructions as injection warnings", () => {
     const paymentResult = analyzeLetter([
       "FEMA Notice",
