@@ -634,7 +634,7 @@ export const detectRiskFlags = (intakeText: string, letter?: LetterAnalysis): Ri
   }
 
   if (
-    /scam|fraud|fraudulent|fake fema|gift cards?|wire transfer|processing fee|upfront fee|bitcoin|cryptocurrency|cash app|zelle|venmo|paypal|asked for.*(?:fema code|application id|payment code)/i.test(normalized)
+    /scam|fraud|fraudulent|fake fema|gift cards?|wire transfer|processing fee|upfront fee|bitcoin|cryptocurrency|cash app|zelle|venmo|paypal|money order|asked for.*(?:fema code|application id|payment code)/i.test(normalized)
   ) {
     addFlag(flags, "suspected_fraud_or_scam");
   }
