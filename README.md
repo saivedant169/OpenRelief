@@ -75,5 +75,6 @@ Start here:
 - [Demo script](docs/demo-script.md)
 - [Demo video runbook](docs/demo-video-runbook.md)
 - [Partner outreach](docs/partner-outreach.md)
+- [Partner review log](docs/partner-review-log.md)
 - [Technical report](docs/technical-report.md)
 - [Baseline failure examples](docs/baseline-failure-examples.md)

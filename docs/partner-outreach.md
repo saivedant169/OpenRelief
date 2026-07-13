@@ -41,6 +41,7 @@ Saivedant Hava
 - Get consent before quoting or summarizing reviewer feedback.
 - Keep notes separate from public fixtures until sanitized.
 - Convert feedback into issues without identifying people, households, agencies, or active cases.
+- Use the Partner review log in `docs/partner-review-log.md` to capture consent, reviewer role, findings, and launch decision evidence.
 
 ## Feedback Questions
 

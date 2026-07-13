@@ -38,3 +38,4 @@ Manual safety review must confirm:
 - [Demo script](demo-script.md)
 - [Demo video runbook](demo-video-runbook.md)
 - [Partner outreach](partner-outreach.md)
+- [Partner review log](partner-review-log.md)

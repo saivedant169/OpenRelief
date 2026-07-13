@@ -23,9 +23,11 @@ const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
 const demoVideoRunbookPath = path.join(process.cwd(), "docs", "demo-video-runbook.md");
 const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
+const partnerReviewLogPath = path.join(process.cwd(), "docs", "partner-review-log.md");
 const packageJsonPath = path.join(process.cwd(), "package.json");
 const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
 const demoVideoPreflightPath = path.join(process.cwd(), "scripts", "demo-video-preflight.mjs");
+const partnerReviewPreflightPath = path.join(process.cwd(), "scripts", "partner-review-preflight.mjs");
 const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "pages.yml");
 const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
 
@@ -215,6 +217,41 @@ describe("release readiness", () => {
     expect(partnerOutreach).toContain("disaster case worker");
     expect(partnerOutreach).toContain("No real survivor PII");
     expect(partnerOutreach).toContain("consent");
+  });
+
+  it("defines partner review evidence controls", () => {
+    expect(existsSync(partnerReviewLogPath)).toBe(true);
+    expect(existsSync(partnerReviewPreflightPath)).toBe(true);
+
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
+    const readme = readFileSync(readmePath, "utf8");
+    const releaseReadiness = readFileSync(releaseReadinessPath, "utf8");
+    const technicalReport = readFileSync(technicalReportPath, "utf8");
+    const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
+    const partnerReviewLog = readFileSync(partnerReviewLogPath, "utf8");
+    const partnerReviewPreflight = readFileSync(partnerReviewPreflightPath, "utf8");
+
+    expect(packageJson.scripts["partner:review:preflight"]).toBe("node scripts/partner-review-preflight.mjs");
+    expect(packageJson.scripts.check).toContain("npm run partner:review:preflight");
+    expect(readme).toContain("Partner review log");
+    expect(releaseReadiness).toContain("Partner review log");
+    expect(technicalReport).toContain("Partner review log");
+    expect(partnerOutreach).toContain("Partner review log");
+
+    const requiredLogText = [
+      "Partner Review Log",
+      "Synthetic examples only",
+      "No real survivor PII",
+      "Consent record",
+      "Reviewer role",
+      "Critical issue",
+      "Launch decision"
+    ];
+
+    for (const requiredText of requiredLogText) {
+      expect(partnerReviewLog).toContain(requiredText);
+      expect(partnerReviewPreflight).toContain(requiredText);
+    }
   });
 
   it("defines a demo video preflight command", () => {
