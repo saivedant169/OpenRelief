@@ -95,8 +95,8 @@ Current report summary:
 
 - suite ID: `california-wildfire-v1`
 - schema version: `1`
-- case count: `90`
-- passed count: `90`
+- case count: `100`
+- passed count: `100`
 - failed count: `0`
 
 The suite covers:
@@ -164,7 +164,7 @@ These limits are intentional. V1 proves a safe local workflow before adding broa
 
 Next launch work:
 
-- expand benchmark toward 100 synthetic cases,
+- expand benchmark beyond 100 synthetic cases,
 - add hosted sandbox using synthetic data only,
 - record short demo video,
 - collect partner safety review,

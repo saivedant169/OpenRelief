@@ -52,19 +52,19 @@ const buildExpectedReport = () => {
 };
 
 describe("machine-readable eval report", () => {
-  it("keeps balanced coverage while moving toward the 100-case launch bar", () => {
+  it("keeps balanced coverage at the 100-case launch bar", () => {
     const caseCountsByType = californiaWildfireCases.reduce<Record<string, number>>((counts, fixture) => {
       counts[fixture.expected.letterType] = (counts[fixture.expected.letterType] ?? 0) + 1;
       return counts;
     }, {});
 
-    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(90);
-    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(20);
-    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(21);
-    expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(17);
-    expect(caseCountsByType.deadline_notice ?? 0).toBeGreaterThanOrEqual(11);
-    expect(caseCountsByType.inspection_notice ?? 0).toBeGreaterThanOrEqual(9);
-    expect(caseCountsByType.unknown ?? 0).toBeGreaterThanOrEqual(12);
+    expect(californiaWildfireCases.length).toBeGreaterThanOrEqual(100);
+    expect(caseCountsByType.denial ?? 0).toBeGreaterThanOrEqual(22);
+    expect(caseCountsByType.request_for_information ?? 0).toBeGreaterThanOrEqual(23);
+    expect(caseCountsByType.approval ?? 0).toBeGreaterThanOrEqual(19);
+    expect(caseCountsByType.deadline_notice ?? 0).toBeGreaterThanOrEqual(12);
+    expect(caseCountsByType.inspection_notice ?? 0).toBeGreaterThanOrEqual(10);
+    expect(caseCountsByType.unknown ?? 0).toBeGreaterThanOrEqual(14);
   });
 
   it("covers the V1 high-risk escalation matrix", () => {
