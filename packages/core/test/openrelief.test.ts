@@ -107,6 +107,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[SSN removed]");
   });
 
+  it("redacts driver license identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Driver license number D1234567 should not stay in local text.");
+
+    expect(redacted).not.toContain("D1234567");
+    expect(redacted).toContain("[identity document removed]");
+  });
+
   it("redacts contact identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Call 555-123-4567 or email survivor@example.test before saving this note."
