@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 116,
+  "caseCount": 117,
   "passed": true,
   "metrics": {
-    "passedCount": 116,
+    "passedCount": 117,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -899,6 +899,27 @@
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
       "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "medical_emergency"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-seizure-medical-risk",
+      "title": "Request letter with seizure medical risk",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [

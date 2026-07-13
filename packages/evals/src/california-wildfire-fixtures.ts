@@ -766,6 +766,23 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-seizure-medical-risk",
+    title: "Request letter with seizure medical risk",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send medicine storage receipts and transportation notes.",
+      "Case note says a child had a seizure after the evacuation."
+    ],
+    county: "Imperial",
+    riskFlags: ["medical_emergency"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-caseworker-lodging-triage",
     title: "Case-worker triage request for lodging receipts",
     lines: [
