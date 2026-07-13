@@ -204,6 +204,16 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for records listed in the agency account."
   },
   {
+    request: "requested records",
+    phrases: ["requested records were not received"],
+    fact: "The letter asks for requested records."
+  },
+  {
+    request: "other household records",
+    phrases: ["other household records"],
+    fact: "The letter asks for other household records."
+  },
+  {
     request: "insurance information",
     phrases: ["insurance"],
     fact: "The letter mentions insurance information."
@@ -642,7 +652,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
         {
           label: "Lease, mortgage, utility bill, or other occupancy proof",
           status:
-            hasRequest(requests, ["proof of occupancy", "utility records"])
+            hasRequest(requests, ["proof of occupancy", "utility records", "other household records"])
               ? "missing"
               : "optional",
           sourceIds: ["fema-documents"]
@@ -766,7 +776,7 @@ export const buildEvidencePacket = (requests: string[]): EvidencePacket => ({
       items: [
         {
           label: "Other disaster recovery documents named in the letter",
-          status: requests.includes("account listed records") ? "missing" : "optional",
+          status: hasRequest(requests, ["account listed records", "requested records"]) ? "missing" : "optional",
           sourceIds: ["fema-documents"]
         }
       ]

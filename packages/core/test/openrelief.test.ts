@@ -238,6 +238,23 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for records listed in the agency account.");
   });
 
+  it("extracts requested and household record requests", () => {
+    const genericResult = analyzeLetter(
+      "FEMA Notice\nYour application is denied because requested records were not received."
+    );
+    const householdResult = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send proof of occupancy or other household records."
+    ].join("\n"));
+
+    expect(genericResult.detectedRequests).toContain("requested records");
+    expect(householdResult.detectedRequests).toContain("proof of occupancy");
+    expect(householdResult.detectedRequests).toContain("other household records");
+    expect(genericResult.facts).toContain("The letter asks for requested records.");
+    expect(householdResult.facts).toContain("The letter asks for other household records.");
+  });
+
   it("marks requested insurance settlement records as missing insurance evidence", () => {
     const packet = buildEvidencePacket(["insurance settlement records"]);
 
@@ -248,6 +265,13 @@ describe("OpenRelief domain core", () => {
     const packet = buildEvidencePacket(["account listed records"]);
 
     expect(packet.groups.find((group) => group.category === "other")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested and household records as missing evidence", () => {
+    const packet = buildEvidencePacket(["requested records", "other household records"]);
+
+    expect(packet.groups.find((group) => group.category === "other")?.items[0]?.status).toBe("missing");
+    expect(packet.groups.find((group) => group.category === "residence")?.items[0]?.status).toBe("missing");
   });
 
   it("extracts ownership lease and utility record requests from denial letters", () => {
