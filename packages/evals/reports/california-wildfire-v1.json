@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 114,
+  "caseCount": 115,
   "passed": true,
   "metrics": {
-    "passedCount": 114,
+    "passedCount": 115,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1170,6 +1170,27 @@
       "expectedNeedsHumanReview": false,
       "actualNeedsHumanReview": false,
       "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "disability_accommodation"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-approval-blind-access-risk",
+      "title": "Approval letter with blind survivor access risk",
+      "expectedLetterType": "approval",
+      "actualLetterType": "approval",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
       "passed": true,
       "failures": [],
       "sourceIds": [

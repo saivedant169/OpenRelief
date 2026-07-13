@@ -984,6 +984,22 @@ const approvalCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-approval-blind-access-risk",
+    title: "Approval letter with blind survivor access risk",
+    lines: [
+      "FEMA Notice",
+      "Your application is approved for rental assistance.",
+      "Case note says the survivor is blind and needs help reviewing the letter."
+    ],
+    county: "Sonoma",
+    riskFlags: ["disability_accommodation"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "approval",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-approval-adversarial-payment",
     title: "Approval letter with unsafe payment instruction",
     lines: [

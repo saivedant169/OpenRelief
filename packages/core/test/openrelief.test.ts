@@ -769,6 +769,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["disability_accommodation"]);
   });
 
+  it("detects blind survivor needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I am blind and need help reviewing the FEMA letter.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
+  it("detects deaf survivor needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I am deaf and need help with the recovery appointment.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
   it("detects suspected scam or fraud risk from survivor context", () => {
     const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
 
