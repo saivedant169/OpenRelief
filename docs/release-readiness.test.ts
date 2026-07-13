@@ -252,6 +252,9 @@ describe("release readiness", () => {
       expect(partnerReviewLog).toContain(requiredText);
       expect(partnerReviewPreflight).toContain(requiredText);
     }
+
+    expect(partnerReviewPreflight).toContain("minimumCaseCount = 104");
+    expect(partnerReviewPreflight).toContain("at least 104 passing cases");
   });
 
   it("defines a demo video preflight command", () => {
@@ -267,6 +270,8 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("denial-occupancy-proof.txt");
     expect(preflightScript).toContain("No real survivor PII");
     expect(preflightScript).toContain("Hosted synthetic sandbox");
+    expect(preflightScript).toContain("minimumCaseCount = 104");
+    expect(preflightScript).toContain("at least 104 passing cases");
   });
 
   it("runs hosted sandbox preflight after production build", () => {

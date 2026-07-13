@@ -33,6 +33,8 @@ const fail = (message) => {
   process.exit(1);
 };
 
+const minimumCaseCount = 104;
+
 for (const [label, filePath] of Object.entries(files)) {
   if (!existsSync(filePath)) {
     fail(`Missing ${label}: ${filePath}`);
@@ -65,8 +67,12 @@ if (!demoRunbook.includes("No real survivor PII")) {
   fail("Demo video runbook must forbid real survivor PII.");
 }
 
-if (report.caseCount < 100 || report.metrics?.passedCount !== report.caseCount || report.metrics?.failedCount !== 0) {
-  fail("Eval report must show at least 100 passing cases and zero failed cases.");
+if (
+  report.caseCount < minimumCaseCount ||
+  report.metrics?.passedCount !== report.caseCount ||
+  report.metrics?.failedCount !== 0
+) {
+  fail("Eval report must show at least 104 passing cases and zero failed cases.");
 }
 
 console.log("Partner review preflight passed.");
