@@ -644,6 +644,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["disability_accommodation"]);
   });
 
+  it("detects walker needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("I lost my walker during the evacuation.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
+  it("detects cane needs as disability accommodation risk", () => {
+    const flags = detectRiskFlags("My cane burned in the fire.");
+
+    expect(flags).toEqual(["disability_accommodation"]);
+  });
+
   it("detects suspected scam or fraud risk from survivor context", () => {
     const flags = detectRiskFlags("Someone called asking for my FEMA code and said it may be a scam.");
 
