@@ -14,6 +14,7 @@
     "test:watch": "vitest",
     "lint": "tsc -b --pretty false",
     "evals": "vitest run packages/evals/src",
+    "evals:report": "vite-node packages/evals/src/write-report.ts",
     "policy:validate": "vitest run packages/policy-packs",
     "docs:check": "vitest run docs",
     "security:audit": "npm audit --audit-level=critical"

@@ -31,6 +31,21 @@ export interface CaliforniaWildfireEvalSuiteResult {
   results: CaliforniaWildfireEvalCaseResult[];
 }
 
+export interface CaliforniaWildfireEvalReport {
+  schemaVersion: 1;
+  suiteId: string;
+  caseCount: number;
+  passed: boolean;
+  metrics: {
+    passedCount: number;
+    failedCount: number;
+    failureCount: number;
+  };
+  results: Array<
+    Omit<CaliforniaWildfireEvalCaseResult, "output">
+  >;
+}
+
 const unique = (values: string[]): string[] => [...new Set(values)];
 
 export const runCaliforniaWildfireEvalSuite = (): CaliforniaWildfireEvalSuiteResult => {
@@ -73,5 +88,48 @@ export const runCaliforniaWildfireEvalSuite = (): CaliforniaWildfireEvalSuiteRes
     caseCount: results.length,
     passed: results.every((result) => result.passed),
     results
+  };
+};
+
+export const buildCaliforniaWildfireEvalReport = (): CaliforniaWildfireEvalReport => {
+  const suite = runCaliforniaWildfireEvalSuite();
+  const passedCount = suite.results.filter((result) => result.passed).length;
+  const failedCount = suite.results.length - passedCount;
+
+  return {
+    schemaVersion: 1,
+    suiteId: suite.suiteId,
+    caseCount: suite.caseCount,
+    passed: suite.passed,
+    metrics: {
+      passedCount,
+      failedCount,
+      failureCount: suite.results.flatMap((result) => result.failures).length
+    },
+    results: suite.results.map(
+      ({
+        caseId,
+        title,
+        expectedLetterType,
+        actualLetterType,
+        expectedNeedsHumanReview,
+        actualNeedsHumanReview,
+        passed,
+        failures,
+        sourceIds,
+        riskFlags
+      }) => ({
+        caseId,
+        title,
+        expectedLetterType,
+        actualLetterType,
+        expectedNeedsHumanReview,
+        actualNeedsHumanReview,
+        passed,
+        failures,
+        sourceIds,
+        riskFlags
+      })
+    )
   };
 };
