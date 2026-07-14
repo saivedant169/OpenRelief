@@ -1560,6 +1560,29 @@ describe("OpenRelief domain core", () => {
     });
   });
 
+  it("detects received-by date deadlines from uploaded letters", () => {
+    const result = analyzeLetter("FEMA Notice\nRequested documents must be received by August 15, 2026.");
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response date",
+      text: "documents must be received by August 15, 2026",
+      source: "uploaded_letter"
+    });
+    expect(result.facts).toContain("The letter says documents must be received by August 15, 2026.");
+  });
+
+  it("detects due-by date deadlines from uploaded letters", () => {
+    const result = analyzeLetter("FEMA Notice\nYour response is due by 08/15/2026.");
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response date",
+      text: "response is due by 08/15/2026",
+      source: "uploaded_letter"
+    });
+  });
+
   it("detects send-by date deadlines from uploaded letters", () => {
     const result = analyzeLetter(
       "FEMA Notice\nSend the requested records by August 15, 2026 to keep your application moving."

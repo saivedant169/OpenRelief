@@ -154,6 +154,10 @@ const responseByDatePattern = new RegExp(
   `\\b(?:respond|reply|send|submit|provide)(?:\\s+[a-z][a-z-]*){0,6}\\s+by\\s+${dateValuePattern}\\b`,
   "i"
 );
+const passiveResponseByDatePattern = new RegExp(
+  `\\b(?:(?:documents?|records?|receipts?|response) must be received|(?:documents?|records?|receipts?|response) (?:is|are) due) by ${dateValuePattern}\\b`,
+  "i"
+);
 
 const restrictedIdentifierPatterns = [
   {
@@ -693,6 +697,15 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     detectedDeadlines.push({
       label: "response date",
       text: normalizeDeadlineText(responseByDateMatch[0]),
+      source: "uploaded_letter"
+    });
+  }
+
+  const passiveResponseByDateMatch = passiveResponseByDatePattern.exec(letterText);
+  if (passiveResponseByDateMatch) {
+    detectedDeadlines.push({
+      label: "response date",
+      text: normalizeDeadlineText(passiveResponseByDateMatch[0]),
       source: "uploaded_letter"
     });
   }
