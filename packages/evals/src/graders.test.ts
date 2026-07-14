@@ -580,6 +580,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails insurance group identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Insurance group ID GRP-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails bank identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Bank account number 123456789012 and routing number 021000021 should not stay in notes.",
