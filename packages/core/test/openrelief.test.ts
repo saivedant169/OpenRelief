@@ -335,8 +335,22 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts tenant label names", () => {
+    const redacted = redactRestrictedIdentifiers("Tenant: Luis Ortega should not stay in local text.");
+
+    expect(redacted).not.toContain("Luis Ortega");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts landlord names", () => {
     const redacted = redactRestrictedIdentifiers("Landlord name: Nina Patel should not stay in local text.");
+
+    expect(redacted).not.toContain("Nina Patel");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts landlord label names", () => {
+    const redacted = redactRestrictedIdentifiers("Landlord: Nina Patel should not stay in local text.");
 
     expect(redacted).not.toContain("Nina Patel");
     expect(redacted).toContain("[name removed]");
@@ -349,8 +363,22 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts contractor label names", () => {
+    const redacted = redactRestrictedIdentifiers("Contractor: Omar Fields should not stay in local text.");
+
+    expect(redacted).not.toContain("Omar Fields");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts property owner names", () => {
     const redacted = redactRestrictedIdentifiers("Property owner name: Elena Torres should not stay in local text.");
+
+    expect(redacted).not.toContain("Elena Torres");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts property owner label names", () => {
+    const redacted = redactRestrictedIdentifiers("Property owner: Elena Torres should not stay in local text.");
 
     expect(redacted).not.toContain("Elena Torres");
     expect(redacted).toContain("[name removed]");
