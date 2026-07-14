@@ -307,6 +307,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance policy removed]");
   });
 
+  it("redacts insurance member identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Insurance member ID MEM-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MEM-123456");
+    expect(redacted).toContain("[insurance member removed]");
+  });
+
   it("redacts bank identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Bank account number 123456789012 and routing number 021000021 should not stay in notes."

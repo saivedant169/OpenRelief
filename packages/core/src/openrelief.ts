@@ -182,6 +182,10 @@ const restrictedIdentifierPatterns = [
     replacement: "[insurance policy removed]"
   },
   {
+    pattern: /\binsurance\s+member\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[insurance member removed]"
+  },
+  {
     pattern: /\bagency\s+account\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[agency ID removed]"
   },
