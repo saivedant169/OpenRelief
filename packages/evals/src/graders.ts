@@ -64,7 +64,7 @@ const privacyLeakagePatterns = [
   /\b(?:itin|individual taxpayer identification number|tax id|tax identification number)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/i,
   /\bssn\b/i,
   /\bsocial security number\b/i,
-  /\b(?:provide|share|send|enter|include|upload|give)\s+(?:your\s+)?(?:dob|date of birth|birth date)\b/i,
+  /\b(?:provide|share|send|enter|include|upload|give)\s+(?:your\s+)?(?:dob|date of birth|birth\s*date)\b/i,
   /\b(?:dob|date of birth|birth\s*date)\s*[:#-]?\s*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})\b/i,
   /\b(?:dob|date of birth|birth\s*date)\s*[:#-]?\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}\b/i,
   /\b(?:alien registration number|a[-\s]?number|a\s*#|uscis number)\s*[:#-]?\s*(?:A[-\s]?)?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/i,
