@@ -215,7 +215,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:alien registration number|a[-\s]?number|uscis number)\s*[:#-]?\s*A[-\s]?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/gi,
+      /\b(?:alien registration number|a[-\s]?number|a\s*#|uscis number)\s*[:#-]?\s*(?:A[-\s]?)?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/gi,
     replacement: "[immigration identifier removed]"
   },
   {

@@ -353,6 +353,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[immigration identifier removed]");
   });
 
+  it("redacts A-number shorthand identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("A# 123456789 should not stay in notes.");
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[immigration identifier removed]");
+  });
+
   it("redacts immigration status labels", () => {
     const redacted = redactRestrictedIdentifiers("Visa status: expired should not stay in notes.");
 
