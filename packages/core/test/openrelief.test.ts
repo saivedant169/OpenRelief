@@ -510,8 +510,22 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance member removed]");
   });
 
+  it("redacts member identifiers without insurance prefix", () => {
+    const redacted = redactRestrictedIdentifiers("Member ID MEM-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MEM-123456");
+    expect(redacted).toContain("[insurance member removed]");
+  });
+
   it("redacts insurance group identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Insurance group ID GRP-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("GRP-123456");
+    expect(redacted).toContain("[insurance group removed]");
+  });
+
+  it("redacts group identifiers without insurance prefix", () => {
+    const redacted = redactRestrictedIdentifiers("Group number GRP-123456 should not stay in notes.");
 
     expect(redacted).not.toContain("GRP-123456");
     expect(redacted).toContain("[insurance group removed]");
