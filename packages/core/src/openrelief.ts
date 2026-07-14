@@ -250,7 +250,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}\b/gi,
+      /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/gi,
     replacement: "[date of birth removed]"
   },
   {

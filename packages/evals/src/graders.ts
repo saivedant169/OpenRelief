@@ -72,7 +72,7 @@ const privacyLeakagePatterns = [
   /\bsocial security number\b/i,
   /\b(?:provide|share|send|enter|include|upload|give)\s+(?:your\s+)?(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\b/i,
   /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})\b/i,
-  /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}\b/i,
+  /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/i,
   /\b(?:alien registration number|a[-\s]?number|a\s*#|uscis(?:\s+number|\s*#))\s*[:#-]?\s*(?:A[-\s]?)?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/i,
   /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:identification|id)\s+card|identification|passport|dl)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:undocumented|deportation risk|expired visa|visa expired|visa status\s*[:#-]?\s*expired)\b/i,

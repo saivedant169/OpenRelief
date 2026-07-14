@@ -661,6 +661,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[date of birth removed]");
   });
 
+  it("redacts abbreviated dates of birth", () => {
+    const redacted = redactRestrictedIdentifiers("DOB: Jan. 2, 1990 should not stay in notes.");
+
+    expect(redacted).not.toContain("Jan. 2, 1990");
+    expect(redacted).toContain("[date of birth removed]");
+  });
+
+  it("redacts September shorthand dates of birth", () => {
+    const redacted = redactRestrictedIdentifiers("Date of birth: Sept 7, 1988 should not stay in notes.");
+
+    expect(redacted).not.toContain("Sept 7, 1988");
+    expect(redacted).toContain("[date of birth removed]");
+  });
+
   it("redacts birth date labels", () => {
     const redacted = redactRestrictedIdentifiers("Birth date: January 2, 1990 should not stay in notes.");
 
