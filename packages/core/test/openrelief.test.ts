@@ -496,6 +496,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance policy removed]");
   });
 
+  it("redacts policy identifiers without insurance prefix", () => {
+    const redacted = redactRestrictedIdentifiers("Policy number POL-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("POL-123456");
+    expect(redacted).toContain("[insurance policy removed]");
+  });
+
   it("redacts insurance member identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Insurance member ID MEM-123456 should not stay in notes.");
 
