@@ -133,6 +133,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[agency ID removed]");
   });
 
+  it("redacts SBA loan identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("SBA loan number 1234567 should not stay in the packet.");
+
+    expect(redacted).not.toContain("1234567");
+    expect(redacted).toContain("[loan identifier removed]");
+  });
+
+  it("redacts SBA loan shorthand identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("SBA loan no. LN12345 should not stay in the packet.");
+
+    expect(redacted).not.toContain("LN12345");
+    expect(redacted).toContain("[loan identifier removed]");
+  });
+
+  it("redacts loan number identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Loan number LN12345 should not stay in the packet.");
+
+    expect(redacted).not.toContain("LN12345");
+    expect(redacted).toContain("[loan identifier removed]");
+  });
+
   it("redacts alphanumeric application identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Application ID ABC-123456 should not stay in local text.");
 

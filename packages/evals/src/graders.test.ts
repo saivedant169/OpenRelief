@@ -415,6 +415,39 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails SBA loan identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "SBA loan number 1234567 should not stay in the packet.",
+      sourceIds: ["sba-disaster-loans"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails SBA loan shorthand identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "SBA loan no. LN12345 should not stay in the packet.",
+      sourceIds: ["sba-disaster-loans"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails loan number identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Loan number LN12345 should not stay in the packet.",
+      sourceIds: ["sba-disaster-loans"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails alphanumeric app identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Keep App ID ABC-123456 in the packet.",

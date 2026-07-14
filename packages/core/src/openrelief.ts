@@ -194,6 +194,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[agency ID removed]"
   },
   {
+    pattern:
+      /\b(?:(?:sba|disaster)\s+)?loan\s+(?:application\s+)?(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,}\b/gi,
+    replacement: "[loan identifier removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },
