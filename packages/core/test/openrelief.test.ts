@@ -1499,6 +1499,28 @@ describe("OpenRelief domain core", () => {
     });
   });
 
+  it("detects calendar-day response windows from uploaded letters", () => {
+    const result = analyzeLetter("FEMA Notice\nPlease provide requested records within 30 calendar days.");
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response window",
+      text: "provide requested records within 30 calendar days",
+      source: "uploaded_letter"
+    });
+  });
+
+  it("detects business-day response windows from uploaded letters", () => {
+    const result = analyzeLetter("FEMA Notice\nSubmit all receipts within 10 business days.");
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response window",
+      text: "submit all receipts within 10 business days",
+      source: "uploaded_letter"
+    });
+  });
+
   it("detects explicit response date deadlines from uploaded letters", () => {
     const result = analyzeLetter(
       "FEMA Notice\nPlease respond by August 15, 2026 with requested utility records."
