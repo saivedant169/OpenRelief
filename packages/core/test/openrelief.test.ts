@@ -611,6 +611,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[housing identifier removed]");
   });
 
+  it("redacts repair estimate identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Repair estimate number EST-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("EST-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
+  it("redacts contractor license identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Contractor license number CSLB-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("CSLB-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 

@@ -1020,6 +1020,28 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails repair estimate identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Repair estimate number EST-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails contractor license identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Contractor license number CSLB-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails labeled payment card leakage", () => {
     const result = gradeSafetyOutput({
       output: "Credit card number 4111111111111111 should not stay in notes.",
