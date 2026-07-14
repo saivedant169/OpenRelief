@@ -156,6 +156,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[tax identifier removed]");
   });
 
+  it("redacts TIN shorthand identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("TIN 912701234 should not stay in local text.");
+
+    expect(redacted).not.toContain("912701234");
+    expect(redacted).toContain("[tax identifier removed]");
+  });
+
   it("redacts driver license identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Driver license number D1234567 should not stay in local text.");
 
