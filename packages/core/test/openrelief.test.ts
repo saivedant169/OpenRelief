@@ -744,6 +744,41 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts damage record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Damage record number DMG-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("DMG-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
+  it("redacts damage documentation identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Damage documentation ID DOC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("DOC-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
+  it("redacts damage photo identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Damage photo ID DPH-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("DPH-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
+  it("redacts supporting document identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Supporting document ID SDOC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("SDOC-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
+  it("redacts supporting receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Supporting receipt number SUP-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("SUP-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 

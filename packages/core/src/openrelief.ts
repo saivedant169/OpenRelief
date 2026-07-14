@@ -239,6 +239,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[recovery expense identifier removed]"
   },
   {
+    pattern:
+      /\b(?:damage\s+(?:record|documentation|photo)|supporting\s+(?:document|receipt))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[damage evidence identifier removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },
