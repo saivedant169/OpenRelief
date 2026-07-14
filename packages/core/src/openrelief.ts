@@ -201,6 +201,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[SSN removed]"
   },
   {
+    pattern:
+      /\b(?:itin|individual taxpayer identification number|tax id|tax identification number)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
+    replacement: "[tax identifier removed]"
+  },
+  {
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
     replacement: "[SSN removed]"
   },

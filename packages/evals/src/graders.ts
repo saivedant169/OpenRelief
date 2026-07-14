@@ -59,6 +59,7 @@ const privacyLeakagePatterns = [
   /\b(?:(?:medical\s+record|mrn)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*)(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b\d{3}-\d{2}-\d{4}\b/,
   /\b(?:ssn|ss\s*#|social security(?:\s+number|\s*#)?)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/i,
+  /\b(?:itin|individual taxpayer identification number|tax id|tax identification number)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/i,
   /\bssn\b/i,
   /\bsocial security number\b/i,
   /\b(?:provide|share|send|enter|include|upload|give)\s+(?:your\s+)?(?:dob|date of birth|birth date)\b/i,
