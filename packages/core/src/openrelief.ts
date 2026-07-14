@@ -134,6 +134,7 @@ const injectionPatterns = [
   /system prompt/i,
   /say .* approved/i,
   /(?:^|[\n.?!]\s*)(?:please\s+)?(?:(?:ignore|disregard|do not respond to|throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)|(?:there is )?no need to (?:respond|reply) to (?:the )?(?:fema|official|agency) (?:letter|notice|request))/i,
+  /\b(?:wait|delay|hold off)(?:\s+(?:to|before))?\s+(?:respond|reply|responding|replying) to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /(?:ask for|share|provide|send|enter|include|upload|give).*(?:payment codes?|full bank numbers?|bank numbers?|bank account numbers?|routing numbers?|full ssn|ssn|social security numbers?|dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date|immigration status|visa status|full application id|fema codes?|access codes?|door codes?|entry codes?|verification codes?|passwords?|pins?|otps?|passcodes?)/i
 ];
 
