@@ -1638,6 +1638,20 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter says documents must be received by August 15, 2026.");
   });
 
+  it("detects no-later-than received date deadlines from uploaded letters", () => {
+    const result = analyzeLetter(
+      "FEMA Notice\nRequested documents must be received no later than August 15, 2026."
+    );
+
+    expect(result.letterType).toBe("deadline_notice");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "response date",
+      text: "documents must be received no later than August 15, 2026",
+      source: "uploaded_letter"
+    });
+    expect(result.facts).toContain("The letter says documents must be received no later than August 15, 2026.");
+  });
+
   it("detects due-by date deadlines from uploaded letters", () => {
     const result = analyzeLetter("FEMA Notice\nYour response is due by 08/15/2026.");
 
