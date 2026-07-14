@@ -204,6 +204,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[utility account removed]"
   },
   {
+    pattern:
+      /\b(?:hotel|motel|lodging|shelter)\s+(?:confirmation|reservation|booking)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[lodging identifier removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },

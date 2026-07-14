@@ -583,6 +583,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[utility account removed]");
   });
 
+  it("redacts hotel confirmation identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Hotel confirmation number HCN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("HCN-123456");
+    expect(redacted).toContain("[lodging identifier removed]");
+  });
+
+  it("redacts lodging reservation identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Lodging reservation number RSV-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("RSV-123456");
+    expect(redacted).toContain("[lodging identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
