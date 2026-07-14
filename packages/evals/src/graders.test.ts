@@ -481,6 +481,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails PO Box address leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Mail records to P.O. Box 4321 before review.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails insurance claim identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Insurance claim number ABC-123456 should not stay in notes.",
