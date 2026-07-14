@@ -68,6 +68,7 @@ const privacyLeakagePatterns = [
   /\b(?:generator\s+rental\s+receipt|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:damage\s+(?:record|documentation|photo)|supporting\s+(?:document|receipt))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:insurance\s+settlement\s+records?|account\s+listed\s+records?|requested\s+records?|(?:other\s+)?household\s+records?|supporting\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
+  /\b(?:(?:proof\s+of\s+occupancy|occupancy|residence|ownership|lease|utility|deed|title)\s+records?|mortgage\s+statement)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/i,
   /\b(?:credit|debit|prepaid|ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?:\d[ -]?){13,19}\b/i,
   /\b(?:ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,

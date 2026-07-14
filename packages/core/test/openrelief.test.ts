@@ -814,6 +814,69 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[record request identifier removed]");
   });
 
+  it("redacts proof of occupancy record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Proof of occupancy record ID POO-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("POO-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts occupancy record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Occupancy record ID OCC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("OCC-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts residence record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Residence record ID RES-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("RES-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts ownership record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Ownership record number OWN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("OWN-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts lease record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Lease record ID LSR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("LSR-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts utility record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Utility record number UTL-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("UTL-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts deed record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Deed record number DED-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("DED-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts mortgage statement identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Mortgage statement number MTG-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MTG-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts title record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Title record ID TTL-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("TTL-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
