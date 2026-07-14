@@ -1552,6 +1552,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immediate_danger"]);
   });
 
+  it("detects active flames inside as immediate danger", () => {
+    const flags = detectRiskFlags("Flames are inside the house right now.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
+  it("detects evacuation orders with no transportation as immediate danger", () => {
+    const flags = detectRiskFlags("We have no transportation and the evacuation order says leave now.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
   it("detects active smoke filling a home as immediate danger", () => {
     const flags = detectRiskFlags("Smoke is filling the house right now.");
 
