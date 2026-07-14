@@ -293,6 +293,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts household member label names", () => {
+    const redacted = redactRestrictedIdentifiers("Household member: Diego Ramos should not stay in local text.");
+
+    expect(redacted).not.toContain("Diego Ramos");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts child names", () => {
     const redacted = redactRestrictedIdentifiers("Child name: Nora Kim should not stay in local text.");
 
@@ -300,8 +307,22 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts child label names", () => {
+    const redacted = redactRestrictedIdentifiers("Child: Nora Kim should not stay in local text.");
+
+    expect(redacted).not.toContain("Nora Kim");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts case worker names", () => {
     const redacted = redactRestrictedIdentifiers("Case worker name: Priya Shah should not stay in local text.");
+
+    expect(redacted).not.toContain("Priya Shah");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts case worker label names", () => {
+    const redacted = redactRestrictedIdentifiers("Case worker: Priya Shah should not stay in local text.");
 
     expect(redacted).not.toContain("Priya Shah");
     expect(redacted).toContain("[name removed]");
