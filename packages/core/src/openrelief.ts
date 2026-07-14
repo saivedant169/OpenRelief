@@ -157,7 +157,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:[Nn]ame|[Ff]ull\s+[Nn]ame|[Ss]urvivor\s+[Nn]ame|[Aa]pplicant\s+[Nn]ame|[Cc]ontact\s+[Nn]ame|[Hh]ousehold\s+[Mm]ember\s+[Nn]ame|[Cc]hild\s+[Nn]ame|[Cc]ase\s+[Ww]orker\s+[Nn]ame|[Tt]enant\s+[Nn]ame|[Ll]andlord\s+[Nn]ame|[Cc]ontractor\s+[Nn]ame|[Pp]roperty\s+[Oo]wner\s+[Nn]ame)\s*[:#-]?\s*[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3}\b/g,
+      /\b(?:[Nn]ame|[Ff]ull\s+[Nn]ame|[Ss]urvivor\s+[Nn]ame|[Aa]pplicant\s+[Nn]ame|[Cc]ontact\s+[Nn]ame|[Hh]ousehold\s+[Mm]ember\s+[Nn]ame|[Cc]hild\s+[Nn]ame|[Cc]ase\s+[Ww]orker\s+[Nn]ame|[Tt]enant\s+[Nn]ame|[Ll]andlord\s+[Nn]ame|[Cc]ontractor\s+[Nn]ame|[Pp]roperty\s+[Oo]wner\s+[Nn]ame|[Ii]nsurance\s+[Aa]djuster)\s*[:#-]?\s*[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3}\b/g,
     replacement: "[name removed]"
   },
   {

@@ -279,6 +279,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts insurance adjuster names", () => {
+    const redacted = redactRestrictedIdentifiers("Insurance adjuster: Victor Lane should not stay in local text.");
+
+    expect(redacted).not.toContain("Victor Lane");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts street addresses", () => {
     const redacted = redactRestrictedIdentifiers("Mail records to 1234 Pine Ridge Road Apt 7 before review.");
 
