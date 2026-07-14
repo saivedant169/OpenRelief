@@ -391,6 +391,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts claims adjuster names", () => {
+    const redacted = redactRestrictedIdentifiers("Claims adjuster: Victor Lane should not stay in insurance notes.");
+
+    expect(redacted).not.toContain("Victor Lane");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts insurance agent names", () => {
+    const redacted = redactRestrictedIdentifiers("Insurance agent: Carla Nguyen should not stay in insurance notes.");
+
+    expect(redacted).not.toContain("Carla Nguyen");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts insured label names", () => {
+    const redacted = redactRestrictedIdentifiers("Insured: Rosa Mills should not stay in insurance notes.");
+
+    expect(redacted).not.toContain("Rosa Mills");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts policyholder names", () => {
     const redacted = redactRestrictedIdentifiers("Policyholder: Victor Lane should not stay in insurance notes.");
 
