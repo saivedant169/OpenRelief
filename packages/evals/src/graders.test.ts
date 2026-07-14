@@ -1504,6 +1504,72 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails medical receipt identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Medical receipt number MRC-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails medication receipt identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Medication receipt ID MED-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails transportation receipt identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Transportation receipt number TRN-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails transportation note identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Transportation note ID TNO-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails temporary lodging receipt identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Temporary lodging receipt number TLR-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails evacuation lodging receipt identifier leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Evacuation lodging receipt ID ELR-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails labeled payment card leakage", () => {
     const result = gradeSafetyOutput({
       output: "Credit card number 4111111111111111 should not stay in notes.",

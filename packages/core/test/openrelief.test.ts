@@ -919,6 +919,48 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance evidence identifier removed]");
   });
 
+  it("redacts medical receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Medical receipt number MRC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MRC-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
+  it("redacts medication receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Medication receipt ID MED-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MED-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
+  it("redacts transportation receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Transportation receipt number TRN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("TRN-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
+  it("redacts transportation note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Transportation note ID TNO-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("TNO-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
+  it("redacts temporary lodging receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Temporary lodging receipt number TLR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("TLR-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
+  it("redacts evacuation lodging receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Evacuation lodging receipt ID ELR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("ELR-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
