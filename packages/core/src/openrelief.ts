@@ -219,6 +219,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[repair identifier removed]"
   },
   {
+    pattern:
+      /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[medical support identifier removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },

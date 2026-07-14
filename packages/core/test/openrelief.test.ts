@@ -625,6 +625,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts medicine storage receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Medicine storage receipt number RXR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("RXR-123456");
+    expect(redacted).toContain("[medical support identifier removed]");
+  });
+
+  it("redacts medical transportation trip identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Medical transportation trip number MTR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MTR-123456");
+    expect(redacted).toContain("[medical support identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
