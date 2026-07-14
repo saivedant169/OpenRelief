@@ -215,7 +215,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:repair\s+estimate|contractor\s+license)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:repair\s+(?:estimate|receipt|record)|contractor\s+(?:license|estimate))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[repair identifier removed]"
   },
   {
@@ -225,7 +225,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:agency|case)\s+message|appointment\s+note|shelter\s+placement\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:agency|case|contractor)\s+message|appointment\s+note|shelter\s+placement\s+note|unsafe\s+home\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[communication identifier removed]"
   },
   {

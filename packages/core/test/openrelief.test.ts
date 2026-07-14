@@ -625,6 +625,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts repair receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Repair receipt number RPR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("RPR-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
+  it("redacts contractor estimate identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Contractor estimate ID CES-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("CES-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
+  it("redacts repair record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Repair record ID RRD-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("RRD-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts medicine storage receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medicine storage receipt number RXR-123456 should not stay in notes.");
 
@@ -664,6 +685,20 @@ describe("OpenRelief domain core", () => {
     const redacted = redactRestrictedIdentifiers("Shelter placement note ID SPN-123456 should not stay in notes.");
 
     expect(redacted).not.toContain("SPN-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
+  it("redacts contractor message identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Contractor message ID CTM-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("CTM-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
+  it("redacts unsafe home access note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Unsafe home access note ID UHA-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("UHA-123456");
     expect(redacted).toContain("[communication identifier removed]");
   });
 
