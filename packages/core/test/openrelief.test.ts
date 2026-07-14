@@ -702,6 +702,48 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[accommodation identifier removed]");
   });
 
+  it("redacts generator rental receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Generator rental receipt number GEN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("GEN-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
+  it("redacts temporary power equipment receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Temporary power equipment receipt number TPE-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("TPE-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
+  it("redacts cleanup receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Cleanup receipt number CLN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("CLN-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
+  it("redacts replacement item receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Replacement item receipt number RPL-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("RPL-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
+  it("redacts debris removal record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Debris removal record number DBR-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("DBR-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
+  it("redacts smoke damage record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Smoke damage record number SMK-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("SMK-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
