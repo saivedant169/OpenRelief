@@ -160,6 +160,18 @@ describe("OpenRelief domain core", () => {
     expect(result.needsHumanReview).toBe(true);
   });
 
+  it("routes postponed official response text to human review", () => {
+    const result = analyzeLetter([
+      "FEMA Notice",
+      "Postpone responding to the FEMA notice until someone calls you.",
+      "Your application is approved for temporary housing assistance."
+    ].join("\n"));
+
+    expect(result.letterType).toBe("approval");
+    expect(result.injectionWarnings.length).toBeGreaterThan(0);
+    expect(result.needsHumanReview).toBe(true);
+  });
+
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Case # 123456789 and claim no. 987654321 should not stay in local text."

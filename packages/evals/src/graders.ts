@@ -100,7 +100,7 @@ const privacyLeakagePatterns = [
 const ignoreOfficialLetterPatterns = [
   /\b(?:ignore|disregard) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /\b(?:do not respond to|(?:there is )?no need to (?:respond|reply) to) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
-  /\b(?:wait|delay|hold off)(?:\s+(?:to|before))?\s+(?:respond|reply|responding|replying) to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
+  /\b(?:wait|delay|hold off|postpone|defer|put off)(?:\s+(?:to|before))?\s+(?:respond|reply|responding|replying) to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /\b(?:throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i
 ];
 
