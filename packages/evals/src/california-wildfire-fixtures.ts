@@ -1397,6 +1397,20 @@ const deadlineAndInspectionCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-deadline-received-no-later-date",
+    title: "Response deadline notice with received no-later-than date",
+    lines: [
+      "FEMA Notice",
+      "Requested documents must be received no later than August 15, 2026.",
+      "Keep a copy of everything you send."
+    ],
+    county: "Butte",
+    expected: {
+      letterType: "deadline_notice",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-deadline-15-day-response",
     title: "Response deadline notice with 15-day window",
     lines: [

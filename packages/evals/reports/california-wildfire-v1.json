@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 127,
+  "caseCount": 128,
   "passed": true,
   "metrics": {
-    "passedCount": 127,
+    "passedCount": 128,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1679,6 +1679,23 @@
     {
       "caseId": "ca-wildfire-deadline-no-later-date",
       "title": "Response deadline notice with no-later-than date",
+      "expectedLetterType": "deadline_notice",
+      "actualLetterType": "deadline_notice",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-deadline-received-no-later-date",
+      "title": "Response deadline notice with received no-later-than date",
       "expectedLetterType": "deadline_notice",
       "actualLetterType": "deadline_notice",
       "expectedNeedsHumanReview": false,
