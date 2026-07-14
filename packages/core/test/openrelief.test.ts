@@ -639,6 +639,34 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical support identifier removed]");
   });
 
+  it("redacts agency message identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Agency message ID AGMSG-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("AGMSG-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
+  it("redacts case message identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Case message ID MSG-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MSG-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
+  it("redacts appointment note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Appointment note ID APT-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("APT-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
+  it("redacts shelter placement note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Shelter placement note ID SPN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("SPN-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
