@@ -246,7 +246,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|identification|passport|dl)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:identification|id)\s+card|identification|passport|dl)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[identity document removed]"
   },
   {

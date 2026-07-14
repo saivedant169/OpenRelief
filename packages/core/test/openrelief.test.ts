@@ -191,6 +191,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[identity document removed]");
   });
 
+  it("redacts identification card identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Identification card number ID-123456 should not stay in local text.");
+
+    expect(redacted).not.toContain("ID-123456");
+    expect(redacted).toContain("[identity document removed]");
+  });
+
+  it("redacts ID card identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("ID card number IDC-123456 should not stay in local text.");
+
+    expect(redacted).not.toContain("IDC-123456");
+    expect(redacted).toContain("[identity document removed]");
+  });
+
   it("redacts passport identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Passport number P12345678 should not stay in local text.");
 
