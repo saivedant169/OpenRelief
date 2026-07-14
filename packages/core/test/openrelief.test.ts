@@ -527,6 +527,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[bank identifier removed]");
   });
 
+  it("redacts utility account identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Utility account number UTL-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("UTL-123456");
+    expect(redacted).toContain("[utility account removed]");
+  });
+
+  it("redacts electric account identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Electric account number ELEC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("ELEC-123456");
+    expect(redacted).toContain("[utility account removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 

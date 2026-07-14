@@ -199,6 +199,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[loan identifier removed]"
   },
   {
+    pattern:
+      /\b(?:utility|electric|gas|water|power)\s+account\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[utility account removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },
