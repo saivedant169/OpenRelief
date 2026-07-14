@@ -213,6 +213,10 @@ const restrictedIdentifierPatterns = [
     replacement: "[medical record removed]"
   },
   {
+    pattern: /\b(?:medicaid|medicare)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[health identifier removed]"
+  },
+  {
     pattern:
       /\b(?:ssn|ss\s*#|social security(?:\s+number|\s*#)?)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
     replacement: "[SSN removed]"
