@@ -156,6 +156,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[identity document removed]");
   });
 
+  it("redacts driver license shorthand identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("DL# D1234567 should not stay in local text.");
+
+    expect(redacted).not.toContain("D1234567");
+    expect(redacted).toContain("[identity document removed]");
+  });
+
   it("redacts passport identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Passport number P12345678 should not stay in local text.");
 
