@@ -151,7 +151,7 @@ const monthNamePattern =
 const dateValuePattern = `(?:${monthNamePattern}\\s+\\d{1,2},?\\s+\\d{4}|\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}|\\d{4}-\\d{1,2}-\\d{1,2})`;
 const responseWithinDaysPattern = /\b(?:respond|reply|send|submit|provide)(?:\s+[a-z][a-z-]*){0,6}\s+within\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days\b/i;
 const responseByDatePattern = new RegExp(
-  `\\b(?:respond|reply|send|submit|provide)(?:\\s+[a-z][a-z-]*){0,6}\\s+by\\s+${dateValuePattern}\\b`,
+  `\\b(?:respond|reply|send|submit|provide)(?:\\s+[a-z][a-z-]*){0,6}\\s+(?:by|no later than)\\s+${dateValuePattern}\\b`,
   "i"
 );
 const passiveResponseByDatePattern = new RegExp(
