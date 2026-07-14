@@ -373,6 +373,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[payment card removed]");
   });
 
+  it("redacts short EBT card identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("EBT card ID EBT-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("EBT-123456");
+    expect(redacted).toContain("[payment card removed]");
+  });
+
+  it("redacts short benefits card identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Benefits card ID BEN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("BEN-123456");
+    expect(redacted).toContain("[payment card removed]");
+  });
+
   it("redacts account credentials and access codes", () => {
     const redacted = redactRestrictedIdentifiers("Password: River999 and door code 1234 should not stay in notes.");
 
