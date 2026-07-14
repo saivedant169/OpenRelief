@@ -158,6 +158,11 @@ const passiveResponseByDatePattern = new RegExp(
   `\\b(?:(?:documents?|records?|receipts?|response) must be received|(?:documents?|records?|receipts?|response) (?:is|are) due) by ${dateValuePattern}\\b`,
   "i"
 );
+const appealWithinDaysPattern = /\b(?:you have\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days(?:\s+from\s+(?:the\s+)?date\s+of\s+(?:this\s+)?letter)?\s+to\s+appeal|appeal must be (?:submitted|received|filed) within\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days|file an appeal within\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days)\b/i;
+const appealByDatePattern = new RegExp(
+  `\\bappeal must be (?:received|submitted|filed) by ${dateValuePattern}\\b`,
+  "i"
+);
 
 const restrictedIdentifierPatterns = [
   {
@@ -681,6 +686,24 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   if (normalized.includes("appeal within 60 days")) {
     detectedDeadlines.push({ label: "appeal window", text: "appeal within 60 days", source: "uploaded_letter" });
+  }
+
+  const appealWithinDaysMatch = appealWithinDaysPattern.exec(letterText);
+  if (appealWithinDaysMatch && !detectedDeadlines.some((deadline) => deadline.label === "appeal window")) {
+    detectedDeadlines.push({
+      label: "appeal window",
+      text: normalizeDeadlineText(appealWithinDaysMatch[0]),
+      source: "uploaded_letter"
+    });
+  }
+
+  const appealByDateMatch = appealByDatePattern.exec(letterText);
+  if (appealByDateMatch) {
+    detectedDeadlines.push({
+      label: "appeal date",
+      text: normalizeDeadlineText(appealByDateMatch[0]),
+      source: "uploaded_letter"
+    });
   }
 
   const responseWithinDaysMatch = responseWithinDaysPattern.exec(letterText);

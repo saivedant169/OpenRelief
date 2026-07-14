@@ -41,6 +41,32 @@ describe("OpenRelief domain core", () => {
     expect(result.needsHumanReview).toBe(true);
   });
 
+  it("detects have-days-to-appeal deadline language", () => {
+    const result = analyzeLetter(
+      "FEMA Notice\nYour application is denied. You have 60 days from the date of this letter to appeal."
+    );
+
+    expect(result.letterType).toBe("denial");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "appeal window",
+      text: "you have 60 days from the date of this letter to appeal",
+      source: "uploaded_letter"
+    });
+  });
+
+  it("detects appeal received-by date deadline language", () => {
+    const result = analyzeLetter(
+      "FEMA Notice\nYour application is denied. Any appeal must be received by August 15, 2026."
+    );
+
+    expect(result.letterType).toBe("denial");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "appeal date",
+      text: "appeal must be received by August 15, 2026",
+      source: "uploaded_letter"
+    });
+  });
+
   it("separates letter facts from uncertain interpretation", () => {
     const result = analyzeLetter(denialLetter);
 
