@@ -307,6 +307,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts policyholder names", () => {
+    const redacted = redactRestrictedIdentifiers("Policyholder: Victor Lane should not stay in insurance notes.");
+
+    expect(redacted).not.toContain("Victor Lane");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts policy holder names", () => {
+    const redacted = redactRestrictedIdentifiers("Policy holder: Rosa Mills should not stay in insurance notes.");
+
+    expect(redacted).not.toContain("Rosa Mills");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts street addresses", () => {
     const redacted = redactRestrictedIdentifiers("Mail records to 1234 Pine Ridge Road Apt 7 before review.");
 
