@@ -667,6 +667,41 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[communication identifier removed]");
   });
 
+  it("redacts accommodation receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Accommodation receipt number ACC-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("ACC-123456");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
+  it("redacts accommodation note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Accommodation note ID ACN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("ACN-123456");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
+  it("redacts accessibility expense record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Accessibility expense record number AER-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("AER-123456");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
+  it("redacts accessibility note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Accessibility note ID ASN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("ASN-123456");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
+  it("redacts medical access note identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Medical access note ID MAN-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("MAN-123456");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 

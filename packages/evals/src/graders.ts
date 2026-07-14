@@ -64,6 +64,7 @@ const privacyLeakagePatterns = [
   /\b(?:repair\s+estimate|contractor\s+license)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:(?:agency|case)\s+message|appointment\s+note|shelter\s+placement\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
+  /\b(?:accommodation\s+(?:receipt|note)|accessibility\s+(?:expense\s+record|note)|medical\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/i,
   /\b(?:credit|debit|prepaid|ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?:\d[ -]?){13,19}\b/i,
   /\b(?:ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,

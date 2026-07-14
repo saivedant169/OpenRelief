@@ -229,6 +229,11 @@ const restrictedIdentifierPatterns = [
     replacement: "[communication identifier removed]"
   },
   {
+    pattern:
+      /\b(?:accommodation\s+(?:receipt|note)|accessibility\s+(?:expense\s+record|note)|medical\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[accommodation identifier removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },
