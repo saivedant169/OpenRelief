@@ -160,7 +160,7 @@ const passiveResponseByDatePattern = new RegExp(
 );
 const appealWithinDaysPattern = /\b(?:you have\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days(?:\s+from\s+(?:the\s+)?date\s+of\s+(?:this\s+)?letter)?\s+to\s+appeal|appeal must be (?:submitted|received|filed) within\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days|file an appeal within\s+\d{1,3}\s+(?:calendar\s+|business\s+)?days)\b/i;
 const appealByDatePattern = new RegExp(
-  `\\bappeal (?:must be (?:received|submitted|filed)|(?:is|are) due) (?:by|no later than) ${dateValuePattern}\\b`,
+  `\\b(?:appeal (?:must be (?:received|submitted|filed)|(?:is|are) due)|file an appeal) (?:by|no later than) ${dateValuePattern}\\b`,
   "i"
 );
 
