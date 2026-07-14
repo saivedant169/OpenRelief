@@ -264,6 +264,16 @@ const restrictedIdentifierPatterns = [
     replacement: "[identity document removed]"
   },
   {
+    pattern:
+      /\b(?:vin|vehicle identification number)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*[A-HJ-NPR-Z0-9]{17}\b/gi,
+    replacement: "[vehicle identifier removed]"
+  },
+  {
+    pattern:
+      /\b(?:license|licence)\s+plate\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,9}\b/gi,
+    replacement: "[vehicle identifier removed]"
+  },
+  {
     pattern: /\b(?:fema|sba)\s+(?:registration|reg\.?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,}\b/gi,
     replacement: "[agency ID removed]"
   },

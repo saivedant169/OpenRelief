@@ -233,6 +233,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[identity document removed]");
   });
 
+  it("redacts vehicle identification numbers", () => {
+    const redacted = redactRestrictedIdentifiers("VIN 1HGCM82633A004352 should not stay in notes.");
+
+    expect(redacted).not.toContain("1HGCM82633A004352");
+    expect(redacted).toContain("[vehicle identifier removed]");
+  });
+
+  it("redacts license plate identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("License plate 8ABC123 should not stay in notes.");
+
+    expect(redacted).not.toContain("8ABC123");
+    expect(redacted).toContain("[vehicle identifier removed]");
+  });
+
   it("redacts contact identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Call 555-123-4567 or email survivor@example.test before saving this note."
