@@ -597,6 +597,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[lodging identifier removed]");
   });
 
+  it("redacts temporary housing unit identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Temporary housing unit THU-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("THU-123456");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
+  it("redacts rental lease identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Rental lease number LEA-123456 should not stay in notes.");
+
+    expect(redacted).not.toContain("LEA-123456");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
