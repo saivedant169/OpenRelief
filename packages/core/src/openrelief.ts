@@ -219,12 +219,12 @@ const restrictedIdentifierPatterns = [
     replacement: "[SSN removed]"
   },
   {
-    pattern: /\b(?:dob|date of birth|birth date)\s*[:#-]?\s*\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/gi,
+    pattern: /\b(?:dob|date of birth|birth\s*date)\s*[:#-]?\s*\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/gi,
     replacement: "[date of birth removed]"
   },
   {
     pattern:
-      /\b(?:dob|date of birth|birth date)\s*[:#-]?\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}\b/gi,
+      /\b(?:dob|date of birth|birth\s*date)\s*[:#-]?\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4}\b/gi,
     replacement: "[date of birth removed]"
   },
   {
