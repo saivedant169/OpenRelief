@@ -296,6 +296,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[bank identifier removed]");
   });
 
+  it("redacts labeled payment card identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
+
+    expect(redacted).not.toContain("4111111111111111");
+    expect(redacted).toContain("[payment card removed]");
+  });
+
   it("redacts account credentials and access codes", () => {
     const redacted = redactRestrictedIdentifiers("Password: River999 and door code 1234 should not stay in notes.");
 

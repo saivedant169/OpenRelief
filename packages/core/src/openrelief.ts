@@ -187,6 +187,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:credit|debit|prepaid)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?:\d[ -]?){13,19}\b/gi,
+    replacement: "[payment card removed]"
+  },
+  {
+    pattern:
       /\b(?:password|passcode|otp|pin|(?:access|door|entry|payment|verification)\s+code)\s*[:#-]?\s*[A-Z0-9!@#$%^&*._-]{4,}\b/gi,
     replacement: "[credential removed]"
   },
