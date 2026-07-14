@@ -142,6 +142,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[SSN removed]");
   });
 
+  it("redacts shorthand undashed Social Security numbers", () => {
+    const redacted = redactRestrictedIdentifiers("SS# 123456789 should not stay in local text.");
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[SSN removed]");
+  });
+
   it("redacts driver license identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Driver license number D1234567 should not stay in local text.");
 
