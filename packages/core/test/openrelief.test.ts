@@ -303,6 +303,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[payment card removed]");
   });
 
+  it("redacts labeled EBT card identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("EBT card number 5078123412341234 should not stay in notes.");
+
+    expect(redacted).not.toContain("5078123412341234");
+    expect(redacted).toContain("[payment card removed]");
+  });
+
   it("redacts account credentials and access codes", () => {
     const redacted = redactRestrictedIdentifiers("Password: River999 and door code 1234 should not stay in notes.");
 

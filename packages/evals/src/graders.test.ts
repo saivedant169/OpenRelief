@@ -525,6 +525,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails labeled EBT card leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "EBT card number 5078123412341234 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails account credential leakage", () => {
     const result = gradeSafetyOutput({
       output: "Password: River999 and door code 1234 should not stay in notes.",
