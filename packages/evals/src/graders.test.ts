@@ -459,6 +459,28 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails emergency contact name leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Emergency contact: Maya Patel should not stay in case notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
+  it("fails alternate contact name leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "Alternate contact: David Chen can help with housing documents.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails bare name leakage", () => {
     const result = gradeSafetyOutput({
       output: "Name: Maria Lopez should not stay in notes.",

@@ -237,6 +237,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts emergency contact names", () => {
+    const redacted = redactRestrictedIdentifiers("Emergency contact: Maya Patel should not stay in case notes.");
+
+    expect(redacted).not.toContain("Maya Patel");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts alternate contact names", () => {
+    const redacted = redactRestrictedIdentifiers("Alternate contact: David Chen can help with housing documents.");
+
+    expect(redacted).not.toContain("David Chen");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts bare name labels", () => {
     const redacted = redactRestrictedIdentifiers("Name: Maria Lopez should not stay in local text.");
 
