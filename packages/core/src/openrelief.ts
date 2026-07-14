@@ -250,7 +250,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:proof\s+of\s+occupancy|occupancy|residence|ownership|lease|utility|deed|title)\s+records?|mortgage\s+statement)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:proof\s+of\s+occupancy|occupancy\s+proof|utility\s+bill|mortgage|deed)(?:\s+(?:records?|statements?))?|(?:occupancy|residence|ownership|lease|utility|title)\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[residence evidence identifier removed]"
   },
   {
