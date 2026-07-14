@@ -272,6 +272,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts borrower label names", () => {
+    const redacted = redactRestrictedIdentifiers("Borrower: Luis Ortega should not stay in SBA loan notes.");
+
+    expect(redacted).not.toContain("Luis Ortega");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts co-borrower label names", () => {
+    const redacted = redactRestrictedIdentifiers("Co-borrower: Nina Patel should not stay in SBA loan notes.");
+
+    expect(redacted).not.toContain("Nina Patel");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts loan officer names", () => {
+    const redacted = redactRestrictedIdentifiers("Loan officer: Carla Nguyen should not stay in SBA loan notes.");
+
+    expect(redacted).not.toContain("Carla Nguyen");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts survivor label names", () => {
     const redacted = redactRestrictedIdentifiers("Survivor: Asha Singh should not stay in the packet.");
 
