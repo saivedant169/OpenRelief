@@ -918,6 +918,23 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-collapsing-roof-danger",
+    title: "Request letter with collapsing roof danger",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send proof of occupancy and repair receipts.",
+      "Case note says the damaged roof is collapsing over the bedroom."
+    ],
+    county: "Ventura",
+    riskFlags: ["immediate_danger"],
+    tags: ["emergency"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-live-wire-danger",
     title: "Request letter with live-wire danger context",
     lines: [

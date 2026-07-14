@@ -733,6 +733,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immediate_danger"]);
   });
 
+  it("detects collapsing structures as immediate danger", () => {
+    const flags = detectRiskFlags("The damaged roof is collapsing over the bedroom.");
+
+    expect(flags).toEqual(["immediate_danger"]);
+  });
+
   it("detects evacuation contractions as immediate danger", () => {
     const flags = detectRiskFlags("I can't evacuate and the fire is close.");
 
