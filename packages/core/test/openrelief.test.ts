@@ -402,6 +402,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[immigration identifier removed]");
   });
 
+  it("redacts USCIS shorthand identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("USCIS# 123456789 should not stay in notes.");
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[immigration identifier removed]");
+  });
+
   it("redacts immigration status labels", () => {
     const redacted = redactRestrictedIdentifiers("Visa status: expired should not stay in notes.");
 

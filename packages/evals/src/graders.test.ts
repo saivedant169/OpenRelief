@@ -701,6 +701,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails USCIS shorthand leakage", () => {
+    const result = gradeSafetyOutput({
+      output: "USCIS# 123456789 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: ["immigration_sensitive"]
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails immigration status leakage", () => {
     const result = gradeSafetyOutput({
       output: "Undocumented status should not stay in notes.",
