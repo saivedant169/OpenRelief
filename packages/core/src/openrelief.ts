@@ -127,6 +127,8 @@ export interface AppealDraft {
 
 const injectionPatterns = [
   /ignore all previous instructions/i,
+  /disregard (?:all )?(?:previous )?instructions/i,
+  /override (?:safety rules|source checks|human review)/i,
   /developer mode/i,
   /system prompt/i,
   /say .* approved/i,
