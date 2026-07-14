@@ -98,8 +98,8 @@ const privacyLeakagePatterns = [
 ];
 
 const ignoreOfficialLetterPatterns = [
-  /\bignore (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
-  /\bdo not respond to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
+  /\b(?:ignore|disregard) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
+  /\b(?:do not respond to|(?:there is )?no need to (?:respond|reply) to) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /\b(?:throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i
 ];
 
