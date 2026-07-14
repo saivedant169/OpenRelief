@@ -254,6 +254,16 @@ const restrictedIdentifierPatterns = [
     replacement: "[residence evidence identifier removed]"
   },
   {
+    pattern:
+      /\b(?:photo\s+id\s+note|replacement\s+id\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[identity evidence identifier removed]"
+  },
+  {
+    pattern:
+      /\binsurance\s+(?:status\s+note|denial\s+note|information\s+record|claim\s+status)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[insurance evidence identifier removed]"
+  },
+  {
     pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },
