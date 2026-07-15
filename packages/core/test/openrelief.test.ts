@@ -1116,6 +1116,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[damage evidence identifier removed]");
   });
 
+  it("redacts private access evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Privately owned road record number POR-123456 should not stay in notes.",
+        "Private bridge damage record number PBR-123456 should not stay in notes.",
+        "Sole access damage record number SAR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("POR-123456");
+    expect(redacted).not.toContain("PBR-123456");
+    expect(redacted).not.toContain("SAR-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
   it("redacts supporting document identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Supporting document ID SDOC-123456 should not stay in notes.");
 
@@ -3177,8 +3192,19 @@ describe("OpenRelief domain core", () => {
     expect(receiptsResult.facts).toContain("The letter asks for supporting receipts.");
   });
 
+  it("extracts private access evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send private access damage records, privately-owned road repair records, and bridge repair estimates."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("private access records");
+    expect(result.facts).toContain("The letter asks for private access records.");
+  });
+
   it("marks requested damage repair and supporting evidence as missing", () => {
-    const packet = buildEvidencePacket(["damage records", "repair records", "supporting receipts"]);
+    const packet = buildEvidencePacket(["damage records", "private access records", "repair records", "supporting receipts"]);
 
     expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");

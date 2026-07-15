@@ -275,7 +275,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:damage\s+(?:record|documentation|photo)|supporting\s+(?:document|receipt))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:damage\s+(?:record|documentation|photo)|(?:private|privately\s+owned|privately-owned)\s+(?:road|bridge|dock)\s+(?:record|damage\s+record|repair\s+record)|private\s+access\s+damage\s+record|sole\s+access\s+damage\s+record|supporting\s+(?:document|receipt))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[damage evidence identifier removed]"
   },
   {
@@ -982,6 +982,27 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for damage documentation."
   },
   {
+    request: "private access records",
+    phrases: [
+      "private access records",
+      "private access damage records",
+      "sole access damage records",
+      "privately-owned road records",
+      "privately owned road records",
+      "privately-owned road repair records",
+      "privately owned road repair records",
+      "private road repair records",
+      "private road damage records",
+      "private bridge repair records",
+      "private bridge damage records",
+      "private dock repair records",
+      "private dock damage records",
+      "bridge repair estimates",
+      "dock repair estimates"
+    ],
+    fact: "The letter asks for private access records."
+  },
+  {
     request: "smoke damage records",
     phrases: ["smoke damage records"],
     fact: "The letter asks for smoke damage records."
@@ -1645,6 +1666,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "damage photos",
             "damage documentation",
             "damage records",
+            "private access records",
             "smoke damage records",
             "repair estimates"
           ]),
