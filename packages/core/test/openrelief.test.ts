@@ -1275,15 +1275,23 @@ describe("OpenRelief domain core", () => {
     const redacted = redactRestrictedIdentifiers(
       [
         "Generator purchase receipt number GPR-123456 should not stay in notes.",
+        "Generator receipts number GER-A1B2C3 should not stay in notes.",
+        "Receipts for generator rental and temporary power equipment number GTP-A1B2C3 should not stay in notes.",
         "Chainsaw rental receipt number CSR-123456 should not stay in notes.",
+        "Chainsaw receipts number CHR-A1B2C3 should not stay in notes.",
         "Dehumidifier receipt number DHR-123456 should not stay in notes.",
+        "Dehumidifier receipts number DHR-A1B2C3 should not stay in notes.",
         "Miscellaneous item receipt number MIR-123456 should not stay in notes."
       ].join("\n")
     );
 
     expect(redacted).not.toContain("GPR-123456");
+    expect(redacted).not.toContain("GER-A1B2C3");
+    expect(redacted).not.toContain("GTP-A1B2C3");
     expect(redacted).not.toContain("CSR-123456");
+    expect(redacted).not.toContain("CHR-A1B2C3");
     expect(redacted).not.toContain("DHR-123456");
+    expect(redacted).not.toContain("DHR-A1B2C3");
     expect(redacted).not.toContain("MIR-123456");
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
