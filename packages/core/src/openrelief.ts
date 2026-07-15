@@ -464,6 +464,24 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for homeowners insurance statements."
   },
   {
+    request: "real property insurance records",
+    phrases: [
+      "real property insurance document",
+      "real property insurance documents",
+      "real property insurance bill",
+      "real property insurance bills",
+      "real property insurance payment record",
+      "real property insurance payment records",
+      "structural insurance document",
+      "structural insurance documents",
+      "structural insurance bill",
+      "structural insurance bills",
+      "structural insurance payment record",
+      "structural insurance payment records"
+    ],
+    fact: "The letter asks for real property insurance records."
+  },
+  {
     request: "escrow statements",
     phrases: ["escrow statement", "escrow statements"],
     fact: "The letter asks for escrow statements."
@@ -537,6 +555,41 @@ const requestDetectionRules: RequestDetectionRule[] = [
       "receipts for major repairs or improvements"
     ],
     fact: "The letter asks for major repair or improvement receipts."
+  },
+  {
+    request: "mobile home park ownership letters",
+    phrases: [
+      "mobile home park ownership letter",
+      "mobile home park ownership letters",
+      "mobile home park letter confirming ownership",
+      "mobile home park manager ownership letter",
+      "mobile home park owner ownership letter"
+    ],
+    fact: "The letter asks for mobile home park ownership letters."
+  },
+  {
+    request: "court ownership documents",
+    phrases: [
+      "court ownership document",
+      "court ownership documents",
+      "court documentation showing ownership",
+      "court documents showing ownership",
+      "court documentation that states ownership",
+      "court documents that state ownership"
+    ],
+    fact: "The letter asks for court ownership documents."
+  },
+  {
+    request: "public official ownership letters",
+    phrases: [
+      "public official ownership letter",
+      "public official ownership letters",
+      "public official letter showing ownership",
+      "public official letters showing ownership",
+      "public official letter confirming ownership",
+      "public official letters confirming ownership"
+    ],
+    fact: "The letter asks for public official ownership letters."
   },
   {
     request: "lease records",
@@ -1314,6 +1367,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "property tax receipts",
             "property tax bills",
             "homeowners insurance statements",
+            "real property insurance records",
             "escrow statements",
             "tax assessment records",
             "title records",
@@ -1326,6 +1380,9 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "bonds for title",
             "will or heirship records",
             "major repair receipts",
+            "mobile home park ownership letters",
+            "court ownership documents",
+            "public official ownership letters",
             "lease records",
             "lease agreements"
           ]),

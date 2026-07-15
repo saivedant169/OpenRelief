@@ -2835,6 +2835,23 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for major repair or improvement receipts.");
   });
 
+  it("extracts ownership verification letter requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a real property insurance payment record, mobile home park letter confirming ownership, court documents showing ownership, or public official letter confirming ownership."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("real property insurance records");
+    expect(result.detectedRequests).toContain("mobile home park ownership letters");
+    expect(result.detectedRequests).toContain("court ownership documents");
+    expect(result.detectedRequests).toContain("public official ownership letters");
+    expect(result.facts).toContain("The letter asks for real property insurance records.");
+    expect(result.facts).toContain("The letter asks for mobile home park ownership letters.");
+    expect(result.facts).toContain("The letter asks for court ownership documents.");
+    expect(result.facts).toContain("The letter asks for public official ownership letters.");
+  });
+
   it("marks requested ownership lease and utility evidence as missing", () => {
     const packet = buildEvidencePacket([
       "ownership records",
@@ -2861,6 +2878,10 @@ describe("OpenRelief domain core", () => {
       "bonds for title",
       "will or heirship records",
       "major repair receipts",
+      "real property insurance records",
+      "mobile home park ownership letters",
+      "court ownership documents",
+      "public official ownership letters",
       "lease records",
       "lease agreements",
       "housing agreements",

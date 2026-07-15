@@ -702,6 +702,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-ownership-verification-letters",
+    title: "Request for ownership verification letters",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a real property insurance payment record, mobile home park letter confirming ownership, court documents showing ownership, or public official letter confirming ownership."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-identity-evidence",
     title: "Request for identity evidence",
     lines: [

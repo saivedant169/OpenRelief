@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 148,
+  "caseCount": 149,
   "passed": true,
   "metrics": {
-    "passedCount": 148,
+    "passedCount": 149,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -821,6 +821,23 @@
       "sourceIds": [
         "fema-appeals",
         "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-ownership-verification-letters",
+      "title": "Request for ownership verification letters",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-documents",
+        "fema-appeals",
         "sba-disaster"
       ],
       "riskFlags": []
