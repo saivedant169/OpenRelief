@@ -903,6 +903,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts major repair and improvement receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Major repair receipt number MRR-A1B2C3 should not stay in notes.",
+        "Maintenance receipt number MNT-A1B2C3 should not stay in notes.",
+        "Improvement receipt number IMP-A1B2C3 should not stay in notes.",
+        "Receipt for major repairs or improvements number RMI-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MRR-A1B2C3");
+    expect(redacted).not.toContain("MNT-A1B2C3");
+    expect(redacted).not.toContain("IMP-A1B2C3");
+    expect(redacted).not.toContain("RMI-A1B2C3");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts contractor estimate identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Contractor estimate ID CES-123456 should not stay in notes.");
 

@@ -230,7 +230,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:repair\s+(?:estimate|receipt|record)|contractor\s+(?:license|estimate)|hazard\s+mitigation\s+(?:record|receipt|estimate)|mitigation\s+(?:repair|measure)\s+(?:record|receipt|estimate))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:major\s+)?repair\s+(?:estimate|receipt|record)|(?:maintenance|improvement)\s+receipts?|receipts?\s+for\s+major\s+repairs?(?:\s+or\s+improvements?)?|contractor\s+(?:license|estimate)|hazard\s+mitigation\s+(?:record|receipt|estimate)|mitigation\s+(?:repair|measure)\s+(?:record|receipt|estimate))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[repair identifier removed]"
   },
   {
