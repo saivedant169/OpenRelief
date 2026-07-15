@@ -18,6 +18,7 @@ const requiredIssueMaterials = [
 ];
 const requiredIssueHeadings = ["Sanitized findings", "Launch risk"];
 const allowedLaunchRiskValues = new Set(["pending", "critical", "high", "medium", "low", "none"]);
+const publicTrackingIssuePattern = /^https:\/\/github\.com\/saivedant169\/OpenRelief\/issues\/\d+$/;
 const requiredIssueSections = [
   {
     heading: "Objective",
@@ -246,13 +247,12 @@ if (!existsSync(reviewLogPath)) {
 }
 
 const reviewLog = readFileSync(reviewLogPath, "utf8");
+const recordedPublicTrackingIssueValues = completedReviewLogValuesForField("public tracking issue");
 const recordedPublicIssueLaunchRiskValues = completedReviewLogValuesForField("public issue launch risk").map((value) =>
   value.toLowerCase()
 );
 const recordedPublicIssueLaunchRisk = recordedPublicIssueLaunchRiskValues.at(-1) ?? "";
-const issueUrl = /^public tracking issue:\s*(https:\/\/github\.com\/saivedant169\/OpenRelief\/issues\/\d+)\s*$/im.exec(
-  reviewLog
-)?.[1];
+const issueUrl = recordedPublicTrackingIssueValues.find((value) => publicTrackingIssuePattern.test(value));
 
 if (!issueUrl) {
   fail("Partner review log missing public tracking issue URL.");
@@ -280,6 +280,10 @@ const issueBody = issue.body ?? "";
 
 if (issue.url !== issueUrl) {
   addError("Partner review issue URL does not match docs/partner-review-log.md.");
+}
+
+if (recordedPublicTrackingIssueValues.length > 1) {
+  addError("Partner review log public tracking issue must contain at most one final URL.");
 }
 
 if (issue.state !== "OPEN") {

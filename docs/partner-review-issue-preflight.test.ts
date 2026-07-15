@@ -382,4 +382,14 @@ describe("partner review issue preflight", () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue URL does not match docs/partner-review-log.md.");
   });
+
+  it("rejects duplicate recorded public tracking issue URLs", () => {
+    const result = runIssuePreflight(
+      completeIssue,
+      `${reviewLog}public tracking issue: https://github.com/saivedant169/OpenRelief/issues/2\n`
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log public tracking issue must contain at most one final URL.");
+  });
 });
