@@ -78,6 +78,30 @@ test("immediate danger guidance appears before paperwork", async ({ page }) => {
   await expect(firstChecklistItem).toContainText("Immediate danger should be handled before paperwork");
 });
 
+test("final eligibility requests route to source-backed human review", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
+
+  await page.getByLabel("Extracted letter text").fill("FEMA Notice\nYour application is approved for rental assistance.");
+  await page.getByLabel("Immediate needs and risks").fill("Can you tell me if I am eligible for FEMA assistance?");
+  await page.getByRole("button", { name: /analyze letter/i }).click();
+
+  await expect(page.locator(".risk-list").getByText("Final eligibility question", { exact: true })).toBeVisible();
+  await expect(page.getByText("OpenRelief cannot confirm final eligibility or legal options.")).toBeVisible();
+
+  const firstChecklistItem = page.locator(".checklist li").first();
+  await expect(firstChecklistItem).toContainText("Request human review");
+  await expect(firstChecklistItem).toContainText("Final eligibility questions should be reviewed by a qualified helper.");
+  await expect(firstChecklistItem).toContainText("Documents Needed for FEMA Assistance");
+
+  const sourceCard = page.locator("article").filter({ has: page.getByRole("heading", { name: "Source citations" }) });
+  await expect(sourceCard.getByRole("link", { name: "Documents Needed for FEMA Assistance" })).toHaveAttribute(
+    "href",
+    "https://www.fema.gov/assistance/individual/after-applying"
+  );
+  await expect(page.getByText(/you are eligible/i)).toHaveCount(0);
+});
+
 test("source citations export and clear local data stay usable", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
