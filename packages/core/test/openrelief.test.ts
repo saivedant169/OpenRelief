@@ -2723,6 +2723,27 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for school documents.");
   });
 
+  it("extracts expanded official residence evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a voter registration card, cable bill, medical provider bill, social service organization documents, federal or state benefit documents, or mobile home park letter."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("voter registration cards");
+    expect(result.detectedRequests).toContain("cable or satellite bills");
+    expect(result.detectedRequests).toContain("medical provider bills");
+    expect(result.detectedRequests).toContain("social service organization documents");
+    expect(result.detectedRequests).toContain("benefit documents");
+    expect(result.detectedRequests).toContain("mobile home park documents");
+    expect(result.facts).toContain("The letter asks for voter registration cards.");
+    expect(result.facts).toContain("The letter asks for cable or satellite bills.");
+    expect(result.facts).toContain("The letter asks for medical provider bills.");
+    expect(result.facts).toContain("The letter asks for social service organization documents.");
+    expect(result.facts).toContain("The letter asks for benefit documents.");
+    expect(result.facts).toContain("The letter asks for mobile home park documents.");
+  });
+
   it("extracts deed mortgage and title requests from information letters", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -2827,6 +2848,12 @@ describe("OpenRelief domain core", () => {
       "bank statements",
       "credit card statements",
       "phone bills",
+      "cable or satellite bills",
+      "medical provider bills",
+      "voter registration cards",
+      "social service organization documents",
+      "benefit documents",
+      "mobile home park documents",
       "vehicle registrations",
       "affidavits of residency",
       "court documentation",

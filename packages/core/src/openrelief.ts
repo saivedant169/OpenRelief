@@ -560,6 +560,50 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for phone bills."
   },
   {
+    request: "cable or satellite bills",
+    phrases: ["cable bill", "cable bills", "satellite bill", "satellite bills", "cable/satellite bill", "cable/satellite bills"],
+    fact: "The letter asks for cable or satellite bills."
+  },
+  {
+    request: "medical provider bills",
+    phrases: ["medical provider bill", "medical provider bills", "medical provider's bill", "medical provider's bills"],
+    fact: "The letter asks for medical provider bills."
+  },
+  {
+    request: "voter registration cards",
+    phrases: ["voter registration card", "voter registration cards"],
+    fact: "The letter asks for voter registration cards."
+  },
+  {
+    request: "social service organization documents",
+    phrases: ["social service organization document", "social service organization documents"],
+    fact: "The letter asks for social service organization documents."
+  },
+  {
+    request: "benefit documents",
+    phrases: [
+      "federal benefit document",
+      "federal benefit documents",
+      "state benefit document",
+      "state benefit documents",
+      "federal or state benefit document",
+      "federal or state benefit documents"
+    ],
+    fact: "The letter asks for benefit documents."
+  },
+  {
+    request: "mobile home park documents",
+    phrases: [
+      "mobile home park document",
+      "mobile home park documents",
+      "mobile home park letter",
+      "mobile home park letters",
+      "mobile home park owner",
+      "mobile home park manager"
+    ],
+    fact: "The letter asks for mobile home park documents."
+  },
+  {
     request: "vehicle registrations",
     phrases: ["motor vehicle registration", "motor vehicle registrations", "vehicle registration", "vehicle registrations"],
     fact: "The letter asks for vehicle registrations."
@@ -1202,6 +1246,12 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "bank statements",
             "credit card statements",
             "phone bills",
+            "cable or satellite bills",
+            "medical provider bills",
+            "voter registration cards",
+            "social service organization documents",
+            "benefit documents",
+            "mobile home park documents",
             "vehicle registrations",
             "affidavits of residency",
             "court documentation",
