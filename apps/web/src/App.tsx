@@ -123,6 +123,7 @@ type SavedCaseSummary = {
   riskFlags: string[];
   summary: string;
   notes: string;
+  updatedAt: string;
 };
 
 const readSavedDraft = (): SavedDraft => {
@@ -162,6 +163,16 @@ const parseAvailableEvidenceText = (value: string): string[] =>
 const formatRiskFlag = (flag: string): string => riskFlagLabels[flag] ?? flag;
 
 const formatDeadlineSource = (source: Deadline["source"]): string => deadlineSourceLabels[source];
+
+const currentTimestamp = (): string => new Date().toISOString();
+
+const normalizeSavedCaseUpdatedAt = (value: unknown): string =>
+  typeof value === "string" ? limitText(redactRestrictedIdentifiers(value), 64) : "";
+
+const formatSavedCaseUpdatedAt = (updatedAt: string): string => {
+  const date = new Date(updatedAt);
+  return Number.isNaN(date.getTime()) ? "Not recorded" : updatedAt.slice(0, 16).replace("T", " ");
+};
 
 const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
 
@@ -264,6 +275,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
       redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : ""),
       maxOptionalTextLength
     );
+    const sanitizedUpdatedAt = normalizeSavedCaseUpdatedAt(candidate.updatedAt);
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
     const restoredRiskFlags = detectRiskFlags(sanitizedIntakeText, restoredAnalysis);
     const restoredChecklist = createChecklist(
@@ -307,7 +319,8 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         checklistStatuses,
         riskFlags: redactStringList(restoredRiskFlags),
         summary: redactRestrictedIdentifiers(restoredAnalysis.summary),
-        notes: sanitizedNotes
+        notes: sanitizedNotes,
+        updatedAt: sanitizedUpdatedAt
       }
     ];
   });
@@ -486,6 +499,7 @@ export const App = () => {
       sourceIds
     }));
     const snapshotId = activeSavedCaseId ?? nextLocalCaseId(savedCases);
+    const updatedAt = currentTimestamp();
     setSavedCases((current) => {
       const existingCase = current.find((savedCase) => savedCase.id === snapshotId);
       const snapshot: SavedCaseSummary = {
@@ -502,7 +516,8 @@ export const App = () => {
         checklistStatuses: normalizeChecklistStatuses(checklistItems, existingCase?.checklistStatuses),
         riskFlags,
         summary: analysis.summary,
-        notes: existingCase?.notes ?? ""
+        notes: existingCase?.notes ?? "",
+        updatedAt
       };
 
       return [snapshot, ...current.filter((item) => item.id !== snapshot.id)].slice(0, 10);
@@ -548,10 +563,11 @@ export const App = () => {
       return;
     }
 
+    const updatedAt = currentTimestamp();
     setSavedCases((current) =>
       current.map((savedCase) =>
         savedCase.id === activeSavedCaseId
-          ? { ...savedCase, notes: limitText(redactRestrictedIdentifiers(notes), maxOptionalTextLength) }
+          ? { ...savedCase, notes: limitText(redactRestrictedIdentifiers(notes), maxOptionalTextLength), updatedAt }
           : savedCase
       )
     );
@@ -559,6 +575,7 @@ export const App = () => {
   };
 
   const handleChecklistStatus = (savedCaseId: string, itemId: string, checked: boolean) => {
+    const updatedAt = currentTimestamp();
     setSavedCases((current) =>
       current.map((savedCase) =>
         savedCase.id === savedCaseId
@@ -567,7 +584,8 @@ export const App = () => {
               checklistStatuses: {
                 ...savedCase.checklistStatuses,
                 [itemId]: checked ? "done" : "todo"
-              }
+              },
+              updatedAt
             }
           : savedCase
       )
@@ -748,6 +766,7 @@ export const App = () => {
                       <span>
                         Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done
                       </span>
+                      <span>Last updated: {formatSavedCaseUpdatedAt(savedCase.updatedAt)}</span>
                       <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
                       <span>
                         Flags:{" "}

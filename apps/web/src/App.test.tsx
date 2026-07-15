@@ -535,6 +535,7 @@ describe("OpenRelief web workflow", () => {
 
     expect(within(queue).getByText("Status: Needs review")).toBeInTheDocument();
     expect(within(queue).getByText("Missing: 1")).toBeInTheDocument();
+    expect(within(queue).getByText(/^Last updated: \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/)).toBeInTheDocument();
     expect(within(queue).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
     expect(within(queue).getByText("Flags: Denial or appeal deadline")).toBeInTheDocument();
 
@@ -644,6 +645,7 @@ describe("OpenRelief web workflow", () => {
       id: string;
       letterType: string;
       letterText: string;
+      updatedAt: string;
       checklistItems: Array<{ id: string; editable: boolean; deadline?: { text: string } }>;
     }>;
 
@@ -653,6 +655,7 @@ describe("OpenRelief web workflow", () => {
       letterType: "denial"
     });
     expect(archive[0].letterText).toContain("proof of occupancy");
+    expect(archive[0].updatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:/);
     expect(archive[0].checklistItems.find((item) => item.id === "human-review")?.editable).toBe(true);
     expect(archive[0].checklistItems.find((item) => item.id === "review-deadline")?.deadline?.text).toBe(
       "appeal within 60 days"
