@@ -1383,6 +1383,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts ownership insurance evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Homeowners insurance statement number HIS-123456 should not stay in notes.",
+        "Real property insurance payment record number RPI-123456 should not stay in notes.",
+        "Structural insurance document number SID-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("HIS-123456");
+    expect(redacted).not.toContain("RPI-123456");
+    expect(redacted).not.toContain("SID-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts ownership title and contract identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
