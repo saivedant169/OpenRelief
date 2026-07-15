@@ -15,6 +15,25 @@ test("letter review produces checklist and evidence packet", async ({ page }) =>
   await expect(page.getByText("Appeal FEMA's Decision")).toBeVisible();
 });
 
+test("immediate danger guidance appears before paperwork", async ({ page }) => {
+  await page.goto("/");
+
+  await page
+    .getByLabel("Immediate needs and risks")
+    .fill("There is fire outside right now and I am in immediate danger.");
+
+  const emergencyAlert = page.getByRole("alert", { name: "Immediate danger guidance" });
+  await expect(emergencyAlert).toContainText("contact local emergency services now");
+  await expect(page.getByText(/hotline|911|988/i)).toHaveCount(0);
+
+  await page.getByRole("button", { name: /analyze letter/i }).click();
+
+  await expect(page.getByText("immediate_danger")).toBeVisible();
+  const firstChecklistItem = page.locator(".checklist li").first();
+  await expect(firstChecklistItem).toContainText("Request human review");
+  await expect(firstChecklistItem).toContainText("Immediate danger should be handled before paperwork");
+});
+
 test("app shell reloads offline after service worker cache", async ({ context, page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
