@@ -37,6 +37,7 @@ describe("OpenRelief web workflow", () => {
     expect(checklistCard).not.toBeNull();
     expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
     expect(within(checklistCard as HTMLElement).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
+    expect(within(checklistCard as HTMLElement).getByText("Deadline source: Uploaded letter")).toBeInTheDocument();
     expect(within(checklistCard as HTMLElement).getAllByText(/Source: /).length).toBeGreaterThan(0);
     expect(within(checklistCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
 
@@ -588,6 +589,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(checklistSection as HTMLElement).getByText("Collect proof of occupancy")).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
     expect(within(checklistSection as HTMLElement).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
+    expect(within(checklistSection as HTMLElement).getByText("Deadline source: Uploaded letter")).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getAllByText(/Appeal FEMA's Decision/).length).toBeGreaterThan(0);
     expect(
       within(checklistSection as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length

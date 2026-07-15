@@ -1031,6 +1031,9 @@ export const App = () => {
                         {item.editable ? <span className="editable-mark">Editable</span> : null}
                         <p>{item.reason}</p>
                         {item.deadline ? <span>Deadline: {item.deadline.text}</span> : null}
+                        {item.deadline ? (
+                          <span className="item-sources">Deadline source: {formatDeadlineSource(item.deadline.source)}</span>
+                        ) : null}
                         <span className="item-sources">
                           Source:{" "}
                           {item.sourceIds
@@ -1105,6 +1108,11 @@ export const App = () => {
                             </label>
                             <span>{item.reason}</span>
                             {item.deadline ? <span>Deadline: {item.deadline.text}</span> : null}
+                            {item.deadline ? (
+                              <span className="item-sources">
+                                Deadline source: {formatDeadlineSource(item.deadline.source)}
+                              </span>
+                            ) : null}
                             <span className="item-sources">
                               Source:{" "}
                               {item.sourceIds
