@@ -47,4 +47,5 @@ This launch gate must pass before public demo promotion. It checks completed ses
 - [Demo script](demo-script.md)
 - [Demo video runbook](demo-video-runbook.md)
 - [Partner outreach](partner-outreach.md)
+- [Partner review targets](partner-review-targets.md)
 - [Partner review log](partner-review-log.md)

@@ -75,6 +75,7 @@ Start here:
 - [Demo script](docs/demo-script.md)
 - [Demo video runbook](docs/demo-video-runbook.md)
 - [Partner outreach](docs/partner-outreach.md)
+- [Partner review targets](docs/partner-review-targets.md)
 - [Partner review log](docs/partner-review-log.md)
 - [V1 release audit](docs/v1-release-audit.md)
 - [Technical report](docs/technical-report.md)

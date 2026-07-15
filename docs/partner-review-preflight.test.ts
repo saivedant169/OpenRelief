@@ -77,13 +77,26 @@ decision_owner: Saivedant Hava
 decision_date: YYYY-MM-DD
 notes:
 `;
-const outreach = "Partner Outreach\nNo real survivor PII\nconsent\nlegal aid\ndisaster case worker\n";
+const outreach =
+  "Partner Outreach\nNo real survivor PII\nconsent\nlegal aid\ndisaster case worker\ndocs/partner-review-targets.md\n";
+const targets = `# Partner Review Targets
+
+No real survivor PII
+
+Disaster Legal Assistance Collaborative
+LawHelpCA
+Legal Aid Foundation of Los Angeles
+Disability Rights California
+Listos California
+California Volunteers
+docs/partner-review-log.md
+`;
 const baselineFailures = "missing_human_escalation\n";
 const demoRunbook = "No real survivor PII\n";
 const passingReport = JSON.stringify({ caseCount: 108, metrics: { passedCount: 108, failedCount: 0 } });
 
 const runPartnerPreflight = (
-  overrides: Partial<Record<"log" | "outreach" | "baseline" | "demo" | "report", string>> & {
+  overrides: Partial<Record<"log" | "outreach" | "targets" | "baseline" | "demo" | "report", string>> & {
     omitEvidencePaths?: string[];
   } = {}
 ) => {
@@ -95,6 +108,7 @@ const runPartnerPreflight = (
     mkdirSync(path.join(tempRoot, "packages", "evals", "reports"), { recursive: true });
     writeFileSync(path.join(tempRoot, "docs", "partner-review-log.md"), overrides.log ?? reviewLog);
     writeFileSync(path.join(tempRoot, "docs", "partner-outreach.md"), overrides.outreach ?? outreach);
+    writeFileSync(path.join(tempRoot, "docs", "partner-review-targets.md"), overrides.targets ?? targets);
     writeFileSync(path.join(tempRoot, "docs", "baseline-failure-examples.md"), overrides.baseline ?? baselineFailures);
     writeFileSync(path.join(tempRoot, "docs", "demo-video-runbook.md"), overrides.demo ?? demoRunbook);
     writeFileSync(path.join(tempRoot, "packages", "evals", "reports", "california-wildfire-v1.json"), overrides.report ?? passingReport);
@@ -189,6 +203,15 @@ describe("partner review preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner outreach missing: consent");
+  });
+
+  it("rejects missing partner review targets", () => {
+    const result = runPartnerPreflight({
+      targets: targets.replace("Disaster Legal Assistance Collaborative\n", "")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review targets missing: Disaster Legal Assistance Collaborative");
   });
 
   it("rejects failing eval report", () => {

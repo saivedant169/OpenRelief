@@ -64,6 +64,8 @@ Use:
 - `local-first`,
 - `V1`.
 
+Start from the public target list in `docs/partner-review-targets.md`.
+
 Do not include real survivor PII in titles, bodies, screenshots, commits, branches, or attachments.
 
 ## Launch Decision

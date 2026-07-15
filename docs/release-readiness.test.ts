@@ -26,6 +26,7 @@ const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
 const demoVideoRunbookPath = path.join(process.cwd(), "docs", "demo-video-runbook.md");
 const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
+const partnerReviewTargetsPath = path.join(process.cwd(), "docs", "partner-review-targets.md");
 const partnerReviewLogPath = path.join(process.cwd(), "docs", "partner-review-log.md");
 const packageJsonPath = path.join(process.cwd(), "package.json");
 const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
@@ -304,10 +305,12 @@ describe("release readiness", () => {
     expect(existsSync(demoScriptPath)).toBe(true);
     expect(existsSync(demoVideoRunbookPath)).toBe(true);
     expect(existsSync(partnerOutreachPath)).toBe(true);
+    expect(existsSync(partnerReviewTargetsPath)).toBe(true);
 
     const demoScript = readFileSync(demoScriptPath, "utf8");
     const demoVideoRunbook = readFileSync(demoVideoRunbookPath, "utf8");
     const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
+    const partnerReviewTargets = readFileSync(partnerReviewTargetsPath, "utf8");
 
     expect(demoScript).toContain("OpenRelief Demo Script");
     expect(demoScript).toContain("synthetic");
@@ -327,6 +330,12 @@ describe("release readiness", () => {
     expect(partnerOutreach).toContain("disaster case worker");
     expect(partnerOutreach).toContain("No real survivor PII");
     expect(partnerOutreach).toContain("consent");
+    expect(partnerOutreach).toContain("partner-review-targets.md");
+    expect(partnerReviewTargets).toContain("Partner Review Targets");
+    expect(partnerReviewTargets).toContain("Disaster Legal Assistance Collaborative");
+    expect(partnerReviewTargets).toContain("LawHelpCA");
+    expect(partnerReviewTargets).toContain("Disability Rights California");
+    expect(partnerReviewTargets).toContain("No real survivor PII");
   });
 
   it("defines partner review evidence controls", () => {
@@ -339,6 +348,7 @@ describe("release readiness", () => {
     const releaseReadiness = readFileSync(releaseReadinessPath, "utf8");
     const technicalReport = readFileSync(technicalReportPath, "utf8");
     const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
+    const partnerReviewTargets = readFileSync(partnerReviewTargetsPath, "utf8");
     const partnerReviewLog = readFileSync(partnerReviewLogPath, "utf8");
     const partnerReviewPreflight = readFileSync(partnerReviewPreflightPath, "utf8");
     const partnerReviewIssue = readFileSync(partnerReviewIssuePath, "utf8");
@@ -348,11 +358,13 @@ describe("release readiness", () => {
     expect(packageJson.scripts.check).toContain("npm run partner:review:preflight");
     expect(readme).toContain("Partner review log");
     expect(releaseReadiness).toContain("Partner review log");
+    expect(releaseReadiness).toContain("Partner review targets");
     expect(releaseReadiness).toContain("Partner review issue template");
     expect(releaseReadiness).toContain("public tracking issue URL");
     expect(technicalReport).toContain("Partner review log");
     expect(partnerOutreach).toContain("Partner review log");
     expect(partnerOutreach).toContain("partner-review");
+    expect(partnerReviewTargets).toContain("California Volunteers");
     expect(labels).toContain("partner-review");
     expect(partnerReviewIssue).toContain("No real survivor PII");
     expect(partnerReviewIssue).toContain("synthetic examples only");

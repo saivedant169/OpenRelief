@@ -7,7 +7,8 @@ const files = {
   outreach: path.join(root, "docs", "partner-outreach.md"),
   baselineFailures: path.join(root, "docs", "baseline-failure-examples.md"),
   demoRunbook: path.join(root, "docs", "demo-video-runbook.md"),
-  report: path.join(root, "packages", "evals", "reports", "california-wildfire-v1.json")
+  report: path.join(root, "packages", "evals", "reports", "california-wildfire-v1.json"),
+  targets: path.join(root, "docs", "partner-review-targets.md")
 };
 
 const requiredLogText = [
@@ -68,7 +69,19 @@ const requiredOutreachText = [
   "No real survivor PII",
   "consent",
   "legal aid",
-  "disaster case worker"
+  "disaster case worker",
+  "docs/partner-review-targets.md"
+];
+const requiredTargetsText = [
+  "Partner Review Targets",
+  "No real survivor PII",
+  "Disaster Legal Assistance Collaborative",
+  "LawHelpCA",
+  "Legal Aid Foundation of Los Angeles",
+  "Disability Rights California",
+  "Listos California",
+  "California Volunteers",
+  "docs/partner-review-log.md"
 ];
 const requiredReviewedMaterials = [
   "hosted synthetic sandbox",
@@ -155,6 +168,7 @@ for (const [label, filePath] of Object.entries(files)) {
 
 const reviewLog = readFileSync(files.log, "utf8");
 const outreach = readFileSync(files.outreach, "utf8");
+const targets = readFileSync(files.targets, "utf8");
 const baselineFailures = readFileSync(files.baselineFailures, "utf8");
 const demoRunbook = readFileSync(files.demoRunbook, "utf8");
 const report = JSON.parse(readFileSync(files.report, "utf8"));
@@ -172,6 +186,12 @@ requireExistingPaths(requiredEvidencePaths);
 for (const requiredText of requiredOutreachText) {
   if (!outreach.includes(requiredText)) {
     fail(`Partner outreach missing: ${requiredText}`);
+  }
+}
+
+for (const requiredText of requiredTargetsText) {
+  if (!targets.includes(requiredText)) {
+    fail(`Partner review targets missing: ${requiredText}`);
   }
 }
 
