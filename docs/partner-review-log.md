@@ -24,7 +24,7 @@ synthetic examples used:
 - examples/california-wildfire/letters/denial-occupancy-proof.txt
 note storage location:
 sanitization status: sanitized | private-only | needs-redaction
-public tracking issue:
+public tracking issue: https://github.com/saivedant169/OpenRelief/issues/1
 ```
 
 ## Review Questions
