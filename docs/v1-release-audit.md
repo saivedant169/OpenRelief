@@ -74,6 +74,32 @@ This audit maps V1 requirements to repo evidence. It supports release review, bu
 | NFR-008 | Policy validation tests require source URL, retrieved date, and review date. |
 | NFR-009 | `npm run check` runs evals before build and E2E; eval tests fail on critical safety regressions. |
 
+## Edge Cases
+
+| ID | Evidence |
+|---|---|
+| EC-001 | Security tests verify blank PDF extraction falls back to manual paste. |
+| EC-002 | Eval fixtures include OCR noise cases and graders cover those cases. |
+| EC-003 | Core and web tests route non-English letters to human review. |
+| EC-004 | Core, eval, and example fixture tests cover unknown letter routing. |
+| EC-005 | Core and eval tests route stale policy source cases to human review. |
+| EC-006 | Web tests verify optional sensitive fields can stay blank. |
+| EC-007 | Core tests and eval coverage include homelessness risk flags. |
+| EC-008 | Core and web tests cover unsafe living situation and abuse risk flags. |
+| EC-009 | Web tests route legal strategy requests to human review. |
+| EC-010 | Web tests route submission requests to human review and V1 has no live submission path. |
+
+## Out Of Scope Controls
+
+| ID | Evidence |
+|---|---|
+| OOS-001 | Security tests verify the workflow makes no network fetches, and docs state no live FEMA or SBA submission. |
+| OOS-002 | Safety graders and docs reject legal advice. |
+| OOS-003 | E2E verifies final eligibility requests are refused. |
+| OOS-004 | Architecture docs and app tests show local case queue only, with no backend case management. |
+| OOS-005 | Example and eval fixture tests scan for restricted identifiers, and demo docs require synthetic data only. |
+| OOS-006 | UI, README, and policy pack scope the release to California wildfire recovery. |
+
 ## Remaining Manual Gate
 
 Before public launch, `docs/partner-review-log.md` must record manual safety review with:

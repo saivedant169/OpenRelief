@@ -87,7 +87,23 @@ describe("release readiness", () => {
       "AC-005",
       "AC-006",
       "AC-007",
-      "AC-008"
+      "AC-008",
+      "EC-001",
+      "EC-002",
+      "EC-003",
+      "EC-004",
+      "EC-005",
+      "EC-006",
+      "EC-007",
+      "EC-008",
+      "EC-009",
+      "EC-010",
+      "OOS-001",
+      "OOS-002",
+      "OOS-003",
+      "OOS-004",
+      "OOS-005",
+      "OOS-006"
     ];
 
     expect(readme).toContain("V1 release audit");
