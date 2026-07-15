@@ -40,6 +40,14 @@ const steps = [
   ["Export", "Save or print packet"]
 ];
 
+const immediateNeedOptions = [
+  { label: "Housing", text: "No place to stay." },
+  { label: "Medical", text: "Need medication." },
+  { label: "Food", text: "Need food assistance." },
+  { label: "Safety", text: "Unsafe living situation." },
+  { label: "Disability accommodation", text: "Need disability accommodation." }
+];
+
 const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => [source.id, source]));
 const storageKeyPrefix = "openrelief:v1:";
 const caseStorageKey = "openrelief:v1:case";
@@ -800,6 +808,19 @@ export const App = () => {
     }
   };
 
+  const handleImmediateNeed = (text: string, checked: boolean) => {
+    const currentLines = intakeText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && line !== text);
+    const nextLines = checked ? [...currentLines, text] : currentLines;
+
+    setIntakeText(limitText(nextLines.join("\n"), maxOptionalTextLength));
+    setExportText("");
+    setClearArmed(false);
+    setActiveSavedCaseId(null);
+  };
+
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
   const visibleSavedCases = useMemo(() => {
     const search = caseQueueSearch.trim().toLowerCase();
@@ -1091,6 +1112,19 @@ export const App = () => {
               </div>
               <span className="quality">Optional</span>
             </div>
+            <fieldset className="need-options">
+              <legend>Immediate need choices</legend>
+              {immediateNeedOptions.map((option) => (
+                <label key={option.label}>
+                  <input
+                    type="checkbox"
+                    checked={intakeText.split("\n").map((line) => line.trim()).includes(option.text)}
+                    onChange={(event) => handleImmediateNeed(option.text, event.target.checked)}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </fieldset>
             <textarea
               aria-label="Immediate needs and risks"
               className="intake-textarea"

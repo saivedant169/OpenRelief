@@ -469,10 +469,47 @@ textarea {
   min-height: 120px;
 }
 
+.need-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0 0 12px;
+  border: 0;
+}
+
+.need-options legend {
+  width: 100%;
+  margin-bottom: 2px;
+  color: #344253;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.need-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 10px;
+  color: #1d2733;
+  background: #f2f5f8;
+  border: 1px solid #c8d1dc;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.need-options input {
+  width: 18px;
+  height: 18px;
+}
+
 textarea:focus,
 button:focus-visible,
 a:focus-visible,
-.file-control:focus-within {
+.file-control:focus-within,
+.need-options:focus-within {
   outline: 3px solid #7fb2ff;
   outline-offset: 2px;
 }

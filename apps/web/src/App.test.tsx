@@ -201,6 +201,38 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("i".repeat(10_000));
   });
 
+  it("adds immediate need choices to intake risk flags", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("checkbox", { name: "Housing" }));
+    await userEvent.click(screen.getByRole("checkbox", { name: "Medical" }));
+    await userEvent.click(screen.getByRole("checkbox", { name: "Food" }));
+    await userEvent.click(screen.getByRole("checkbox", { name: "Safety" }));
+    await userEvent.click(screen.getByRole("checkbox", { name: "Disability accommodation" }));
+
+    const intakeField = screen.getByLabelText("Immediate needs and risks");
+    expect(intakeField).toHaveValue(
+      [
+        "No place to stay.",
+        "Need medication.",
+        "Need food assistance.",
+        "Unsafe living situation.",
+        "Need disability accommodation."
+      ].join("\n")
+    );
+
+    await userEvent.click(screen.getByRole("checkbox", { name: "Food" }));
+    expect((intakeField as HTMLTextAreaElement).value).not.toContain("Need food assistance.");
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const riskList = screen.getByLabelText("High-risk flags");
+    expect(within(riskList).getByText("Housing instability")).toBeInTheDocument();
+    expect(within(riskList).getByText("Medical emergency")).toBeInTheDocument();
+    expect(within(riskList).getByText("Unsafe home or abuse concern")).toBeInTheDocument();
+    expect(within(riskList).getByText("Disability accommodation")).toBeInTheDocument();
+  });
+
   it("shows send-by date deadlines from uploaded letters", async () => {
     render(<App />);
 
