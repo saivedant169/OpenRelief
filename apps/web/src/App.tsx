@@ -95,7 +95,7 @@ type EvidenceSummaryItem = {
   sourceIds: string[];
 };
 
-type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason" | "sourceIds">;
+type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason" | "editable" | "sourceIds">;
 
 type ChecklistStatus = "todo" | "done";
 
@@ -270,7 +270,14 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     ).map(redactEvidenceSummaryItem);
     const deadlines = restoredAnalysis.detectedDeadlines.map(redactDeadline);
     const checklistItems = restoredChecklist.items
-      .map(({ id, title, category, reason, sourceIds }) => ({ id, title, category, reason, sourceIds }))
+      .map(({ id, title, category, reason, editable, sourceIds }) => ({
+        id,
+        title,
+        category,
+        reason,
+        editable,
+        sourceIds
+      }))
       .map(redactChecklistSummaryItem);
     const checklistStatuses = normalizeChecklistStatuses(checklistItems, candidate.checklistStatuses);
 
@@ -458,11 +465,12 @@ export const App = () => {
       return;
     }
 
-    const checklistItems = checklist.items.map(({ id, title, category, reason, sourceIds }) => ({
+    const checklistItems = checklist.items.map(({ id, title, category, reason, editable, sourceIds }) => ({
       id,
       title,
       category,
       reason,
+      editable,
       sourceIds
     }));
     const snapshotId = activeSavedCaseId ?? nextLocalCaseId(savedCases);
@@ -1049,6 +1057,7 @@ export const App = () => {
                         {activeSavedCase.checklistItems.map((item) => (
                           <li key={item.id}>
                             <strong>{item.title}</strong>
+                            {item.editable ? <span className="editable-mark">Editable</span> : null}
                             <label className="case-task-status">
                               <input
                                 type="checkbox"

@@ -579,6 +579,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByRole("heading", { name: "Checklist" })).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getByText("Request human review")).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getByText("Collect proof of occupancy")).toBeInTheDocument();
+    expect(within(checklistSection as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
     expect(within(checklistSection as HTMLElement).getAllByText(/Appeal FEMA's Decision/).length).toBeGreaterThan(0);
     expect(
       within(checklistSection as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length
@@ -632,7 +633,12 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Saved-case archives may include personal information.")).toBeInTheDocument();
 
     const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
-    const archive = JSON.parse(archiveField.value) as { id: string; letterType: string; letterText: string }[];
+    const archive = JSON.parse(archiveField.value) as Array<{
+      id: string;
+      letterType: string;
+      letterText: string;
+      checklistItems: Array<{ id: string; editable: boolean }>;
+    }>;
 
     expect(archive).toHaveLength(1);
     expect(archive[0]).toMatchObject({
@@ -640,6 +646,7 @@ describe("OpenRelief web workflow", () => {
       letterType: "denial"
     });
     expect(archive[0].letterText).toContain("proof of occupancy");
+    expect(archive[0].checklistItems.find((item) => item.id === "human-review")?.editable).toBe(true);
   });
 
   it("caps saved case archive text before import", async () => {
@@ -751,7 +758,7 @@ describe("OpenRelief web workflow", () => {
       letterType: string;
       summary: string;
       deadlines: Array<{ text: string }>;
-      checklistItems: Array<{ id: string }>;
+      checklistItems: Array<{ id: string; editable: boolean }>;
       riskFlags: string[];
       notes: string;
     }>;
@@ -789,13 +796,14 @@ describe("OpenRelief web workflow", () => {
     const exported = JSON.parse(archiveField.value) as Array<{
       fileName: string;
       letterType: string;
-      checklistItems: Array<{ id: string }>;
+      checklistItems: Array<{ id: string; editable: boolean }>;
       riskFlags: string[];
     }>;
 
     expect(exported[0]?.fileName).toBe("Imported saved case");
     expect(exported[0]?.letterType).toBe("denial");
     expect(exported[0]?.checklistItems.map((item) => item.id)).toContain("human-review");
+    expect(exported[0]?.checklistItems.find((item) => item.id === "human-review")?.editable).toBe(true);
     expect(exported[0]?.riskFlags).toContain("denial_or_appeal");
   });
 
