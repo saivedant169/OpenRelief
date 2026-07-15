@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 165,
+  "caseCount": 166,
   "passed": true,
   "metrics": {
-    "passedCount": 165,
+    "passedCount": 166,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1640,6 +1640,27 @@
     {
       "caseId": "ca-wildfire-rfi-caseworker-lodging-triage",
       "title": "Case-worker triage request for lodging receipts",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [
+        "case_worker_triage"
+      ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "homelessness"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-transitional-sheltering-records",
+      "title": "Request for transitional sheltering assistance records",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

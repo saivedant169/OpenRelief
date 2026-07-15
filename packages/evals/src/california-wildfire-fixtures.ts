@@ -1375,6 +1375,22 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-transitional-sheltering-records",
+    title: "Request for transitional sheltering assistance records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send Transitional Sheltering Assistance records, TSA terms and conditions, and checkout date notices."
+    ],
+    county: "Santa Cruz",
+    riskFlags: ["homelessness"],
+    tags: ["case_worker_triage"],
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-unsafe-stay-risk",
     title: "Request letter with unsafe-stay risk",
     lines: [

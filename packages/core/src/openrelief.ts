@@ -245,7 +245,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:agency|case|contractor)\s+message|appointment\s+note|shelter\s+placement\s+note|unsafe\s+home\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:agency|case|contractor)\s+message|appointment\s+note|shelter\s+placement\s+note|transitional\s+sheltering\s+assistance\s+(?:record|notice|message)|tsa\s+(?:record|notice|message|terms\s+and\s+conditions)|checkout\s+notice|unsafe\s+home\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[communication identifier removed]"
   },
   {
@@ -1011,6 +1011,23 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "shelter placement notes",
     phrases: ["shelter placement notes"],
     fact: "The letter asks for shelter placement notes."
+  },
+  {
+    request: "transitional sheltering assistance records",
+    phrases: [
+      "transitional sheltering assistance records",
+      "transitional sheltering assistance notices",
+      "transitional sheltering assistance messages",
+      "tsa records",
+      "tsa notices",
+      "tsa messages",
+      "tsa terms and conditions",
+      "terms and conditions document",
+      "checkout notice",
+      "checkout date notice",
+      "hotel checkout notice"
+    ],
+    fact: "The letter asks for transitional sheltering assistance records."
   },
   {
     request: "case messages",
@@ -1844,6 +1861,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
           status: evidenceStatus(requests, availableEvidence, [
             "agency messages",
             "shelter placement notes",
+            "transitional sheltering assistance records",
             "case messages",
             "appointment notes",
             "contractor messages",

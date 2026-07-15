@@ -973,6 +973,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[communication identifier removed]");
   });
 
+  it("redacts transitional sheltering assistance identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Transitional sheltering assistance notice number TSA-123456 should not stay in notes.",
+        "TSA terms and conditions number TTC-123456 should not stay in notes.",
+        "Checkout notice number CON-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("TSA-123456");
+    expect(redacted).not.toContain("TTC-123456");
+    expect(redacted).not.toContain("CON-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
   it("redacts contractor message identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Contractor message ID CTM-123456 should not stay in notes.");
 
@@ -3498,6 +3513,17 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for shelter placement notes.");
   });
 
+  it("extracts transitional sheltering assistance record requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send Transitional Sheltering Assistance records, TSA terms and conditions, and checkout date notices."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("transitional sheltering assistance records");
+    expect(result.facts).toContain("The letter asks for transitional sheltering assistance records.");
+  });
+
   it("extracts case message and appointment note requests", () => {
     const caseMessageResult = analyzeLetter([
       "FEMA Notice",
@@ -3572,6 +3598,12 @@ describe("OpenRelief domain core", () => {
 
   it("marks requested shelter placement notes as missing communication evidence", () => {
     const packet = buildEvidencePacket(["shelter placement notes"]);
+
+    expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested transitional sheltering assistance records as missing communication evidence", () => {
+    const packet = buildEvidencePacket(["transitional sheltering assistance records"]);
 
     expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
   });
