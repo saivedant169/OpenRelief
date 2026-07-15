@@ -519,12 +519,16 @@ describe("release readiness", () => {
     const technicalReport = readFileSync(technicalReportPath, "utf8");
     const preflightScript = readFileSync(publicLaunchPreflightPath, "utf8");
 
-    expect(packageJson.scripts["launch:preflight"]).toBe("node scripts/public-launch-preflight.mjs");
+    expect(packageJson.scripts["launch:preflight"]).toBe(
+      "node scripts/public-launch-preflight.mjs && npm run partner:issue:preflight"
+    );
     expect(packageJson.scripts.check).not.toContain("npm run launch:preflight");
     expect(releaseReadiness).toContain("npm run partner:issue:preflight");
     expect(releaseReadiness).toContain("npm run launch:preflight");
     expect(releaseReadiness).toContain("authenticated `gh` CLI");
     expect(technicalReport).toContain("npm run launch:preflight");
+    expect(releaseReadiness).toContain("runs the partner issue preflight");
+    expect(technicalReport).toContain("runs the partner issue preflight");
 
     const requiredLaunchFields = [
       "review_id",

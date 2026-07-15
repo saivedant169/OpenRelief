@@ -22,7 +22,7 @@
     "demo:video:preflight": "node scripts/demo-video-preflight.mjs",
     "partner:review:preflight": "node scripts/partner-review-preflight.mjs",
     "partner:issue:preflight": "node scripts/partner-review-issue-preflight.mjs",
-    "launch:preflight": "node scripts/public-launch-preflight.mjs"
+    "launch:preflight": "node scripts/public-launch-preflight.mjs && npm run partner:issue:preflight"
   },
   "dependencies": {
     "@tesseract.js-data/eng": "^1.0.0",
