@@ -78,6 +78,50 @@ test("immediate danger guidance appears before paperwork", async ({ page }) => {
   await expect(firstChecklistItem).toContainText("Immediate danger should be handled before paperwork");
 });
 
+test("source citations export and clear local data stay usable", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
+
+  await page.getByRole("button", { name: /analyze letter/i }).click();
+
+  const sourceCard = page.locator("article").filter({ has: page.getByRole("heading", { name: "Source citations" }) });
+  await expect(sourceCard.getByRole("link", { name: "Appeal FEMA's Decision" })).toHaveAttribute(
+    "href",
+    "https://www.fema.gov/assistance/individual/after-applying/appeals"
+  );
+  await expect(sourceCard.getByText("https://www.fema.gov/assistance/individual/after-applying/appeals")).toBeVisible();
+  await expect(sourceCard.getByText(/retrieved 2026-07-13/).first()).toBeVisible();
+
+  await page.getByRole("button", { name: "Create packet text" }).click();
+  const exportText = page.getByLabel("Export packet text");
+  await expect(exportText).toContainText("Sources");
+  await expect(exportText).toContainText("https://www.fema.gov/assistance/individual/after-applying/appeals");
+  await expect(exportText).toContainText("retrieved 2026-07-13");
+
+  await page.getByRole("button", { name: "Save case snapshot" }).click();
+  await expect(page.getByRole("region", { name: "Local case queue" }).getByText("Saved case: Claim denial")).toBeVisible();
+  expect(
+    await page.evaluate(() =>
+      Array.from({ length: window.localStorage.length }, (_value, index) => window.localStorage.key(index) ?? "").some(
+        (key) => key.startsWith("openrelief:")
+      )
+    )
+  ).toBe(true);
+
+  await page.getByRole("button", { name: "Clear export local data" }).click();
+  await page.getByRole("button", { name: "Confirm clear export local data" }).click();
+
+  await expect(page.getByLabel("Extracted letter text")).toHaveValue("");
+  await expect(page.getByRole("region", { name: "Local case queue" }).getByText("No saved cases")).toBeVisible();
+  expect(
+    await page.evaluate(() =>
+      Array.from({ length: window.localStorage.length }, (_value, index) => window.localStorage.key(index) ?? "").some(
+        (key) => key.startsWith("openrelief:")
+      )
+    )
+  ).toBe(false);
+});
+
 test("app shell reloads offline after service worker cache", async ({ context, page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
