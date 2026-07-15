@@ -55,6 +55,7 @@ describe("OpenRelief web workflow", () => {
     const exportField = screen.getByLabelText("Export packet text") as HTMLTextAreaElement;
     expect(exportField.value).toContain("OpenRelief packet");
     expect(exportField.value).toContain("This export may include personal information.");
+    expect(exportField.value).toContain("Deadlines\n- appeal window: appeal within 60 days");
 
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
 

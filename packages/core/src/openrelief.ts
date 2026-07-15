@@ -2192,6 +2192,10 @@ export const createCaseExport = (
   policyPack: PolicyPack
 ): string => {
   const checklistLines = checklist.items.map((item) => `- ${item.title}: ${item.reason}`).join("\n");
+  const deadlineLines =
+    letter.detectedDeadlines.length > 0
+      ? letter.detectedDeadlines.map((deadline) => `- ${deadline.label}: ${deadline.text}`).join("\n")
+      : "No deadline found";
   const evidenceLines = evidencePacket.groups
     .map((group) => {
       const items = group.items.map((item) => `  - ${item.label} (${item.status})`).join("\n");
@@ -2213,6 +2217,9 @@ export const createCaseExport = (
     "",
     `Letter type: ${letter.letterType}`,
     `Summary: ${letter.summary}`,
+    "",
+    "Deadlines",
+    deadlineLines,
     "",
     "Checklist",
     checklistLines,
