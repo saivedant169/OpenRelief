@@ -411,6 +411,11 @@ export const App = () => {
     return createAppealDraft(analysis, checklist, californiaWildfirePolicyPack);
   }, [analysis, checklist]);
 
+  const applyExtractedLetterText = (text: string) => {
+    setLetterText(limitText(text, maxLetterTextLength));
+    setLetterError(text.length > maxLetterTextLength ? letterLengthMessage : "");
+  };
+
   const handleAnalyze = () => {
     if (letterText.length > maxLetterTextLength) {
       setLetterError(letterLengthMessage);
@@ -602,13 +607,13 @@ export const App = () => {
     setExportText("");
     setLetterError("");
     if (file.type.startsWith("text/") || hasFileExtension(file, textFileExtensions)) {
-      setLetterText(await readTextFile(file));
+      applyExtractedLetterText(await readTextFile(file));
       return;
     }
 
     if (file.type === "application/pdf" || hasFileExtension(file, pdfFileExtensions)) {
       const extractedText = await extractPdfText(file);
-      setLetterText(extractedText);
+      applyExtractedLetterText(extractedText);
       if (!extractedText.trim()) {
         setFileError(pdfExtractionMessage);
       }
@@ -617,7 +622,7 @@ export const App = () => {
 
     if (file.type.startsWith("image/") || hasFileExtension(file, imageFileExtensions)) {
       const extractedText = await extractImageText(file);
-      setLetterText(extractedText);
+      applyExtractedLetterText(extractedText);
       if (!extractedText.trim()) {
         setFileError(imageExtractionMessage);
       }

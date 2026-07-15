@@ -224,6 +224,22 @@ describe("OpenRelief security smoke", () => {
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 
+  it("caps uploaded TXT text before local draft storage", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text") as HTMLTextAreaElement;
+    const file = new File([`${"x".repeat(50_000)}TAIL`], "long-letter.txt", { type: "text/plain" });
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(letterField.value).toHaveLength(50_000);
+    });
+
+    expect(screen.getByText("Letter text too long. Keep extracted text under 50,000 characters.")).toBeInTheDocument();
+    expect(window.localStorage.getItem("openrelief:v1:case")).not.toContain("TAIL");
+  });
+
   it("extracts local image OCR text and clears stale analysis", async () => {
     render(<App />);
     await loadSampleLetter();
