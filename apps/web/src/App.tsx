@@ -1069,7 +1069,16 @@ export const App = () => {
                       {activeSavedCase.missingEvidence.length > 0 ? (
                         <ul className="case-detail-list">
                           {activeSavedCase.missingEvidence.map((item) => (
-                            <li key={item.label}>{item.label}</li>
+                            <li key={item.label}>
+                              {item.label}
+                              <span className="item-sources">
+                                Source:{" "}
+                                {item.sourceIds
+                                  .map((sourceId) => sourceById.get(sourceId)?.title)
+                                  .filter((title): title is string => Boolean(title))
+                                  .join(", ")}
+                              </span>
+                            </li>
                           ))}
                         </ul>
                       ) : (

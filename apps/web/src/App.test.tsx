@@ -471,10 +471,18 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
 
     const detail = screen.getByRole("region", { name: "Case detail" });
+    const missingEvidenceSection = within(detail)
+      .getByRole("heading", { name: "Missing evidence" })
+      .closest("section");
 
+    expect(missingEvidenceSection).not.toBeNull();
     expect(within(detail).getByRole("heading", { name: "Missing evidence" })).toBeInTheDocument();
-    expect(within(detail).getByText("Lease, mortgage, utility bill, or other occupancy proof")).toBeInTheDocument();
-    expect(within(detail).getByText("Documents Needed for FEMA Assistance")).toBeInTheDocument();
+    expect(
+      within(missingEvidenceSection as HTMLElement).getByText("Lease, mortgage, utility bill, or other occupancy proof")
+    ).toBeInTheDocument();
+    expect(
+      within(missingEvidenceSection as HTMLElement).getByText(/Documents Needed for FEMA Assistance/)
+    ).toBeInTheDocument();
   });
 
   it("shows checklist sources in opened saved case appendix", async () => {
