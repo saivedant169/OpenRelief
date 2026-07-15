@@ -135,7 +135,7 @@ body:
     id: launch-risk
     attributes:
       label: Launch risk
-      description: Highest unresolved risk found during review.
+      description: Highest unresolved risk found during review. Public launch requires low or none.
       options:
         - pending
         - critical

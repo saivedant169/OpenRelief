@@ -405,6 +405,7 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("synthetic examples only");
     expect(partnerReviewIssue).toContain("Sanitized findings");
     expect(partnerReviewIssue).toContain("Launch risk");
+    expect(partnerReviewIssue).toContain("Public launch requires low or none.");
     expect(partnerReviewIssue).toContain("hosted synthetic sandbox: https://saivedant169.github.io/OpenRelief/");
     expect(partnerReviewIssue).toContain("docs/partner-review-packet.md");
     expect(partnerReviewIssue).toContain("packages/evals/reports/california-wildfire-v1.json");
