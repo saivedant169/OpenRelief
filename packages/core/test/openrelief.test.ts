@@ -1383,6 +1383,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts ownership title and contract identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Manufactured home title number MHT-123456 should not stay in notes.",
+        "Home purchase contract number HPC-123456 should not stay in notes.",
+        "Contract for deed number CFD-123456 should not stay in notes.",
+        "Land installment contract number LIC-123456 should not stay in notes.",
+        "Quitclaim deed number QCD-123456 should not stay in notes.",
+        "Bill of sale number BOS-123456 should not stay in notes.",
+        "Bond for title number BFT-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MHT-123456");
+    expect(redacted).not.toContain("HPC-123456");
+    expect(redacted).not.toContain("CFD-123456");
+    expect(redacted).not.toContain("LIC-123456");
+    expect(redacted).not.toContain("QCD-123456");
+    expect(redacted).not.toContain("BOS-123456");
+    expect(redacted).not.toContain("BFT-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts title record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Title record ID TTL-123456 should not stay in notes.");
 
