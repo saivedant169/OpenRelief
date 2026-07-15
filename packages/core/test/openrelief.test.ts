@@ -1196,10 +1196,38 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts expanded cleanup receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Cleaning and sanitizing receipts number CSR-A1B2C3 should not stay in notes.",
+        "Cleanup supplies receipts number CUS-A1B2C3 should not stay in notes.",
+        "Cleaning material receipts number CMR-A1B2C3 should not stay in notes.",
+        "Receipts from any supplies, materials or paid help number RPH-A1B2C3 should not stay in notes.",
+        "Receipts for supplies, materials, or paid help number RSP-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("CSR-A1B2C3");
+    expect(redacted).not.toContain("CUS-A1B2C3");
+    expect(redacted).not.toContain("CMR-A1B2C3");
+    expect(redacted).not.toContain("RPH-A1B2C3");
+    expect(redacted).not.toContain("RSP-A1B2C3");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts replacement item receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Replacement item receipt number RPL-123456 should not stay in notes.");
 
     expect(redacted).not.toContain("RPL-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
+  it("redacts replacement household item receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Receipts for replacement household items number RHI-A1B2C3 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("RHI-A1B2C3");
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
