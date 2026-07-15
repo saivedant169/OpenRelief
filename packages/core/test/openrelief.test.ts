@@ -2665,6 +2665,19 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for rent receipts.");
   });
 
+  it("extracts lease and housing agreement residence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a lease agreement or housing agreement."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("lease agreements");
+    expect(result.detectedRequests).toContain("housing agreements");
+    expect(result.facts).toContain("The letter asks for lease agreements.");
+    expect(result.facts).toContain("The letter asks for housing agreements.");
+  });
+
   it("extracts employer and public official residence statements", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -2736,6 +2749,8 @@ describe("OpenRelief domain core", () => {
       "tax assessment records",
       "title records",
       "lease records",
+      "lease agreements",
+      "housing agreements",
       "utility records",
       "utility bills",
       "rent receipts",

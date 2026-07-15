@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 142,
+  "caseCount": 143,
   "passed": true,
   "metrics": {
-    "passedCount": 142,
+    "passedCount": 143,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -641,6 +641,23 @@
     {
       "caseId": "ca-wildfire-rfi-residence-receipts",
       "title": "Request for residence receipts",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-residence-agreements",
+      "title": "Request for residence agreements",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

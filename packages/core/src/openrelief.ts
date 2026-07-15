@@ -442,6 +442,16 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for lease records."
   },
   {
+    request: "lease agreements",
+    phrases: ["lease agreement", "lease agreements", "written lease agreement", "written lease agreements"],
+    fact: "The letter asks for lease agreements."
+  },
+  {
+    request: "housing agreements",
+    phrases: ["housing agreement", "housing agreements"],
+    fact: "The letter asks for housing agreements."
+  },
+  {
     request: "utility records",
     phrases: ["utility records"],
     fact: "The letter asks for utility records."
@@ -1093,6 +1103,9 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
           status: evidenceStatus(requests, availableEvidence, [
             "proof of occupancy",
             "occupancy records",
+            "lease records",
+            "lease agreements",
+            "housing agreements",
             "utility records",
             "utility bills",
             "rent receipts",
@@ -1121,7 +1134,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "escrow statements",
             "tax assessment records",
             "title records",
-            "lease records"
+            "lease records",
+            "lease agreements"
           ]),
           sourceIds: ["fema-documents"]
         }

@@ -562,6 +562,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-residence-agreements",
+    title: "Request for residence agreements",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a lease agreement or housing agreement."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-residence-statements",
     title: "Request for residence statements",
     lines: [
