@@ -528,7 +528,8 @@ describe("release readiness", () => {
       "manual_safety_review_complete",
       "ready_for_public_demo",
       "decision_owner",
-      "decision_date"
+      "decision_date",
+      "public_issue_safe"
     ];
 
     for (const requiredField of requiredLaunchFields) {
@@ -546,9 +547,11 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
     expect(releaseReadiness).toContain("sanitized review answers");
     expect(releaseReadiness).toContain("sanitized notes");
+    expect(releaseReadiness).toContain("public_issue_safe: yes");
     expect(releaseReadiness).toContain("reviewed materials");
     expect(technicalReport).toContain("completed reviewer session");
     expect(technicalReport).toContain("sanitized review answers");
+    expect(technicalReport).toContain("public_issue_safe: yes");
     expect(technicalReport).toContain("synthetic examples");
   });
 
