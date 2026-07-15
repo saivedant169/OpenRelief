@@ -402,6 +402,7 @@ describe("release readiness", () => {
     expect(partnerReviewTargets).toContain("docs/partner-review-packet.md");
     expect(labels).toContain("partner-review");
     expect(partnerReviewIssue).toContain("No real survivor PII");
+    expect(partnerReviewIssue).toContain('title: "[Partner review]: V1 launch safety review"');
     expect(partnerReviewIssue).toContain("synthetic examples only");
     expect(partnerReviewIssue).toContain("Sanitized findings");
     expect(partnerReviewIssue).toContain("Launch risk");

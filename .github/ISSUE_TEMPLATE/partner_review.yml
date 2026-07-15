@@ -1,6 +1,6 @@
 name: Partner review
 description: Track sanitized partner review for V1 launch readiness.
-title: "[Partner review]: "
+title: "[Partner review]: V1 launch safety review"
 labels: ["partner-review", "safety", "V1"]
 body:
   - type: markdown
