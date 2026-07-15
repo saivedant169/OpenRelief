@@ -23,6 +23,7 @@ body {
 
 button,
 textarea,
+select,
 input {
   font: inherit;
 }
@@ -219,6 +220,46 @@ a:hover {
   border: 1px solid #b8c9e8;
   border-radius: 7px;
   font-weight: 750;
+}
+
+.basic-context-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.field-group {
+  display: grid;
+  gap: 6px;
+  color: #344253;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.field-group input,
+.field-group select {
+  min-height: 44px;
+  padding: 9px 10px;
+  color: #1d2733;
+  background: #ffffff;
+  border: 1px solid #c8d1dc;
+  border-radius: 7px;
+}
+
+.field-with-action {
+  display: flex;
+  gap: 8px;
+}
+
+.field-with-action input {
+  min-width: 0;
+  flex: 1;
+}
+
+.field-with-action .secondary-action {
+  flex: 0 0 auto;
+  min-height: 44px;
 }
 
 .queue-search,
@@ -904,6 +945,18 @@ a:focus-visible,
   .secondary-action {
     width: 100%;
     margin-top: 12px;
+  }
+
+  .basic-context-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-with-action {
+    flex-direction: column;
+  }
+
+  .field-with-action .secondary-action {
+    margin-top: 0;
   }
 
   .results-grid {

@@ -47,6 +47,18 @@ const immediateNeedOptions = [
   { label: "Safety", text: "Unsafe living situation." },
   { label: "Disability accommodation", text: "Need disability accommodation." }
 ];
+const skipContextOption = "Skip for now";
+const disasterTypeOptions = ["Wildfire", "Flood", "Storm", "Other"];
+const housingStatusOptions = ["Own", "Rent", "Displaced", "Other"];
+const insuranceStatusOptions = ["Have claim", "No", "Unsure"];
+const intakeContextLabels = {
+  disasterType: "Disaster type",
+  countyCity: "County/city",
+  housingStatus: "Housing status",
+  insuranceStatus: "Insurance status"
+} as const;
+
+type IntakeContextField = keyof typeof intakeContextLabels;
 
 const sourceById = new Map(californiaWildfirePolicyPack.sources.map((source) => [source.id, source]));
 const storageKeyPrefix = "openrelief:v1:";
@@ -808,6 +820,31 @@ export const App = () => {
     }
   };
 
+  const intakeContextValue = (field: IntakeContextField): string => {
+    const prefix = `${intakeContextLabels[field]}:`;
+    const line = intakeText
+      .split("\n")
+      .map((item) => item.trim())
+      .find((item) => item.startsWith(prefix));
+
+    return line?.slice(prefix.length).trim() ?? "";
+  };
+
+  const handleIntakeContext = (field: IntakeContextField, value: string) => {
+    const prefix = `${intakeContextLabels[field]}:`;
+    const sanitizedValue = redactRestrictedIdentifiers(value.trim());
+    const currentLines = intakeText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && !line.startsWith(prefix));
+    const nextLines = sanitizedValue ? [...currentLines, `${prefix} ${sanitizedValue}`] : currentLines;
+
+    setIntakeText(limitText(nextLines.join("\n"), maxOptionalTextLength));
+    setExportText("");
+    setClearArmed(false);
+    setActiveSavedCaseId(null);
+  };
+
   const handleImmediateNeed = (text: string, checked: boolean) => {
     const currentLines = intakeText
       .split("\n")
@@ -1073,6 +1110,85 @@ export const App = () => {
             <a className="secondary-link" href="#help">
               Go to letter upload
             </a>
+          </section>
+
+          <section className="editor-panel basic-context" aria-label="Basic context">
+            <div className="section-heading">
+              <div>
+                <h2>Basic context</h2>
+                <p>Why we ask: this shapes checklist order.</p>
+              </div>
+              <span className="quality">Optional</span>
+            </div>
+            <div className="basic-context-grid">
+              <div className="field-group">
+                <label htmlFor="disaster-type">Disaster type</label>
+                <select
+                  id="disaster-type"
+                  aria-label="Disaster type"
+                  value={intakeContextValue("disasterType")}
+                  onChange={(event) => handleIntakeContext("disasterType", event.target.value)}
+                >
+                  <option value="">{skipContextOption}</option>
+                  {disasterTypeOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="field-group">
+                <label htmlFor="county-city">County/city</label>
+                <div className="field-with-action">
+                  <input
+                    id="county-city"
+                    aria-label="County/city"
+                    value={intakeContextValue("countyCity")}
+                    onChange={(event) => handleIntakeContext("countyCity", event.target.value)}
+                  />
+                  <button
+                    aria-label="Skip county/city"
+                    className="secondary-action"
+                    type="button"
+                    onClick={() => handleIntakeContext("countyCity", "")}
+                  >
+                    Skip
+                  </button>
+                </div>
+              </div>
+              <div className="field-group">
+                <label htmlFor="housing-status">Housing status</label>
+                <select
+                  id="housing-status"
+                  aria-label="Housing status"
+                  value={intakeContextValue("housingStatus")}
+                  onChange={(event) => handleIntakeContext("housingStatus", event.target.value)}
+                >
+                  <option value="">{skipContextOption}</option>
+                  {housingStatusOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="field-group">
+                <label htmlFor="insurance-status">Insurance status</label>
+                <select
+                  id="insurance-status"
+                  aria-label="Insurance status"
+                  value={intakeContextValue("insuranceStatus")}
+                  onChange={(event) => handleIntakeContext("insuranceStatus", event.target.value)}
+                >
+                  <option value="">{skipContextOption}</option>
+                  {insuranceStatusOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </section>
 
           <section

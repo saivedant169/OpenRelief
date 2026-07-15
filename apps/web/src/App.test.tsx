@@ -76,6 +76,23 @@ describe("OpenRelief web workflow", () => {
     expect(document.querySelector("#evidence-input")).toBeInTheDocument();
   });
 
+  it("shows skippable basic context without restricted identifiers", async () => {
+    render(<App />);
+
+    const context = screen.getByRole("region", { name: "Basic context" });
+    expect(within(context).getByText("Why we ask: this shapes checklist order.")).toBeInTheDocument();
+    expect(within(context).getByLabelText("Disaster type")).toHaveDisplayValue("Skip for now");
+    expect(within(context).getByLabelText("Housing status")).toHaveDisplayValue("Skip for now");
+    expect(within(context).getByLabelText("Insurance status")).toHaveDisplayValue("Skip for now");
+    expect(within(context).queryByLabelText(/ssn|social security|full application/i)).not.toBeInTheDocument();
+
+    await userEvent.type(within(context).getByLabelText("County/city"), "Pasadena");
+    expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("County/city: Pasadena");
+
+    await userEvent.click(within(context).getByRole("button", { name: "Skip county/city" }));
+    expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("");
+  });
+
   it("shows visible human support path before upload", () => {
     render(<App />);
 
@@ -258,6 +275,21 @@ describe("OpenRelief web workflow", () => {
     expect(within(riskList).getByText("Medical emergency")).toBeInTheDocument();
     expect(within(riskList).getByText("Unsafe home or abuse concern")).toBeInTheDocument();
     expect(within(riskList).getByText("Disability accommodation")).toBeInTheDocument();
+  });
+
+  it("persists displaced housing context to escalation flags", async () => {
+    render(<App />);
+
+    await userEvent.selectOptions(screen.getByLabelText("Housing status"), "Displaced");
+    expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("Housing status: Displaced");
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const riskList = screen.getByLabelText("High-risk flags");
+    expect(within(riskList).getByText("Housing instability")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(window.localStorage.getItem("openrelief:v1:case")).toContain("Housing status: Displaced");
+    });
   });
 
   it("shows send-by date deadlines from uploaded letters", async () => {

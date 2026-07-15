@@ -2821,6 +2821,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["homelessness"]);
   });
 
+  it("detects displaced housing status as homelessness risk", () => {
+    const flags = detectRiskFlags("Housing status: Displaced");
+
+    expect(flags).toEqual(["homelessness"]);
+  });
+
   it("detects living in a car as homelessness risk", () => {
     const flags = detectRiskFlags("We are living in our car after the evacuation.");
 
