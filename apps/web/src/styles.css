@@ -741,6 +741,19 @@ a:focus-visible,
   height: 18px;
 }
 
+.case-task-note {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  color: #344253;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.case-task-note textarea {
+  min-height: 76px;
+}
+
 .case-notes {
   min-height: 120px;
 }

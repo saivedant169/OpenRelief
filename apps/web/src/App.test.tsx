@@ -673,6 +673,17 @@ describe("OpenRelief web workflow", () => {
     fireEvent.change(notesField, { target: { value: "n".repeat(10_001) } });
 
     expect(notesField).toHaveValue("n".repeat(10_000));
+
+    const taskNoteField = screen.getByLabelText("Task note for Request human review");
+    await userEvent.type(taskNoteField, "Called legal aid contact.");
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("Called legal aid contact.");
+    });
+
+    fireEvent.change(taskNoteField, { target: { value: "t".repeat(10_001) } });
+
+    expect(taskNoteField).toHaveValue("t".repeat(10_000));
   });
 
   it("shows timeline and checklist in opened saved case detail", async () => {

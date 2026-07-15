@@ -108,6 +108,8 @@ type ChecklistStatus = "todo" | "done";
 
 type ChecklistStatusMap = Record<string, ChecklistStatus>;
 
+type ChecklistNoteMap = Record<string, string>;
+
 type CaseQueueSort = "updated" | "deadline" | "escalation" | "missing" | "unknown";
 
 type SavedCaseSummary = {
@@ -122,6 +124,7 @@ type SavedCaseSummary = {
   missingEvidence: EvidenceSummaryItem[];
   checklistItems: ChecklistSummaryItem[];
   checklistStatuses: ChecklistStatusMap;
+  checklistNotes: ChecklistNoteMap;
   riskFlags: string[];
   summary: string;
   notes: string;
@@ -194,6 +197,20 @@ const normalizeChecklistStatuses = (items: ChecklistSummaryItem[], value: unknow
     const status = candidate[item.id];
     statuses[item.id] = isChecklistStatus(status) ? status : "todo";
     return statuses;
+  }, {});
+};
+
+const normalizeChecklistNotes = (items: ChecklistSummaryItem[], value: unknown): ChecklistNoteMap => {
+  const candidate =
+    typeof value === "object" && value !== null && !Array.isArray(value)
+      ? (value as Record<string, unknown>)
+      : {};
+
+  return items.reduce<ChecklistNoteMap>((notes, item) => {
+    const note = candidate[item.id];
+    notes[item.id] =
+      typeof note === "string" ? limitText(redactRestrictedIdentifiers(note), maxOptionalTextLength) : "";
+    return notes;
   }, {});
 };
 
@@ -342,6 +359,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
       }))
       .map(redactChecklistSummaryItem);
     const checklistStatuses = normalizeChecklistStatuses(checklistItems, candidate.checklistStatuses);
+    const checklistNotes = normalizeChecklistNotes(checklistItems, candidate.checklistNotes);
 
     return [
       {
@@ -356,6 +374,7 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
         missingEvidence,
         checklistItems,
         checklistStatuses,
+        checklistNotes,
         riskFlags: redactStringList(restoredRiskFlags),
         summary: redactRestrictedIdentifiers(restoredAnalysis.summary),
         notes: sanitizedNotes,
@@ -573,6 +592,7 @@ export const App = () => {
         missingEvidence: extractMissingEvidence(evidencePacket),
         checklistItems,
         checklistStatuses: normalizeChecklistStatuses(checklistItems, existingCase?.checklistStatuses),
+        checklistNotes: normalizeChecklistNotes(checklistItems, existingCase?.checklistNotes),
         riskFlags,
         summary: analysis.summary,
         notes: existingCase?.notes ?? "",
@@ -627,6 +647,25 @@ export const App = () => {
       current.map((savedCase) =>
         savedCase.id === activeSavedCaseId
           ? { ...savedCase, notes: limitText(redactRestrictedIdentifiers(notes), maxOptionalTextLength), updatedAt }
+          : savedCase
+      )
+    );
+    setClearArmed(false);
+  };
+
+  const handleChecklistNote = (savedCaseId: string, itemId: string, note: string) => {
+    const updatedAt = currentTimestamp();
+    setSavedCases((current) =>
+      current.map((savedCase) =>
+        savedCase.id === savedCaseId
+          ? {
+              ...savedCase,
+              checklistNotes: {
+                ...savedCase.checklistNotes,
+                [itemId]: limitText(redactRestrictedIdentifiers(note), maxOptionalTextLength)
+              },
+              updatedAt
+            }
           : savedCase
       )
     );
@@ -1269,6 +1308,17 @@ export const App = () => {
                                 .filter((title): title is string => Boolean(title))
                                 .join(", ")}
                             </span>
+                            <label className="case-task-note">
+                              <span>Task note</span>
+                              <textarea
+                                aria-label={`Task note for ${item.title}`}
+                                maxLength={maxOptionalTextLength}
+                                value={activeSavedCase.checklistNotes[item.id] ?? ""}
+                                onChange={(event) =>
+                                  handleChecklistNote(activeSavedCase.id, item.id, event.target.value)
+                                }
+                              />
+                            </label>
                           </li>
                         ))}
                       </ul>
