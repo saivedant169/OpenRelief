@@ -31,7 +31,7 @@ After manual review is recorded in `docs/partner-review-log.md`, run:
 - `npm run partner:issue:preflight`
 - `npm run launch:preflight`
 
-The partner issue preflight also runs inside `npm run check`. It requires authenticated `gh` CLI access and checks the public tracking issue status, labels, reviewed materials, section fields, and launch checklist. The launch gate stays separate from `npm run check` because automated CI should stay green while partner review is still pending. The launch gate must pass before public demo promotion. It checks completed session fields, reviewed materials, synthetic examples, sanitized review answers, sanitized finding ID, severity, area, summary, evidence, recommended change, sanitized notes, `public_issue_safe: yes` findings, owner, and decision date.
+The partner issue preflight also runs inside `npm run check`. It requires authenticated `gh` CLI access and checks the public tracking issue status, labels, reviewed materials, section fields, and launch checklist. The launch gate stays separate from `npm run check` because automated CI should stay green while partner review is still pending. The launch gate must pass before public demo promotion. It checks completed session fields, reviewed materials, synthetic examples, sanitized review answers, sanitized finding ID, severity, area, summary, evidence, recommended change, sanitized notes, `public_issue_safe: yes` findings, owner, recent review date, and decision date.
 
 ## Evidence Sources
 

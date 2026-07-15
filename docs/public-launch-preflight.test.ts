@@ -15,11 +15,22 @@ const evidencePaths = [
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
+const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+const dateDaysFromToday = (days: number) => {
+  const date = new Date();
+  date.setUTCHours(0, 0, 0, 0);
+  date.setUTCDate(date.getUTCDate() + days);
+  return formatDate(date);
+};
+const reviewDate = dateDaysFromToday(-1);
+const staleReviewDate = dateDaysFromToday(-91);
+const earlierDecisionDate = dateDaysFromToday(-2);
+const futureDate = dateDaysFromToday(1);
 
 const completeReviewLog = `# Partner Review Log
 
 review_id: review-001
-review_date: 2026-07-15
+review_date: ${reviewDate}
 Reviewer role: legal aid reviewer
 reviewer organization type: nonprofit legal aid
 Consent record: recorded outside public repo
@@ -53,7 +64,7 @@ high_issues_open: closed
 manual_safety_review_complete: yes
 ready_for_public_demo: yes
 decision_owner: Saivedant Hava
-decision_date: 2026-07-15
+decision_date: ${reviewDate}
 notes: sanitized review found launch guardrails ready
 `;
 
@@ -303,7 +314,7 @@ recommended change: remove screenshot copy before launch
     const result = runLaunchPreflight(
       completeReviewLog
         .replace("- docs/demo-video-runbook.md\n", "")
-        .replace("review_date: 2026-07-15", "review_date: 2026-02-31")
+        .replace(`review_date: ${reviewDate}`, "review_date: 2026-02-31")
         .replace("critical_issues_open: no", "critical_issues_open: yes")
         .replace("decision_owner: Saivedant Hava", "decision_owner: reviewer")
     );
@@ -374,7 +385,7 @@ recommended change: remove screenshot copy before launch
   });
 
   it("rejects invalid review dates", () => {
-    const result = runLaunchPreflight(completeReviewLog.replace("review_date: 2026-07-15", "review_date: 2026-02-31"));
+    const result = runLaunchPreflight(completeReviewLog.replace(`review_date: ${reviewDate}`, "review_date: 2026-02-31"));
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review field must use YYYY-MM-DD: review_date");
@@ -383,8 +394,8 @@ recommended change: remove screenshot copy before launch
   it("rejects unfilled date templates", () => {
     const result = runLaunchPreflight(
       completeReviewLog
-        .replace("review_date: 2026-07-15", "review_date: YYYY-MM-DD")
-        .replace("decision_date: 2026-07-15", "decision_date: YYYY-MM-DD")
+        .replace(`review_date: ${reviewDate}`, "review_date: YYYY-MM-DD")
+        .replace(`decision_date: ${reviewDate}`, "decision_date: YYYY-MM-DD")
     );
 
     expect(result.status).toBe(1);
@@ -395,8 +406,8 @@ recommended change: remove screenshot copy before launch
   it("rejects future review and decision dates", () => {
     const result = runLaunchPreflight(
       completeReviewLog
-        .replace("review_date: 2026-07-15", "review_date: 2999-01-01")
-        .replace("decision_date: 2026-07-15", "decision_date: 2999-01-01")
+        .replace(`review_date: ${reviewDate}`, `review_date: ${futureDate}`)
+        .replace(`decision_date: ${reviewDate}`, `decision_date: ${futureDate}`)
     );
 
     expect(result.status).toBe(1);
@@ -404,8 +415,21 @@ recommended change: remove screenshot copy before launch
     expect(result.stderr).toContain("Public launch blocked: decision_date cannot be in the future.");
   });
 
+  it("rejects stale review dates", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace(`review_date: ${reviewDate}`, `review_date: ${staleReviewDate}`)
+        .replace(`decision_date: ${reviewDate}`, `decision_date: ${staleReviewDate}`)
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: review_date must be within 90 days.");
+  });
+
   it("rejects launch decisions dated before review", () => {
-    const result = runLaunchPreflight(completeReviewLog.replace("decision_date: 2026-07-15", "decision_date: 2026-07-14"));
+    const result = runLaunchPreflight(
+      completeReviewLog.replace(`decision_date: ${reviewDate}`, `decision_date: ${earlierDecisionDate}`)
+    );
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Public launch blocked: decision_date cannot be before review_date.");

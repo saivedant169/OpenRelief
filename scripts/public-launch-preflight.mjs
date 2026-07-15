@@ -46,6 +46,8 @@ const normalizedPlaceholderValues = new Set([
   "unknown"
 ]);
 const dateTemplateValue = "YYYY-MM-DD";
+const maximumReviewAgeDays = 90;
+const millisecondsPerDay = 24 * 60 * 60 * 1000;
 const requiredReviewedMaterials = [
   "hosted synthetic sandbox",
   "docs/demo-script.md",
@@ -339,6 +341,10 @@ if (errors.length === 0) {
 
   if (reviewDateValue && reviewDateValue > today) {
     addError("Public launch blocked: review_date cannot be in the future.");
+  }
+
+  if (reviewDateValue && today.getTime() - reviewDateValue.getTime() > maximumReviewAgeDays * millisecondsPerDay) {
+    addError(`Public launch blocked: review_date must be within ${maximumReviewAgeDays} days.`);
   }
 
   if (decisionDateValue && decisionDateValue > today) {

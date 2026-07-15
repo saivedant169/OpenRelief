@@ -544,6 +544,7 @@ describe("release readiness", () => {
 
     expect(preflightScript).toContain("Saivedant Hava");
     expect(preflightScript).toContain("YYYY-MM-DD");
+    expect(preflightScript).toContain("maximumReviewAgeDays = 90");
     expect(preflightScript).toContain("sanitized");
     expect(preflightScript).toContain("requiredReviewedMaterials");
     expect(preflightScript).toContain("requiredSyntheticExamples");
@@ -557,10 +558,12 @@ describe("release readiness", () => {
     expect(releaseReadiness).toContain("recommended change");
     expect(releaseReadiness).toContain("sanitized notes");
     expect(releaseReadiness).toContain("public_issue_safe: yes");
+    expect(releaseReadiness).toContain("recent review date");
     expect(releaseReadiness).toContain("reviewed materials");
     expect(technicalReport).toContain("completed reviewer session");
     expect(technicalReport).toContain("sanitized review answers");
     expect(technicalReport).toContain("sanitized finding ID");
+    expect(technicalReport).toContain("recent review date");
     expect(technicalReport).toContain("public_issue_safe: yes");
     expect(technicalReport).toContain("synthetic examples");
   });
