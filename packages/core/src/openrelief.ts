@@ -492,6 +492,26 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for phone bills."
   },
   {
+    request: "vehicle registrations",
+    phrases: ["motor vehicle registration", "motor vehicle registrations", "vehicle registration", "vehicle registrations"],
+    fact: "The letter asks for vehicle registrations."
+  },
+  {
+    request: "affidavits of residency",
+    phrases: ["affidavit of residency", "affidavits of residency"],
+    fact: "The letter asks for affidavits of residency."
+  },
+  {
+    request: "court documentation",
+    phrases: ["court documentation", "court documents"],
+    fact: "The letter asks for court documentation."
+  },
+  {
+    request: "school documents",
+    phrases: ["local school documents", "school documents", "school records"],
+    fact: "The letter asks for school documents."
+  },
+  {
     request: "account listed records",
     phrases: ["requested records listed in your account"],
     fact: "The letter asks for records listed in the agency account."
@@ -1114,6 +1134,10 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "bank statements",
             "credit card statements",
             "phone bills",
+            "vehicle registrations",
+            "affidavits of residency",
+            "court documentation",
+            "school documents",
             "other household records"
           ]),
           sourceIds: ["fema-documents"]

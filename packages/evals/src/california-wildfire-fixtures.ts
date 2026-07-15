@@ -604,6 +604,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-alternate-residence-evidence",
+    title: "Request for alternate residence evidence",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send motor vehicle registration, an affidavit of residency, court documentation, or local school documents."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-ownership-documents",
     title: "Request for ownership documents",
     lines: [
