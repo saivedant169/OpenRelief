@@ -51,6 +51,19 @@ const requiredIssueSections = [
       "decision_date: YYYY-MM-DD",
       "notes:"
     ]
+  },
+  {
+    heading: "Completion checklist",
+    texts: [
+      "Consent captured outside public repo.",
+      "Raw notes stored outside public repo.",
+      "Sanitized findings contain no names, addresses, phone numbers, emails, SSNs, agency IDs, insurance details, medical details, immigration details, screenshots, or partner private data.",
+      "Sanitized outcome copied into docs/partner-review-log.md.",
+      "Public issue URL copied into public tracking issue field.",
+      "Critical issues open set to no.",
+      "High issues accepted or closed.",
+      "npm run launch:preflight passes."
+    ]
   }
 ];
 const requiredBodyText = [

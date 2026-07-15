@@ -63,10 +63,16 @@ decision_date: YYYY-MM-DD
 notes:
 \`\`\`
 
-SSNs
-screenshots
-partner private data
-npm run launch:preflight passes`
+## Completion checklist
+
+- [ ] Consent captured outside public repo.
+- [ ] Raw notes stored outside public repo.
+- [ ] Sanitized findings contain no names, addresses, phone numbers, emails, SSNs, agency IDs, insurance details, medical details, immigration details, screenshots, or partner private data.
+- [ ] Sanitized outcome copied into docs/partner-review-log.md.
+- [ ] Public issue URL copied into public tracking issue field.
+- [ ] Critical issues open set to no.
+- [ ] High issues accepted or closed.
+- [ ] npm run launch:preflight passes.`
 };
 
 const runIssuePreflight = (issue = completeIssue, log = reviewLog) => {
@@ -152,11 +158,28 @@ describe("partner review issue preflight", () => {
       ...completeIssue,
       body: completeIssue.body
         .replace("- docs/demo-video-runbook.md\n", "")
-        .replace("npm run launch:preflight passes", "npm run launch:preflight passes\n\ndocs/demo-video-runbook.md")
+        .replace("npm run launch:preflight passes.", "npm run launch:preflight passes.\n\ndocs/demo-video-runbook.md")
     });
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue materials missing: docs/demo-video-runbook.md");
+  });
+
+  it("rejects completion checklist outside its issue section", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body
+        .replace("- [ ] Raw notes stored outside public repo.\n", "")
+        .replace(
+          "## Completion checklist",
+          "Raw notes stored outside public repo.\n\n## Completion checklist"
+        )
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Partner review issue section Completion checklist missing: Raw notes stored outside public repo."
+    );
   });
 
   it("rejects issue URL drift from the review log", () => {
