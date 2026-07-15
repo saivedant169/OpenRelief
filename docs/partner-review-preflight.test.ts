@@ -21,6 +21,8 @@ Synthetic examples only. No real survivor PII.
 
 ## Session Record
 
+Review date must be within 90 days before public launch.
+
 review_id:
 review_date: YYYY-MM-DD
 Reviewer role:

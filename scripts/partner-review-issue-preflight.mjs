@@ -38,6 +38,7 @@ const requiredIssueSections = [
   {
     heading: "Session fields",
     texts: [
+      "Review date must be within 90 days before public launch.",
       "review_id:",
       "review_date: YYYY-MM-DD",
       "Reviewer role:",
@@ -118,6 +119,7 @@ const requiredBodyText = [
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt",
   "review_id:",
+  "Review date must be within 90 days before public launch.",
   "review_date: YYYY-MM-DD",
   "Reviewer role:",
   "reviewer organization type:",

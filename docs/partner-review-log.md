@@ -6,7 +6,7 @@ Keep completed notes outside the public repo until sanitized. Synthetic examples
 
 ## Session Record
 
-Reviewer role and Consent record must be captured before using feedback.
+Reviewer role and Consent record must be captured before using feedback. Review date must be within 90 days before public launch.
 
 ```text
 review_id:

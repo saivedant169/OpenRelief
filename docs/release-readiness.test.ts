@@ -414,6 +414,7 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("partner private data");
     expect(partnerReviewIssue).toContain("review_id");
     expect(partnerReviewIssue).toContain("review_date");
+    expect(partnerReviewIssue).toContain("90 days");
     expect(partnerReviewIssue).toContain("reviewer organization type");
     expect(partnerReviewIssue).toContain("Consent record");
     expect(partnerReviewIssue).toContain("note storage location");
@@ -436,6 +437,7 @@ describe("release readiness", () => {
       "Partner Review Log",
       "Synthetic examples only",
       "No real survivor PII",
+      "Review date must be within 90 days before public launch.",
       "review_id:",
       "review_date: YYYY-MM-DD",
       "Consent record",

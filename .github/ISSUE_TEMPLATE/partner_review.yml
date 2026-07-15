@@ -17,7 +17,7 @@ body:
     id: review-date
     attributes:
       label: review_date
-      description: YYYY-MM-DD.
+      description: YYYY-MM-DD. Must be within 90 days before public launch.
     validations:
       required: true
   - type: input

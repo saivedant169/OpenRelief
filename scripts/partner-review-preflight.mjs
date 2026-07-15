@@ -16,6 +16,7 @@ const requiredLogText = [
   "Partner Review Log",
   "Synthetic examples only",
   "No real survivor PII",
+  "Review date must be within 90 days before public launch.",
   "review_id:",
   "review_date: YYYY-MM-DD",
   "Consent record",

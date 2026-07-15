@@ -42,6 +42,8 @@ Complete external partner review needed before public demo promotion. Public lau
 
 ## Session fields
 
+Review date must be within 90 days before public launch.
+
 \`\`\`text
 review_id:
 review_date: YYYY-MM-DD
