@@ -27,6 +27,9 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Appeal FEMA's Decision")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Letter facts" })).toBeInTheDocument();
     expect(screen.getByText("The letter says appeal within 60 days.")).toBeInTheDocument();
+    const requestedItemsCard = screen.getByRole("heading", { name: "Requested items" }).closest("article");
+    expect(requestedItemsCard).not.toBeNull();
+    expect(within(requestedItemsCard as HTMLElement).getByText("proof of occupancy")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Needs review" })).toBeInTheDocument();
     expect(screen.getByText("OpenRelief cannot confirm final eligibility or legal options.")).toBeInTheDocument();
     expect(screen.getByText("https://www.fema.gov/assistance/individual/after-applying/appeals")).toBeInTheDocument();
@@ -338,6 +341,9 @@ describe("OpenRelief web workflow", () => {
     const deadlinesCard = screen.getByRole("heading", { name: "Deadlines" }).closest("article");
     expect(deadlinesCard).not.toBeNull();
     expect(within(deadlinesCard as HTMLElement).getByText("No deadline found")).toBeInTheDocument();
+    const requestedItemsCard = screen.getByRole("heading", { name: "Requested items" }).closest("article");
+    expect(requestedItemsCard).not.toBeNull();
+    expect(within(requestedItemsCard as HTMLElement).getByText("No specific document request found")).toBeInTheDocument();
   });
 
   it("clears stale analysis after manual letter edits", async () => {

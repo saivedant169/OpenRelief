@@ -1526,6 +1526,19 @@ export const App = () => {
               </article>
 
               <article className="result-card">
+                <h2>Requested items</h2>
+                {analysis.detectedRequests.length > 0 ? (
+                  <ul className="analysis-list">
+                    {analysis.detectedRequests.map((request) => (
+                      <li key={request}>{request}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No specific document request found</p>
+                )}
+              </article>
+
+              <article className="result-card">
                 <h2>Needs review</h2>
                 <ul className="analysis-list">
                   {analysis.uncertainties.map((uncertainty) => (
