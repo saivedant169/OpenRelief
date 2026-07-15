@@ -1997,6 +1997,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance evidence identifier removed]");
   });
 
+  it("redacts generic insurance identifiers", () => {
+    const redacted = redactRestrictedIdentifiers("Insurance number INS-A1B2C3 should not stay in notes.");
+
+    expect(redacted).not.toContain("INS-A1B2C3");
+    expect(redacted).toContain("[insurance evidence identifier removed]");
+  });
+
   it("redacts insurance claim status identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Insurance claim status ID ICS-123456 should not stay in notes.");
 
