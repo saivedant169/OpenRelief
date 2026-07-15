@@ -583,6 +583,7 @@ describe("release readiness", () => {
     expect(technicalReport).toContain("sanitized finding ID");
     expect(technicalReport).toContain("recent review date");
     expect(technicalReport).toContain("public_issue_safe: yes");
+    expect(technicalReport).toContain("final public issue launch risk");
     expect(technicalReport).toContain("synthetic examples");
   });
 

@@ -153,7 +153,7 @@ Demo recording readiness is checked by `npm run demo:video:preflight`. The comma
 
 Partner review readiness is checked by `npm run partner:review:preflight`. The command verifies the Partner review log, partner outreach packet, baseline failure examples, demo runbook, and current passing eval report before review sessions.
 
-Public demo promotion is checked by `npm run launch:preflight` after manual safety review is recorded. The command fails until a completed reviewer session, reviewed materials, synthetic examples, sanitized review answers, sanitized finding ID, severity, area, summary, evidence, recommended change, sanitized notes, `public_issue_safe: yes` findings, no critical issues open, high issues accepted or closed, manual safety review complete, public demo readiness, owner, recent review date, and decision date are recorded.
+Public demo promotion is checked by `npm run launch:preflight` after manual safety review is recorded. The command fails until a completed reviewer session, reviewed materials, synthetic examples, sanitized review answers, sanitized finding ID, severity, area, summary, evidence, recommended change, sanitized notes, `public_issue_safe: yes` findings, final public issue launch risk, no critical issues open, high issues accepted or closed, manual safety review complete, public demo readiness, owner, recent review date, and decision date are recorded.
 
 ## Why This Idea Works
 
