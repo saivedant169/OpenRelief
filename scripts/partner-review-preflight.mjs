@@ -69,6 +69,14 @@ const requiredOutreachText = [
   "legal aid",
   "disaster case worker"
 ];
+const requiredReviewedMaterials = [
+  "hosted synthetic sandbox",
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json"
+];
+const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
 
 const fail = (message) => {
   console.error(message);
@@ -76,6 +84,52 @@ const fail = (message) => {
 };
 
 const minimumCaseCount = 108;
+
+const listItemsForField = (content, field) => {
+  const lines = content.split(/\r?\n/);
+  const fieldLabel = `${field}:`.toLowerCase();
+  let startIndex = -1;
+
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    if (lines[index]?.trim().toLowerCase() === fieldLabel) {
+      startIndex = index;
+      break;
+    }
+  }
+
+  if (startIndex === -1) {
+    return [];
+  }
+
+  const items = [];
+
+  for (const line of lines.slice(startIndex + 1)) {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      continue;
+    }
+
+    if (trimmed.startsWith("- ")) {
+      items.push(trimmed.slice(2).trim());
+      continue;
+    }
+
+    break;
+  }
+
+  return items;
+};
+
+const requireListItems = (content, label, items) => {
+  const listedItems = new Set(listItemsForField(content, label));
+
+  for (const item of items) {
+    if (!listedItems.has(item)) {
+      fail(`Partner review log missing ${label} item: ${item}`);
+    }
+  }
+};
 
 for (const [label, filePath] of Object.entries(files)) {
   if (!existsSync(filePath)) {
@@ -94,6 +148,9 @@ for (const requiredText of requiredLogText) {
     fail(`Partner review log missing: ${requiredText}`);
   }
 }
+
+requireListItems(reviewLog, "materials reviewed", requiredReviewedMaterials);
+requireListItems(reviewLog, "synthetic examples used", requiredSyntheticExamples);
 
 for (const requiredText of requiredOutreachText) {
   if (!outreach.includes(requiredText)) {

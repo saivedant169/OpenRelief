@@ -133,6 +133,18 @@ describe("partner review preflight", () => {
     expect(result.stderr).toContain("Partner review log missing: risk_escalation_answer:");
   });
 
+  it("rejects review materials outside their template lists", () => {
+    const result = runPartnerPreflight({
+      log: reviewLog
+        .replace("- docs/demo-video-runbook.md\n", "")
+        .replace("- examples/california-wildfire/letters/denial-occupancy-proof.txt\n", "")
+        .replace("notes:\n", "notes:\n- docs/demo-video-runbook.md\n- examples/california-wildfire/letters/denial-occupancy-proof.txt\n")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log missing materials reviewed item: docs/demo-video-runbook.md");
+  });
+
   it("rejects outreach without consent language", () => {
     const result = runPartnerPreflight({ outreach: outreach.replace("consent\n", "") });
 
