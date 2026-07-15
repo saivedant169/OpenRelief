@@ -412,14 +412,34 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for deed records."
   },
   {
+    request: "deed of trust",
+    phrases: ["deed of trust", "deeds of trust"],
+    fact: "The letter asks for a deed of trust."
+  },
+  {
     request: "mortgage statements",
     phrases: ["mortgage statement", "mortgage statements"],
     fact: "The letter asks for mortgage statements."
   },
   {
+    request: "escrow analysis",
+    phrases: ["escrow analysis", "escrow analyses"],
+    fact: "The letter asks for escrow analysis."
+  },
+  {
     request: "property tax statements",
     phrases: ["property tax statement", "property tax statements", "property tax record", "property tax records"],
     fact: "The letter asks for property tax statements."
+  },
+  {
+    request: "property tax receipts",
+    phrases: ["property tax receipt", "property tax receipts"],
+    fact: "The letter asks for property tax receipts."
+  },
+  {
+    request: "property tax bills",
+    phrases: ["property tax bill", "property tax bills"],
+    fact: "The letter asks for property tax bills."
   },
   {
     request: "escrow statements",
@@ -1153,8 +1173,12 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "ownership records",
             "proof of ownership",
             "deed records",
+            "deed of trust",
             "mortgage statements",
+            "escrow analysis",
             "property tax statements",
+            "property tax receipts",
+            "property tax bills",
             "escrow statements",
             "tax assessment records",
             "title records",
