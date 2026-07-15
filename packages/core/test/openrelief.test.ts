@@ -446,6 +446,7 @@ describe("OpenRelief domain core", () => {
   it("redacts expanded identity evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
+        "Photo ID number PID-A1B2C3 should not stay in local text.",
         "Federal ID number FED-A1B2C3 should not stay in local text.",
         "Federal-issued id number FID-A1B2C3 should not stay in local text.",
         "State issued id number SID-A1B2C3 should not stay in local text.",
@@ -457,6 +458,7 @@ describe("OpenRelief domain core", () => {
       ].join("\n")
     );
 
+    expect(redacted).not.toContain("PID-A1B2C3");
     expect(redacted).not.toContain("FED-A1B2C3");
     expect(redacted).not.toContain("FID-A1B2C3");
     expect(redacted).not.toContain("SID-A1B2C3");
