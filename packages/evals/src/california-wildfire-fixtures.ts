@@ -1012,6 +1012,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-moving-storage-records",
+    title: "Request for moving and storage records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send moving and storage receipts, moving truck rental receipts, storage unit receipts, and storage expense records."
+    ],
+    county: "Sonoma",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-funeral-records",
     title: "Request for funeral records",
     lines: [

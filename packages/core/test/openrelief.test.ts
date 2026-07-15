@@ -1016,6 +1016,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[child care identifier removed]");
   });
 
+  it("redacts moving and storage record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Moving receipt number MOV-123456 should not stay in notes.",
+        "Storage unit receipt number SUR-123456 should not stay in notes.",
+        "Moving truck rental receipt number MTR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MOV-123456");
+    expect(redacted).not.toContain("SUR-123456");
+    expect(redacted).not.toContain("MTR-123456");
+    expect(redacted).toContain("[moving storage identifier removed]");
+  });
+
   it("redacts funeral record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
@@ -3157,6 +3172,17 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for child care records.");
   });
 
+  it("extracts moving and storage evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send moving and storage receipts, moving truck rental receipts, storage unit receipts, and storage expense records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("moving and storage records");
+    expect(result.facts).toContain("The letter asks for moving and storage records.");
+  });
+
   it("extracts funeral evidence requests", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -3173,7 +3199,8 @@ describe("OpenRelief domain core", () => {
       "generator rental receipts",
       "temporary power equipment receipts",
       "personal property records",
-      "child care records"
+      "child care records",
+      "moving and storage records"
     ]);
 
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");

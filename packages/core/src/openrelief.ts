@@ -255,6 +255,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:moving\s+(?:receipt|expense\s+record|truck\s+rental\s+receipt)|storage\s+(?:receipt|unit\s+receipt|expense\s+record)|moving\s+and\s+storage\s+(?:receipt|expense\s+record))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[moving storage identifier removed]"
+  },
+  {
+    pattern:
       /\b(?:child\s*care|childcare)\s+(?:receipt|contract|estimate|provider\s+letter)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[child care identifier removed]"
   },
@@ -1037,6 +1042,24 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for child care records."
   },
   {
+    request: "moving and storage records",
+    phrases: [
+      "moving and storage records",
+      "moving and storage receipts",
+      "moving and storage expense records",
+      "moving receipts",
+      "moving receipt",
+      "moving expense records",
+      "moving truck rental receipts",
+      "storage receipts",
+      "storage receipt",
+      "storage unit receipts",
+      "storage expense records",
+      "moving and storing personal property"
+    ],
+    fact: "The letter asks for moving and storage records."
+  },
+  {
     request: "funeral records",
     phrases: [
       "funeral assistance records",
@@ -1588,7 +1611,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "temporary power equipment receipts",
             "replacement item receipts",
             "personal property records",
-            "child care records"
+            "child care records",
+            "moving and storage records"
           ]),
           sourceIds: ["fema-documents"]
         }
