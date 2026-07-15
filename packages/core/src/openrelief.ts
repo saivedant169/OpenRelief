@@ -963,6 +963,28 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for replacement item receipts."
   },
   {
+    request: "personal property records",
+    phrases: [
+      "personal property records",
+      "personal property receipts",
+      "personal property inventory",
+      "personal property list",
+      "appliance records",
+      "appliance receipts",
+      "clothing records",
+      "clothing receipts",
+      "computer records",
+      "computer receipts",
+      "occupational tool records",
+      "occupational tool receipts",
+      "educational material records",
+      "educational material receipts",
+      "home furnishing records",
+      "home furnishing receipts"
+    ],
+    fact: "The letter asks for personal property records."
+  },
+  {
     request: "accessibility expense records",
     phrases: ["accessibility and accommodation expense records"],
     fact: "The letter asks for accessibility expense records."
@@ -1491,7 +1513,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "supporting receipts",
             "generator rental receipts",
             "temporary power equipment receipts",
-            "replacement item receipts"
+            "replacement item receipts",
+            "personal property records"
           ]),
           sourceIds: ["fema-documents"]
         }

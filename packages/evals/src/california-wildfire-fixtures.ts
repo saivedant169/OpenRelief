@@ -970,6 +970,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-personal-property-records",
+    title: "Request for personal property records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send personal property receipts, appliance records, clothing receipts, occupational tool records, and educational material records."
+    ],
+    county: "Marin",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-immigration-sensitive-documents",
     title: "Request letter with immigration-sensitive context",
     lines: [

@@ -3079,8 +3079,23 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for temporary power equipment receipts.");
   });
 
+  it("extracts personal property evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send personal property receipts, appliance records, clothing receipts, occupational tool records, and educational material records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("personal property records");
+    expect(result.facts).toContain("The letter asks for personal property records.");
+  });
+
   it("marks requested generator and temporary power evidence as missing", () => {
-    const packet = buildEvidencePacket(["generator rental receipts", "temporary power equipment receipts"]);
+    const packet = buildEvidencePacket([
+      "generator rental receipts",
+      "temporary power equipment receipts",
+      "personal property records"
+    ]);
 
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
   });

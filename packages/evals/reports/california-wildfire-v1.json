@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 151,
+  "caseCount": 152,
   "passed": true,
   "metrics": {
-    "passedCount": 151,
+    "passedCount": 152,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1147,6 +1147,23 @@
       "tags": [
         "ocr_noise"
       ],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-personal-property-records",
+      "title": "Request for personal property records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
       "passed": true,
       "failures": [],
       "sourceIds": [
