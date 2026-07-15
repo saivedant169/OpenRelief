@@ -17,6 +17,7 @@ const requiredIssueMaterials = [
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
 const requiredIssueHeadings = ["Sanitized findings", "Launch risk"];
+const allowedLaunchRiskValues = new Set(["pending", "critical", "high", "medium", "low", "none"]);
 const requiredIssueSections = [
   {
     heading: "Objective",
@@ -317,6 +318,15 @@ for (const section of requiredIssueSections) {
       addError(`Partner review issue section ${section.heading} missing: ${text}`);
     }
   }
+}
+
+const launchRiskLines = sectionTextForHeading(issueBody, "Launch risk")
+  .split(/\r?\n/)
+  .map((line) => line.trim().toLowerCase())
+  .filter(Boolean);
+
+if (!launchRiskLines.some((line) => allowedLaunchRiskValues.has(line))) {
+  addError("Partner review issue section Launch risk must include pending, critical, high, medium, low, or none.");
 }
 
 if (errors.length > 0) {

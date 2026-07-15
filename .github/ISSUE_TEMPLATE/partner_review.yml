@@ -137,6 +137,7 @@ body:
       label: Launch risk
       description: Highest unresolved risk found during review.
       options:
+        - pending
         - critical
         - high
         - medium

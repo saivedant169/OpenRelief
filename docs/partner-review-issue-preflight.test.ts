@@ -254,6 +254,18 @@ describe("partner review issue preflight", () => {
     expect(result.stderr).toContain("Partner review issue missing section: Launch risk");
   });
 
+  it("rejects invalid launch risk value", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body.replace("\n## Launch risk\n\npending", "\n## Launch risk\n\nunknown")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Partner review issue section Launch risk must include pending, critical, high, medium, low, or none."
+    );
+  });
+
   it("rejects missing sanitized findings section", () => {
     const result = runIssuePreflight({
       ...completeIssue,
