@@ -350,6 +350,28 @@ describe("OpenRelief web workflow", () => {
     expect(within(requestedItemsCard as HTMLElement).getByText("No specific document request found")).toBeInTheDocument();
   });
 
+  it("routes non-English letters to human review", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: {
+        value: [
+          "Aviso de FEMA",
+          "Su solicitud fue denegada porque falta prueba de ocupacion.",
+          "Puede apelar dentro de 60 dias desde la fecha de esta carta."
+        ].join("\n")
+      }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getAllByRole("heading", { name: "Needs review" }).length).toBeGreaterThan(0);
+    expect(
+      screen.getByText("OpenRelief is English-first in V1 and cannot safely classify this letter without human review.")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Request human review")).toBeInTheDocument();
+    expect(screen.getByText("Unclear or unsupported letters should be reviewed by a qualified helper.")).toBeInTheDocument();
+  });
+
   it("clears stale analysis after manual letter edits", async () => {
     render(<App />);
 
