@@ -218,9 +218,9 @@ body:
           required: true
         - label: Findings use synthetic examples only.
           required: true
-        - label: Sanitized outcome can be copied into docs/partner-review-log.md.
+        - label: Sanitized outcome copied into docs/partner-review-log.md.
           required: true
-        - label: Public issue URL can be copied into the public tracking issue field.
+        - label: Public issue URL copied into public tracking issue field.
           required: true
-        - label: Launch risk can be copied into the public issue launch risk field.
+        - label: Launch risk copied into public issue launch risk field.
           required: true

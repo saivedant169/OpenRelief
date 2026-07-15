@@ -411,6 +411,9 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("public tracking issue");
     expect(partnerReviewIssue).toContain("public issue launch risk");
     expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
+    expect(partnerReviewIssue).toContain("Sanitized outcome copied into docs/partner-review-log.md.");
+    expect(partnerReviewIssue).toContain("Public issue URL copied into public tracking issue field.");
+    expect(partnerReviewIssue).toContain("Launch risk copied into public issue launch risk field.");
     expect(partnerReviewIssue).toContain("SSNs");
     expect(partnerReviewIssue).toContain("screenshots");
     expect(partnerReviewIssue).toContain("partner private data");
