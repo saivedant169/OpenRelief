@@ -1840,6 +1840,31 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts expanded ownership verification identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Affidavits of heirship number AOH-B2C3D4 should not stay in notes.",
+        "Mobile home park ownership letters number MHP-B2C3D4 should not stay in notes.",
+        "Mobile home park letter confirming ownership number MHC-B2C3D4 should not stay in notes.",
+        "Mobile home park manager ownership letter number MMM-B2C3D4 should not stay in notes.",
+        "Mobile home park owner ownership letter number MOO-B2C3D4 should not stay in notes.",
+        "Court ownership documents number COD-B2C3D4 should not stay in notes.",
+        "Public official letters showing ownership number POS-B2C3D4 should not stay in notes.",
+        "Public official letters confirming ownership number POC-B2C3D4 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("AOH-B2C3D4");
+    expect(redacted).not.toContain("MHP-B2C3D4");
+    expect(redacted).not.toContain("MHC-B2C3D4");
+    expect(redacted).not.toContain("MMM-B2C3D4");
+    expect(redacted).not.toContain("MOO-B2C3D4");
+    expect(redacted).not.toContain("COD-B2C3D4");
+    expect(redacted).not.toContain("POS-B2C3D4");
+    expect(redacted).not.toContain("POC-B2C3D4");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts title record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Title record ID TTL-123456 should not stay in notes.");
 

@@ -310,7 +310,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:last\s+will\s+and\s+testament|affidavit\s+of\s+heirship|mobile\s+home\s+park\s+(?:ownership\s+)?letter|court\s+ownership\s+document|court\s+(?:documentation|documents?)\s+(?:showing|that\s+states?)\s+ownership|public\s+official\s+(?:ownership\s+)?letter)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:last\s+will\s+and\s+testament|affidavits?\s+of\s+heirship|mobile\s+home\s+park\s+(?:ownership\s+letters?|letters?\s+confirming\s+ownership|(?:manager|owner)\s+ownership\s+letters?)|court\s+ownership\s+documents?|court\s+(?:documentation|documents?)\s+(?:showing|that\s+states?)\s+ownership|public\s+official\s+(?:ownership\s+letters?|letters?\s+(?:showing|confirming)\s+ownership))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[residence evidence identifier removed]"
   },
   {
