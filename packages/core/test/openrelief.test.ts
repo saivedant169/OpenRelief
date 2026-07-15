@@ -1118,6 +1118,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[accommodation identifier removed]");
   });
 
+  it("redacts expanded accommodation identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Accommodation receipts number ACR-A1B2C3 should not stay in notes.",
+        "Accessibility and accommodation expense records number AAX-A1B2C3 should not stay in notes.",
+        "Accessibility and accommodation notes ID AAN-A1B2C3 should not stay in notes.",
+        "Medical access notes ID MAN-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("ACR-A1B2C3");
+    expect(redacted).not.toContain("AAX-A1B2C3");
+    expect(redacted).not.toContain("AAN-A1B2C3");
+    expect(redacted).not.toContain("MAN-A1B2C3");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
   it("redacts accommodation note identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Accommodation note ID ACN-123456 should not stay in notes.");
 
