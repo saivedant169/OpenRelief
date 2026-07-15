@@ -94,6 +94,7 @@ export type EvidenceCategory =
   | "receipts"
   | "insurance"
   | "medical_or_transportation"
+  | "funeral"
   | "communications"
   | "other";
 
@@ -256,6 +257,11 @@ const restrictedIdentifierPatterns = [
     pattern:
       /\b(?:child\s*care|childcare)\s+(?:receipt|contract|estimate|provider\s+letter)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[child care identifier removed]"
+  },
+  {
+    pattern:
+      /\b(?:death\s+certificate|(?:funeral|burial|reburial)\s+(?:receipt|contract|estimate|expense\s+document)|funeral\s+home\s+contract)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[funeral identifier removed]"
   },
   {
     pattern:
@@ -1031,6 +1037,27 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for child care records."
   },
   {
+    request: "funeral records",
+    phrases: [
+      "funeral assistance records",
+      "funeral expense documents",
+      "funeral expense records",
+      "funeral receipts",
+      "funeral receipt",
+      "funeral home contracts",
+      "funeral home contract",
+      "burial receipts",
+      "burial receipt",
+      "burial expense estimates",
+      "burial estimates",
+      "reburial expenses",
+      "reburial receipts",
+      "death certificate",
+      "official death certificate"
+    ],
+    fact: "The letter asks for funeral records."
+  },
+  {
     request: "accessibility expense records",
     phrases: ["accessibility and accommodation expense records"],
     fact: "The letter asks for accessibility expense records."
@@ -1600,6 +1627,16 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "accommodation receipts",
             "medical access notes"
           ]),
+          sourceIds: ["fema-documents"]
+        }
+      ]
+    },
+    {
+      category: "funeral",
+      items: [
+        {
+          label: "Funeral, burial, reburial, or death certificate records",
+          status: evidenceStatus(requests, availableEvidence, ["funeral records"]),
           sourceIds: ["fema-documents"]
         }
       ]

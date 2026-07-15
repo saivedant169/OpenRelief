@@ -1012,6 +1012,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-funeral-records",
+    title: "Request for funeral records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send an official death certificate, funeral receipts, a funeral home contract, and burial expense estimates."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-immigration-sensitive-documents",
     title: "Request letter with immigration-sensitive context",
     lines: [

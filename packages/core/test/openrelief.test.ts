@@ -1016,6 +1016,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[child care identifier removed]");
   });
 
+  it("redacts funeral record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Death certificate number DC-123456 should not stay in notes.",
+        "Funeral receipt number FNR-123456 should not stay in notes.",
+        "Funeral home contract number FHC-123456 should not stay in notes.",
+        "Burial estimate number BUR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("DC-123456");
+    expect(redacted).not.toContain("FNR-123456");
+    expect(redacted).not.toContain("FHC-123456");
+    expect(redacted).not.toContain("BUR-123456");
+    expect(redacted).toContain("[funeral identifier removed]");
+  });
+
   it("redacts damage record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Damage record number DMG-123456 should not stay in notes.");
 
@@ -2530,6 +2547,7 @@ describe("OpenRelief domain core", () => {
       "receipts",
       "insurance",
       "medical_or_transportation",
+      "funeral",
       "communications",
       "other"
     ]);
@@ -3139,6 +3157,17 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for child care records.");
   });
 
+  it("extracts funeral evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send an official death certificate, funeral receipts, a funeral home contract, and burial expense estimates."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("funeral records");
+    expect(result.facts).toContain("The letter asks for funeral records.");
+  });
+
   it("marks requested generator temporary power and child care evidence as missing", () => {
     const packet = buildEvidencePacket([
       "generator rental receipts",
@@ -3148,6 +3177,12 @@ describe("OpenRelief domain core", () => {
     ]);
 
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested funeral evidence as missing", () => {
+    const packet = buildEvidencePacket(["funeral records"]);
+
+    expect(packet.groups.find((group) => group.category === "funeral")?.items[0]?.status).toBe("missing");
   });
 
   it("extracts medical transportation and lodging requests from information letters", () => {
