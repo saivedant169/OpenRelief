@@ -12,6 +12,7 @@ Use this packet when asking for V1 safety and workflow review. Use synthetic dat
 
 ## Materials To Send
 
+- `docs/partner-review-packet.md`
 - `docs/demo-script.md`
 - `docs/demo-video-runbook.md`
 - `docs/baseline-failure-examples.md`

@@ -99,6 +99,7 @@ No real survivor PII
 
 https://saivedant169.github.io/OpenRelief/
 https://github.com/saivedant169/OpenRelief/issues/1
+docs/partner-review-packet.md
 docs/demo-script.md
 docs/demo-video-runbook.md
 docs/baseline-failure-examples.md

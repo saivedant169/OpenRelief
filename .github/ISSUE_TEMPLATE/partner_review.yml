@@ -45,7 +45,15 @@ body:
     id: materials-reviewed
     attributes:
       label: Materials reviewed
-      description: List synthetic sandbox, demo script, demo video runbook, baseline failures, eval report, and synthetic examples reviewed.
+      description: Confirm each reviewed material stays synthetic and public-safe.
+      value: |
+        - hosted synthetic sandbox: https://saivedant169.github.io/OpenRelief/
+        - docs/demo-script.md
+        - docs/demo-video-runbook.md
+        - docs/partner-review-packet.md
+        - docs/baseline-failure-examples.md
+        - packages/evals/reports/california-wildfire-v1.json
+        - examples/california-wildfire/letters/denial-occupancy-proof.txt
     validations:
       required: true
   - type: input

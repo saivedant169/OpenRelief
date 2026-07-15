@@ -339,6 +339,7 @@ describe("release readiness", () => {
     expect(partnerReviewPacket).toContain("Partner Review Packet");
     expect(partnerReviewPacket).toContain("https://saivedant169.github.io/OpenRelief/");
     expect(partnerReviewPacket).toContain("https://github.com/saivedant169/OpenRelief/issues/1");
+    expect(partnerReviewPacket).toContain("docs/partner-review-packet.md");
     expect(partnerReviewPacket).toContain("docs/demo-script.md");
     expect(partnerReviewPacket).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(partnerReviewPacket).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
@@ -394,6 +395,9 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("synthetic examples only");
     expect(partnerReviewIssue).toContain("Sanitized findings");
     expect(partnerReviewIssue).toContain("Launch risk");
+    expect(partnerReviewIssue).toContain("hosted synthetic sandbox: https://saivedant169.github.io/OpenRelief/");
+    expect(partnerReviewIssue).toContain("docs/partner-review-packet.md");
+    expect(partnerReviewIssue).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(partnerReviewIssue).toContain("public tracking issue");
     expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
     expect(partnerReviewIssue).toContain("SSNs");
