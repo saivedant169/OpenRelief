@@ -2569,8 +2569,21 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for a replacement ID note.");
   });
 
+  it("extracts driver license and passport requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a driver's license or passport."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("driver license");
+    expect(result.detectedRequests).toContain("passport");
+    expect(result.facts).toContain("The letter asks for a driver license.");
+    expect(result.facts).toContain("The letter asks for a passport.");
+  });
+
   it("marks requested identity evidence as missing", () => {
-    const packet = buildEvidencePacket(["photo id", "replacement id note"]);
+    const packet = buildEvidencePacket(["photo id", "replacement id note", "driver license", "passport"]);
 
     expect(packet.groups.find((group) => group.category === "identity")?.items[0]?.status).toBe("missing");
   });

@@ -442,6 +442,16 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for a replacement ID note."
   },
   {
+    request: "driver license",
+    phrases: ["driver's license", "driver license"],
+    fact: "The letter asks for a driver license."
+  },
+  {
+    request: "passport",
+    phrases: ["passport"],
+    fact: "The letter asks for a passport."
+  },
+  {
     request: "insurance information",
     phrases: ["insurance"],
     fact: "The letter mentions insurance information."
@@ -982,7 +992,13 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
       items: [
         {
           label: "Photo ID or replacement ID note",
-          status: evidenceStatus(requests, availableEvidence, ["photo id", "replacement id note"]),
+          status: evidenceStatus(requests, availableEvidence, [
+            "photo id",
+            "replacement id note",
+            "driver license",
+            "driver's license",
+            "passport"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]
