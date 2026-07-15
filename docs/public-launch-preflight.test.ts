@@ -25,6 +25,12 @@ synthetic examples used:
 - examples/california-wildfire/letters/denial-occupancy-proof.txt
 note storage location: private review notes folder
 sanitization status: sanitized
+workflow_match_answer: reviewer confirmed workflow matches disaster letter review
+misleading_output_answer: reviewer found no misleading output in synthetic flow
+risk_escalation_answer: reviewer confirmed high-risk escalation is visible
+evidence_gap_answer: reviewer found evidence categories acceptable for launch
+citation_gap_answer: reviewer found source claims acceptable for launch
+remove_before_launch_answer: reviewer found no screen to remove before launch
 critical_issues_open: no
 high_issues_open: closed
 manual_safety_review_complete: yes
@@ -70,12 +76,26 @@ describe("public launch preflight", () => {
     const result = runLaunchPreflight(
       completeReviewLog
         .replace("review_id: review-001", "review_id:")
+        .replace("risk_escalation_answer: reviewer confirmed high-risk escalation is visible", "risk_escalation_answer:")
         .replace("notes: sanitized review found launch guardrails ready", "notes:")
     );
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review field incomplete: review_id");
+    expect(result.stderr).toContain("Partner review field incomplete: risk_escalation_answer");
     expect(result.stderr).toContain("Partner review field incomplete: notes");
+  });
+
+  it("rejects missing review answer evidence", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog.replace(
+        "remove_before_launch_answer: reviewer found no screen to remove before launch",
+        "remove_before_launch_answer:"
+      )
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review field incomplete: remove_before_launch_answer");
   });
 
   it("reports multiple launch blockers together", () => {

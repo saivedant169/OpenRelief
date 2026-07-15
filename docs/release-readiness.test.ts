@@ -373,6 +373,13 @@ describe("release readiness", () => {
       "Which evidence category is missing or overbroad?",
       "Which source or policy claim needs stronger citation?",
       "Which screen or wording should be removed before launch?",
+      "Review Answers",
+      "workflow_match_answer:",
+      "misleading_output_answer:",
+      "risk_escalation_answer:",
+      "evidence_gap_answer:",
+      "citation_gap_answer:",
+      "remove_before_launch_answer:",
       "Findings Template",
       "finding_id:",
       "severity: critical | high | medium | low",
@@ -422,6 +429,12 @@ describe("release readiness", () => {
       "Consent record",
       "note storage location",
       "sanitization status",
+      "workflow_match_answer",
+      "misleading_output_answer",
+      "risk_escalation_answer",
+      "evidence_gap_answer",
+      "citation_gap_answer",
+      "remove_before_launch_answer",
       "critical_issues_open",
       "high_issues_open",
       "manual_safety_review_complete",
@@ -442,9 +455,11 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("docs/demo-video-runbook.md");
     expect(preflightScript).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(preflightScript).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
+    expect(releaseReadiness).toContain("sanitized review answers");
     expect(releaseReadiness).toContain("sanitized notes");
     expect(releaseReadiness).toContain("reviewed materials");
     expect(technicalReport).toContain("completed reviewer session");
+    expect(technicalReport).toContain("sanitized review answers");
     expect(technicalReport).toContain("synthetic examples");
   });
 

@@ -38,6 +38,15 @@ Which evidence category is missing or overbroad?
 Which source or policy claim needs stronger citation?
 Which screen or wording should be removed before launch?
 
+## Review Answers
+
+workflow_match_answer:
+misleading_output_answer:
+risk_escalation_answer:
+evidence_gap_answer:
+citation_gap_answer:
+remove_before_launch_answer:
+
 ## Findings Template
 
 finding_id:
@@ -115,6 +124,13 @@ describe("partner review preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review log missing: finding_id:");
+  });
+
+  it("rejects missing review answer template field", () => {
+    const result = runPartnerPreflight({ log: reviewLog.replace("risk_escalation_answer:\n", "") });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log missing: risk_escalation_answer:");
   });
 
   it("rejects outreach without consent language", () => {

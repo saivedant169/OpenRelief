@@ -85,6 +85,12 @@ const reviewerOrganizationType = completedValue("reviewer organization type");
 const consentRecord = completedValue("Consent record");
 const noteStorageLocation = completedValue("note storage location");
 const sanitizationStatus = completedValue("sanitization status").toLowerCase();
+const workflowMatchAnswer = completedValue("workflow_match_answer");
+const misleadingOutputAnswer = completedValue("misleading_output_answer");
+const riskEscalationAnswer = completedValue("risk_escalation_answer");
+const evidenceGapAnswer = completedValue("evidence_gap_answer");
+const citationGapAnswer = completedValue("citation_gap_answer");
+const removeBeforeLaunchAnswer = completedValue("remove_before_launch_answer");
 const criticalIssuesOpen = completedValue("critical_issues_open").toLowerCase();
 const highIssuesOpen = completedValue("high_issues_open").toLowerCase();
 const manualSafetyReviewComplete = completedValue("manual_safety_review_complete").toLowerCase();
@@ -108,6 +114,17 @@ if (errors.length === 0) {
 
   if (consentRecord.length < 3 || noteStorageLocation.length < 3) {
     addError("Public launch blocked: consent record and note storage location are required.");
+  }
+
+  if (
+    workflowMatchAnswer.length < 2 ||
+    misleadingOutputAnswer.length < 2 ||
+    riskEscalationAnswer.length < 2 ||
+    evidenceGapAnswer.length < 2 ||
+    citationGapAnswer.length < 2 ||
+    removeBeforeLaunchAnswer.length < 2
+  ) {
+    addError("Public launch blocked: all review answers are required.");
   }
 
   if (!normalizedSanitizedValues.has(sanitizationStatus)) {

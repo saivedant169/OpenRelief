@@ -35,6 +35,19 @@ sanitization status: sanitized | private-only | needs-redaction
 5. Which source or policy claim needs stronger citation?
 6. Which screen or wording should be removed before launch?
 
+## Review Answers
+
+Record sanitized answers after review.
+
+```text
+workflow_match_answer:
+misleading_output_answer:
+risk_escalation_answer:
+evidence_gap_answer:
+citation_gap_answer:
+remove_before_launch_answer:
+```
+
 ## Findings Template
 
 ```text
