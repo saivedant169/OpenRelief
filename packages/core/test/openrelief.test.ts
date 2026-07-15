@@ -2556,6 +2556,25 @@ describe("OpenRelief domain core", () => {
     expect(packet.groups.find((group) => group.category === "other")?.items[0]?.status).toBe("missing");
   });
 
+  it("extracts photo ID and replacement ID note requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a photo ID or replacement ID note."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("photo id");
+    expect(result.detectedRequests).toContain("replacement id note");
+    expect(result.facts).toContain("The letter asks for photo ID.");
+    expect(result.facts).toContain("The letter asks for a replacement ID note.");
+  });
+
+  it("marks requested identity evidence as missing", () => {
+    const packet = buildEvidencePacket(["photo id", "replacement id note"]);
+
+    expect(packet.groups.find((group) => group.category === "identity")?.items[0]?.status).toBe("missing");
+  });
+
   it("marks available requested evidence as available", () => {
     const packet = buildEvidencePacket(["repair receipts"], ["repair receipts"]);
 

@@ -432,6 +432,16 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for supporting documents."
   },
   {
+    request: "photo id",
+    phrases: ["photo id"],
+    fact: "The letter asks for photo ID."
+  },
+  {
+    request: "replacement id note",
+    phrases: ["replacement id note"],
+    fact: "The letter asks for a replacement ID note."
+  },
+  {
     request: "insurance information",
     phrases: ["insurance"],
     fact: "The letter mentions insurance information."
