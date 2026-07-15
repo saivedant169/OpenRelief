@@ -50,6 +50,10 @@ test("app shell reloads offline after service worker cache", async ({ context, p
   await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
   await page.getByRole("button", { name: /analyze letter/i }).click();
   await expect(page.getByText("Claim denial")).toBeVisible();
+  await expect(page.getByText("Request human review")).toBeVisible();
+  await expect(page.getByText("Collect proof of occupancy")).toBeVisible();
+  await expect(page.getByText("Evidence packet outline")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Appeal FEMA's Decision" })).toBeVisible();
 
   await context.setOffline(false);
 });
