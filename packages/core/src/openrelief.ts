@@ -797,8 +797,35 @@ const requestDetectionRules: RequestDetectionRule[] = [
   },
   {
     request: "insurance settlement records",
-    phrases: ["insurance settlement records"],
+    phrases: [
+      "insurance settlement information",
+      "insurance settlement record",
+      "insurance settlement records",
+      "insurance settlement letter",
+      "insurance settlement letters"
+    ],
     fact: "The letter asks for insurance settlement records."
+  },
+  {
+    request: "insurance denial letters",
+    phrases: [
+      "insurance denial letter",
+      "insurance denial letters",
+      "insurance denial",
+      "denial from insurance",
+      "denial because damage did not exceed the policy deductible"
+    ],
+    fact: "The letter asks for insurance denial letters."
+  },
+  {
+    request: "proof of lack of insurance",
+    phrases: ["proof of lack of insurance", "lack of insurance", "no insurance coverage"],
+    fact: "The letter asks for proof of lack of insurance."
+  },
+  {
+    request: "policy exclusion records",
+    phrases: ["policy with an exclusion", "policy exclusion", "policy exclusions", "insurance policy exclusion"],
+    fact: "The letter asks for policy exclusion records."
   },
   {
     request: "repair receipts",
@@ -1007,10 +1034,17 @@ const normalizeDeadlineText = (value: string) => {
   return trimmedValue.charAt(0).toLowerCase() + trimmedValue.slice(1);
 };
 
+const hasDeniedApplicationCue = (normalized: string): boolean =>
+  /\b(?:your|the)\s+application\s+(?:is|was|has been)\s+denied\b/.test(normalized) ||
+  /\b(?:your|the)\s+(?:request|claim|assistance)\s+(?:is|was|has been)\s+denied\b/.test(normalized);
+
+const hasRequestForInformationCue = (normalized: string): boolean =>
+  normalized.includes("request for information") || normalized.includes("additional information is needed before");
+
 const buildLetterFacts = (normalized: string, requests: string[], deadlines: Deadline[]): string[] => {
   const facts: string[] = [];
 
-  if (normalized.includes("denied") || normalized.includes("denial")) {
+  if (hasDeniedApplicationCue(normalized)) {
     facts.push("The letter says the application is denied.");
   }
 
@@ -1101,20 +1135,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
     );
   }
 
-  if (normalized.includes("denied") || normalized.includes("denial")) {
-    return {
-      letterType: "denial",
-      summary: "This letter appears to deny the request and asks for careful human review before next steps.",
-      facts,
-      uncertainties,
-      detectedDeadlines,
-      detectedRequests,
-      injectionWarnings,
-      needsHumanReview: true
-    };
-  }
-
-  if (normalized.includes("request for information") || normalized.includes("additional information")) {
+  if (hasRequestForInformationCue(normalized)) {
     return {
       letterType: "request_for_information",
       summary: "This letter appears to request more information before a decision can be made.",
@@ -1124,6 +1145,19 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
       detectedRequests,
       injectionWarnings,
       needsHumanReview: needsInjectionReview
+    };
+  }
+
+  if (hasDeniedApplicationCue(normalized)) {
+    return {
+      letterType: "denial",
+      summary: "This letter appears to deny the request and asks for careful human review before next steps.",
+      facts,
+      uncertainties,
+      detectedDeadlines,
+      detectedRequests,
+      injectionWarnings,
+      needsHumanReview: true
     };
   }
 
@@ -1470,7 +1504,10 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
           label: "Insurance claim status or denial note",
           status: evidenceStatus(requests, availableEvidence, [
             "insurance information",
-            "insurance settlement records"
+            "insurance settlement records",
+            "insurance denial letters",
+            "proof of lack of insurance",
+            "policy exclusion records"
           ]),
           sourceIds: ["fema-documents"]
         }

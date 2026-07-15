@@ -533,6 +533,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-insurance-coverage-documents",
+    title: "Request for insurance coverage documents",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send an insurance denial letter, proof of lack of insurance, or policy exclusion records."
+    ],
+    county: "Ventura",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-occupancy",
     title: "Request for proof of occupancy",
     lines: [

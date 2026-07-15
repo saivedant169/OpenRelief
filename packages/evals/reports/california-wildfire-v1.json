@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 150,
+  "caseCount": 151,
   "passed": true,
   "metrics": {
-    "passedCount": 150,
+    "passedCount": 151,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -605,6 +605,23 @@
     {
       "caseId": "ca-wildfire-rfi-insurance",
       "title": "Request for insurance information",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-documents",
+        "fema-appeals",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-insurance-coverage-documents",
+      "title": "Request for insurance coverage documents",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

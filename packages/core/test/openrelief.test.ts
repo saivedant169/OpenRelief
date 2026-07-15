@@ -2514,13 +2514,31 @@ describe("OpenRelief domain core", () => {
     const result = analyzeLetter([
       "FEMA Notice",
       "You must respond within 30 days from the date of this letter.",
-      "Send insurance settlement records and repair receipts."
+      "Send insurance settlement information and repair receipts."
     ].join("\n"));
 
     expect(result.detectedRequests).toContain("insurance settlement records");
     expect(result.detectedRequests).toContain("insurance information");
     expect(result.detectedRequests).toContain("repair receipts");
     expect(result.facts).toContain("The letter asks for insurance settlement records.");
+  });
+
+  it("extracts insurance denial and coverage requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send an insurance denial letter, proof of lack of insurance, or policy exclusion records."
+    ].join("\n"));
+
+    expect(result.letterType).toBe("request_for_information");
+    expect(result.detectedRequests).toContain("insurance denial letters");
+    expect(result.detectedRequests).toContain("proof of lack of insurance");
+    expect(result.detectedRequests).toContain("policy exclusion records");
+    expect(result.detectedRequests).toContain("insurance information");
+    expect(result.facts).not.toContain("The letter says the application is denied.");
+    expect(result.facts).toContain("The letter asks for insurance denial letters.");
+    expect(result.facts).toContain("The letter asks for proof of lack of insurance.");
+    expect(result.facts).toContain("The letter asks for policy exclusion records.");
   });
 
   it("extracts requested account record requests", () => {
@@ -2552,7 +2570,12 @@ describe("OpenRelief domain core", () => {
   });
 
   it("marks requested insurance settlement records as missing insurance evidence", () => {
-    const packet = buildEvidencePacket(["insurance settlement records"]);
+    const packet = buildEvidencePacket([
+      "insurance settlement records",
+      "insurance denial letters",
+      "proof of lack of insurance",
+      "policy exclusion records"
+    ]);
 
     expect(packet.groups.find((group) => group.category === "insurance")?.items[0]?.status).toBe("missing");
   });
