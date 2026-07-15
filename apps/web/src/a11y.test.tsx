@@ -7,6 +7,9 @@ import { App } from "./App";
 
 const stylesPath = path.join(process.cwd(), "apps", "web", "src", "styles.css");
 
+const styleRule = (styles: string, selector: string) =>
+  styles.match(new RegExp(`${selector.replaceAll(".", "\\.")}\\s*\\{[^}]+\\}`))?.[0] ?? "";
+
 const expectNamedControls = () => {
   for (const button of screen.getAllByRole("button")) {
     expect(button).toHaveAccessibleName();
@@ -35,22 +38,36 @@ describe("OpenRelief accessibility smoke", () => {
 
   it("keeps saved-case archive actions at least 44px tall", () => {
     const styles = readFileSync(stylesPath, "utf8");
-    const archiveActionRule = styles.match(/\.case-archive-actions \.secondary-action\s*\{[^}]+\}/)?.[0] ?? "";
+    const archiveActionRule = styleRule(styles, ".case-archive-actions .secondary-action");
 
     expect(archiveActionRule).toContain("min-height: 44px");
   });
 
   it("keeps saved-case queue rows at least 44px tall", () => {
     const styles = readFileSync(stylesPath, "utf8");
-    const queueRowRule = styles.match(/\.queue-row\s*\{[^}]+\}/)?.[0] ?? "";
+    const queueRowRule = styleRule(styles, ".queue-row");
 
     expect(queueRowRule).toContain("min-height: 44px");
   });
 
   it("keeps case task checkbox rows at least 44px tall", () => {
     const styles = readFileSync(stylesPath, "utf8");
-    const taskStatusRule = styles.match(/\.case-task-status\s*\{[^}]+\}/)?.[0] ?? "";
+    const taskStatusRule = styleRule(styles, ".case-task-status");
 
     expect(taskStatusRule).toContain("min-height: 44px");
+  });
+
+  it("keeps primary actions and file upload targets at least 44px tall", () => {
+    const styles = readFileSync(stylesPath, "utf8");
+    const sharedActionRule = styleRule(styles, ".file-control,\n.primary-action,\n.secondary-action");
+
+    expect(sharedActionRule).toContain("min-height: 44px");
+  });
+
+  it("keeps basic intake fields at least 44px tall", () => {
+    const styles = readFileSync(stylesPath, "utf8");
+    const fieldRule = styleRule(styles, ".field-group input,\n.field-group select");
+
+    expect(fieldRule).toContain("min-height: 44px");
   });
 });
