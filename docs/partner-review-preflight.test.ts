@@ -29,6 +29,25 @@ synthetic examples used:
 note storage location:
 sanitization status: sanitized | private-only | needs-redaction
 
+## Review Questions
+
+Does workflow match real disaster letter review?
+Which output could mislead a survivor under stress?
+Which risk flag needs faster human escalation?
+Which evidence category is missing or overbroad?
+Which source or policy claim needs stronger citation?
+Which screen or wording should be removed before launch?
+
+## Findings Template
+
+finding_id:
+severity: critical | high | medium | low
+area: legal boundary | source grounding | escalation | privacy | accessibility | workflow
+summary:
+evidence:
+recommended change:
+public_issue_safe: yes | no
+
 ## Critical issue
 
 ## Launch decision
