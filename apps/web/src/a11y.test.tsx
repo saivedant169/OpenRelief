@@ -46,4 +46,11 @@ describe("OpenRelief accessibility smoke", () => {
 
     expect(queueRowRule).toContain("min-height: 44px");
   });
+
+  it("keeps case task checkbox rows at least 44px tall", () => {
+    const styles = readFileSync(stylesPath, "utf8");
+    const taskStatusRule = styles.match(/\.case-task-status\s*\{[^}]+\}/)?.[0] ?? "";
+
+    expect(taskStatusRule).toContain("min-height: 44px");
+  });
 });
