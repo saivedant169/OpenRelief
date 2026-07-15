@@ -1711,6 +1711,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts expanded serious needs evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Serious needs assistance records number SAR-A1B2C3 should not stay in notes.",
+        "Emergency supplies receipts number ESR-A1B2C3 should not stay in notes.",
+        "Immediate needs receipts number INR-A1B2C3 should not stay in notes.",
+        "Water and food receipts number WFR-A1B2C3 should not stay in notes.",
+        "First aid receipts number FAR-A1B2C3 should not stay in notes.",
+        "Breastfeeding supply receipts number BSR-A1B2C3 should not stay in notes.",
+        "Fuel for transportation receipts number FTR-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("SAR-A1B2C3");
+    expect(redacted).not.toContain("ESR-A1B2C3");
+    expect(redacted).not.toContain("INR-A1B2C3");
+    expect(redacted).not.toContain("WFR-A1B2C3");
+    expect(redacted).not.toContain("FAR-A1B2C3");
+    expect(redacted).not.toContain("BSR-A1B2C3");
+    expect(redacted).not.toContain("FTR-A1B2C3");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
