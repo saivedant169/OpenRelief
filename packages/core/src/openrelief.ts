@@ -2191,14 +2191,31 @@ export const createCaseExport = (
   evidencePacket: EvidencePacket,
   policyPack: PolicyPack
 ): string => {
-  const checklistLines = checklist.items.map((item) => `- ${item.title}: ${item.reason}`).join("\n");
+  const sourceTitleById = new Map(policyPack.sources.map((source) => [source.id, source.title]));
+  const checklistLines = checklist.items
+    .map((item) => {
+      const sources = item.sourceIds
+        .map((sourceId) => sourceTitleById.get(sourceId))
+        .filter((title): title is string => Boolean(title))
+        .join(", ");
+      return `- ${item.title}: ${item.reason}${sources ? ` Source: ${sources}` : ""}`;
+    })
+    .join("\n");
   const deadlineLines =
     letter.detectedDeadlines.length > 0
       ? letter.detectedDeadlines.map((deadline) => `- ${deadline.label}: ${deadline.text}`).join("\n")
       : "No deadline found";
   const evidenceLines = evidencePacket.groups
     .map((group) => {
-      const items = group.items.map((item) => `  - ${item.label} (${item.status})`).join("\n");
+      const items = group.items
+        .map((item) => {
+          const sources = item.sourceIds
+            .map((sourceId) => sourceTitleById.get(sourceId))
+            .filter((title): title is string => Boolean(title))
+            .join(", ");
+          return `  - ${item.label} (${item.status})${sources ? ` Source: ${sources}` : ""}`;
+        })
+        .join("\n");
       return `${group.category}\n${items}`;
     })
     .join("\n\n");

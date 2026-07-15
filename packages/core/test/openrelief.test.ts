@@ -4682,6 +4682,12 @@ describe("OpenRelief domain core", () => {
     expect(exported).toContain("Deadlines\n- appeal window: appeal within 60 days");
     expect(exported).toContain("Request human review");
     expect(exported).toContain("Appeal FEMA's Decision");
+    expect(exported).toContain(
+      "Request human review: Denial, appeal, or risk flags should be reviewed by a qualified helper. Source: Appeal FEMA's Decision"
+    );
+    expect(exported).toContain(
+      "Lease, mortgage, utility bill, or other occupancy proof (missing) Source: Documents Needed for FEMA Assistance"
+    );
     expect(exported).toContain("last reviewed 2026-07-13");
   });
 
