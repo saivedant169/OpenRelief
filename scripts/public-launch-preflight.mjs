@@ -105,9 +105,47 @@ const requireDate = (field, value) => {
   return date;
 };
 
+const listItemsForField = (field) => {
+  const lines = reviewLog.split(/\r?\n/);
+  const fieldLabel = `${field}:`.toLowerCase();
+  let startIndex = -1;
+
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    if (lines[index]?.trim().toLowerCase() === fieldLabel) {
+      startIndex = index;
+      break;
+    }
+  }
+
+  if (startIndex === -1) {
+    return [];
+  }
+
+  const items = [];
+
+  for (const line of lines.slice(startIndex + 1)) {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      continue;
+    }
+
+    if (trimmed.startsWith("- ")) {
+      items.push(trimmed.slice(2).trim());
+      continue;
+    }
+
+    break;
+  }
+
+  return items;
+};
+
 const requireListItems = (label, items) => {
+  const listedItems = new Set(listItemsForField(label));
+
   for (const item of items) {
-    if (!reviewLog.includes(`- ${item}`)) {
+    if (!listedItems.has(item)) {
       addError(`Public launch blocked: ${label} missing ${item}.`);
     }
   }

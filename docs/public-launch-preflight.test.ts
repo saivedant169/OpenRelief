@@ -211,6 +211,24 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: materials reviewed missing docs/demo-video-runbook.md.");
   });
 
+  it("requires reviewed materials and examples in their launch lists", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("- docs/demo-video-runbook.md\n", "")
+        .replace("- examples/california-wildfire/letters/denial-occupancy-proof.txt\n", "")
+        .replace(
+          "notes: sanitized review found launch guardrails ready",
+          "notes: sanitized review found docs/demo-video-runbook.md and examples/california-wildfire/letters/denial-occupancy-proof.txt ready"
+        )
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: materials reviewed missing docs/demo-video-runbook.md.");
+    expect(result.stderr).toContain(
+      "Public launch blocked: synthetic examples used missing examples/california-wildfire/letters/denial-occupancy-proof.txt."
+    );
+  });
+
   it("rejects invalid review dates", () => {
     const result = runLaunchPreflight(completeReviewLog.replace("review_date: 2026-07-15", "review_date: 2026-02-31"));
 
