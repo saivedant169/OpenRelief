@@ -157,6 +157,19 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("dropped-letter.txt")).toBeInTheDocument();
   });
 
+  it("shows manual paste fallback tied to editable letter text", () => {
+    render(<App />);
+
+    expect(screen.getByText("Upload or paste letter (PDF, JPG, PNG, TXT)")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Paste text manually" })).toHaveAttribute(
+      "href",
+      "#extracted-letter-text"
+    );
+    expect(document.querySelector("#extracted-letter-text")).toBeInTheDocument();
+    expect(screen.getByLabelText("Extracted letter text")).not.toBeDisabled();
+    expect(screen.getByLabelText("Extracted letter text")).not.toHaveAttribute("readonly");
+  });
+
   it("shows export text and requires confirmation before clearing local work", async () => {
     render(<App />);
 

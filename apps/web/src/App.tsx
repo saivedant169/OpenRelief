@@ -1288,7 +1288,7 @@ export const App = () => {
               <Upload aria-hidden="true" />
             </div>
             <div>
-              <strong>Upload letter (PDF, JPG, PNG, TXT)</strong>
+              <strong>Upload or paste letter (PDF, JPG, PNG, TXT)</strong>
               <p>PDF text and image OCR run locally in this browser.</p>
               <p>Drop PDF, JPG, PNG, or TXT here, or choose file.</p>
             </div>
@@ -1296,6 +1296,9 @@ export const App = () => {
               Choose file
               <input type="file" accept=".txt,.pdf,.png,.jpg,.jpeg" onChange={handleFile} />
             </label>
+            <a className="secondary-link" href="#extracted-letter-text">
+              Paste text manually
+            </a>
             <span className="file-name">{fileName}</span>
             {fileError ? (
               <p className="upload-error" role="alert">
@@ -1368,7 +1371,7 @@ export const App = () => {
             ) : null}
           </section>
 
-          <section className="editor-panel">
+          <section className="editor-panel" id="extracted-letter-text">
             <div className="section-heading">
               <div>
                 <h2>Extracted letter text</h2>
