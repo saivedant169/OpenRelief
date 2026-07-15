@@ -1730,6 +1730,8 @@ describe("OpenRelief domain core", () => {
         "Voter registration card number VRC-A1B2C3 should not stay in notes.",
         "Social service organization document number SSO-A1B2C3 should not stay in notes.",
         "Federal benefit document number FBD-A1B2C3 should not stay in notes.",
+        "Mobile home park owner number MHO-A1B2C3 should not stay in notes.",
+        "Mobile home park manager number MHM-A1B2C3 should not stay in notes.",
         "Vehicle registration number VRG-A1B2C3 should not stay in notes.",
         "Affidavit of residency number AOR-A1B2C3 should not stay in notes.",
         "Court documentation number CTD-A1B2C3 should not stay in notes.",
@@ -1740,6 +1742,8 @@ describe("OpenRelief domain core", () => {
     expect(redacted).not.toContain("VRC-A1B2C3");
     expect(redacted).not.toContain("SSO-A1B2C3");
     expect(redacted).not.toContain("FBD-A1B2C3");
+    expect(redacted).not.toContain("MHO-A1B2C3");
+    expect(redacted).not.toContain("MHM-A1B2C3");
     expect(redacted).not.toContain("VRG-A1B2C3");
     expect(redacted).not.toContain("AOR-A1B2C3");
     expect(redacted).not.toContain("CTD-A1B2C3");
