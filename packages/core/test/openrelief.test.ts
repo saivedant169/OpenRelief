@@ -1883,6 +1883,31 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance evidence identifier removed]");
   });
 
+  it("redacts expanded insurance coverage identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Insurance denial letters number IDL-A1B2C3 should not stay in notes.",
+        "Insurance denial number IDN-A1B2C3 should not stay in notes.",
+        "Denial from insurance number DFI-A1B2C3 should not stay in notes.",
+        "Denial because damage did not exceed the policy deductible number DDD-A1B2C3 should not stay in notes.",
+        "Lack of insurance number LOI-A1B2C3 should not stay in notes.",
+        "No insurance coverage number NIC-A1B2C3 should not stay in notes.",
+        "Policy with an exclusion number PWE-A1B2C3 should not stay in notes.",
+        "Policy exclusions number PEX-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("IDL-A1B2C3");
+    expect(redacted).not.toContain("IDN-A1B2C3");
+    expect(redacted).not.toContain("DFI-A1B2C3");
+    expect(redacted).not.toContain("DDD-A1B2C3");
+    expect(redacted).not.toContain("LOI-A1B2C3");
+    expect(redacted).not.toContain("NIC-A1B2C3");
+    expect(redacted).not.toContain("PWE-A1B2C3");
+    expect(redacted).not.toContain("PEX-A1B2C3");
+    expect(redacted).toContain("[insurance evidence identifier removed]");
+  });
+
   it("redacts medical receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medical receipt number MRC-123456 should not stay in notes.");
 
