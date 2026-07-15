@@ -3,6 +3,8 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 const repoRoot = process.cwd();
+const issueTemplateDir = path.join(repoRoot, ".github", "ISSUE_TEMPLATE");
+const labelsPath = path.join(repoRoot, ".github", "labels.yml");
 const scannedRoots = [
   ".github",
   "apps/web/e2e",
@@ -62,6 +64,31 @@ describe("repo hygiene", () => {
         return [...markerFailures, ...dashFailures];
       })
     );
+
+    expect(failures).toEqual([]);
+  });
+
+  it("keeps issue template labels declared in the label manifest", () => {
+    const labelManifest = readFileSync(labelsPath, "utf8");
+    const declaredLabels = new Set(
+      [...labelManifest.matchAll(/^- name:\s*(.+)$/gm)].map((match) => match[1].trim())
+    );
+    const templateFiles = readdirSync(issueTemplateDir).filter((entry) => entry.endsWith(".yml"));
+    const failures = templateFiles.flatMap((entry) => {
+      const templatePath = path.join(issueTemplateDir, entry);
+      const template = readFileSync(templatePath, "utf8");
+      const labelsLine = /^labels:\s*\[(.*)\]\s*$/m.exec(template);
+
+      if (!labelsLine) {
+        return [`${entry}: missing inline labels list`];
+      }
+
+      return labelsLine[1]
+        .split(",")
+        .map((label) => label.trim().replace(/^["']|["']$/g, ""))
+        .filter((label) => label && !declaredLabels.has(label))
+        .map((label) => `${entry}: missing label ${label}`);
+    });
 
     expect(failures).toEqual([]);
   });
