@@ -12,6 +12,7 @@ Current hosted sandbox: https://saivedant169.github.io/OpenRelief/
 - Upload processing must remain local to the browser.
 - Saved cases must remain in local browser storage.
 - No analytics or telemetry may collect document text or intake text.
+- No external model endpoints or remote model calls.
 - No live FEMA, SBA, state, county, or legal-aid submission.
 - No final eligibility decisions.
 - No legal advice.

@@ -579,6 +579,9 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("dist");
     expect(preflightScript).toContain("hosted-sandbox.md");
     expect(preflightScript).toContain("telemetry");
+    expect(preflightScript).toContain("No external model endpoints");
+    expect(preflightScript).toContain("connect-src 'self'");
+    expect(preflightScript).toContain("External model endpoint");
   });
 
   it("defines the hosted sandbox deployment workflow", () => {

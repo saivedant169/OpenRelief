@@ -4,14 +4,23 @@ import path from "node:path";
 const root = process.cwd();
 const distPath = path.join(root, "dist");
 const hostedSandboxPath = path.join(root, "docs", "hosted-sandbox.md");
+const sourceIndexPath = path.join(root, "apps", "web", "index.html");
+const distIndexPath = path.join(distPath, "index.html");
 const sourceScanPaths = [
-  path.join(root, "apps", "web", "index.html"),
+  sourceIndexPath,
   path.join(root, "apps", "web", "src"),
   path.join(root, "apps", "web", "public", "manifest.webmanifest"),
   path.join(root, "apps", "web", "public", "service-worker.js"),
   path.join(distPath, "index.html"),
   path.join(distPath, "manifest.webmanifest"),
   path.join(distPath, "service-worker.js")
+];
+const requiredIndexSecurityPhrases = [
+  "Content-Security-Policy",
+  "default-src 'self'",
+  "connect-src 'self'",
+  "form-action 'none'",
+  "frame-ancestors 'none'"
 ];
 const requiredDistFiles = [
   "index.html",
@@ -28,6 +37,7 @@ const requiredHostedSandboxPhrases = [
   "No real survivor PII",
   "local browser storage",
   "No analytics or telemetry",
+  "No external model endpoints",
   "No live FEMA, SBA, state, county, or legal-aid submission",
   "npm run check"
 ];
@@ -41,6 +51,16 @@ const bannedTelemetryMarkers = [
   "sentry.io",
   "plausible.io",
   "amplitude"
+];
+const bannedExternalModelMarkers = [
+  ["api.", "open", "ai.com"].join(""),
+  ["api.", "anth", "ropic.com"].join(""),
+  "generativelanguage.googleapis.com",
+  "api.openrouter.ai",
+  "api.groq.com",
+  "api.mistral.ai",
+  "replicate.com",
+  "huggingface.co"
 ];
 
 const failures = [];
@@ -97,6 +117,19 @@ if (!existsSync(hostedSandboxPath)) {
   }
 }
 
+for (const indexPath of [sourceIndexPath, distIndexPath]) {
+  if (!existsSync(indexPath)) {
+    continue;
+  }
+
+  const indexHtml = readText(indexPath);
+  for (const phrase of requiredIndexSecurityPhrases) {
+    if (!indexHtml.includes(phrase)) {
+      fail(`Hosted sandbox index missing security phrase: ${phrase}`);
+    }
+  }
+}
+
 const scannedTextFiles = sourceScanPaths
   .flatMap(listFiles)
   .filter((filePath) => /\.(css|html|js|jsx|json|ts|tsx|webmanifest)$/.test(filePath));
@@ -105,6 +138,11 @@ for (const filePath of scannedTextFiles) {
   const marker = bannedTelemetryMarkers.find((candidate) => content.includes(candidate));
   if (marker) {
     fail(`Telemetry marker "${marker}" found in ${path.relative(root, filePath)}.`);
+  }
+
+  const modelMarker = bannedExternalModelMarkers.find((candidate) => content.includes(candidate));
+  if (modelMarker) {
+    fail(`External model endpoint "${modelMarker}" found in ${path.relative(root, filePath)}.`);
   }
 }
 
