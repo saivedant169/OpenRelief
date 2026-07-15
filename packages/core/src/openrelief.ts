@@ -1604,13 +1604,19 @@ export const createChecklist = (
 
   if (letter.needsHumanReview || caseContext.riskFlags.length > 0 || needsPolicyReview) {
     const needsInjectionReview = letter.injectionWarnings.length > 0;
+    const needsImmediateDangerReview = caseContext.riskFlags.includes("immediate_danger");
     const needsEligibilityReview = caseContext.riskFlags.includes("final_eligibility_request");
-    const needsRiskReview = caseContext.riskFlags.some((riskFlag) => riskFlag !== "final_eligibility_request");
+    const needsRiskReview = caseContext.riskFlags.some(
+      (riskFlag) => riskFlag !== "final_eligibility_request" && riskFlag !== "immediate_danger"
+    );
     const needsDenialReview = letter.needsHumanReview && letter.letterType === "denial";
     const needsAppealReview = letter.needsHumanReview && letter.detectedDeadlines.length > 0;
     const needsDenialOrAppealReview = needsDenialReview || needsAppealReview || needsRiskReview;
     const needsUnclearLetterReview = letter.needsHumanReview && !needsInjectionReview && !needsDenialOrAppealReview;
     const humanReviewReasons = [
+      needsImmediateDangerReview
+        ? "Immediate danger should be handled before paperwork. Contact local emergency services now if you are in immediate danger."
+        : "",
       needsInjectionReview ? "Prompt injection or unsafe instructions should be reviewed by a qualified helper." : "",
       needsUnclearLetterReview ? "Unclear or unsupported letters should be reviewed by a qualified helper." : "",
       needsDenialOrAppealReview

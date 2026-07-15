@@ -3484,6 +3484,27 @@ describe("OpenRelief domain core", () => {
     expect(humanReview?.reason).not.toContain("Denial, appeal, or risk flags");
   });
 
+  it("puts immediate danger guidance before paperwork on checklist", () => {
+    const letter = analyzeLetter("FEMA Notice\nYour application is approved for rental assistance.");
+    const checklist = createChecklist(
+      {
+        county: "Los Angeles",
+        disasterType: "wildfire",
+        riskFlags: ["immediate_danger"]
+      },
+      letter,
+      californiaWildfirePolicyPack
+    );
+
+    const humanReview = checklist.items.find((item) => item.category === "human_review");
+
+    expect(checklist.items[0]?.id).toBe("human-review");
+    expect(humanReview?.reason).toContain("Immediate danger should be handled before paperwork");
+    expect(humanReview?.reason).toContain("Contact local emergency services now");
+    expect(humanReview?.reason).not.toMatch(/hotline|911|988/i);
+    expect(humanReview?.reason).not.toContain("Denial, appeal, or risk flags");
+  });
+
   it("marks checklist items as editable", () => {
     const letter = analyzeLetter(denialLetter);
     const checklist = createChecklist(
