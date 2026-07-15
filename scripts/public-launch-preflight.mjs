@@ -46,6 +46,7 @@ const requiredReviewedMaterials = [
   "packages/evals/reports/california-wildfire-v1.json"
 ];
 const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
+const reviewListFields = ["materials reviewed", "synthetic examples used"];
 const requiredEvidencePaths = [
   "docs/demo-script.md",
   "docs/demo-video-runbook.md",
@@ -169,6 +170,14 @@ const requireExistingPaths = (items) => {
   }
 };
 
+const addRestrictedTextErrors = (field, value) => {
+  for (const { label, pattern } of restrictedReviewTextPatterns) {
+    if (pattern.test(value)) {
+      addError(`Public launch blocked: ${field} contains ${label}.`);
+    }
+  }
+};
+
 const reviewId = completedValue("review_id");
 const reviewDate = completedValue("review_date");
 const reviewerRole = completedValue("Reviewer role");
@@ -215,6 +224,12 @@ if (errors.length === 0) {
   requireExistingPaths(requiredEvidencePaths);
   const reviewDateValue = requireDate("review_date", reviewDate);
 
+  for (const field of reviewListFields) {
+    for (const item of listItemsForField(field)) {
+      addRestrictedTextErrors(field, item);
+    }
+  }
+
   for (const { field, value } of requiredSpecificFields) {
     if (normalizedPlaceholderValues.has(value.toLowerCase())) {
       addError(`Public launch blocked: ${field} must include specific review evidence.`);
@@ -242,11 +257,7 @@ if (errors.length === 0) {
   }
 
   for (const { field, value } of requiredSpecificFields) {
-    for (const { label, pattern } of restrictedReviewTextPatterns) {
-      if (pattern.test(value)) {
-        addError(`Public launch blocked: ${field} contains ${label}.`);
-      }
-    }
+    addRestrictedTextErrors(field, value);
   }
 
   if (!normalizedSanitizedValues.has(sanitizationStatus)) {

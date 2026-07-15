@@ -264,6 +264,24 @@ describe("public launch preflight", () => {
     );
   });
 
+  it("rejects private data in launch evidence lists", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace(
+          "- hosted synthetic sandbox\n",
+          "- hosted synthetic sandbox\n- reviewer@example.test notes\n"
+        )
+        .replace(
+          "- examples/california-wildfire/letters/denial-occupancy-proof.txt\n",
+          "- examples/california-wildfire/letters/denial-occupancy-proof.txt\n- screenshot review copy\n"
+        )
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: materials reviewed contains email address.");
+    expect(result.stderr).toContain("Public launch blocked: synthetic examples used contains screenshot reference.");
+  });
+
   it("rejects missing launch evidence files", () => {
     const result = runLaunchPreflight(completeReviewLog, {
       omitEvidencePaths: [
