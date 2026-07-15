@@ -1031,6 +1031,12 @@ export const App = () => {
               ) : null}
             </div>
             <div className="review-actions">
+              <a className="primary-action" href="#help">
+                Review a letter
+              </a>
+              <a className="secondary-action" href="#evidence-input">
+                Build evidence checklist
+              </a>
               <button
                 className="secondary-action"
                 type="button"
@@ -1096,7 +1102,7 @@ export const App = () => {
             ) : null}
           </section>
 
-          <section className="editor-panel">
+          <section className="editor-panel" id="evidence-input">
             <div className="section-heading">
               <div>
                 <h2>Evidence already available</h2>

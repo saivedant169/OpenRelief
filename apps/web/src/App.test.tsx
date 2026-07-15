@@ -64,6 +64,18 @@ describe("OpenRelief web workflow", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows start actions for letter review and evidence checklist", () => {
+    render(<App />);
+
+    expect(screen.getByRole("link", { name: "Review a letter" })).toHaveAttribute("href", "#help");
+    expect(screen.getByRole("link", { name: "Build evidence checklist" })).toHaveAttribute(
+      "href",
+      "#evidence-input"
+    );
+    expect(document.querySelector("#help")).toBeInTheDocument();
+    expect(document.querySelector("#evidence-input")).toBeInTheDocument();
+  });
+
   it("shows visible human support path before upload", () => {
     render(<App />);
 
