@@ -71,6 +71,17 @@ const letterTypeLabels: Record<LetterType, string> = {
   inspection_notice: "Inspection notice",
   unknown: "Needs review"
 };
+const riskFlagLabels: Record<string, string> = {
+  immediate_danger: "Immediate danger",
+  denial_or_appeal: "Denial or appeal deadline",
+  final_eligibility_request: "Final eligibility question",
+  homelessness: "Housing instability",
+  medical_emergency: "Medical emergency",
+  abuse_or_unsafe_home: "Unsafe home or abuse concern",
+  disability_accommodation: "Disability accommodation",
+  immigration_sensitive: "Immigration-sensitive concern",
+  suspected_fraud_or_scam: "Suspected fraud or scam"
+};
 
 type SavedDraft = {
   letterText?: string;
@@ -140,6 +151,8 @@ const parseAvailableEvidenceText = (value: string): string[] =>
     .split(/[\n,;]+/)
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
+
+const formatRiskFlag = (flag: string): string => riskFlagLabels[flag] ?? flag;
 
 const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
 
@@ -716,7 +729,12 @@ export const App = () => {
                         Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done
                       </span>
                       <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
-                      <span>Flags: {savedCase.riskFlags.length > 0 ? savedCase.riskFlags.join(", ") : "None"}</span>
+                      <span>
+                        Flags:{" "}
+                        {savedCase.riskFlags.length > 0
+                          ? savedCase.riskFlags.map(formatRiskFlag).join(", ")
+                          : "None"}
+                      </span>
                     </button>
                   </li>
                 ))}
@@ -922,7 +940,7 @@ export const App = () => {
                 {riskFlags.length > 0 ? (
                   <div className="risk-list" aria-label="High-risk flags">
                     {riskFlags.map((flag) => (
-                      <span key={flag}>{flag}</span>
+                      <span key={flag}>{formatRiskFlag(flag)}</span>
                     ))}
                   </div>
                 ) : null}
@@ -1078,7 +1096,7 @@ export const App = () => {
                       {activeSavedCase.riskFlags.length > 0 ? (
                         <ul className="case-detail-list">
                           {activeSavedCase.riskFlags.map((flag) => (
-                            <li key={flag}>{flag}</li>
+                            <li key={flag}>{formatRiskFlag(flag)}</li>
                           ))}
                         </ul>
                       ) : (

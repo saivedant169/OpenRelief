@@ -28,7 +28,7 @@ test("immediate danger guidance appears before paperwork", async ({ page }) => {
 
   await page.getByRole("button", { name: /analyze letter/i }).click();
 
-  await expect(page.getByText("immediate_danger")).toBeVisible();
+  await expect(page.locator(".risk-list").getByText("Immediate danger", { exact: true })).toBeVisible();
   const firstChecklistItem = page.locator(".checklist li").first();
   await expect(firstChecklistItem).toContainText("Request human review");
   await expect(firstChecklistItem).toContainText("Immediate danger should be handled before paperwork");
