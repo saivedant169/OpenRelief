@@ -15,6 +15,21 @@ test("letter review produces checklist and evidence packet", async ({ page }) =>
   await expect(page.getByRole("link", { name: "Appeal FEMA's Decision" })).toBeVisible();
 });
 
+test("uploaded sample denial letter stays editable and classifies", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByLabel("Choose file").setInputFiles("examples/california-wildfire/letters/denial-occupancy-proof.txt");
+
+  await expect(page.getByText("denial-occupancy-proof.txt")).toBeVisible();
+  await expect(page.getByLabel("Extracted letter text")).toHaveValue(/proof of occupancy is missing/);
+
+  await page.getByRole("button", { name: /analyze letter/i }).click();
+
+  await expect(page.getByText("Claim denial")).toBeVisible();
+  await expect(page.getByText("Collect proof of occupancy")).toBeVisible();
+  await expect(page.getByText("Evidence packet outline")).toBeVisible();
+});
+
 test("immediate danger guidance appears before paperwork", async ({ page }) => {
   await page.goto("/");
 
