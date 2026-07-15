@@ -3248,6 +3248,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
 
+  it("detects Apple Cash requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked me to send money through Apple Cash before they would help with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
+  it("detects Google Pay requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked me to send money through Google Pay before they would help with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
   it("detects Zelle requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked me to send money through Zelle before they would help with FEMA paperwork.");
 
@@ -3286,6 +3298,12 @@ describe("OpenRelief domain core", () => {
 
   it("detects cashier check requests as suspected scam risk", () => {
     const flags = detectRiskFlags("Someone asked me to send a cashier check before they would help with FEMA paperwork.");
+
+    expect(flags).toEqual(["suspected_fraud_or_scam"]);
+  });
+
+  it("detects cashier's check requests as suspected scam risk", () => {
+    const flags = detectRiskFlags("Someone asked me to send a cashier's check before they would help with FEMA paperwork.");
 
     expect(flags).toEqual(["suspected_fraud_or_scam"]);
   });
