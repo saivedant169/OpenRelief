@@ -101,6 +101,22 @@ describe("partner review preflight", () => {
     expect(result.stderr).toContain("Partner review log missing: decision_owner: Saivedant Hava");
   });
 
+  it("rejects missing review question prompt", () => {
+    const result = runPartnerPreflight({
+      log: reviewLog.replace("Which output could mislead a survivor under stress?\n", "")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log missing: Which output could mislead a survivor under stress?");
+  });
+
+  it("rejects missing findings template field", () => {
+    const result = runPartnerPreflight({ log: reviewLog.replace("finding_id:\n", "") });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log missing: finding_id:");
+  });
+
   it("rejects outreach without consent language", () => {
     const result = runPartnerPreflight({ outreach: outreach.replace("consent\n", "") });
 
