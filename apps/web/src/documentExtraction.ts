@@ -31,6 +31,7 @@ const readFileAsArrayBuffer = (file: File): Promise<ArrayBuffer> => {
 
 const decodePdfLiteralText = (value: string) =>
   value
+    .replace(/\\\r\n|\\\r|\\\n/g, "")
     .replace(/\\n/g, "\n")
     .replace(/\\r/g, "\r")
     .replace(/\\t/g, "\t")
@@ -56,14 +57,14 @@ const decodePdfHexText = (value: string) => {
 };
 
 const extractPdfTextItems = (value: string) => [
-  ...[...value.matchAll(/\(((?:\\.|[^\\)])*)\)/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
+  ...[...value.matchAll(/\(((?:\\[\s\S]|[^\\)])*)\)/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
   ...[...value.matchAll(/<([0-9a-f\s]+)>/gi)].map((match) => decodePdfHexText(match[1] ?? ""))
 ];
 
 const extractRawPdfText = (data: Uint8Array) => {
   const source = new TextDecoder("latin1").decode(data);
   const textItems = [
-    ...[...source.matchAll(/\(((?:\\.|[^\\)])*)\)\s*Tj/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
+    ...[...source.matchAll(/\(((?:\\[\s\S]|[^\\)])*)\)\s*Tj/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
     ...[...source.matchAll(/<([0-9a-f\s]+)>\s*Tj/gi)].map((match) => decodePdfHexText(match[1] ?? "")),
     ...[...source.matchAll(/\[([\s\S]*?)\]\s*TJ/g)].flatMap((match) => extractPdfTextItems(match[1] ?? ""))
   ];
