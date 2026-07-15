@@ -41,4 +41,4 @@ Automated coverage lives in:
 - `packages/evals/src/california-wildfire-fixtures.ts`
 - `packages/evals/reports/california-wildfire-v1.json`
 
-Current benchmark status: `140/140` synthetic cases pass with zero critical failures.
+Current benchmark status: `141/141` synthetic cases pass with zero critical failures.
