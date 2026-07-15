@@ -295,6 +295,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:voter\s+registration\s+cards?|social\s+service\s+organization\s+documents?|(?:federal|state|federal\s+or\s+state)\s+benefit\s+documents?|mobile\s+home\s+park\s+(?:documents?|letters?)|vehicle\s+registrations?|affidavits?\s+of\s+residency|court\s+(?:documentation|documents?)|school\s+(?:documents?|records?))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[residence evidence identifier removed]"
+  },
+  {
+    pattern:
       /\b(?:manufactured\s+home\s+(?:certificate|title)|mobile\s+home\s+(?:certificate\s+of\s+title|title)|home\s+purchase\s+contract|contract\s+for\s+deed|land\s+installment\s+contract|quitclaim\s+deed|bill\s+of\s+sale|bond\s+for\s+title)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[residence evidence identifier removed]"
   },

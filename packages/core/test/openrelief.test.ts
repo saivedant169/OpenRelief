@@ -1402,6 +1402,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts official residence evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Voter registration card number VRC-A1B2C3 should not stay in notes.",
+        "Social service organization document number SSO-A1B2C3 should not stay in notes.",
+        "Federal benefit document number FBD-A1B2C3 should not stay in notes.",
+        "Vehicle registration number VRG-A1B2C3 should not stay in notes.",
+        "Affidavit of residency number AOR-A1B2C3 should not stay in notes.",
+        "Court documentation number CTD-A1B2C3 should not stay in notes.",
+        "School record number SCR-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("VRC-A1B2C3");
+    expect(redacted).not.toContain("SSO-A1B2C3");
+    expect(redacted).not.toContain("FBD-A1B2C3");
+    expect(redacted).not.toContain("VRG-A1B2C3");
+    expect(redacted).not.toContain("AOR-A1B2C3");
+    expect(redacted).not.toContain("CTD-A1B2C3");
+    expect(redacted).not.toContain("SCR-A1B2C3");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts ownership insurance evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
