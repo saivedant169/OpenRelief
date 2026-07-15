@@ -3,6 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 
+const restrictedDataNotice = "Do not enter SSNs, full application IDs, birth dates, or immigration status details.";
+
 describe("OpenRelief web workflow", () => {
   beforeEach(() => {
     window.localStorage.clear();
@@ -79,6 +81,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(checklistCard as HTMLElement).getByRole("heading", { name: "High priority" })).toBeInTheDocument();
     expect(within(checklistCard as HTMLElement).getByRole("heading", { name: "Deadline tasks" })).toBeInTheDocument();
     expect(within(checklistCard as HTMLElement).getByRole("heading", { name: "Evidence tasks" })).toBeInTheDocument();
+    expect(within(checklistCard as HTMLElement).getByText(restrictedDataNotice)).toBeInTheDocument();
     expect(within(checklistCard as HTMLElement).getByRole("link", { name: "Build evidence packet" })).toHaveAttribute(
       "href",
       "#evidence-packet-outline"
@@ -165,6 +168,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(context).getByText("Raises urgent review.")).toBeInTheDocument();
     expect(within(context).getByText("Marks replacement tasks.")).toBeInTheDocument();
     expect(within(context).queryByLabelText(/ssn|social security|full application/i)).not.toBeInTheDocument();
+    expect(screen.getAllByText(restrictedDataNotice)).toHaveLength(2);
 
     await userEvent.type(within(context).getByLabelText("County/city"), "Pasadena");
     expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("County/city: Pasadena");
@@ -957,6 +961,7 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
 
     const notesField = screen.getByLabelText("Case notes");
+    expect(screen.getAllByText(restrictedDataNotice).length).toBeGreaterThanOrEqual(1);
     await userEvent.type(notesField, "Called survivor about occupancy proof.");
 
     await waitFor(() => {

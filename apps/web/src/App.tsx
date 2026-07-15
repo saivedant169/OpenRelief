@@ -87,6 +87,7 @@ const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text b
 const imageExtractionMessage = "Could not extract image text. Paste extracted text below.";
 const letterLengthMessage = "Letter text too long. Keep extracted text under 50,000 characters.";
 const caseArchiveLengthMessage = "Saved cases JSON too long. Keep archives under 100,000 characters.";
+const restrictedDataNotice = "Do not enter SSNs, full application IDs, birth dates, or immigration status details.";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -1373,6 +1374,7 @@ export const App = () => {
               <div>
                 <h2>Evidence already available</h2>
                 <p>List documents already found so requested evidence is not treated as missing.</p>
+                <p>{restrictedDataNotice}</p>
               </div>
               <span className="quality">Optional</span>
             </div>
@@ -1395,6 +1397,7 @@ export const App = () => {
               <div>
                 <h2>Immediate needs and risks</h2>
                 <p>Add urgent needs that should change human review priority.</p>
+                <p>{restrictedDataNotice}</p>
               </div>
               <span className="quality">Optional</span>
             </div>
@@ -1550,6 +1553,7 @@ export const App = () => {
 
               <article className="result-card wide">
                 <h2>Next-step checklist</h2>
+                <p>{restrictedDataNotice}</p>
                 <div className="checklist-groups">
                   {checklistGroups.map((group) => (
                     <section className="checklist-group" key={group.category}>
@@ -1815,6 +1819,7 @@ export const App = () => {
                     </section>
                     <section className="case-detail-section case-notes-section">
                       <h3>Notes</h3>
+                      <p>{restrictedDataNotice}</p>
                       <textarea
                         aria-label="Case notes"
                         className="case-notes"
