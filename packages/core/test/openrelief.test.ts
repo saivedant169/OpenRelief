@@ -1060,6 +1060,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical support identifier removed]");
   });
 
+  it("redacts expanded dental identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Dental receipts number DRC-A1B2C3 should not stay in notes.",
+        "Dental bills number DBL-A1B2C3 should not stay in notes.",
+        "Itemized dental bills number IDB-A1B2C3 should not stay in notes.",
+        "Dental expense records number DER-A1B2C3 should not stay in notes.",
+        "Medical and dental receipts number MDR-A1B2C3 should not stay in notes.",
+        "Medical and dental bills number MDB-A1B2C3 should not stay in notes.",
+        "Itemized bills, receipts, or estimates showing medical or dental expenses number IDE-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("DRC-A1B2C3");
+    expect(redacted).not.toContain("DBL-A1B2C3");
+    expect(redacted).not.toContain("IDB-A1B2C3");
+    expect(redacted).not.toContain("DER-A1B2C3");
+    expect(redacted).not.toContain("MDR-A1B2C3");
+    expect(redacted).not.toContain("MDB-A1B2C3");
+    expect(redacted).not.toContain("IDE-A1B2C3");
+    expect(redacted).toContain("[medical support identifier removed]");
+  });
+
   it("redacts vehicle repair record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [

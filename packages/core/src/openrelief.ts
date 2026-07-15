@@ -235,7 +235,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip|dental\s+(?:receipt|bill|estimate|expense\s+record))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip|dental\s+(?:receipts?|bills?|estimates?|expense\s+records?)|itemized\s+dental\s+bills?|medical\s+and\s+dental\s+(?:receipts?|bills?)|itemized\s+bills,\s+receipts,?\s+or\s+estimates\s+showing\s+medical\s+or\s+dental\s+expenses)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[medical support identifier removed]"
   },
   {
