@@ -1176,7 +1176,8 @@ describe("OpenRelief domain core", () => {
         "TSA records number TSR-A1B2C3 should not stay in notes.",
         "Terms and conditions document number TCD-A1B2C3 should not stay in notes.",
         "Checkout date notice number CDN-A1B2C3 should not stay in notes.",
-        "Hotel checkout notice number HCN-A1B2C3 should not stay in notes."
+        "Hotel checkout notice number HCN-A1B2C3 should not stay in notes.",
+        "Notes about unsafe home access number UHA-A1B2C3 should not stay in notes."
       ].join("\n")
     );
 
@@ -1186,6 +1187,7 @@ describe("OpenRelief domain core", () => {
     expect(redacted).not.toContain("TCD-A1B2C3");
     expect(redacted).not.toContain("CDN-A1B2C3");
     expect(redacted).not.toContain("HCN-A1B2C3");
+    expect(redacted).not.toContain("UHA-A1B2C3");
     expect(redacted).toContain("[communication identifier removed]");
   });
 

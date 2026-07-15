@@ -245,7 +245,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:agency|case|contractor)\s+messages?|appointment\s+notes?|shelter\s+placement\s+notes?|transitional\s+sheltering\s+assistance\s+(?:records?|notices?|messages?)|tsa\s+(?:records?|notices?|messages?|terms\s+and\s+conditions)|terms\s+and\s+conditions\s+document|(?:hotel\s+)?checkout(?:\s+date)?\s+notice|unsafe\s+home\s+access\s+notes?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:agency|case|contractor)\s+messages?|appointment\s+notes?|shelter\s+placement\s+notes?|transitional\s+sheltering\s+assistance\s+(?:records?|notices?|messages?)|tsa\s+(?:records?|notices?|messages?|terms\s+and\s+conditions)|terms\s+and\s+conditions\s+document|(?:hotel\s+)?checkout(?:\s+date)?\s+notice|unsafe\s+home\s+access\s+notes?|notes\s+about\s+unsafe\s+home\s+access)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[communication identifier removed]"
   },
   {
