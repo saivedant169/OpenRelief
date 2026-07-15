@@ -308,6 +308,19 @@ describe("partner review issue preflight", () => {
     );
   });
 
+  it("rejects duplicate recorded public issue launch risk values", () => {
+    const result = runIssuePreflight(
+      {
+        ...completeIssue,
+        body: completeIssue.body.replace("\n## Launch risk\n\npending", "\n## Launch risk\n\nlow")
+      },
+      `${reviewLog}public issue launch risk: none\npublic issue launch risk: low\n`
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log public issue launch risk must contain at most one final value.");
+  });
+
   it("rejects missing sanitized findings section", () => {
     const result = runIssuePreflight({
       ...completeIssue,

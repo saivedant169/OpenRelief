@@ -246,7 +246,10 @@ if (!existsSync(reviewLogPath)) {
 }
 
 const reviewLog = readFileSync(reviewLogPath, "utf8");
-const recordedPublicIssueLaunchRisk = completedReviewLogValuesForField("public issue launch risk").at(-1)?.toLowerCase() ?? "";
+const recordedPublicIssueLaunchRiskValues = completedReviewLogValuesForField("public issue launch risk").map((value) =>
+  value.toLowerCase()
+);
+const recordedPublicIssueLaunchRisk = recordedPublicIssueLaunchRiskValues.at(-1) ?? "";
 const issueUrl = /^public tracking issue:\s*(https:\/\/github\.com\/saivedant169\/OpenRelief\/issues\/\d+)\s*$/im.exec(
   reviewLog
 )?.[1];
@@ -346,6 +349,10 @@ if (launchRiskLines.length !== 1 || !allowedLaunchRiskValues.has(launchRiskLines
 
 if (recordedPublicIssueLaunchRisk && !allowedLaunchRiskValues.has(recordedPublicIssueLaunchRisk)) {
   addError("Partner review log public issue launch risk must include pending, critical, high, medium, low, or none.");
+}
+
+if (recordedPublicIssueLaunchRiskValues.length > 1) {
+  addError("Partner review log public issue launch risk must contain at most one final value.");
 }
 
 if (recordedPublicIssueLaunchRisk && allowedLaunchRiskValues.has(recordedPublicIssueLaunchRisk)) {
