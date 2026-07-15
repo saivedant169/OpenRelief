@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 147,
+  "caseCount": 148,
   "passed": true,
   "metrics": {
-    "passedCount": 147,
+    "passedCount": 148,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -804,6 +804,23 @@
       "sourceIds": [
         "fema-documents",
         "fema-appeals",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-alternate-ownership-proof",
+      "title": "Request for alternate ownership proof",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
         "sba-disaster"
       ],
       "riskFlags": []

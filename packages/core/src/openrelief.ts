@@ -495,14 +495,48 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for home purchase contracts."
   },
   {
+    request: "contract for deed",
+    phrases: ["contract for deed", "contracts for deed"],
+    fact: "The letter asks for a contract for deed."
+  },
+  {
+    request: "land installment contracts",
+    phrases: ["land installment contract", "land installment contracts"],
+    fact: "The letter asks for land installment contracts."
+  },
+  {
+    request: "quitclaim deeds",
+    phrases: ["quitclaim deed", "quitclaim deeds"],
+    fact: "The letter asks for quitclaim deeds."
+  },
+  {
     request: "bills of sale",
     phrases: ["bill of sale", "bills of sale"],
     fact: "The letter asks for bills of sale."
   },
   {
+    request: "bonds for title",
+    phrases: ["bond for title", "bonds for title"],
+    fact: "The letter asks for bonds for title."
+  },
+  {
     request: "will or heirship records",
     phrases: ["last will and testament", "affidavit of heirship", "affidavits of heirship"],
     fact: "The letter asks for will or heirship records."
+  },
+  {
+    request: "major repair receipts",
+    phrases: [
+      "major repair receipt",
+      "major repair receipts",
+      "maintenance receipt",
+      "maintenance receipts",
+      "improvement receipt",
+      "improvement receipts",
+      "receipts for major repairs",
+      "receipts for major repairs or improvements"
+    ],
+    fact: "The letter asks for major repair or improvement receipts."
   },
   {
     request: "lease records",
@@ -1285,8 +1319,13 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "title records",
             "manufactured home titles",
             "home purchase contracts",
+            "contract for deed",
+            "land installment contracts",
+            "quitclaim deeds",
             "bills of sale",
+            "bonds for title",
             "will or heirship records",
+            "major repair receipts",
             "lease records",
             "lease agreements"
           ]),

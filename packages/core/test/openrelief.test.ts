@@ -2816,6 +2816,25 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for will or heirship records.");
   });
 
+  it("extracts alternate ownership proof requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a contract for deed, land installment contract, quitclaim deed, bond for title, or receipts for major repairs or improvements."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("contract for deed");
+    expect(result.detectedRequests).toContain("land installment contracts");
+    expect(result.detectedRequests).toContain("quitclaim deeds");
+    expect(result.detectedRequests).toContain("bonds for title");
+    expect(result.detectedRequests).toContain("major repair receipts");
+    expect(result.facts).toContain("The letter asks for a contract for deed.");
+    expect(result.facts).toContain("The letter asks for land installment contracts.");
+    expect(result.facts).toContain("The letter asks for quitclaim deeds.");
+    expect(result.facts).toContain("The letter asks for bonds for title.");
+    expect(result.facts).toContain("The letter asks for major repair or improvement receipts.");
+  });
+
   it("marks requested ownership lease and utility evidence as missing", () => {
     const packet = buildEvidencePacket([
       "ownership records",
@@ -2835,8 +2854,13 @@ describe("OpenRelief domain core", () => {
       "title records",
       "manufactured home titles",
       "home purchase contracts",
+      "contract for deed",
+      "land installment contracts",
+      "quitclaim deeds",
       "bills of sale",
+      "bonds for title",
       "will or heirship records",
+      "major repair receipts",
       "lease records",
       "lease agreements",
       "housing agreements",
