@@ -116,6 +116,14 @@ describe("release readiness", () => {
     expect(releaseReadiness).toContain("V1 release audit");
     expect(audit).toContain("Remaining Manual Gate");
     expect(audit).toContain("docs/partner-review-log.md");
+    expect(audit).toContain("review date within 90 days");
+    expect(audit).toContain("reviewer role and organization type");
+    expect(audit).toContain("consent record and private note storage location");
+    expect(audit).toContain("reviewed materials and synthetic examples");
+    expect(audit).toContain("sanitized answers for all review questions");
+    expect(audit).toContain("categorized finding ID, severity, area, summary, evidence, and recommended change");
+    expect(audit).toContain("public_issue_safe: yes");
+    expect(audit).toContain("decision owner, decision date, and sanitized notes recorded");
 
     for (const requirementId of requirementIds) {
       expect(audit).toContain(requirementId);

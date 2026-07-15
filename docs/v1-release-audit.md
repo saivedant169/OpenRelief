@@ -104,8 +104,15 @@ This audit maps V1 requirements to repo evidence. It supports release review, bu
 
 Before public launch, `docs/partner-review-log.md` must record manual safety review with:
 
+- review date within 90 days,
+- reviewer role and organization type,
+- consent record and private note storage location,
+- reviewed materials and synthetic examples,
+- sanitized answers for all review questions,
+- categorized finding ID, severity, area, summary, evidence, and recommended change,
+- `public_issue_safe: yes`,
 - no critical issues open,
 - high issues accepted or closed,
 - manual safety review complete,
 - ready for public demo marked `yes`,
-- decision owner and date recorded.
+- decision owner, decision date, and sanitized notes recorded.
