@@ -336,6 +336,12 @@ if (!launchRiskLines.some((line) => allowedLaunchRiskValues.has(line))) {
   addError("Partner review issue section Launch risk must include pending, critical, high, medium, low, or none.");
 }
 
+if (launchRiskLines.length !== 1 || !allowedLaunchRiskValues.has(launchRiskLines[0] ?? "")) {
+  addError(
+    "Partner review issue section Launch risk must contain exactly one value: pending, critical, high, medium, low, or none."
+  );
+}
+
 if (recordedPublicIssueLaunchRisk && !allowedLaunchRiskValues.has(recordedPublicIssueLaunchRisk)) {
   addError("Partner review log public issue launch risk must include pending, critical, high, medium, low, or none.");
 }

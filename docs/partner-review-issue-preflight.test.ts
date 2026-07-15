@@ -267,6 +267,18 @@ describe("partner review issue preflight", () => {
     );
   });
 
+  it("rejects extra launch risk values", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body.replace("\n## Launch risk\n\npending", "\n## Launch risk\n\npending\nunknown")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Partner review issue section Launch risk must contain exactly one value: pending, critical, high, medium, low, or none."
+    );
+  });
+
   it("passes when recorded public issue launch risk matches issue", () => {
     const result = runIssuePreflight(
       {
