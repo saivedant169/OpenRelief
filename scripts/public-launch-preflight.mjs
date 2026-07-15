@@ -267,7 +267,7 @@ if (errors.length === 0) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
   }
 
-  if (publicIssueSafeValues.some((value) => value !== "yes")) {
+  if (publicIssueSafeValues.length === 0 || publicIssueSafeValues.some((value) => value !== "yes")) {
     addError("Public launch blocked: public_issue_safe findings must be yes.");
   }
 

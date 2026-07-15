@@ -41,6 +41,7 @@ risk_escalation_answer: reviewer confirmed high-risk escalation is visible
 evidence_gap_answer: reviewer found evidence categories acceptable for launch
 citation_gap_answer: reviewer found source claims acceptable for launch
 remove_before_launch_answer: reviewer found no screen to remove before launch
+public_issue_safe: yes
 critical_issues_open: no
 high_issues_open: closed
 manual_safety_review_complete: yes
@@ -227,6 +228,13 @@ recommended change: remove screenshot copy before launch
 
   it("rejects findings not safe for public issue", () => {
     const result = runLaunchPreflight(`${completeReviewLog}public_issue_safe: no\n`);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: public_issue_safe findings must be yes.");
+  });
+
+  it("requires findings marked safe for public issue", () => {
+    const result = runLaunchPreflight(completeReviewLog.replace("public_issue_safe: yes\n", ""));
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Public launch blocked: public_issue_safe findings must be yes.");
