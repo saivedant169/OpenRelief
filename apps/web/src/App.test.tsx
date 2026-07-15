@@ -677,6 +677,27 @@ describe("OpenRelief web workflow", () => {
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });
 
+  it("clears saved case snapshots with confirmation", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("OR-CA-2026-001");
+
+    await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
+
+    expect(screen.getByText("This removes local draft and saved case snapshots from this browser.")).toBeInTheDocument();
+    expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /confirm clear local data/i }));
+
+    expect(window.localStorage.getItem("openrelief:v1:cases")).toBeNull();
+    expect(screen.getByText("No saved cases")).toBeInTheDocument();
+    expect(screen.queryByText("Saved case: Claim denial")).not.toBeInTheDocument();
+  });
+
   it("saves multiple local case snapshots with distinct IDs", async () => {
     render(<App />);
 
