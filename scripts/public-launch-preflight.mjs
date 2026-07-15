@@ -24,6 +24,15 @@ const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const normalizedNoValues = new Set(["0", "no", "none"]);
 const normalizedResolvedHighValues = new Set(["0", "no", "none", "accepted", "closed"]);
 const normalizedSanitizedValues = new Set(["sanitized"]);
+const normalizedFindingSeverities = new Set(["critical", "high", "medium", "low"]);
+const normalizedFindingAreas = new Set([
+  "legal boundary",
+  "source grounding",
+  "escalation",
+  "privacy",
+  "accessibility",
+  "workflow"
+]);
 const normalizedPlaceholderValues = new Set([
   "n/a",
   "na",
@@ -195,6 +204,9 @@ const riskEscalationAnswer = completedValue("risk_escalation_answer");
 const evidenceGapAnswer = completedValue("evidence_gap_answer");
 const citationGapAnswer = completedValue("citation_gap_answer");
 const removeBeforeLaunchAnswer = completedValue("remove_before_launch_answer");
+const findingId = completedValue("finding_id");
+const findingSeverity = completedValue("severity").toLowerCase();
+const findingArea = completedValue("area").toLowerCase();
 const findingSummary = completedValue("summary");
 const findingEvidence = completedValue("evidence");
 const findingRecommendedChange = completedValue("recommended change");
@@ -215,11 +227,16 @@ const reviewAnswers = [
   { field: "remove_before_launch_answer", value: removeBeforeLaunchAnswer }
 ];
 const findingFields = [
+  { field: "finding_id", value: findingId },
+  { field: "severity", value: findingSeverity },
+  { field: "area", value: findingArea }
+];
+const findingTextFields = [
   { field: "summary", value: findingSummary },
   { field: "evidence", value: findingEvidence },
   { field: "recommended change", value: findingRecommendedChange }
 ];
-const launchTextFields = [...reviewAnswers, ...findingFields, { field: "notes", value: decisionNotes }];
+const launchTextFields = [...reviewAnswers, ...findingFields, ...findingTextFields, { field: "notes", value: decisionNotes }];
 const requiredSpecificFields = [
   { field: "review_id", value: reviewId },
   { field: "Reviewer role", value: reviewerRole },
@@ -272,8 +289,16 @@ if (errors.length === 0) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
   }
 
-  if (findingFields.some(({ value }) => value.length < minimumReviewAnswerLength)) {
-    addError("Public launch blocked: sanitized findings need summary, evidence, and recommended change.");
+  if (findingId.length < 3 || findingTextFields.some(({ value }) => value.length < minimumReviewAnswerLength)) {
+    addError("Public launch blocked: sanitized findings need finding_id, severity, area, summary, evidence, and recommended change.");
+  }
+
+  if (!normalizedFindingSeverities.has(findingSeverity)) {
+    addError("Public launch blocked: finding severity is invalid.");
+  }
+
+  if (!normalizedFindingAreas.has(findingArea)) {
+    addError("Public launch blocked: finding area is invalid.");
   }
 
   if (publicIssueSafeValues.length === 0 || publicIssueSafeValues.some((value) => value !== "yes")) {

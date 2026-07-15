@@ -41,6 +41,9 @@ risk_escalation_answer: reviewer confirmed high-risk escalation is visible
 evidence_gap_answer: reviewer found evidence categories acceptable for launch
 citation_gap_answer: reviewer found source claims acceptable for launch
 remove_before_launch_answer: reviewer found no screen to remove before launch
+finding_id: finding-001
+severity: low
+area: workflow
 summary: reviewer found no public launch blocker in synthetic flow
 evidence: reviewer cited synthetic denial letter and hosted sandbox review
 recommended change: reviewer recommended no launch-blocking change
@@ -244,10 +247,10 @@ recommended change: remove screenshot copy before launch
   });
 
   it("requires sanitized finding details", () => {
-    const result = runLaunchPreflight(completeReviewLog.replace("summary: reviewer found no public launch blocker in synthetic flow\n", ""));
+    const result = runLaunchPreflight(completeReviewLog.replace("finding_id: finding-001\n", ""));
 
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain("Partner review field incomplete: summary");
+    expect(result.stderr).toContain("Partner review field incomplete: finding_id");
   });
 
   it("rejects thin sanitized finding details", () => {
@@ -259,7 +262,21 @@ recommended change: remove screenshot copy before launch
     );
 
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain("Public launch blocked: sanitized findings need summary, evidence, and recommended change.");
+    expect(result.stderr).toContain(
+      "Public launch blocked: sanitized findings need finding_id, severity, area, summary, evidence, and recommended change."
+    );
+  });
+
+  it("rejects invalid sanitized finding categories", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("severity: low", "severity: urgent")
+        .replace("area: workflow", "area: general")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: finding severity is invalid.");
+    expect(result.stderr).toContain("Public launch blocked: finding area is invalid.");
   });
 
   it("rejects restricted survivor and partner details", () => {

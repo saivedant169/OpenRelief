@@ -61,6 +61,9 @@ const requiredIssueSections = [
   {
     heading: "Sanitized findings",
     texts: [
+      "finding_id:",
+      "severity: critical | high | medium | low",
+      "area: legal boundary | source grounding | escalation | privacy | accessibility | workflow",
       "summary:",
       "evidence:",
       "recommended change:",
@@ -128,6 +131,9 @@ const requiredBodyText = [
   "citation_gap_answer:",
   "remove_before_launch_answer:",
   "Sanitized findings",
+  "finding_id:",
+  "severity: critical | high | medium | low",
+  "area: legal boundary | source grounding | escalation | privacy | accessibility | workflow",
   "summary:",
   "evidence:",
   "recommended change:",

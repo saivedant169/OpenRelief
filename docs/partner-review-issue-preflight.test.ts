@@ -66,6 +66,9 @@ remove_before_launch_answer:
 ## Sanitized findings
 
 \`\`\`text
+finding_id:
+severity: critical | high | medium | low
+area: legal boundary | source grounding | escalation | privacy | accessibility | workflow
 summary:
 evidence:
 recommended change:
@@ -254,12 +257,12 @@ describe("partner review issue preflight", () => {
       ...completeIssue,
       body: completeIssue.body
         .replace(
-          "\n## Sanitized findings\n\n```text\nsummary:\nevidence:\nrecommended change:\npublic_issue_safe: yes | no\n```\n",
+          "\n## Sanitized findings\n\n```text\nfinding_id:\nseverity: critical | high | medium | low\narea: legal boundary | source grounding | escalation | privacy | accessibility | workflow\nsummary:\nevidence:\nrecommended change:\npublic_issue_safe: yes | no\n```\n",
           "\n"
         )
         .replace(
           "## Completion checklist",
-          "summary:\nevidence:\nrecommended change:\npublic_issue_safe: yes | no\n\n## Completion checklist"
+          "finding_id:\nseverity: critical | high | medium | low\narea: legal boundary | source grounding | escalation | privacy | accessibility | workflow\nsummary:\nevidence:\nrecommended change:\npublic_issue_safe: yes | no\n\n## Completion checklist"
         )
     });
 

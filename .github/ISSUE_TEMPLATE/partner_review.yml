@@ -121,6 +121,14 @@ body:
     attributes:
       label: Sanitized findings
       description: Summarize workflow, safety, citation, escalation, privacy, or accessibility findings without private data.
+      placeholder: |
+        finding_id:
+        severity: critical | high | medium | low
+        area: legal boundary | source grounding | escalation | privacy | accessibility | workflow
+        summary:
+        evidence:
+        recommended change:
+        public_issue_safe: yes | no
     validations:
       required: true
   - type: dropdown
