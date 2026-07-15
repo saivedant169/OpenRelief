@@ -1,6 +1,6 @@
 # Partner Outreach
 
-Use this packet to request safety and workflow review from disaster recovery partners before public launch.
+Use this packet to request safety and workflow review from disaster recovery partners before public launch. Send the review materials listed in `docs/partner-review-packet.md`.
 
 ## Reviewers To Contact
 

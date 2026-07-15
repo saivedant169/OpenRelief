@@ -26,6 +26,7 @@ const hostedSandboxPath = path.join(process.cwd(), "docs", "hosted-sandbox.md");
 const demoScriptPath = path.join(process.cwd(), "docs", "demo-script.md");
 const demoVideoRunbookPath = path.join(process.cwd(), "docs", "demo-video-runbook.md");
 const partnerOutreachPath = path.join(process.cwd(), "docs", "partner-outreach.md");
+const partnerReviewPacketPath = path.join(process.cwd(), "docs", "partner-review-packet.md");
 const partnerReviewTargetsPath = path.join(process.cwd(), "docs", "partner-review-targets.md");
 const partnerReviewLogPath = path.join(process.cwd(), "docs", "partner-review-log.md");
 const packageJsonPath = path.join(process.cwd(), "package.json");
@@ -306,11 +307,13 @@ describe("release readiness", () => {
     expect(existsSync(demoScriptPath)).toBe(true);
     expect(existsSync(demoVideoRunbookPath)).toBe(true);
     expect(existsSync(partnerOutreachPath)).toBe(true);
+    expect(existsSync(partnerReviewPacketPath)).toBe(true);
     expect(existsSync(partnerReviewTargetsPath)).toBe(true);
 
     const demoScript = readFileSync(demoScriptPath, "utf8");
     const demoVideoRunbook = readFileSync(demoVideoRunbookPath, "utf8");
     const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
+    const partnerReviewPacket = readFileSync(partnerReviewPacketPath, "utf8");
     const partnerReviewTargets = readFileSync(partnerReviewTargetsPath, "utf8");
 
     expect(demoScript).toContain("OpenRelief Demo Script");
@@ -332,6 +335,17 @@ describe("release readiness", () => {
     expect(partnerOutreach).toContain("No real survivor PII");
     expect(partnerOutreach).toContain("consent");
     expect(partnerOutreach).toContain("partner-review-targets.md");
+    expect(partnerOutreach).toContain("partner-review-packet.md");
+    expect(partnerReviewPacket).toContain("Partner Review Packet");
+    expect(partnerReviewPacket).toContain("https://saivedant169.github.io/OpenRelief/");
+    expect(partnerReviewPacket).toContain("https://github.com/saivedant169/OpenRelief/issues/1");
+    expect(partnerReviewPacket).toContain("docs/demo-script.md");
+    expect(partnerReviewPacket).toContain("packages/evals/reports/california-wildfire-v1.json");
+    expect(partnerReviewPacket).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
+    expect(partnerReviewPacket).toContain("npm run partner:review:preflight");
+    expect(partnerReviewPacket).toContain("npm run partner:issue:preflight");
+    expect(partnerReviewPacket).toContain("npm run launch:preflight");
+    expect(partnerReviewPacket).toContain("No real survivor PII");
     expect(partnerReviewTargets).toContain("Partner Review Targets");
     expect(partnerReviewTargets).toContain("Disaster Legal Assistance Collaborative");
     expect(partnerReviewTargets).toContain("LawHelpCA");
@@ -350,6 +364,7 @@ describe("release readiness", () => {
     const releaseReadiness = readFileSync(releaseReadinessPath, "utf8");
     const technicalReport = readFileSync(technicalReportPath, "utf8");
     const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
+    const partnerReviewPacket = readFileSync(partnerReviewPacketPath, "utf8");
     const partnerReviewTargets = readFileSync(partnerReviewTargetsPath, "utf8");
     const partnerReviewLog = readFileSync(partnerReviewLogPath, "utf8");
     const partnerReviewPreflight = readFileSync(partnerReviewPreflightPath, "utf8");
@@ -362,14 +377,18 @@ describe("release readiness", () => {
     expect(packageJson.scripts.check).toContain("npm run partner:review:preflight");
     expect(packageJson.scripts.check).not.toContain("npm run partner:issue:preflight");
     expect(readme).toContain("Partner review log");
+    expect(readme).toContain("Partner review packet");
     expect(releaseReadiness).toContain("Partner review log");
+    expect(releaseReadiness).toContain("Partner review packet");
     expect(releaseReadiness).toContain("Partner review targets");
     expect(releaseReadiness).toContain("Partner review issue template");
     expect(releaseReadiness).toContain("public tracking issue URL");
     expect(technicalReport).toContain("Partner review log");
     expect(partnerOutreach).toContain("Partner review log");
     expect(partnerOutreach).toContain("partner-review");
+    expect(partnerReviewPacket).toContain("Do not replace empty review fields with placeholders.");
     expect(partnerReviewTargets).toContain("California Volunteers");
+    expect(partnerReviewTargets).toContain("docs/partner-review-packet.md");
     expect(labels).toContain("partner-review");
     expect(partnerReviewIssue).toContain("No real survivor PII");
     expect(partnerReviewIssue).toContain("synthetic examples only");

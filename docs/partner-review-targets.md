@@ -18,7 +18,7 @@ Source checked: 2026-07-15.
 ## Outreach Rules
 
 - Use synthetic demo materials only.
-- Send the hosted synthetic sandbox, demo script, demo video runbook, baseline failures, eval report, and synthetic denial example.
+- Send the hosted synthetic sandbox, demo script, demo video runbook, baseline failures, eval report, synthetic denial example, and `docs/partner-review-packet.md`.
 - Ask for workflow, safety, privacy, accessibility, source-grounding, and escalation feedback.
 - Store raw notes and consent records outside the public repo.
 - Copy only sanitized findings, public issue URL, and launch decision evidence into `docs/partner-review-log.md`.
