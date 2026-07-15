@@ -5,6 +5,7 @@ import path from "node:path";
 const root = process.cwd();
 const reviewLogPath = path.join(root, "docs", "partner-review-log.md");
 const repo = "saivedant169/OpenRelief";
+const requiredTitle = "[Partner review]: V1 launch safety review";
 const requiredLabels = ["partner-review", "safety", "V1"];
 const requiredIssueMaterials = [
   "hosted synthetic sandbox",
@@ -109,7 +110,7 @@ if (!issueNumber) {
 
 const issueResult = spawnSync(
   "gh",
-  ["issue", "view", issueNumber, "--repo", repo, "--json", "url,state,labels,body"],
+  ["issue", "view", issueNumber, "--repo", repo, "--json", "url,state,labels,title,body"],
   { encoding: "utf8" }
 );
 
@@ -126,6 +127,10 @@ if (issue.url !== issueUrl) {
 
 if (issue.state !== "OPEN") {
   addError("Partner review issue must stay open until launch review completes.");
+}
+
+if (issue.title !== requiredTitle) {
+  addError(`Partner review issue title must be: ${requiredTitle}`);
 }
 
 for (const label of requiredLabels) {

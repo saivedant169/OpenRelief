@@ -14,6 +14,7 @@ public tracking issue: ${issueUrl}
 const completeIssue = {
   url: issueUrl,
   state: "OPEN",
+  title: "[Partner review]: V1 launch safety review",
   labels: [{ name: "partner-review" }, { name: "safety" }, { name: "V1" }],
   body: `No real survivor PII
 
@@ -100,6 +101,16 @@ describe("partner review issue preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue missing label: V1");
+  });
+
+  it("rejects title drift", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      title: "[Partner review]: stale launch review"
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue title must be: [Partner review]: V1 launch safety review");
   });
 
   it("rejects missing launch fields in issue body", () => {
