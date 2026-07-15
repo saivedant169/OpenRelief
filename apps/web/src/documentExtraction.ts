@@ -36,6 +36,7 @@ const decodePdfLiteralText = (value: string) =>
     .replace(/\\t/g, "\t")
     .replace(/\\b/g, "\b")
     .replace(/\\f/g, "\f")
+    .replace(/\\([0-7]{1,3})/g, (_match, value: string) => String.fromCharCode(Number.parseInt(value, 8)))
     .replace(/\\([\\()])/g, "$1");
 
 const decodePdfHexText = (value: string) => {
