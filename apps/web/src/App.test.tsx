@@ -683,6 +683,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByRole("heading", { name: "Timeline" })).toBeInTheDocument();
     expect(within(detail).getByText("Letter analyzed")).toBeInTheDocument();
     expect(within(detail).getByText("Checklist created")).toBeInTheDocument();
+    expect(within(detail).getByText("Evidence packet started")).toBeInTheDocument();
     expect(within(detail).getByText(/^Snapshot saved: \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/)).toBeInTheDocument();
     expect(within(detail).getByText("Deadline tracked: appeal within 60 days")).toBeInTheDocument();
     expect(within(detail).getByRole("heading", { name: "Uploaded letter" })).toBeInTheDocument();

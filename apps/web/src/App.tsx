@@ -1223,6 +1223,7 @@ export const App = () => {
                       <ul className="case-detail-list">
                         <li>Letter analyzed</li>
                         <li>Checklist created</li>
+                        <li>Evidence packet started</li>
                         <li>Snapshot saved: {formatSavedCaseUpdatedAt(activeSavedCase.updatedAt)}</li>
                         <li>Deadline tracked: {activeSavedCase.deadlines[0]?.text ?? "None"}</li>
                       </ul>
