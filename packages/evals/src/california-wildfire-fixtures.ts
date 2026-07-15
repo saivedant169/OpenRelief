@@ -562,6 +562,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-tax-ownership-evidence",
+    title: "Request for tax ownership evidence",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send property tax statements, escrow statements, or tax assessment records."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-identity-evidence",
     title: "Request for identity evidence",
     lines: [

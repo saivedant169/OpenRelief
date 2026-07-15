@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 138,
+  "caseCount": 139,
   "passed": true,
   "metrics": {
-    "passedCount": 138,
+    "passedCount": 139,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -641,6 +641,23 @@
     {
       "caseId": "ca-wildfire-rfi-ownership-documents",
       "title": "Request for ownership documents",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-tax-ownership-evidence",
+      "title": "Request for tax ownership evidence",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

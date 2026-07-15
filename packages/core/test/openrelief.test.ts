@@ -2669,12 +2669,30 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for title records.");
   });
 
+  it("extracts property tax escrow and tax assessment ownership requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send property tax statements, escrow statements, or tax assessment records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("property tax statements");
+    expect(result.detectedRequests).toContain("escrow statements");
+    expect(result.detectedRequests).toContain("tax assessment records");
+    expect(result.facts).toContain("The letter asks for property tax statements.");
+    expect(result.facts).toContain("The letter asks for escrow statements.");
+    expect(result.facts).toContain("The letter asks for tax assessment records.");
+  });
+
   it("marks requested ownership lease and utility evidence as missing", () => {
     const packet = buildEvidencePacket([
       "ownership records",
       "proof of ownership",
       "deed records",
       "mortgage statements",
+      "property tax statements",
+      "escrow statements",
+      "tax assessment records",
       "title records",
       "lease records",
       "utility records"
