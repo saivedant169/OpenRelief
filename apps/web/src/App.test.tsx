@@ -419,6 +419,18 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Approval")).toBeInTheDocument();
 
+    const queue = screen.getByRole("region", { name: "Local case queue" });
+    const queueSearch = within(queue).getByLabelText("Search saved cases");
+    await userEvent.type(queueSearch, "approval");
+
+    expect(within(queue).getByText("Saved case: Approval")).toBeInTheDocument();
+    expect(within(queue).queryByText("Saved case: Claim denial")).not.toBeInTheDocument();
+
+    await userEvent.clear(queueSearch);
+    await userEvent.type(queueSearch, "no-match");
+
+    expect(within(queue).getByText("No matching saved cases")).toBeInTheDocument();
+
     const archiveField = screen.getByLabelText("Saved cases JSON") as HTMLTextAreaElement;
     const exported = JSON.parse(archiveField.value) as Array<{ id: string; letterType: string }>;
 

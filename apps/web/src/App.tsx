@@ -396,6 +396,7 @@ export const App = () => {
   const [letterError, setLetterError] = useState("");
   const [caseArchiveText, setCaseArchiveText] = useState("");
   const [caseArchiveError, setCaseArchiveError] = useState("");
+  const [caseQueueSearch, setCaseQueueSearch] = useState("");
 
   useEffect(() => {
     if (letterText === "" && fileName === "No file selected") {
@@ -702,6 +703,22 @@ export const App = () => {
   };
 
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
+  const visibleSavedCases = useMemo(() => {
+    const search = caseQueueSearch.trim().toLowerCase();
+    if (!search) {
+      return savedCases;
+    }
+
+    return savedCases.filter((savedCase) =>
+      [
+        savedCase.id,
+        savedCase.title,
+        caseQueueStatus(savedCase),
+        savedCase.deadlines[0]?.text ?? "",
+        ...savedCase.riskFlags.map(formatRiskFlag)
+      ].some((value) => value.toLowerCase().includes(search))
+    );
+  }, [caseQueueSearch, savedCases]);
   const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
   const currentCaseId = activeSavedCase?.id ?? nextLocalCaseId(savedCases);
   const activeCaseSourceIds = activeSavedCase
@@ -768,33 +785,47 @@ export const App = () => {
           <section className="case-card" aria-label="Local case queue">
             <strong>Local case queue</strong>
             {savedCases.length > 0 ? (
-              <ul className="saved-cases">
-                {savedCases.map((savedCase) => (
-                  <li key={savedCase.id}>
-                    <button
-                      aria-label={`Open saved case ${savedCase.id}`}
-                      className="queue-row"
-                      type="button"
-                      onClick={() => handleOpenSavedCase(savedCase)}
-                    >
-                      <strong>Saved case: {savedCase.title}</strong>
-                      <span>Status: {caseQueueStatus(savedCase)}</span>
-                      <span>Missing: {savedCase.missingEvidence.length}</span>
-                      <span>
-                        Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done
-                      </span>
-                      <span>Last updated: {formatSavedCaseUpdatedAt(savedCase.updatedAt)}</span>
-                      <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
-                      <span>
-                        Flags:{" "}
-                        {savedCase.riskFlags.length > 0
-                          ? savedCase.riskFlags.map(formatRiskFlag).join(", ")
-                          : "None"}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <label className="queue-search">
+                  <span>Search cases</span>
+                  <input
+                    aria-label="Search saved cases"
+                    value={caseQueueSearch}
+                    onChange={(event) => setCaseQueueSearch(event.target.value)}
+                  />
+                </label>
+                {visibleSavedCases.length > 0 ? (
+                  <ul className="saved-cases">
+                    {visibleSavedCases.map((savedCase) => (
+                      <li key={savedCase.id}>
+                        <button
+                          aria-label={`Open saved case ${savedCase.id}`}
+                          className="queue-row"
+                          type="button"
+                          onClick={() => handleOpenSavedCase(savedCase)}
+                        >
+                          <strong>Saved case: {savedCase.title}</strong>
+                          <span>Status: {caseQueueStatus(savedCase)}</span>
+                          <span>Missing: {savedCase.missingEvidence.length}</span>
+                          <span>
+                            Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done
+                          </span>
+                          <span>Last updated: {formatSavedCaseUpdatedAt(savedCase.updatedAt)}</span>
+                          <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
+                          <span>
+                            Flags:{" "}
+                            {savedCase.riskFlags.length > 0
+                              ? savedCase.riskFlags.map(formatRiskFlag).join(", ")
+                              : "None"}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No matching saved cases</p>
+                )}
+              </>
             ) : (
               <p>No saved cases</p>
             )}
