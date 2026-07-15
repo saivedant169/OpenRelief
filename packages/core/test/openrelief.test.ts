@@ -1363,6 +1363,8 @@ describe("OpenRelief domain core", () => {
   it("redacts personal property record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
+        "Personal property records number PPR-A1B2C3 should not stay in notes.",
+        "Personal property receipts number PPR-B1C2D3 should not stay in notes.",
         "Personal property receipt number PPR-123456 should not stay in notes.",
         "Appliance record number APR-123456 should not stay in notes.",
         "Appliance receipts number APT-A1B2C3 should not stay in notes.",
@@ -1376,6 +1378,8 @@ describe("OpenRelief domain core", () => {
       ].join("\n")
     );
 
+    expect(redacted).not.toContain("PPR-A1B2C3");
+    expect(redacted).not.toContain("PPR-B1C2D3");
     expect(redacted).not.toContain("PPR-123456");
     expect(redacted).not.toContain("APR-123456");
     expect(redacted).not.toContain("APT-A1B2C3");
@@ -1390,9 +1394,15 @@ describe("OpenRelief domain core", () => {
   });
 
   it("redacts debris removal record identifiers", () => {
-    const redacted = redactRestrictedIdentifiers("Debris removal record number DBR-123456 should not stay in notes.");
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Debris removal record number DBR-123456 should not stay in notes.",
+        "Debris removal records number DBR-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
 
     expect(redacted).not.toContain("DBR-123456");
+    expect(redacted).not.toContain("DBR-A1B2C3");
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
@@ -2142,6 +2152,7 @@ describe("OpenRelief domain core", () => {
     const redacted = redactRestrictedIdentifiers(
       [
         "Serious needs assistance records number SAR-A1B2C3 should not stay in notes.",
+        "Emergency supply receipts number ESR-B1C2D3 should not stay in notes.",
         "Emergency supplies receipts number ESR-A1B2C3 should not stay in notes.",
         "Immediate needs receipts number INR-A1B2C3 should not stay in notes.",
         "Water and food receipts number WFR-A1B2C3 should not stay in notes.",
@@ -2152,6 +2163,7 @@ describe("OpenRelief domain core", () => {
     );
 
     expect(redacted).not.toContain("SAR-A1B2C3");
+    expect(redacted).not.toContain("ESR-B1C2D3");
     expect(redacted).not.toContain("ESR-A1B2C3");
     expect(redacted).not.toContain("INR-A1B2C3");
     expect(redacted).not.toContain("WFR-A1B2C3");
