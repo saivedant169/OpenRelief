@@ -372,6 +372,9 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("Launch risk");
     expect(partnerReviewIssue).toContain("public tracking issue");
     expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
+    expect(partnerReviewIssue).toContain("SSNs");
+    expect(partnerReviewIssue).toContain("screenshots");
+    expect(partnerReviewIssue).toContain("partner private data");
     expect(partnerReviewIssue).toContain("workflow_match_answer");
     expect(partnerReviewIssue).toContain("misleading_output_answer");
     expect(partnerReviewIssue).toContain("risk_escalation_answer");

@@ -94,7 +94,7 @@ body:
     attributes:
       label: Safety confirmation
       options:
-        - label: Raw notes, consent records, names, addresses, phone numbers, emails, agency IDs, insurance details, medical details, and immigration details are not included.
+        - label: Raw notes, consent records, names, addresses, phone numbers, emails, SSNs, agency IDs, insurance details, medical details, immigration details, screenshots, and partner private data are not included.
           required: true
         - label: Findings use synthetic examples only.
           required: true
