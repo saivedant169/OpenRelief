@@ -61,6 +61,24 @@ describe("OpenRelief web workflow", () => {
     ).toBeInTheDocument();
   });
 
+  it("accepts dropped text letters into editable review", async () => {
+    render(<App />);
+
+    const uploadRegion = screen.getByRole("region", { name: "Upload letter" });
+    const file = new File(["FEMA Notice\nYour application is approved for rental assistance."], "dropped-letter.txt", {
+      type: "text/plain"
+    });
+
+    fireEvent.drop(uploadRegion, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Extracted letter text")).toHaveValue(
+        "FEMA Notice\nYour application is approved for rental assistance."
+      );
+    });
+    expect(screen.getByText("dropped-letter.txt")).toBeInTheDocument();
+  });
+
   it("shows export text and requires confirmation before clearing local work", async () => {
     render(<App />);
 

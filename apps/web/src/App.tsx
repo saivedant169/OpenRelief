@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   Upload
 } from "lucide-react";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, DragEvent, useEffect, useMemo, useState } from "react";
 import {
   analyzeLetter,
   buildEvidencePacket,
@@ -726,26 +726,19 @@ export const App = () => {
     clearOpenReliefLocalStorage();
   };
 
-  const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
-      return;
-    }
-
+  const handleUploadedFile = async (file: File): Promise<boolean> => {
     if (!isAcceptedFile(file)) {
       setFileError("Unsupported file type. Upload TXT, PDF, JPG, or PNG.");
       setClearArmed(false);
       setActiveSavedCaseId(null);
-      event.target.value = "";
-      return;
+      return false;
     }
 
     if (file.size > maxUploadSizeBytes) {
       setFileError("File too large. Upload a file under 10 MB.");
       setClearArmed(false);
       setActiveSavedCaseId(null);
-      event.target.value = "";
-      return;
+      return false;
     }
 
     setFileError("");
@@ -757,7 +750,7 @@ export const App = () => {
     setLetterError("");
     if (file.type.startsWith("text/") || hasFileExtension(file, textFileExtensions)) {
       applyExtractedLetterText(await readTextFile(file));
-      return;
+      return true;
     }
 
     if (file.type === "application/pdf" || hasFileExtension(file, pdfFileExtensions)) {
@@ -766,7 +759,7 @@ export const App = () => {
       if (!extractedText.trim()) {
         setFileError(pdfExtractionMessage);
       }
-      return;
+      return true;
     }
 
     if (file.type.startsWith("image/") || hasFileExtension(file, imageFileExtensions)) {
@@ -775,11 +768,36 @@ export const App = () => {
       if (!extractedText.trim()) {
         setFileError(imageExtractionMessage);
       }
-      return;
+      return true;
     }
 
     setLetterText("");
     setFileError(imageExtractionMessage);
+    return false;
+  };
+
+  const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const accepted = await handleUploadedFile(file);
+    if (!accepted) {
+      event.target.value = "";
+    }
+  };
+
+  const handleUploadDragOver = (event: DragEvent<HTMLElement>) => {
+    event.preventDefault();
+  };
+
+  const handleUploadDrop = async (event: DragEvent<HTMLElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files?.[0];
+    if (file) {
+      await handleUploadedFile(file);
+    }
   };
 
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
@@ -1016,13 +1034,20 @@ export const App = () => {
             </div>
           </section>
 
-          <section className="upload-band" id="help" aria-label="Upload letter">
+          <section
+            className="upload-band"
+            id="help"
+            aria-label="Upload letter"
+            onDragOver={handleUploadDragOver}
+            onDrop={handleUploadDrop}
+          >
             <div className="upload-icon">
               <Upload aria-hidden="true" />
             </div>
             <div>
               <strong>Upload letter (PDF, JPG, PNG, TXT)</strong>
               <p>PDF text and image OCR run locally in this browser.</p>
+              <p>Drop PDF, JPG, PNG, or TXT here, or choose file.</p>
             </div>
             <label className="file-control">
               Choose file
