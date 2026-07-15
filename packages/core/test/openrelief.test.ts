@@ -1881,6 +1881,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical travel evidence identifier removed]");
   });
 
+  it("redacts grouped medical travel receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Medical, medication, or transportation receipts number MMT-A1B2C3 should not stay in notes.",
+        "Receipts for transportation number RFT-A1B2C3 should not stay in notes.",
+        "Receipts for transportation and temporary lodging number RTL-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MMT-A1B2C3");
+    expect(redacted).not.toContain("RFT-A1B2C3");
+    expect(redacted).not.toContain("RTL-A1B2C3");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
   it("redacts transportation note identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Transportation note ID TNO-123456 should not stay in notes.");
 
