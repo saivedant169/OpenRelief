@@ -292,6 +292,13 @@ describe("partner review issue preflight", () => {
     expect(result.stdout).toContain("Partner review issue preflight passed.");
   });
 
+  it("ignores review log launch risk template values", () => {
+    const result = runIssuePreflight(completeIssue, `${reviewLog}public issue launch risk: low | none\n`);
+
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Partner review issue preflight passed.");
+  });
+
   it("rejects recorded public issue launch risk drift", () => {
     const result = runIssuePreflight(completeIssue, `${reviewLog}public issue launch risk: low\n`);
 

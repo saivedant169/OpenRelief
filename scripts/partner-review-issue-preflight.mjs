@@ -236,7 +236,9 @@ const materialMatches = (listedItem, requiredItem) => listedItem === requiredIte
 const completedReviewLogValuesForField = (field) => {
   const pattern = new RegExp(`^${field}:[^\\S\\r\\n]*(.*)$`, "gim");
 
-  return [...reviewLog.matchAll(pattern)].map((match) => match[1].trim()).filter(Boolean);
+  return [...reviewLog.matchAll(pattern)]
+    .map((match) => match[1].trim())
+    .filter((candidate) => candidate && !candidate.includes("|"));
 };
 
 if (!existsSync(reviewLogPath)) {

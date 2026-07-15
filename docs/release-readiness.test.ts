@@ -460,7 +460,7 @@ describe("release readiness", () => {
       "note storage location:",
       "sanitization status: sanitized | private-only | needs-redaction",
       "public tracking issue:",
-      "public issue launch risk:",
+      "public issue launch risk: low | none",
       "Review Questions",
       "Does workflow match real disaster letter review?",
       "Which output could mislead a survivor under stress?",
