@@ -989,6 +989,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts expanded hazard mitigation identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Hazard mitigation records number HMR-A1B2C3 should not stay in notes.",
+        "Hazard mitigation receipts number HMR-B1C2D3 should not stay in notes.",
+        "Hazard mitigation estimates number HME-A1B2C3 should not stay in notes.",
+        "Mitigation repair receipts number MRR-A1B2C3 should not stay in notes.",
+        "Mitigation measure estimates number MME-A1B2C3 should not stay in notes.",
+        "Repair and rebuild stronger records number RBS-A1B2C3 should not stay in notes.",
+        "Rebuild stronger records number RSR-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("HMR-A1B2C3");
+    expect(redacted).not.toContain("HMR-B1C2D3");
+    expect(redacted).not.toContain("HME-A1B2C3");
+    expect(redacted).not.toContain("MRR-A1B2C3");
+    expect(redacted).not.toContain("MME-A1B2C3");
+    expect(redacted).not.toContain("RBS-A1B2C3");
+    expect(redacted).not.toContain("RSR-A1B2C3");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts medicine storage receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medicine storage receipt number RXR-123456 should not stay in notes.");
 
