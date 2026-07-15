@@ -36,6 +36,7 @@ const normalizedPlaceholderValues = new Set([
   "to be determined",
   "unknown"
 ]);
+const dateTemplateValue = "YYYY-MM-DD";
 const requiredReviewedMaterials = [
   "hosted synthetic sandbox",
   "docs/demo-script.md",
@@ -71,7 +72,9 @@ const reviewLog = readFileSync(reviewLogPath, "utf8");
 const completedValue = (field) => {
   const pattern = new RegExp(`^${escapeRegExp(field)}:[^\\S\\r\\n]*(.*)$`, "gim");
   const values = [...reviewLog.matchAll(pattern)].map((match) => match[1].trim());
-  const value = values.reverse().find((candidate) => candidate && !candidate.includes("|"));
+  const value = values
+    .reverse()
+    .find((candidate) => candidate && !candidate.includes("|") && candidate !== dateTemplateValue);
 
   if (!value) {
     addError(`Partner review field incomplete: ${field}`);

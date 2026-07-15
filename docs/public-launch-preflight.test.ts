@@ -69,7 +69,9 @@ describe("public launch preflight", () => {
     const result = runLaunchPreflight(readFileSync(partnerReviewLogPath, "utf8"));
 
     expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review field incomplete: review_date");
     expect(result.stderr).toContain("Partner review field incomplete: note storage location");
+    expect(result.stderr).toContain("Partner review field incomplete: decision_date");
   });
 
   it("reports multiple incomplete review fields together", () => {
@@ -214,6 +216,18 @@ describe("public launch preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review field must use YYYY-MM-DD: review_date");
+  });
+
+  it("rejects unfilled date templates", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("review_date: 2026-07-15", "review_date: YYYY-MM-DD")
+        .replace("decision_date: 2026-07-15", "decision_date: YYYY-MM-DD")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review field incomplete: review_date");
+    expect(result.stderr).toContain("Partner review field incomplete: decision_date");
   });
 
   it("rejects future review and decision dates", () => {
