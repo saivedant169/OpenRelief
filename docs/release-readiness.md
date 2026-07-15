@@ -28,7 +28,7 @@ After manual review is recorded in `docs/partner-review-log.md`, run:
 
 - `npm run launch:preflight`
 
-This launch gate must pass before public demo promotion. It is separate from `npm run check` because automated CI should stay green while partner review is still pending.
+This launch gate must pass before public demo promotion. It checks completed session fields, sanitized notes, issue status, owner, and decision date. It is separate from `npm run check` because automated CI should stay green while partner review is still pending.
 
 ## Evidence Sources
 

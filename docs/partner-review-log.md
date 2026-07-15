@@ -10,7 +10,7 @@ Reviewer role and Consent record must be captured before using feedback.
 
 ```text
 review_id:
-review_date:
+review_date: YYYY-MM-DD
 Reviewer role:
 reviewer organization type:
 Consent record:
@@ -23,7 +23,7 @@ materials reviewed:
 synthetic examples used:
 - examples/california-wildfire/letters/denial-occupancy-proof.txt
 note storage location:
-sanitization status:
+sanitization status: sanitized | private-only | needs-redaction
 ```
 
 ## Review Questions
@@ -70,7 +70,7 @@ high_issues_open:
 manual_safety_review_complete:
 ready_for_public_demo: yes | no
 decision_owner: Saivedant Hava
-decision_date:
+decision_date: YYYY-MM-DD
 notes:
 ```
 

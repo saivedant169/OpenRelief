@@ -13,6 +13,7 @@ const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const normalizedNoValues = new Set(["0", "no", "none"]);
 const normalizedResolvedHighValues = new Set(["0", "no", "none", "accepted", "closed"]);
+const normalizedSanitizedValues = new Set(["sanitized"]);
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
@@ -20,24 +21,66 @@ if (!existsSync(reviewLogPath)) {
 
 const reviewLog = readFileSync(reviewLogPath, "utf8");
 
-const launchValue = (field) => {
+const completedValue = (field) => {
   const pattern = new RegExp(`^${escapeRegExp(field)}:\\s*(.*)$`, "gim");
   const values = [...reviewLog.matchAll(pattern)].map((match) => match[1].trim());
-  const completedValue = values.reverse().find((value) => value && !value.includes("|"));
+  const value = values.reverse().find((candidate) => candidate && !candidate.includes("|"));
 
-  if (!completedValue) {
-    fail(`Partner review launch field incomplete: ${field}`);
+  if (!value) {
+    fail(`Partner review field incomplete: ${field}`);
   }
 
-  return completedValue;
+  return value;
 };
 
-const criticalIssuesOpen = launchValue("critical_issues_open").toLowerCase();
-const highIssuesOpen = launchValue("high_issues_open").toLowerCase();
-const manualSafetyReviewComplete = launchValue("manual_safety_review_complete").toLowerCase();
-const readyForPublicDemo = launchValue("ready_for_public_demo").toLowerCase();
-const decisionOwner = launchValue("decision_owner");
-const decisionDate = launchValue("decision_date");
+const requireDate = (field, value) => {
+  const match = /^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})$/.exec(value);
+
+  if (!match?.groups) {
+    fail(`Partner review field must use YYYY-MM-DD: ${field}`);
+  }
+
+  const year = Number(match.groups.year);
+  const month = Number(match.groups.month);
+  const day = Number(match.groups.day);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
+    fail(`Partner review field must use YYYY-MM-DD: ${field}`);
+  }
+};
+
+const reviewId = completedValue("review_id");
+const reviewDate = completedValue("review_date");
+const reviewerRole = completedValue("Reviewer role");
+const reviewerOrganizationType = completedValue("reviewer organization type");
+const consentRecord = completedValue("Consent record");
+const noteStorageLocation = completedValue("note storage location");
+const sanitizationStatus = completedValue("sanitization status").toLowerCase();
+const criticalIssuesOpen = completedValue("critical_issues_open").toLowerCase();
+const highIssuesOpen = completedValue("high_issues_open").toLowerCase();
+const manualSafetyReviewComplete = completedValue("manual_safety_review_complete").toLowerCase();
+const readyForPublicDemo = completedValue("ready_for_public_demo").toLowerCase();
+const decisionOwner = completedValue("decision_owner");
+const decisionDate = completedValue("decision_date");
+
+requireDate("review_date", reviewDate);
+
+if (reviewId.length < 3) {
+  fail("Public launch blocked: review_id must identify the review session.");
+}
+
+if (reviewerRole.length < 3 || reviewerOrganizationType.length < 3) {
+  fail("Public launch blocked: reviewer role and organization type are required.");
+}
+
+if (consentRecord.length < 3 || noteStorageLocation.length < 3) {
+  fail("Public launch blocked: consent record and note storage location are required.");
+}
+
+if (!normalizedSanitizedValues.has(sanitizationStatus)) {
+  fail("Public launch blocked: sanitization status must confirm sanitized notes.");
+}
 
 if (!normalizedNoValues.has(criticalIssuesOpen)) {
   fail("Public launch blocked: critical issues remain open.");
@@ -59,8 +102,6 @@ if (decisionOwner !== "Saivedant Hava") {
   fail("Public launch blocked: decision_owner must be Saivedant Hava.");
 }
 
-if (!/^\d{4}-\d{2}-\d{2}$/.test(decisionDate) || Number.isNaN(Date.parse(`${decisionDate}T00:00:00Z`))) {
-  fail("Public launch blocked: decision_date must use YYYY-MM-DD.");
-}
+requireDate("decision_date", decisionDate);
 
 console.log("Public launch preflight passed.");

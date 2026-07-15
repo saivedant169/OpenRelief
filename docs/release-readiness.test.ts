@@ -380,6 +380,13 @@ describe("release readiness", () => {
     expect(technicalReport).toContain("npm run launch:preflight");
 
     const requiredLaunchFields = [
+      "review_id",
+      "review_date",
+      "Reviewer role",
+      "reviewer organization type",
+      "Consent record",
+      "note storage location",
+      "sanitization status",
       "critical_issues_open",
       "high_issues_open",
       "manual_safety_review_complete",
@@ -394,6 +401,9 @@ describe("release readiness", () => {
 
     expect(preflightScript).toContain("Saivedant Hava");
     expect(preflightScript).toContain("YYYY-MM-DD");
+    expect(preflightScript).toContain("sanitized");
+    expect(releaseReadiness).toContain("sanitized notes");
+    expect(technicalReport).toContain("completed reviewer session");
   });
 
   it("defines a demo video preflight command", () => {
