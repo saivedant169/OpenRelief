@@ -1094,6 +1094,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts personal property record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Personal property receipt number PPR-123456 should not stay in notes.",
+        "Appliance record number APR-123456 should not stay in notes.",
+        "Occupational tool record number OTR-123456 should not stay in notes.",
+        "Educational material record number EMR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("PPR-123456");
+    expect(redacted).not.toContain("APR-123456");
+    expect(redacted).not.toContain("OTR-123456");
+    expect(redacted).not.toContain("EMR-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts debris removal record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Debris removal record number DBR-123456 should not stay in notes.");
 
