@@ -1425,6 +1425,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts income residence evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Rent receipt number RRT-A1B2C3 should not stay in notes.",
+        "Employer statement number EMS-A1B2C3 should not stay in notes.",
+        "Pay stub number PST-A1B2C3 should not stay in notes.",
+        "Public official statement number POS-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("RRT-A1B2C3");
+    expect(redacted).not.toContain("EMS-A1B2C3");
+    expect(redacted).not.toContain("PST-A1B2C3");
+    expect(redacted).not.toContain("POS-A1B2C3");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts ownership insurance evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
