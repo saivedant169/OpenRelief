@@ -281,6 +281,10 @@ describe("OpenRelief web workflow", () => {
     expect(anchorClick).toHaveBeenCalled();
     expect(revokeObjectUrl).toHaveBeenCalledWith("blob:openrelief-packet");
 
+    const exportCard = screen.getByRole("heading", { name: "Export packet" }).closest("article");
+    expect(exportCard).not.toBeNull();
+    expect(within(exportCard as HTMLElement).getByRole("button", { name: "Clear export local data" })).toBeInTheDocument();
+
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
 
     expect(screen.getByLabelText("Extracted letter text")).not.toHaveValue("");
@@ -290,6 +294,26 @@ describe("OpenRelief web workflow", () => {
 
     expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+  });
+
+  it("clears local data from the export card with confirmation", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const exportCard = screen.getByRole("heading", { name: "Export packet" }).closest("article");
+    expect(exportCard).not.toBeNull();
+
+    await userEvent.click(within(exportCard as HTMLElement).getByRole("button", { name: "Clear export local data" }));
+    expect(screen.getByLabelText("Extracted letter text")).not.toHaveValue("");
+    expect(
+      within(exportCard as HTMLElement).getByRole("button", { name: "Confirm clear export local data" })
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      within(exportCard as HTMLElement).getByRole("button", { name: "Confirm clear export local data" })
+    );
+    expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
   });
 
   it("labels approval analysis without denial wording", async () => {

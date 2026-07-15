@@ -1872,6 +1872,14 @@ export const App = () => {
                     >
                       Download packet text
                     </button>
+                    <button
+                      aria-label={clearArmed ? "Confirm clear export local data" : "Clear export local data"}
+                      className="secondary-action danger-action"
+                      type="button"
+                      onClick={handleClearLocalData}
+                    >
+                      {clearArmed ? "Confirm clear local data" : "Clear local data"}
+                    </button>
                   </div>
                 </div>
                 <ul className="export-includes" aria-label="Export packet contents">
