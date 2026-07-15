@@ -850,6 +850,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[housing identifier removed]");
   });
 
+  it("redacts expanded displacement assistance identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Displacement assistance records number DAS-A1B2C3 should not stay in notes.",
+        "Immediate housing records number IHR-A1B2C3 should not stay in notes.",
+        "Family and friends stay records number FFR-A1B2C3 should not stay in notes.",
+        "Host stay records number HSR-A1B2C3 should not stay in notes.",
+        "Temporary housing option records number THO-A1B2C3 should not stay in notes.",
+        "Available housing option records number AHO-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("DAS-A1B2C3");
+    expect(redacted).not.toContain("IHR-A1B2C3");
+    expect(redacted).not.toContain("FFR-A1B2C3");
+    expect(redacted).not.toContain("HSR-A1B2C3");
+    expect(redacted).not.toContain("THO-A1B2C3");
+    expect(redacted).not.toContain("AHO-A1B2C3");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
   it("redacts continued housing assistance identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
