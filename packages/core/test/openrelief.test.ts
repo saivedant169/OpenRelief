@@ -1383,6 +1383,25 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts financial residence evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Bank statement number BST-A1B2C3 should not stay in notes.",
+        "Credit card statement number CCS-A1B2C3 should not stay in notes.",
+        "Phone bill number PHB-A1B2C3 should not stay in notes.",
+        "Cable bill number CAB-A1B2C3 should not stay in notes.",
+        "Medical provider bill number MPB-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("BST-A1B2C3");
+    expect(redacted).not.toContain("CCS-A1B2C3");
+    expect(redacted).not.toContain("PHB-A1B2C3");
+    expect(redacted).not.toContain("CAB-A1B2C3");
+    expect(redacted).not.toContain("MPB-A1B2C3");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts ownership insurance evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [

@@ -290,6 +290,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:bank\s+statements?|credit\s+card\s+statements?|phone\s+bills?|(?:cable|satellite|cable\/satellite)\s+bills?|medical\s+provider(?:'s)?\s+bills?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[residence evidence identifier removed]"
+  },
+  {
+    pattern:
       /\b(?:manufactured\s+home\s+(?:certificate|title)|mobile\s+home\s+(?:certificate\s+of\s+title|title)|home\s+purchase\s+contract|contract\s+for\s+deed|land\s+installment\s+contract|quitclaim\s+deed|bill\s+of\s+sale|bond\s+for\s+title)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[residence evidence identifier removed]"
   },
