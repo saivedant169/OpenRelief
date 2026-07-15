@@ -28,6 +28,9 @@ const completeIssue = {
 - packages/evals/reports/california-wildfire-v1.json
 - examples/california-wildfire/letters/denial-occupancy-proof.txt
 
+## Session fields
+
+\`\`\`text
 review_id:
 review_date: YYYY-MM-DD
 Reviewer role:
@@ -35,14 +38,22 @@ reviewer organization type:
 Consent record:
 note storage location:
 sanitization status: sanitized | private-only | needs-redaction
+\`\`\`
 
+## Review answers
+
+\`\`\`text
 workflow_match_answer:
 misleading_output_answer:
 risk_escalation_answer:
 evidence_gap_answer:
 citation_gap_answer:
 remove_before_launch_answer:
+\`\`\`
 
+## Launch decision fields
+
+\`\`\`text
 critical_issues_open:
 high_issues_open:
 manual_safety_review_complete:
@@ -50,6 +61,7 @@ ready_for_public_demo: yes | no
 decision_owner: Saivedant Hava
 decision_date: YYYY-MM-DD
 notes:
+\`\`\`
 
 SSNs
 screenshots
@@ -121,6 +133,18 @@ describe("partner review issue preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue missing body text: workflow_match_answer:");
+  });
+
+  it("rejects launch fields outside their issue sections", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body
+        .replace("Reviewer role:\n", "")
+        .replace("npm run launch:preflight passes", "npm run launch:preflight passes\n\nReviewer role:")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue section Session fields missing: Reviewer role:");
   });
 
   it("rejects review materials outside the materials section", () => {

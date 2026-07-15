@@ -16,6 +16,43 @@ const requiredIssueMaterials = [
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
+const requiredIssueSections = [
+  {
+    heading: "Session fields",
+    texts: [
+      "review_id:",
+      "review_date: YYYY-MM-DD",
+      "Reviewer role:",
+      "reviewer organization type:",
+      "Consent record:",
+      "note storage location:",
+      "sanitization status: sanitized | private-only | needs-redaction"
+    ]
+  },
+  {
+    heading: "Review answers",
+    texts: [
+      "workflow_match_answer:",
+      "misleading_output_answer:",
+      "risk_escalation_answer:",
+      "evidence_gap_answer:",
+      "citation_gap_answer:",
+      "remove_before_launch_answer:"
+    ]
+  },
+  {
+    heading: "Launch decision fields",
+    texts: [
+      "critical_issues_open:",
+      "high_issues_open:",
+      "manual_safety_review_complete:",
+      "ready_for_public_demo: yes | no",
+      "decision_owner: Saivedant Hava",
+      "decision_date: YYYY-MM-DD",
+      "notes:"
+    ]
+  }
+];
 const requiredBodyText = [
   "No real survivor PII",
   "hosted synthetic sandbox",
@@ -87,6 +124,28 @@ const listItemsForHeading = (content, heading) => {
   return items;
 };
 
+const sectionTextForHeading = (content, heading) => {
+  const lines = content.split(/\r?\n/);
+  const headingText = `## ${heading}`.toLowerCase();
+  const startIndex = lines.findIndex((line) => line.trim().toLowerCase() === headingText);
+
+  if (startIndex === -1) {
+    return "";
+  }
+
+  const sectionLines = [];
+
+  for (const line of lines.slice(startIndex + 1)) {
+    if (line.trim().startsWith("## ")) {
+      break;
+    }
+
+    sectionLines.push(line);
+  }
+
+  return sectionLines.join("\n");
+};
+
 const materialMatches = (listedItem, requiredItem) => listedItem === requiredItem || listedItem.startsWith(`${requiredItem}:`);
 
 if (!existsSync(reviewLogPath)) {
@@ -150,6 +209,16 @@ const listedIssueMaterials = listItemsForHeading(issue.body ?? "", "Materials re
 for (const material of requiredIssueMaterials) {
   if (!listedIssueMaterials.some((listedItem) => materialMatches(listedItem, material))) {
     addError(`Partner review issue materials missing: ${material}`);
+  }
+}
+
+for (const section of requiredIssueSections) {
+  const sectionText = sectionTextForHeading(issue.body ?? "", section.heading);
+
+  for (const text of section.texts) {
+    if (!sectionText.includes(text)) {
+      addError(`Partner review issue section ${section.heading} missing: ${text}`);
+    }
   }
 }
 
