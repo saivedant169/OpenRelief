@@ -1189,6 +1189,16 @@ export const App = () => {
                       </ul>
                     </section>
                     <section className="case-detail-section">
+                      <h3>Uploaded letter</h3>
+                      <ul className="case-detail-list">
+                        <li>
+                          <strong>File</strong>
+                          <span>{activeSavedCase.fileName}</span>
+                        </li>
+                        <li>Stored in local browser data only</li>
+                      </ul>
+                    </section>
+                    <section className="case-detail-section">
                       <h3>Checklist</h3>
                       <ul className="case-detail-list">
                         {activeSavedCase.checklistItems.map((item) => (

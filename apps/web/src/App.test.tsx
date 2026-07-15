@@ -632,6 +632,9 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("Letter analyzed")).toBeInTheDocument();
     expect(within(detail).getByText("Checklist created")).toBeInTheDocument();
     expect(within(detail).getByText("Snapshot saved")).toBeInTheDocument();
+    expect(within(detail).getByRole("heading", { name: "Uploaded letter" })).toBeInTheDocument();
+    expect(within(detail).getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
+    expect(within(detail).getByText("Stored in local browser data only")).toBeInTheDocument();
     expect(checklistSection).not.toBeNull();
     expect(within(detail).getByRole("heading", { name: "Checklist" })).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getByText("Request human review")).toBeInTheDocument();
