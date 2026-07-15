@@ -36,6 +36,7 @@ const partnerReviewPreflightPath = path.join(process.cwd(), "scripts", "partner-
 const partnerReviewIssuePreflightPath = path.join(process.cwd(), "scripts", "partner-review-issue-preflight.mjs");
 const publicLaunchPreflightPath = path.join(process.cwd(), "scripts", "public-launch-preflight.mjs");
 const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "pages.yml");
+const ciWorkflowPath = path.join(process.cwd(), ".github", "workflows", "ci.yml");
 const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
 
 describe("release readiness", () => {
@@ -376,7 +377,7 @@ describe("release readiness", () => {
     expect(packageJson.scripts["partner:review:preflight"]).toBe("node scripts/partner-review-preflight.mjs");
     expect(packageJson.scripts["partner:issue:preflight"]).toBe("node scripts/partner-review-issue-preflight.mjs");
     expect(packageJson.scripts.check).toContain("npm run partner:review:preflight");
-    expect(packageJson.scripts.check).not.toContain("npm run partner:issue:preflight");
+    expect(packageJson.scripts.check).toContain("npm run partner:issue:preflight");
     expect(readme).toContain("Partner review log");
     expect(readme).toContain("Partner review packet");
     expect(releaseReadiness).toContain("Partner review log");
@@ -600,6 +601,15 @@ describe("release readiness", () => {
     expect(workflow).toContain("pages: write");
     expect(workflow).toContain("id-token: write");
     expect(viteConfig).toContain('base: process.env.OPENRELIEF_BASE_PATH ?? "/"');
+  });
+
+  it("passes GitHub token to CI check for issue preflight", () => {
+    expect(existsSync(ciWorkflowPath)).toBe(true);
+
+    const workflow = readFileSync(ciWorkflowPath, "utf8");
+
+    expect(workflow).toContain("run: npm run check");
+    expect(workflow).toContain("GH_TOKEN: ${{ github.token }}");
   });
 
   it("publishes the hosted sandbox URL", () => {
