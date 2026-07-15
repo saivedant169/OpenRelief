@@ -1050,6 +1050,8 @@ export const App = () => {
                           onClick={() => handleOpenSavedCase(savedCase)}
                         >
                           <strong>Saved case: {savedCase.title}</strong>
+                          <span>Case ID: {savedCase.id}</span>
+                          <span>Letter type: {letterTypeLabels[savedCase.letterType]}</span>
                           <span>Status: {caseQueueStatus(savedCase)}</span>
                           <span>Missing: {savedCase.missingEvidence.length}</span>
                           <span>

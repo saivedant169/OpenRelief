@@ -657,6 +657,8 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("region", { name: "Local case queue" })).toBeInTheDocument();
     expect(within(screen.getByRole("region", { name: "Current case" })).getByText("OR-CA-2026-001")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(screen.getByText("Case ID: OR-CA-2026-001")).toBeInTheDocument();
+    expect(screen.getByText("Letter type: Claim denial")).toBeInTheDocument();
     expect(screen.getByText("Missing items: Lease, mortgage, utility bill, or other occupancy proof")).toBeInTheDocument();
     expect(screen.getByText("Escalation: Denial or appeal deadline")).toBeInTheDocument();
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
@@ -680,8 +682,12 @@ describe("OpenRelief web workflow", () => {
 
     expect(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Open saved case OR-CA-2026-002" })).toBeInTheDocument();
+    expect(screen.getByText("Case ID: OR-CA-2026-001")).toBeInTheDocument();
+    expect(screen.getByText("Case ID: OR-CA-2026-002")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Approval")).toBeInTheDocument();
+    expect(screen.getByText("Letter type: Claim denial")).toBeInTheDocument();
+    expect(screen.getByText("Letter type: Approval")).toBeInTheDocument();
 
     const queue = screen.getByRole("region", { name: "Local case queue" });
     const queueSearch = within(queue).getByLabelText("Search saved cases");
