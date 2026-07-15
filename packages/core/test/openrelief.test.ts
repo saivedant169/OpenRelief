@@ -1645,6 +1645,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical travel evidence identifier removed]");
   });
 
+  it("redacts expanded lodging record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Temporary lodging record number TLG-A1B2C3 should not stay in notes.",
+        "Out-of-pocket lodging receipt number OPL-A1B2C3 should not stay in notes.",
+        "Verifiable lodging receipt number VLR-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("TLG-A1B2C3");
+    expect(redacted).not.toContain("OPL-A1B2C3");
+    expect(redacted).not.toContain("VLR-A1B2C3");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
   it("redacts hotel and motel receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [

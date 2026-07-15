@@ -325,7 +325,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:medical|medication|transportation|temporary\s+lodging|evacuation\s+lodging|lodging\s+expense|short-term\s+lodging|hotel|motel)\s+(?:receipts?|notes?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:medical|medication|transportation)\s+(?:receipts?|notes?)|(?:temporary\s+lodging|evacuation\s+lodging|lodging\s+expense|short-term\s+lodging|lodging|hotel|motel)\s+(?:receipts?|records?|notes?))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[medical travel evidence identifier removed]"
   },
   {
