@@ -634,6 +634,14 @@ describe("OpenRelief web workflow", () => {
 
     expect(within(detail).getByRole("heading", { name: "Escalation flags" })).toBeInTheDocument();
     expect(within(detail).getByText("Denial or appeal deadline")).toBeInTheDocument();
+    const escalationNotesSection = within(detail).getByRole("heading", { name: "Escalation notes" }).closest("section");
+    expect(escalationNotesSection).not.toBeNull();
+    expect(within(escalationNotesSection as HTMLElement).getByText("Request human review")).toBeInTheDocument();
+    expect(
+      within(escalationNotesSection as HTMLElement).getByText(
+        "Denial, appeal, or risk flags should be reviewed by a qualified helper."
+      )
+    ).toBeInTheDocument();
   });
 
   it("stores case-worker notes locally from case detail", async () => {

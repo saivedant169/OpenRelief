@@ -766,6 +766,8 @@ export const App = () => {
   }, [caseQueueEscalationsOnly, caseQueueSearch, caseQueueSort, savedCases]);
   const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
   const currentCaseId = activeSavedCase?.id ?? nextLocalCaseId(savedCases);
+  const activeCaseEscalationItems =
+    activeSavedCase?.checklistItems.filter((item) => item.category === "human_review") ?? [];
   const activeCaseSourceIds = activeSavedCase
     ? [
         ...new Set([
@@ -1317,6 +1319,21 @@ export const App = () => {
                         </ul>
                       ) : (
                         <p>No escalation flags</p>
+                      )}
+                    </section>
+                    <section className="case-detail-section">
+                      <h3>Escalation notes</h3>
+                      {activeCaseEscalationItems.length > 0 ? (
+                        <ul className="case-detail-list">
+                          {activeCaseEscalationItems.map((item) => (
+                            <li key={item.id}>
+                              <strong>{item.title}</strong>
+                              <span>{item.reason}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No escalation notes</p>
                       )}
                     </section>
                     <section className="case-detail-section">
