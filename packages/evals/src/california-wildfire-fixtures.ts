@@ -758,6 +758,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-expanded-identity-evidence",
+    title: "Request for expanded identity evidence",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a federal ID, Social Security card, employer's payroll document, military ID, or marriage license."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-repair-receipts",
     title: "Request for repair receipts",
     lines: [

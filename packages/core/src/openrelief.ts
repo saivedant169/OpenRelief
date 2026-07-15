@@ -311,7 +311,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:ssn|ss\s*#|social security(?:\s+number|\s*#)?)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
+      /\b(?:ssn|ss\s*#|social security(?:\s+(?:number|card)|\s*#)?)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
     replacement: "[SSN removed]"
   },
   {
@@ -756,9 +756,39 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for a state ID."
   },
   {
+    request: "federal id",
+    phrases: ["federal id", "federal-issued id", "federal issued id", "federal identification card"],
+    fact: "The letter asks for a federal ID."
+  },
+  {
     request: "birth certificate",
     phrases: ["birth certificate"],
     fact: "The letter asks for a birth certificate."
+  },
+  {
+    request: "social security cards",
+    phrases: ["social security card", "social security cards"],
+    fact: "The letter asks for Social Security cards."
+  },
+  {
+    request: "employer payroll documents",
+    phrases: [
+      "employer payroll document",
+      "employer payroll documents",
+      "employer's payroll document",
+      "employer's payroll documents"
+    ],
+    fact: "The letter asks for employer payroll documents."
+  },
+  {
+    request: "military identification",
+    phrases: ["military identification", "military id", "military identification card"],
+    fact: "The letter asks for military identification."
+  },
+  {
+    request: "marriage licenses",
+    phrases: ["marriage license", "marriage licenses"],
+    fact: "The letter asks for marriage licenses."
   },
   {
     request: "insurance information",
@@ -1300,7 +1330,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
       category: "identity",
       items: [
         {
-          label: "Photo ID, passport, birth certificate, or replacement ID note",
+          label: "Photo ID, passport, birth certificate, or other identity proof",
           status: evidenceStatus(requests, availableEvidence, [
             "photo id",
             "replacement id note",
@@ -1308,7 +1338,12 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "driver's license",
             "passport",
             "state id",
-            "birth certificate"
+            "federal id",
+            "birth certificate",
+            "social security cards",
+            "employer payroll documents",
+            "military identification",
+            "marriage licenses"
           ]),
           sourceIds: ["fema-documents"]
         }

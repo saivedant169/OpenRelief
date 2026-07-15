@@ -373,6 +373,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[SSN removed]");
   });
 
+  it("redacts Social Security card numbers", () => {
+    const redacted = redactRestrictedIdentifiers("Social Security card 123456789 should not stay in local text.");
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[SSN removed]");
+  });
+
   it("redacts shorthand undashed Social Security numbers", () => {
     const redacted = redactRestrictedIdentifiers("SS# 123456789 should not stay in local text.");
 
@@ -2595,6 +2602,25 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for a birth certificate.");
   });
 
+  it("extracts expanded identity evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a federal ID, Social Security card, employer's payroll document, military ID, or marriage license."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("federal id");
+    expect(result.detectedRequests).toContain("social security cards");
+    expect(result.detectedRequests).toContain("employer payroll documents");
+    expect(result.detectedRequests).toContain("military identification");
+    expect(result.detectedRequests).toContain("marriage licenses");
+    expect(result.facts).toContain("The letter asks for a federal ID.");
+    expect(result.facts).toContain("The letter asks for Social Security cards.");
+    expect(result.facts).toContain("The letter asks for employer payroll documents.");
+    expect(result.facts).toContain("The letter asks for military identification.");
+    expect(result.facts).toContain("The letter asks for marriage licenses.");
+  });
+
   it("marks requested identity evidence as missing", () => {
     const packet = buildEvidencePacket([
       "photo id",
@@ -2602,7 +2628,12 @@ describe("OpenRelief domain core", () => {
       "driver license",
       "passport",
       "state id",
-      "birth certificate"
+      "federal id",
+      "birth certificate",
+      "social security cards",
+      "employer payroll documents",
+      "military identification",
+      "marriage licenses"
     ]);
 
     expect(packet.groups.find((group) => group.category === "identity")?.items[0]?.status).toBe("missing");
