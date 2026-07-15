@@ -2727,6 +2727,18 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immigration_sensitive"]);
   });
 
+  it("detects A-number context as immigration-sensitive risk", () => {
+    const flags = detectRiskFlags("The helper asked whether my A-number affects FEMA help.");
+
+    expect(flags).toEqual(["immigration_sensitive"]);
+  });
+
+  it("detects USCIS number context as immigration-sensitive risk", () => {
+    const flags = detectRiskFlags("I have a USCIS number and need to know who can review this safely.");
+
+    expect(flags).toEqual(["immigration_sensitive"]);
+  });
+
   it("detects sleeping in a car as homelessness risk", () => {
     const flags = detectRiskFlags("We are sleeping in our car after the evacuation.");
 
