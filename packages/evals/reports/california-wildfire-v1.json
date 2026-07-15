@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 160,
+  "caseCount": 161,
   "passed": true,
   "metrics": {
-    "passedCount": 160,
+    "passedCount": 161,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1206,6 +1206,23 @@
       "riskFlags": [
         "homelessness"
       ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-serious-needs-records",
+      "title": "Request for serious needs records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
     },
     {
       "caseId": "ca-wildfire-rfi-power-equipment",

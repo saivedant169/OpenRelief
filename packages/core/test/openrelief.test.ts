@@ -1362,6 +1362,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical travel evidence identifier removed]");
   });
 
+  it("redacts serious needs receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Serious needs receipt number SNA-123456 should not stay in notes.",
+        "Infant formula receipt number IFR-123456 should not stay in notes.",
+        "Personal hygiene item receipt number PHI-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("SNA-123456");
+    expect(redacted).not.toContain("IFR-123456");
+    expect(redacted).not.toContain("PHI-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts labeled payment card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Credit card number 4111111111111111 should not stay in notes.");
 
@@ -3330,6 +3345,17 @@ describe("OpenRelief domain core", () => {
     expect(lodgingResult.detectedRequests).toContain("temporary lodging receipts");
   });
 
+  it("extracts serious needs evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send serious needs receipts, emergency supply receipts, infant formula receipts, diaper receipts, and personal hygiene item receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("serious needs records");
+    expect(result.facts).toContain("The letter asks for serious needs records.");
+  });
+
   it("extracts evacuation lodging and agency message requests", () => {
     const lodgingResult = analyzeLetter([
       "FEMA Request for Information",
@@ -3412,6 +3438,12 @@ describe("OpenRelief domain core", () => {
     );
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested serious needs evidence as missing", () => {
+    const packet = buildEvidencePacket(["serious needs records"]);
+
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
   });
 
   it("marks requested shelter placement notes as missing communication evidence", () => {

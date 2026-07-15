@@ -255,7 +255,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:generator\s+(?:purchase\s+)?receipt|generator\s+rental\s+receipt|chainsaw\s+(?:rental\s+)?receipt|dehumidifier\s+(?:rental\s+)?receipt|miscellaneous\s+item\s+(?:record|receipt)|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|clean\s+and\s+sanitize\s+receipt|cleanup\s+(?:supply|material)\s+receipt|paid\s+cleanup\s+help\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:serious\s+needs\s+(?:record|receipt)|emergency\s+(?:supply|water|food)\s+receipt|first\s+aid\s+receipt|infant\s+formula\s+receipt|breastfeeding\s+supply\s+receipt|diaper\s+receipt|personal\s+hygiene\s+(?:item\s+)?receipt|fuel\s+for\s+transportation\s+receipt|generator\s+(?:purchase\s+)?receipt|generator\s+rental\s+receipt|chainsaw\s+(?:rental\s+)?receipt|dehumidifier\s+(?:rental\s+)?receipt|miscellaneous\s+item\s+(?:record|receipt)|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|clean\s+and\s+sanitize\s+receipt|cleanup\s+(?:supply|material)\s+receipt|paid\s+cleanup\s+help\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[recovery expense identifier removed]"
   },
   {
@@ -935,6 +935,25 @@ const requestDetectionRules: RequestDetectionRule[] = [
       "receipts for transportation and temporary lodging"
     ],
     fact: "The letter asks for temporary lodging receipts."
+  },
+  {
+    request: "serious needs records",
+    phrases: [
+      "serious needs records",
+      "serious needs receipts",
+      "serious needs assistance records",
+      "emergency supply receipts",
+      "emergency supplies receipts",
+      "immediate needs receipts",
+      "water and food receipts",
+      "first aid receipts",
+      "infant formula receipts",
+      "breastfeeding supply receipts",
+      "diaper receipts",
+      "personal hygiene item receipts",
+      "fuel for transportation receipts"
+    ],
+    fact: "The letter asks for serious needs records."
   },
   {
     request: "agency messages",
@@ -1686,6 +1705,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "debris removal records",
             "repair records",
             "supporting receipts",
+            "serious needs records",
             "generator rental receipts",
             "temporary power equipment receipts",
             "miscellaneous item records",

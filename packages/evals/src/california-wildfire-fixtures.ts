@@ -1012,6 +1012,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-serious-needs-records",
+    title: "Request for serious needs records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send serious needs receipts, emergency supply receipts, infant formula receipts, diaper receipts, and personal hygiene item receipts."
+    ],
+    county: "Butte",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-power-equipment",
     title: "Request for generator and power equipment records",
     lines: [
