@@ -14,6 +14,10 @@
   color: 0052cc
   description: WCAG, keyboard, screen-reader, or mobile accessibility work.
 
+- name: partner-review
+  color: b60205
+  description: External safety or workflow review needed for launch readiness.
+
 - name: good first issue
   color: 7057ff
   description: Small, scoped contribution suitable for new contributors.

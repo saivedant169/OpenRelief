@@ -13,6 +13,7 @@ const labelsPath = path.join(process.cwd(), ".github", "labels.yml");
 const codeownersPath = path.join(process.cwd(), ".github", "CODEOWNERS");
 const bugReportPath = path.join(process.cwd(), ".github", "ISSUE_TEMPLATE", "bug_report.yml");
 const policySourceIssuePath = path.join(process.cwd(), ".github", "ISSUE_TEMPLATE", "policy_source.yml");
+const partnerReviewIssuePath = path.join(process.cwd(), ".github", "ISSUE_TEMPLATE", "partner_review.yml");
 const prTemplatePath = path.join(process.cwd(), ".github", "pull_request_template.md");
 const securityPath = path.join(process.cwd(), "SECURITY.md");
 const syntheticDataLicensePath = path.join(process.cwd(), "docs/synthetic-data-license.md");
@@ -331,6 +332,7 @@ describe("release readiness", () => {
   it("defines partner review evidence controls", () => {
     expect(existsSync(partnerReviewLogPath)).toBe(true);
     expect(existsSync(partnerReviewPreflightPath)).toBe(true);
+    expect(existsSync(partnerReviewIssuePath)).toBe(true);
 
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
     const readme = readFileSync(readmePath, "utf8");
@@ -339,13 +341,22 @@ describe("release readiness", () => {
     const partnerOutreach = readFileSync(partnerOutreachPath, "utf8");
     const partnerReviewLog = readFileSync(partnerReviewLogPath, "utf8");
     const partnerReviewPreflight = readFileSync(partnerReviewPreflightPath, "utf8");
+    const partnerReviewIssue = readFileSync(partnerReviewIssuePath, "utf8");
+    const labels = readFileSync(labelsPath, "utf8");
 
     expect(packageJson.scripts["partner:review:preflight"]).toBe("node scripts/partner-review-preflight.mjs");
     expect(packageJson.scripts.check).toContain("npm run partner:review:preflight");
     expect(readme).toContain("Partner review log");
     expect(releaseReadiness).toContain("Partner review log");
+    expect(releaseReadiness).toContain("Partner review issue template");
     expect(technicalReport).toContain("Partner review log");
     expect(partnerOutreach).toContain("Partner review log");
+    expect(labels).toContain("partner-review");
+    expect(partnerReviewIssue).toContain("No real survivor PII");
+    expect(partnerReviewIssue).toContain("synthetic examples only");
+    expect(partnerReviewIssue).toContain("Sanitized findings");
+    expect(partnerReviewIssue).toContain("Launch risk");
+    expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
 
     const requiredLogText = [
       "Partner Review Log",

@@ -1,0 +1,60 @@
+name: Partner review
+description: Track sanitized partner review for V1 launch readiness.
+title: "[Partner review]: "
+labels: ["partner-review", "safety", "V1"]
+body:
+  - type: markdown
+    attributes:
+      value: "No real survivor PII. Use synthetic examples only. Keep raw notes and consent records outside public issues."
+  - type: input
+    id: reviewer-role
+    attributes:
+      label: Reviewer role
+      description: Example: legal aid reviewer, disaster case worker, accessibility reviewer.
+    validations:
+      required: true
+  - type: input
+    id: organization-type
+    attributes:
+      label: Organization type
+      description: Example: nonprofit legal aid, civic technology group, emergency management volunteer group.
+    validations:
+      required: true
+  - type: textarea
+    id: materials-reviewed
+    attributes:
+      label: Materials reviewed
+      description: List synthetic sandbox, demo script, demo video runbook, baseline failures, eval report, and synthetic examples reviewed.
+    validations:
+      required: true
+  - type: textarea
+    id: sanitized-findings
+    attributes:
+      label: Sanitized findings
+      description: Summarize workflow, safety, citation, escalation, privacy, or accessibility findings without private data.
+    validations:
+      required: true
+  - type: dropdown
+    id: launch-risk
+    attributes:
+      label: Launch risk
+      description: Highest unresolved risk found during review.
+      options:
+        - critical
+        - high
+        - medium
+        - low
+        - none
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety-confirmation
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: Raw notes, consent records, names, addresses, phone numbers, emails, agency IDs, insurance details, medical details, and immigration details are not included.
+          required: true
+        - label: Findings use synthetic examples only.
+          required: true
+        - label: Sanitized outcome can be copied into docs/partner-review-log.md.
+          required: true
