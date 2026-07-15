@@ -1223,9 +1223,17 @@ describe("OpenRelief domain core", () => {
   });
 
   it("redacts insurance settlement record identifiers", () => {
-    const redacted = redactRestrictedIdentifiers("Insurance settlement record number SET-123456 should not stay in notes.");
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Insurance settlement record number SET-123456 should not stay in notes.",
+        "Insurance settlement information ID ISI-123456 should not stay in notes.",
+        "Insurance settlement letter number ISL-123456 should not stay in notes."
+      ].join("\n")
+    );
 
     expect(redacted).not.toContain("SET-123456");
+    expect(redacted).not.toContain("ISI-123456");
+    expect(redacted).not.toContain("ISL-123456");
     expect(redacted).toContain("[record request identifier removed]");
   });
 
