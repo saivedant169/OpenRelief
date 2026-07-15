@@ -2206,6 +2206,10 @@ export const createCaseExport = (
     letter.detectedDeadlines.length > 0
       ? letter.detectedDeadlines.map((deadline) => `- ${deadline.label}: ${deadline.text}`).join("\n")
       : "No deadline found";
+  const requestedLines =
+    letter.detectedRequests.length > 0
+      ? letter.detectedRequests.map((request) => `- ${request}`).join("\n")
+      : "No specific document request found";
   const evidenceLines = evidencePacket.groups
     .map((group) => {
       const items = group.items
@@ -2235,6 +2239,9 @@ export const createCaseExport = (
     "",
     `Letter type: ${letter.letterType}`,
     `Summary: ${letter.summary}`,
+    "",
+    "Requested items",
+    requestedLines,
     "",
     "Deadlines",
     deadlineLines,

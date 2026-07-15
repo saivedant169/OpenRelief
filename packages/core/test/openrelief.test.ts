@@ -4691,6 +4691,7 @@ describe("OpenRelief domain core", () => {
     expect(exported).toContain("OpenRelief packet");
     expect(exported).toContain("not a government decision or legal advice");
     expect(exported).toContain("This export may include personal information.");
+    expect(exported).toContain("Requested items\n- proof of occupancy");
     expect(exported).toContain("Deadlines\n- appeal window: appeal within 60 days");
     expect(exported).toContain("Request human review");
     expect(exported).toContain("Appeal FEMA's Decision");
