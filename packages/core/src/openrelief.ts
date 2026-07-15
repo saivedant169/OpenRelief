@@ -402,6 +402,26 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for ownership records."
   },
   {
+    request: "proof of ownership",
+    phrases: ["proof of ownership"],
+    fact: "The letter asks for proof of ownership."
+  },
+  {
+    request: "deed records",
+    phrases: ["deed record", "deed records"],
+    fact: "The letter asks for deed records."
+  },
+  {
+    request: "mortgage statements",
+    phrases: ["mortgage statement", "mortgage statements"],
+    fact: "The letter asks for mortgage statements."
+  },
+  {
+    request: "title records",
+    phrases: ["title record", "title records"],
+    fact: "The letter asks for title records."
+  },
+  {
     request: "lease records",
     phrases: ["lease records"],
     fact: "The letter asks for lease records."
@@ -1035,7 +1055,14 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
       items: [
         {
           label: "Deed, lease, mortgage statement, or title record",
-          status: evidenceStatus(requests, availableEvidence, ["ownership records", "lease records"]),
+          status: evidenceStatus(requests, availableEvidence, [
+            "ownership records",
+            "proof of ownership",
+            "deed records",
+            "mortgage statements",
+            "title records",
+            "lease records"
+          ]),
           sourceIds: ["fema-documents"]
         }
       ]

@@ -548,6 +548,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-ownership-documents",
+    title: "Request for ownership documents",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send proof of ownership, deed records, mortgage statements, or title records."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-identity-evidence",
     title: "Request for identity evidence",
     lines: [

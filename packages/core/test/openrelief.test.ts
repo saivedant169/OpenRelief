@@ -2652,8 +2652,33 @@ describe("OpenRelief domain core", () => {
     expect(utilityResult.facts).toContain("The letter asks for utility records.");
   });
 
+  it("extracts deed mortgage and title requests from information letters", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send proof of ownership, deed records, mortgage statements, or title records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("proof of ownership");
+    expect(result.detectedRequests).toContain("deed records");
+    expect(result.detectedRequests).toContain("mortgage statements");
+    expect(result.detectedRequests).toContain("title records");
+    expect(result.facts).toContain("The letter asks for proof of ownership.");
+    expect(result.facts).toContain("The letter asks for deed records.");
+    expect(result.facts).toContain("The letter asks for mortgage statements.");
+    expect(result.facts).toContain("The letter asks for title records.");
+  });
+
   it("marks requested ownership lease and utility evidence as missing", () => {
-    const packet = buildEvidencePacket(["ownership records", "lease records", "utility records"]);
+    const packet = buildEvidencePacket([
+      "ownership records",
+      "proof of ownership",
+      "deed records",
+      "mortgage statements",
+      "title records",
+      "lease records",
+      "utility records"
+    ]);
 
     expect(packet.groups.find((group) => group.category === "ownership_or_lease")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "residence")?.items[0]?.status).toBe("missing");
