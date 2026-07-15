@@ -166,6 +166,21 @@ describe("partner review issue preflight", () => {
     expect(result.stderr).toContain("Partner review issue missing body text: workflow_match_answer:");
   });
 
+  it("rejects private identifiers in public issue body", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body.replace(
+        "notes:\n",
+        "notes:\nreviewer@example.test\ncall 555-123-4567\nSSN 123-45-6789\n"
+      )
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue contains email address.");
+    expect(result.stderr).toContain("Partner review issue contains phone number.");
+    expect(result.stderr).toContain("Partner review issue contains Social Security number.");
+  });
+
   it("rejects launch fields outside their issue sections", () => {
     const result = runIssuePreflight({
       ...completeIssue,

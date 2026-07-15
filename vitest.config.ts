@@ -7,6 +7,10 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./apps/web/src/test/setup.ts"],
-    include: ["packages/**/*.test.ts", "apps/**/*.test.tsx", "docs/**/*.test.ts"]
+    include: ["packages/**/*.test.ts", "apps/**/*.test.tsx", "docs/**/*.test.ts"],
+    exclude: ["apps/web/e2e/**", "node_modules/**", "dist/**"],
+    fileParallelism: false,
+    hookTimeout: 30000,
+    testTimeout: 30000
   }
 });

@@ -129,6 +129,14 @@ const requiredBodyText = [
   "partner private data",
   "npm run launch:preflight passes"
 ];
+const restrictedIssueTextPatterns = [
+  { label: "email address", pattern: /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/i },
+  { label: "phone number", pattern: /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/ },
+  { label: "Social Security number", pattern: /\b\d{3}-\d{2}-\d{4}\b/ },
+  { label: "street address", pattern: /\b\d{1,6}\s+[A-Za-z0-9.'-]+(?:\s+[A-Za-z0-9.'-]+){0,4}\s+(?:street|st\.?|avenue|ave\.?|road|rd\.?|boulevard|blvd\.?|drive|dr\.?|lane|ln\.?|court|ct\.?|way|place|pl\.?)\b/i },
+  { label: "agency ID", pattern: /\b(?:agency|case|registration|application)\s*(?:id|number|#)\s*[:#]?\s*[A-Z0-9-]{4,}\b/i },
+  { label: "insurance claim number", pattern: /\binsurance\s+claim\s*(?:number|#|id)?\s*[:#]?\s*[A-Z0-9-]{4,}\b/i }
+];
 
 const fail = (message) => {
   console.error(message);
@@ -229,6 +237,7 @@ if (issueResult.status !== 0) {
 
 const issue = JSON.parse(issueResult.stdout);
 const issueLabels = new Set((issue.labels ?? []).map((label) => label.name));
+const issueBody = issue.body ?? "";
 
 if (issue.url !== issueUrl) {
   addError("Partner review issue URL does not match docs/partner-review-log.md.");
@@ -249,12 +258,18 @@ for (const label of requiredLabels) {
 }
 
 for (const text of requiredBodyText) {
-  if (!issue.body?.includes(text)) {
+  if (!issueBody.includes(text)) {
     addError(`Partner review issue missing body text: ${text}`);
   }
 }
 
-const listedIssueMaterials = listItemsForHeading(issue.body ?? "", "Materials reviewed");
+for (const { label, pattern } of restrictedIssueTextPatterns) {
+  if (pattern.test(issueBody)) {
+    addError(`Partner review issue contains ${label}.`);
+  }
+}
+
+const listedIssueMaterials = listItemsForHeading(issueBody, "Materials reviewed");
 
 for (const material of requiredIssueMaterials) {
   if (!listedIssueMaterials.some((listedItem) => materialMatches(listedItem, material))) {
@@ -263,13 +278,13 @@ for (const material of requiredIssueMaterials) {
 }
 
 for (const heading of requiredIssueHeadings) {
-  if (!hasHeading(issue.body ?? "", heading)) {
+  if (!hasHeading(issueBody, heading)) {
     addError(`Partner review issue missing section: ${heading}`);
   }
 }
 
 for (const section of requiredIssueSections) {
-  const sectionText = sectionTextForHeading(issue.body ?? "", section.heading);
+  const sectionText = sectionTextForHeading(issueBody, section.heading);
 
   for (const text of section.texts) {
     if (!sectionText.includes(text)) {

@@ -21,7 +21,8 @@ const scannedRoots = [
   "SECURITY.md",
   "package.json",
   "tsconfig.json",
-  "vite.config.ts"
+  "vite.config.ts",
+  "vitest.config.ts"
 ];
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".md", ".mjs", ".ts", ".tsx", ".txt", ".yml"]);
 const provenanceMarkers = [
