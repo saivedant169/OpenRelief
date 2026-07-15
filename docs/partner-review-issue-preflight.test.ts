@@ -98,6 +98,7 @@ notes:
 - [ ] Consent captured outside public repo.
 - [ ] Raw notes stored outside public repo.
 - [ ] Sanitized findings contain no names, addresses, phone numbers, emails, SSNs, agency IDs, insurance details, medical details, immigration details, screenshots, or partner private data.
+- [ ] Findings use synthetic examples only.
 - [ ] Sanitized outcome copied into docs/partner-review-log.md.
 - [ ] Public issue URL copied into public tracking issue field.
 - [ ] Critical issues open set to no.
@@ -287,16 +288,16 @@ describe("partner review issue preflight", () => {
     const result = runIssuePreflight({
       ...completeIssue,
       body: completeIssue.body
-        .replace("- [ ] Raw notes stored outside public repo.\n", "")
+        .replace("- [ ] Findings use synthetic examples only.\n", "")
         .replace(
           "## Completion checklist",
-          "Raw notes stored outside public repo.\n\n## Completion checklist"
+          "Findings use synthetic examples only.\n\n## Completion checklist"
         )
     });
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain(
-      "Partner review issue section Completion checklist missing: Raw notes stored outside public repo."
+      "Partner review issue section Completion checklist missing: Findings use synthetic examples only."
     );
   });
 

@@ -96,6 +96,7 @@ const requiredIssueSections = [
       "Consent captured outside public repo.",
       "Raw notes stored outside public repo.",
       "Sanitized findings contain no names, addresses, phone numbers, emails, SSNs, agency IDs, insurance details, medical details, immigration details, screenshots, or partner private data.",
+      "Findings use synthetic examples only.",
       "Sanitized outcome copied into docs/partner-review-log.md.",
       "Public issue URL copied into public tracking issue field.",
       "Critical issues open set to no.",
