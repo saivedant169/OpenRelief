@@ -40,6 +40,8 @@ const restrictedReviewTextPatterns = [
   { label: "redaction marker", pattern: /\b(?:needs-redaction|private-only)\b/i },
   { label: "real survivor reference", pattern: /\breal survivor\b/i }
 ];
+const now = new Date();
+const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
@@ -65,7 +67,7 @@ const requireDate = (field, value) => {
 
   if (!match?.groups) {
     addError(`Partner review field must use YYYY-MM-DD: ${field}`);
-    return;
+    return null;
   }
 
   const year = Number(match.groups.year);
@@ -75,7 +77,10 @@ const requireDate = (field, value) => {
 
   if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
     addError(`Partner review field must use YYYY-MM-DD: ${field}`);
+    return null;
   }
+
+  return date;
 };
 
 const requireListItems = (label, items) => {
@@ -119,7 +124,7 @@ const launchTextFields = [...reviewAnswers, { field: "notes", value: decisionNot
 if (errors.length === 0) {
   requireListItems("materials reviewed", requiredReviewedMaterials);
   requireListItems("synthetic examples used", requiredSyntheticExamples);
-  requireDate("review_date", reviewDate);
+  const reviewDateValue = requireDate("review_date", reviewDate);
 
   if (reviewId.length < 3) {
     addError("Public launch blocked: review_id must identify the review session.");
@@ -169,7 +174,19 @@ if (errors.length === 0) {
     addError("Public launch blocked: decision_owner must be Saivedant Hava.");
   }
 
-  requireDate("decision_date", decisionDate);
+  const decisionDateValue = requireDate("decision_date", decisionDate);
+
+  if (reviewDateValue && reviewDateValue > today) {
+    addError("Public launch blocked: review_date cannot be in the future.");
+  }
+
+  if (decisionDateValue && decisionDateValue > today) {
+    addError("Public launch blocked: decision_date cannot be in the future.");
+  }
+
+  if (reviewDateValue && decisionDateValue && decisionDateValue < reviewDateValue) {
+    addError("Public launch blocked: decision_date cannot be before review_date.");
+  }
 
   if (decisionNotes.length < 10) {
     addError("Public launch blocked: launch decision notes are required.");

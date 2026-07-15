@@ -158,6 +158,25 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Partner review field must use YYYY-MM-DD: review_date");
   });
 
+  it("rejects future review and decision dates", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("review_date: 2026-07-15", "review_date: 2999-01-01")
+        .replace("decision_date: 2026-07-15", "decision_date: 2999-01-01")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: review_date cannot be in the future.");
+    expect(result.stderr).toContain("Public launch blocked: decision_date cannot be in the future.");
+  });
+
+  it("rejects launch decisions dated before review", () => {
+    const result = runLaunchPreflight(completeReviewLog.replace("decision_date: 2026-07-15", "decision_date: 2026-07-14"));
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: decision_date cannot be before review_date.");
+  });
+
   it("rejects notes that are not sanitized", () => {
     const result = runLaunchPreflight(
       completeReviewLog.replace("sanitization status: sanitized", "sanitization status: needs-redaction")
