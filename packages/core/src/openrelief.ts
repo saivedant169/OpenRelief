@@ -230,7 +230,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:repair\s+(?:estimate|receipt|record)|contractor\s+(?:license|estimate))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:repair\s+(?:estimate|receipt|record)|contractor\s+(?:license|estimate)|hazard\s+mitigation\s+(?:record|receipt|estimate)|mitigation\s+(?:repair|measure)\s+(?:record|receipt|estimate))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[repair identifier removed]"
   },
   {
@@ -1008,6 +1008,23 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for damage documentation."
   },
   {
+    request: "hazard mitigation records",
+    phrases: [
+      "hazard mitigation records",
+      "hazard mitigation receipts",
+      "hazard mitigation estimates",
+      "mitigation repair records",
+      "mitigation repair receipts",
+      "mitigation repair estimates",
+      "mitigation measure records",
+      "mitigation measure receipts",
+      "mitigation measure estimates",
+      "repair and rebuild stronger records",
+      "rebuild stronger records"
+    ],
+    fact: "The letter asks for hazard mitigation records."
+  },
+  {
     request: "private access records",
     phrases: [
       "private access records",
@@ -1692,6 +1709,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "damage photos",
             "damage documentation",
             "damage records",
+            "hazard mitigation records",
             "private access records",
             "smoke damage records",
             "repair estimates"

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 162,
+  "caseCount": 163,
   "passed": true,
   "metrics": {
-    "passedCount": 162,
+    "passedCount": 163,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1151,6 +1151,23 @@
     {
       "caseId": "ca-wildfire-rfi-private-access-records",
       "title": "Request for private access records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-hazard-mitigation-records",
+      "title": "Request for hazard mitigation records",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

@@ -856,6 +856,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts hazard mitigation record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Hazard mitigation record number HMR-123456 should not stay in notes.",
+        "Mitigation repair estimate number MRE-123456 should not stay in notes.",
+        "Mitigation measure receipt number MMR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("HMR-123456");
+    expect(redacted).not.toContain("MRE-123456");
+    expect(redacted).not.toContain("MMR-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts medicine storage receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medicine storage receipt number RXR-123456 should not stay in notes.");
 
@@ -3222,6 +3237,17 @@ describe("OpenRelief domain core", () => {
     expect(receiptsResult.facts).toContain("The letter asks for supporting receipts.");
   });
 
+  it("extracts hazard mitigation evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send hazard mitigation records, mitigation repair estimates, and mitigation measure receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("hazard mitigation records");
+    expect(result.facts).toContain("The letter asks for hazard mitigation records.");
+  });
+
   it("extracts private access evidence requests", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -3234,7 +3260,13 @@ describe("OpenRelief domain core", () => {
   });
 
   it("marks requested damage repair and supporting evidence as missing", () => {
-    const packet = buildEvidencePacket(["damage records", "private access records", "repair records", "supporting receipts"]);
+    const packet = buildEvidencePacket([
+      "damage records",
+      "hazard mitigation records",
+      "private access records",
+      "repair records",
+      "supporting receipts"
+    ]);
 
     expect(packet.groups.find((group) => group.category === "damage")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
