@@ -372,6 +372,12 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("Launch risk");
     expect(partnerReviewIssue).toContain("public tracking issue");
     expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
+    expect(partnerReviewIssue).toContain("workflow_match_answer");
+    expect(partnerReviewIssue).toContain("misleading_output_answer");
+    expect(partnerReviewIssue).toContain("risk_escalation_answer");
+    expect(partnerReviewIssue).toContain("evidence_gap_answer");
+    expect(partnerReviewIssue).toContain("citation_gap_answer");
+    expect(partnerReviewIssue).toContain("remove_before_launch_answer");
 
     const requiredLogText = [
       "Partner Review Log",

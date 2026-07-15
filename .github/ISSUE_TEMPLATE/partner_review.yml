@@ -28,6 +28,48 @@ body:
     validations:
       required: true
   - type: textarea
+    id: workflow-match-answer
+    attributes:
+      label: workflow_match_answer
+      description: Does workflow match real disaster letter review? Sanitized answer only.
+    validations:
+      required: true
+  - type: textarea
+    id: misleading-output-answer
+    attributes:
+      label: misleading_output_answer
+      description: Which output could mislead a survivor under stress? Sanitized answer only.
+    validations:
+      required: true
+  - type: textarea
+    id: risk-escalation-answer
+    attributes:
+      label: risk_escalation_answer
+      description: Which risk flag needs faster human escalation? Sanitized answer only.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence-gap-answer
+    attributes:
+      label: evidence_gap_answer
+      description: Which evidence category is missing or overbroad? Sanitized answer only.
+    validations:
+      required: true
+  - type: textarea
+    id: citation-gap-answer
+    attributes:
+      label: citation_gap_answer
+      description: Which source or policy claim needs stronger citation? Sanitized answer only.
+    validations:
+      required: true
+  - type: textarea
+    id: remove-before-launch-answer
+    attributes:
+      label: remove_before_launch_answer
+      description: Which screen or wording should be removed before launch? Sanitized answer only.
+    validations:
+      required: true
+  - type: textarea
     id: sanitized-findings
     attributes:
       label: Sanitized findings
