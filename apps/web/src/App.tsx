@@ -397,6 +397,7 @@ export const App = () => {
   const [caseArchiveText, setCaseArchiveText] = useState("");
   const [caseArchiveError, setCaseArchiveError] = useState("");
   const [caseQueueSearch, setCaseQueueSearch] = useState("");
+  const [caseQueueEscalationsOnly, setCaseQueueEscalationsOnly] = useState(false);
 
   useEffect(() => {
     if (letterText === "" && fileName === "No file selected") {
@@ -705,20 +706,24 @@ export const App = () => {
   const sourceIds = checklist ? [...new Set(checklist.items.flatMap((item) => item.sourceIds))] : [];
   const visibleSavedCases = useMemo(() => {
     const search = caseQueueSearch.trim().toLowerCase();
-    if (!search) {
-      return savedCases;
-    }
+    return savedCases.filter((savedCase) => {
+      if (caseQueueEscalationsOnly && savedCase.riskFlags.length === 0) {
+        return false;
+      }
 
-    return savedCases.filter((savedCase) =>
-      [
+      if (!search) {
+        return true;
+      }
+
+      return [
         savedCase.id,
         savedCase.title,
         caseQueueStatus(savedCase),
         savedCase.deadlines[0]?.text ?? "",
         ...savedCase.riskFlags.map(formatRiskFlag)
-      ].some((value) => value.toLowerCase().includes(search))
-    );
-  }, [caseQueueSearch, savedCases]);
+      ].some((value) => value.toLowerCase().includes(search));
+    });
+  }, [caseQueueEscalationsOnly, caseQueueSearch, savedCases]);
   const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
   const currentCaseId = activeSavedCase?.id ?? nextLocalCaseId(savedCases);
   const activeCaseSourceIds = activeSavedCase
@@ -793,6 +798,14 @@ export const App = () => {
                     value={caseQueueSearch}
                     onChange={(event) => setCaseQueueSearch(event.target.value)}
                   />
+                </label>
+                <label className="queue-filter">
+                  <input
+                    type="checkbox"
+                    checked={caseQueueEscalationsOnly}
+                    onChange={(event) => setCaseQueueEscalationsOnly(event.target.checked)}
+                  />
+                  Show escalation cases only
                 </label>
                 {visibleSavedCases.length > 0 ? (
                   <ul className="saved-cases">

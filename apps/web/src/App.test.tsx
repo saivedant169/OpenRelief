@@ -421,6 +421,12 @@ describe("OpenRelief web workflow", () => {
 
     const queue = screen.getByRole("region", { name: "Local case queue" });
     const queueSearch = within(queue).getByLabelText("Search saved cases");
+    await userEvent.click(within(queue).getByRole("checkbox", { name: "Show escalation cases only" }));
+
+    expect(within(queue).getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(within(queue).queryByText("Saved case: Approval")).not.toBeInTheDocument();
+
+    await userEvent.click(within(queue).getByRole("checkbox", { name: "Show escalation cases only" }));
     await userEvent.type(queueSearch, "approval");
 
     expect(within(queue).getByText("Saved case: Approval")).toBeInTheDocument();

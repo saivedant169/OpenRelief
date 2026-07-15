@@ -203,6 +203,22 @@ a:hover {
   border-radius: 7px;
 }
 
+.queue-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 8px;
+  color: #344253;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.queue-filter input {
+  width: 18px;
+  height: 18px;
+}
+
 .saved-cases {
   display: grid;
   gap: 8px;
