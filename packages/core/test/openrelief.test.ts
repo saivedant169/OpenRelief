@@ -1421,6 +1421,25 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts ownership verification document identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Last will and testament number LWT-A1B2C3 should not stay in notes.",
+        "Affidavit of heirship number AOH-A1B2C3 should not stay in notes.",
+        "Mobile home park ownership letter number MHP-A1B2C3 should not stay in notes.",
+        "Court ownership document number COD-A1B2C3 should not stay in notes.",
+        "Public official ownership letter number POL-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("LWT-A1B2C3");
+    expect(redacted).not.toContain("AOH-A1B2C3");
+    expect(redacted).not.toContain("MHP-A1B2C3");
+    expect(redacted).not.toContain("COD-A1B2C3");
+    expect(redacted).not.toContain("POL-A1B2C3");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts title record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Title record ID TTL-123456 should not stay in notes.");
 
