@@ -146,6 +146,21 @@ const denialCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-denial-mailed-appeal-by-date",
+    title: "Denial letter with mailed appeal by-date deadline",
+    lines: [
+      "FEMA Notice",
+      "Your application is denied because proof of occupancy is missing.",
+      "Your appeal must be mailed by August 15, 2026."
+    ],
+    county: "Los Angeles",
+    riskFlags: ["denial_or_appeal"],
+    expected: {
+      letterType: "denial",
+      needsHumanReview: true
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-denial-ownership",
     title: "Denial letter missing ownership proof",
     lines: [
