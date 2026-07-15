@@ -159,6 +159,19 @@ describe("OpenRelief domain core", () => {
     });
   });
 
+  it("detects mailed appeal date deadline language", () => {
+    const result = analyzeLetter(
+      "FEMA Notice\nYour application is denied. Your appeal must be mailed by August 15, 2026."
+    );
+
+    expect(result.letterType).toBe("denial");
+    expect(result.detectedDeadlines[0]).toEqual({
+      label: "appeal date",
+      text: "appeal must be mailed by August 15, 2026",
+      source: "uploaded_letter"
+    });
+  });
+
   it("separates letter facts from uncertain interpretation", () => {
     const result = analyzeLetter(denialLetter);
 
