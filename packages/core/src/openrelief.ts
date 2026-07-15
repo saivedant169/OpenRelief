@@ -225,7 +225,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|(?:written\s+)?lease\s+agreement|rental\s+agreement|housing\s+agreement|continued\s+temporary\s+housing\s+assistance\s+(?:application|form|records?)|application\s+for\s+continued\s+temporary\s+housing\s+assistance|continued\s+rental\s+assistance\s+(?:application|form|records?)|ctha\s+(?:application|form|records?)|permanent\s+housing\s+plan(?:\s+records?)?|documentation\s+that\s+rental\s+assistance\s+was\s+used\s+for\s+temporary\s+housing|displacement\s+assistance\s+(?:records?|receipts?)|immediate\s+housing\s+(?:records?|receipts?)|family\s+(?:and|or)\s+friends?\s+stay\s+records?|host\s+stay\s+records?|(?:temporary|available)\s+housing\s+option\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|(?:written\s+)?lease\s+agreements?|rental\s+agreements?|housing\s+agreements?|continued\s+temporary\s+housing\s+assistance\s+(?:application|form|records?)|application\s+for\s+continued\s+temporary\s+housing\s+assistance|continued\s+rental\s+assistance\s+(?:application|form|records?)|ctha\s+(?:application|form|records?)|permanent\s+housing\s+plan(?:\s+records?)?|documentation\s+that\s+rental\s+assistance\s+was\s+used\s+for\s+temporary\s+housing|displacement\s+assistance\s+(?:records?|receipts?)|immediate\s+housing\s+(?:records?|receipts?)|family\s+(?:and|or)\s+friends?\s+stay\s+records?|host\s+stay\s+records?|(?:temporary|available)\s+housing\s+option\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[housing identifier removed]"
   },
   {
@@ -285,7 +285,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:proof\s+of\s+occupancy|occupancy\s+proof|utility\s+bill|mortgage|deed)(?:\s+(?:records?|statements?))?|(?:property\s+tax|tax\s+assessment|escrow)\s+(?:statements?|records?|receipts?|bills?|analysis|analyses)|tax\s+bills?|homeowners?\s+insurance\s+statements?|(?:real\s+property|structural)\s+insurance\s+(?:documents?|bills?|payment\s+records?)|(?:occupancy|residence|ownership|lease|utility|title)\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:proof\s+of\s+(?:occupancy|ownership)|occupancy\s+proof|utility\s+bills?|mortgage(?:\s+(?:documents?|documentation|records?|statements?))?|deed(?:\s+(?:records?|statements?))?|deeds?\s+of\s+trust|deed\s+or\s+title)|(?:property\s+tax|tax\s+assessment|escrow)\s+(?:statements?|records?|receipts?|bills?|analysis|analyses)|tax\s+bills?|homeowners?(?:'s)?\s+insurance\s+statements?|(?:real\s+property|structural)\s+insurance\s+(?:documents?|bills?|payment\s+records?)|(?:occupancy|residence|ownership|lease|utility|title)\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[residence evidence identifier removed]"
   },
   {

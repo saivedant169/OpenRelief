@@ -914,15 +914,23 @@ describe("OpenRelief domain core", () => {
       [
         "Rental lease number LEA-123456 should not stay in notes.",
         "Lease agreement number LAG-123456 should not stay in notes.",
+        "Lease agreements number LAG-A1B2C3 should not stay in notes.",
+        "Written lease agreements number WLA-A1B2C3 should not stay in notes.",
         "Rental agreement number RAG-123456 should not stay in notes.",
-        "Housing agreement number HAG-123456 should not stay in notes."
+        "Rental agreements number RAG-A1B2C3 should not stay in notes.",
+        "Housing agreement number HAG-123456 should not stay in notes.",
+        "Housing agreements number HAG-A1B2C3 should not stay in notes."
       ].join("\n")
     );
 
     expect(redacted).not.toContain("LEA-123456");
     expect(redacted).not.toContain("LAG-123456");
+    expect(redacted).not.toContain("LAG-A1B2C3");
+    expect(redacted).not.toContain("WLA-A1B2C3");
     expect(redacted).not.toContain("RAG-123456");
+    expect(redacted).not.toContain("RAG-A1B2C3");
     expect(redacted).not.toContain("HAG-123456");
+    expect(redacted).not.toContain("HAG-A1B2C3");
     expect(redacted).toContain("[housing identifier removed]");
   });
 
@@ -1707,6 +1715,31 @@ describe("OpenRelief domain core", () => {
     const redacted = redactRestrictedIdentifiers("Mortgage ID MTG-654321 should not stay in notes.");
 
     expect(redacted).not.toContain("MTG-654321");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
+  it("redacts expanded ownership and mortgage evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Proof of ownership number POO-A1B2C3 should not stay in notes.",
+        "Deed or title number DOT-A1B2C3 should not stay in notes.",
+        "Deed of trust number DOT-B1C2D3 should not stay in notes.",
+        "Deeds of trust number DOT-C1D2E3 should not stay in notes.",
+        "Mortgage document number MTD-A1B2C3 should not stay in notes.",
+        "Mortgage documentation number MTD-B1C2D3 should not stay in notes.",
+        "Homeowner's insurance statement number HIS-A1B2C3 should not stay in notes.",
+        "Utility bills number UBL-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("POO-A1B2C3");
+    expect(redacted).not.toContain("DOT-A1B2C3");
+    expect(redacted).not.toContain("DOT-B1C2D3");
+    expect(redacted).not.toContain("DOT-C1D2E3");
+    expect(redacted).not.toContain("MTD-A1B2C3");
+    expect(redacted).not.toContain("MTD-B1C2D3");
+    expect(redacted).not.toContain("HIS-A1B2C3");
+    expect(redacted).not.toContain("UBL-A1B2C3");
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
