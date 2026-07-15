@@ -48,6 +48,7 @@ const loadSampleLetter = async () => {
 describe("OpenRelief security smoke", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     window.localStorage.clear();
   });
 
@@ -241,6 +242,7 @@ describe("OpenRelief security smoke", () => {
   });
 
   it("extracts local image OCR text and clears stale analysis", async () => {
+    vi.stubEnv("BASE_URL", "/OpenRelief/");
     render(<App />);
     await loadSampleLetter();
 
@@ -260,9 +262,9 @@ describe("OpenRelief security smoke", () => {
       file,
       "eng",
       expect.objectContaining({
-        corePath: "/tesseract-core/tesseract-core.wasm.js",
-        langPath: "/tessdata",
-        workerPath: "/tesseract/worker.min.js"
+        corePath: "/OpenRelief/tesseract-core/tesseract-core.wasm.js",
+        langPath: "/OpenRelief/tessdata",
+        workerPath: "/OpenRelief/tesseract/worker.min.js"
       })
     );
     expect(screen.getByText("notice.png")).toBeInTheDocument();

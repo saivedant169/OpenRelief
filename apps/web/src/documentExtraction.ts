@@ -1,5 +1,8 @@
 import pdfWorkerUrl from "pdfjs-dist/legacy/build/pdf.worker.mjs?url";
 
+const publicAssetPath = (assetPath: string): string =>
+  `${import.meta.env.BASE_URL.replace(/\/$/, "")}/${assetPath.replace(/^\//, "")}`;
+
 export const readTextFile = (file: File): Promise<string> => {
   if (typeof file.text === "function") {
     return file.text();
@@ -86,9 +89,9 @@ export const extractImageText = async (file: File): Promise<string> => {
   try {
     const { recognize } = await import("tesseract.js");
     const result = await recognize(file, "eng", {
-      corePath: "/tesseract-core/tesseract-core.wasm.js",
-      langPath: "/tessdata",
-      workerPath: "/tesseract/worker.min.js"
+      corePath: publicAssetPath("tesseract-core/tesseract-core.wasm.js"),
+      langPath: publicAssetPath("tessdata"),
+      workerPath: publicAssetPath("tesseract/worker.min.js")
     });
 
     return result.data.text.replace(/\s+/g, " ").trim();
