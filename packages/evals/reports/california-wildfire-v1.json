@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 128,
+  "caseCount": 129,
   "passed": true,
   "metrics": {
-    "passedCount": 128,
+    "passedCount": 129,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -12,6 +12,25 @@
     {
       "caseId": "ca-wildfire-denial-occupancy",
       "title": "Denial letter missing proof of occupancy",
+      "expectedLetterType": "denial",
+      "actualLetterType": "denial",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "denial_or_appeal"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-denial-file-appeal-no-later",
+      "title": "Denial letter with file appeal no-later-than deadline",
       "expectedLetterType": "denial",
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
