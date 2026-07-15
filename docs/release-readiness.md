@@ -24,14 +24,14 @@ Manual safety review must confirm:
 - exports warn reviewers to treat contents as sensitive,
 - hosted demos use synthetic data or browser-local storage only.
 
-Use the Partner review issue template to track sanitized review status, but keep raw notes and consent records outside public issues. Copy only sanitized outcome fields and the public tracking issue URL into `docs/partner-review-log.md`.
+Use the Partner review issue template to track sanitized review status, but keep raw notes and consent records outside public issues. Copy only sanitized outcome fields, public tracking issue URL, and final public issue launch risk into `docs/partner-review-log.md`.
 
 After manual review is recorded in `docs/partner-review-log.md`, run:
 
 - `npm run partner:issue:preflight`
 - `npm run launch:preflight`
 
-The partner issue preflight also runs inside `npm run check`. It requires authenticated `gh` CLI access and checks the public tracking issue status, labels, reviewed materials, section fields, and launch checklist. The launch gate stays separate from `npm run check` because automated CI should stay green while partner review is still pending. The launch gate must pass before public demo promotion. It checks completed session fields, reviewed materials, synthetic examples, sanitized review answers, sanitized finding ID, severity, area, summary, evidence, recommended change, sanitized notes, `public_issue_safe: yes` findings, owner, recent review date, and decision date.
+The partner issue preflight also runs inside `npm run check`. It requires authenticated `gh` CLI access and checks the public tracking issue status, labels, reviewed materials, section fields, and launch checklist. The launch gate stays separate from `npm run check` because automated CI should stay green while partner review is still pending. The launch gate must pass before public demo promotion. It checks completed session fields, reviewed materials, synthetic examples, sanitized review answers, sanitized finding ID, severity, area, summary, evidence, recommended change, sanitized notes, `public_issue_safe: yes` findings, final public issue launch risk, owner, recent review date, and decision date.
 
 ## Evidence Sources
 

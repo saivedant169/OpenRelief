@@ -111,6 +111,7 @@ Before public launch, `docs/partner-review-log.md` must record manual safety rev
 - sanitized answers for all review questions,
 - categorized finding ID, severity, area, summary, evidence, and recommended change,
 - `public_issue_safe: yes`,
+- final public issue launch risk recorded as low or none,
 - no critical issues open,
 - high issues accepted or closed,
 - manual safety review complete,

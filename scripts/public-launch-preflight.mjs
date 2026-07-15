@@ -33,6 +33,7 @@ const normalizedFindingAreas = new Set([
   "accessibility",
   "workflow"
 ]);
+const normalizedPublicIssueLaunchRiskValues = new Set(["low", "none"]);
 const normalizedPlaceholderValues = new Set([
   "n/a",
   "na",
@@ -200,6 +201,7 @@ const consentRecord = completedValue("Consent record");
 const noteStorageLocation = completedValue("note storage location");
 const sanitizationStatus = completedValue("sanitization status").toLowerCase();
 const publicTrackingIssue = completedValue("public tracking issue");
+const publicIssueLaunchRisk = completedValue("public issue launch risk").toLowerCase();
 const workflowMatchAnswer = completedValue("workflow_match_answer");
 const misleadingOutputAnswer = completedValue("misleading_output_answer");
 const riskEscalationAnswer = completedValue("risk_escalation_answer");
@@ -246,6 +248,7 @@ const requiredSpecificFields = [
   { field: "Consent record", value: consentRecord },
   { field: "note storage location", value: noteStorageLocation },
   { field: "public tracking issue", value: publicTrackingIssue },
+  { field: "public issue launch risk", value: publicIssueLaunchRisk },
   ...launchTextFields
 ];
 const scannedReviewTextFields = [
@@ -266,6 +269,10 @@ if (errors.length === 0) {
   }
 
   for (const { field, value } of requiredSpecificFields) {
+    if (field === "public issue launch risk") {
+      continue;
+    }
+
     if (normalizedPlaceholderValues.has(value.toLowerCase())) {
       addError(`Public launch blocked: ${field} must include specific review evidence.`);
     }
@@ -285,6 +292,10 @@ if (errors.length === 0) {
 
   if (!publicTrackingIssuePattern.test(publicTrackingIssue)) {
     addError("Public launch blocked: public tracking issue must be an OpenRelief GitHub issue URL.");
+  }
+
+  if (!normalizedPublicIssueLaunchRiskValues.has(publicIssueLaunchRisk)) {
+    addError("Public launch blocked: public issue launch risk must be low or none.");
   }
 
   if (reviewAnswers.some(({ value }) => value.length < minimumReviewAnswerLength)) {

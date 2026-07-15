@@ -44,5 +44,6 @@ npm run launch:preflight
 
 - Store raw notes and consent records outside the public repo.
 - Copy only sanitized answers into `docs/partner-review-log.md`.
+- Copy final public issue launch risk into `docs/partner-review-log.md`.
 - Keep the public issue open until launch review is complete.
 - Do not commit reviewer names, contact details, organization names, screenshots, or private links.

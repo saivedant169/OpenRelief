@@ -40,6 +40,7 @@ synthetic examples used:
 note storage location:
 sanitization status: sanitized | private-only | needs-redaction
 public tracking issue:
+public issue launch risk:
 
 ## Review Questions
 

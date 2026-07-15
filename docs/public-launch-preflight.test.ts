@@ -46,6 +46,7 @@ synthetic examples used:
 note storage location: private review notes folder
 sanitization status: sanitized
 public tracking issue: https://github.com/saivedant169/OpenRelief/issues/1
+public issue launch risk: none
 workflow_match_answer: reviewer confirmed workflow matches disaster letter review
 misleading_output_answer: reviewer found no misleading output in synthetic flow
 risk_escalation_answer: reviewer confirmed high-risk escalation is visible
@@ -189,6 +190,15 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain(
       "Public launch blocked: public tracking issue must be an OpenRelief GitHub issue URL."
     );
+  });
+
+  it("rejects unresolved public issue launch risk", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog.replace("public issue launch risk: none", "public issue launch risk: pending")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: public issue launch risk must be low or none.");
   });
 
   it("rejects private data in session evidence", () => {

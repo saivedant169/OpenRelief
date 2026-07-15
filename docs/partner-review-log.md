@@ -26,6 +26,7 @@ synthetic examples used:
 note storage location:
 sanitization status: sanitized | private-only | needs-redaction
 public tracking issue: https://github.com/saivedant169/OpenRelief/issues/1
+public issue launch risk:
 ```
 
 ## Review Questions

@@ -456,6 +456,7 @@ describe("release readiness", () => {
       "note storage location:",
       "sanitization status: sanitized | private-only | needs-redaction",
       "public tracking issue:",
+      "public issue launch risk:",
       "Review Questions",
       "Does workflow match real disaster letter review?",
       "Which output could mislead a survivor under stress?",
@@ -528,6 +529,7 @@ describe("release readiness", () => {
       "note storage location",
       "sanitization status",
       "public tracking issue",
+      "public issue launch risk",
       "workflow_match_answer",
       "misleading_output_answer",
       "risk_escalation_answer",
@@ -568,6 +570,7 @@ describe("release readiness", () => {
     expect(releaseReadiness).toContain("severity, area, summary");
     expect(releaseReadiness).toContain("recommended change");
     expect(releaseReadiness).toContain("sanitized notes");
+    expect(releaseReadiness).toContain("final public issue launch risk");
     expect(releaseReadiness).toContain("public_issue_safe: yes");
     expect(releaseReadiness).toContain("recent review date");
     expect(releaseReadiness).toContain("reviewed materials");
