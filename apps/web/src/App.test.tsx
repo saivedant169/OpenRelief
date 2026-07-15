@@ -32,6 +32,8 @@ describe("OpenRelief web workflow", () => {
     const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
     expect(checklistCard).not.toBeNull();
     expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
+    expect(within(checklistCard as HTMLElement).getAllByText(/Source: /).length).toBeGreaterThan(0);
+    expect(within(checklistCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
   });
 
   it("shows safety boundary before upload", () => {

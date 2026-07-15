@@ -12,7 +12,7 @@ test("letter review produces checklist and evidence packet", async ({ page }) =>
   await expect(page.getByText("Request human review")).toBeVisible();
   await expect(page.getByText("Collect proof of occupancy")).toBeVisible();
   await expect(page.getByText("Evidence packet outline")).toBeVisible();
-  await expect(page.getByText("Appeal FEMA's Decision")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Appeal FEMA's Decision" })).toBeVisible();
 });
 
 test("immediate danger guidance appears before paperwork", async ({ page }) => {

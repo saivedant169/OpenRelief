@@ -970,6 +970,13 @@ export const App = () => {
                         <strong>{item.title}</strong>
                         {item.editable ? <span className="editable-mark">Editable</span> : null}
                         <p>{item.reason}</p>
+                        <span className="item-sources">
+                          Source:{" "}
+                          {item.sourceIds
+                            .map((sourceId) => sourceById.get(sourceId)?.title)
+                            .filter((title): title is string => Boolean(title))
+                            .join(", ")}
+                        </span>
                       </div>
                     </li>
                   ))}

@@ -551,6 +551,13 @@ a:focus-visible,
   margin: 4px 0 0;
 }
 
+.item-sources {
+  display: block;
+  margin-top: 4px;
+  color: #4b5b6b;
+  font-size: 13px;
+}
+
 .editable-mark {
   display: inline-flex;
   align-items: center;
