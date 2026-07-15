@@ -49,6 +49,7 @@ describe("OpenRelief web workflow", () => {
     expect(evidenceCard).not.toBeNull();
     expect(within(evidenceCard as HTMLElement).getAllByText(/Source: /).length).toBeGreaterThan(0);
     expect(within(evidenceCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
+    expect(within(evidenceCard as HTMLElement).getAllByText(/Status: /).length).toBeGreaterThan(0);
   });
 
   it("shows escalation panel before letter summary for high-risk flags", async () => {
@@ -95,6 +96,28 @@ describe("OpenRelief web workflow", () => {
       expect(window.localStorage.getItem("openrelief:v1:cases")).toContain('"human-review":"done"');
       expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("Called local case worker.");
     });
+  });
+
+  it("exports evidence outline from the packet section without files", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const evidenceCard = screen.getByRole("heading", { name: "Evidence packet outline" }).closest("article");
+    expect(evidenceCard).not.toBeNull();
+    expect(within(evidenceCard as HTMLElement).getByText("No files are attached to this outline.")).toBeInTheDocument();
+    expect(within(evidenceCard as HTMLElement).getByText("Status: missing")).toBeInTheDocument();
+
+    await userEvent.click(within(evidenceCard as HTMLElement).getByRole("button", { name: "Export outline" }));
+
+    expect((screen.getByLabelText("Export packet text") as HTMLTextAreaElement).value).toContain(
+      "Evidence packet outline"
+    );
+    expect(
+      within(screen.getByRole("list", { name: "Export packet contents" })).getByRole("checkbox", {
+        name: "Uploaded files are not included in V1."
+      })
+    ).toBeDisabled();
   });
 
   it("shows safety boundary before upload", () => {
@@ -451,7 +474,7 @@ describe("OpenRelief web workflow", () => {
     expect(
       within(evidenceCard as HTMLElement).getByText("Repair, hotel, replacement, cleanup, or child care records")
     ).toBeInTheDocument();
-    expect(within(evidenceCard as HTMLElement).getByText("available")).toBeInTheDocument();
+    expect(within(evidenceCard as HTMLElement).getByText("Status: available")).toBeInTheDocument();
   });
 
   it("matches natural available evidence wording", async () => {
@@ -473,7 +496,7 @@ describe("OpenRelief web workflow", () => {
 
     const evidenceCard = screen.getByRole("heading", { name: "Evidence packet outline" }).closest("article");
     expect(evidenceCard).not.toBeNull();
-    expect(within(evidenceCard as HTMLElement).getByText("available")).toBeInTheDocument();
+    expect(within(evidenceCard as HTMLElement).getByText("Status: available")).toBeInTheDocument();
   });
 
   it("matches singular available evidence wording", async () => {
@@ -495,7 +518,7 @@ describe("OpenRelief web workflow", () => {
 
     const evidenceCard = screen.getByRole("heading", { name: "Evidence packet outline" }).closest("article");
     expect(evidenceCard).not.toBeNull();
-    expect(within(evidenceCard as HTMLElement).getByText("available")).toBeInTheDocument();
+    expect(within(evidenceCard as HTMLElement).getByText("Status: available")).toBeInTheDocument();
   });
 
   it("adds high-risk intake details to human review", async () => {

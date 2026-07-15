@@ -1600,7 +1600,7 @@ export const App = () => {
                       {group.items.map((item) => (
                         <p key={item.label}>
                           {item.label}
-                          <span>{item.status}</span>
+                          <span>Status: {item.status}</span>
                           <span className="item-sources">
                             Source:{" "}
                             {item.sourceIds
@@ -1612,6 +1612,12 @@ export const App = () => {
                       ))}
                     </div>
                   ))}
+                </div>
+                <div className="panel-footer">
+                  <span>No files are attached to this outline.</span>
+                  <button className="secondary-action" type="button" onClick={handleCreatePacketText}>
+                    Export outline
+                  </button>
                 </div>
               </article>
 
