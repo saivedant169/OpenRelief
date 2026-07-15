@@ -467,6 +467,21 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for public official statements."
   },
   {
+    request: "bank statements",
+    phrases: ["bank statement", "bank statements"],
+    fact: "The letter asks for bank statements."
+  },
+  {
+    request: "credit card statements",
+    phrases: ["credit card statement", "credit card statements"],
+    fact: "The letter asks for credit card statements."
+  },
+  {
+    request: "phone bills",
+    phrases: ["phone bill", "phone bills"],
+    fact: "The letter asks for phone bills."
+  },
+  {
     request: "account listed records",
     phrases: ["requested records listed in your account"],
     fact: "The letter asks for records listed in the agency account."
@@ -1083,6 +1098,9 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "rent receipts",
             "employer statements",
             "public official statements",
+            "bank statements",
+            "credit card statements",
+            "phone bills",
             "other household records"
           ]),
           sourceIds: ["fema-documents"]

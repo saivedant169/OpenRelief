@@ -2678,6 +2678,21 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for public official statements.");
   });
 
+  it("extracts bank credit card and phone bill residence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send bank statements, credit card statements, or phone bills."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("bank statements");
+    expect(result.detectedRequests).toContain("credit card statements");
+    expect(result.detectedRequests).toContain("phone bills");
+    expect(result.facts).toContain("The letter asks for bank statements.");
+    expect(result.facts).toContain("The letter asks for credit card statements.");
+    expect(result.facts).toContain("The letter asks for phone bills.");
+  });
+
   it("extracts deed mortgage and title requests from information letters", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -2725,7 +2740,10 @@ describe("OpenRelief domain core", () => {
       "utility bills",
       "rent receipts",
       "employer statements",
-      "public official statements"
+      "public official statements",
+      "bank statements",
+      "credit card statements",
+      "phone bills"
     ]);
 
     expect(packet.groups.find((group) => group.category === "ownership_or_lease")?.items[0]?.status).toBe("missing");

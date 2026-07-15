@@ -576,6 +576,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-financial-residence-evidence",
+    title: "Request for financial residence evidence",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send bank statements, credit card statements, or phone bills."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-ownership-documents",
     title: "Request for ownership documents",
     lines: [
