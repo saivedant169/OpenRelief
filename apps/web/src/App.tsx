@@ -1181,6 +1181,20 @@ export const App = () => {
                   </div>
                   <div className="case-detail-grid">
                     <section className="case-detail-section">
+                      <h3>Summary</h3>
+                      <ul className="case-detail-list">
+                        <li>
+                          <strong>Letter type</strong>
+                          <span>{letterTypeLabels[activeSavedCase.letterType]}</span>
+                        </li>
+                        <li>
+                          <strong>Status</strong>
+                          <span>{caseQueueStatus(activeSavedCase)}</span>
+                        </li>
+                        <li>{activeSavedCase.summary}</li>
+                      </ul>
+                    </section>
+                    <section className="case-detail-section">
                       <h3>Timeline</h3>
                       <ul className="case-detail-list">
                         <li>Letter analyzed</li>

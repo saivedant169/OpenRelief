@@ -628,6 +628,11 @@ describe("OpenRelief web workflow", () => {
     const detail = screen.getByRole("region", { name: "Case detail" });
     const checklistSection = within(detail).getByRole("heading", { name: "Checklist" }).closest("section");
 
+    expect(within(detail).getByRole("heading", { name: "Summary" })).toBeInTheDocument();
+    expect(within(detail).getByText("Letter type")).toBeInTheDocument();
+    expect(within(detail).getAllByText("Claim denial").length).toBeGreaterThan(0);
+    expect(within(detail).getByText("Status")).toBeInTheDocument();
+    expect(within(detail).getByText("This letter appears to deny the request and asks for careful human review before next steps.")).toBeInTheDocument();
     expect(within(detail).getByRole("heading", { name: "Timeline" })).toBeInTheDocument();
     expect(within(detail).getByText("Letter analyzed")).toBeInTheDocument();
     expect(within(detail).getByText("Checklist created")).toBeInTheDocument();
