@@ -1294,6 +1294,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[child care identifier removed]");
   });
 
+  it("redacts expanded child care identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Child care receipts number CCR-A1B2C3 should not stay in notes.",
+        "Childcare contracts number CCC-A1B2C3 should not stay in notes.",
+        "Child care provider letters number CPL-A1B2C3 should not stay in notes.",
+        "Signed letter from the child care provider number SLP-A1B2C3 should not stay in notes.",
+        "Post-disaster child care receipts or estimates number PCE-A1B2C3 should not stay in notes.",
+        "Pre-disaster child care receipts, contract, or signed letter number PCL-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("CCR-A1B2C3");
+    expect(redacted).not.toContain("CCC-A1B2C3");
+    expect(redacted).not.toContain("CPL-A1B2C3");
+    expect(redacted).not.toContain("SLP-A1B2C3");
+    expect(redacted).not.toContain("PCE-A1B2C3");
+    expect(redacted).not.toContain("PCL-A1B2C3");
+    expect(redacted).toContain("[child care identifier removed]");
+  });
+
   it("redacts moving and storage record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
@@ -1342,6 +1363,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).not.toContain("FNR-123456");
     expect(redacted).not.toContain("FHC-123456");
     expect(redacted).not.toContain("BUR-123456");
+    expect(redacted).toContain("[funeral identifier removed]");
+  });
+
+  it("redacts expanded funeral identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Official death certificate number ODC-A1B2C3 should not stay in notes.",
+        "Funeral assistance records number FAR-A1B2C3 should not stay in notes.",
+        "Funeral expense documents number FED-A1B2C3 should not stay in notes.",
+        "Funeral expense records number FER-A1B2C3 should not stay in notes.",
+        "Funeral home contracts number FHC-A1B2C3 should not stay in notes.",
+        "Burial expense estimates number BEE-A1B2C3 should not stay in notes.",
+        "Reburial expenses number RBE-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("ODC-A1B2C3");
+    expect(redacted).not.toContain("FAR-A1B2C3");
+    expect(redacted).not.toContain("FED-A1B2C3");
+    expect(redacted).not.toContain("FER-A1B2C3");
+    expect(redacted).not.toContain("FHC-A1B2C3");
+    expect(redacted).not.toContain("BEE-A1B2C3");
+    expect(redacted).not.toContain("RBE-A1B2C3");
     expect(redacted).toContain("[funeral identifier removed]");
   });
 

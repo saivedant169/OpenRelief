@@ -265,12 +265,12 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:child\s*care|childcare)\s+(?:receipt|contract|estimate|provider\s+letter)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:child\s*care|childcare)\s+(?:receipts?|contracts?|estimates?|provider\s+letters?)|(?:signed\s+)?letter\s+from\s+the\s+child\s+care\s+provider|post-disaster\s+child\s+care\s+receipts?\s+or\s+estimates?|pre-disaster\s+child\s+care\s+receipts?,\s+contracts?,\s+or\s+signed\s+letter)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[child care identifier removed]"
   },
   {
     pattern:
-      /\b(?:death\s+certificate|(?:funeral|burial|reburial)\s+(?:receipt|contract|estimate|expense\s+document)|funeral\s+home\s+contract)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:official\s+death\s+certificate|death\s+certificate|funeral\s+assistance\s+records?|funeral\s+expense\s+(?:documents?|records?)|(?:funeral|burial|reburial)\s+(?:receipts?|contracts?|estimates?)|funeral\s+home\s+contracts?|burial\s+expense\s+estimates?|reburial\s+expenses?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[funeral identifier removed]"
   },
   {
