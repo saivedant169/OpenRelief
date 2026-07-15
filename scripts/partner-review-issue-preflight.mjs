@@ -18,6 +18,16 @@ const requiredIssueMaterials = [
 ];
 const requiredIssueSections = [
   {
+    heading: "Reviewer targets",
+    texts: [
+      "legal aid reviewer",
+      "disaster case worker",
+      "emergency management volunteer",
+      "civic technology reviewer",
+      "accessibility reviewer"
+    ]
+  },
+  {
     heading: "Session fields",
     texts: [
       "review_id:",
@@ -50,6 +60,17 @@ const requiredIssueSections = [
       "decision_owner: Saivedant Hava",
       "decision_date: YYYY-MM-DD",
       "notes:"
+    ]
+  },
+  {
+    heading: "Review questions",
+    texts: [
+      "Does workflow match real disaster letter review?",
+      "Which output could mislead a survivor under stress?",
+      "Which risk flag needs faster human escalation?",
+      "Which evidence category is missing or overbroad?",
+      "Which source or policy claim needs stronger citation?",
+      "Which screen or wording should be removed before launch?"
     ]
   },
   {

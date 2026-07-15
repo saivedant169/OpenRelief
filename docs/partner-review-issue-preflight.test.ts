@@ -28,6 +28,14 @@ const completeIssue = {
 - packages/evals/reports/california-wildfire-v1.json
 - examples/california-wildfire/letters/denial-occupancy-proof.txt
 
+## Reviewer targets
+
+- legal aid reviewer
+- disaster case worker
+- emergency management volunteer
+- civic technology reviewer
+- accessibility reviewer
+
 ## Session fields
 
 \`\`\`text
@@ -62,6 +70,15 @@ decision_owner: Saivedant Hava
 decision_date: YYYY-MM-DD
 notes:
 \`\`\`
+
+## Review questions
+
+1. Does workflow match real disaster letter review?
+2. Which output could mislead a survivor under stress?
+3. Which risk flag needs faster human escalation?
+4. Which evidence category is missing or overbroad?
+5. Which source or policy claim needs stronger citation?
+6. Which screen or wording should be removed before launch?
 
 ## Completion checklist
 
@@ -163,6 +180,23 @@ describe("partner review issue preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue materials missing: docs/demo-video-runbook.md");
+  });
+
+  it("rejects review targets and questions outside their issue sections", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body
+        .replace("- legal aid reviewer\n", "")
+        .replace("2. Which output could mislead a survivor under stress?\n", "")
+        .replace("## Reviewer targets", "legal aid reviewer\n\n## Reviewer targets")
+        .replace("## Review questions", "Which output could mislead a survivor under stress?\n\n## Review questions")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue section Reviewer targets missing: legal aid reviewer");
+    expect(result.stderr).toContain(
+      "Partner review issue section Review questions missing: Which output could mislead a survivor under stress?"
+    );
   });
 
   it("rejects completion checklist outside its issue section", () => {
