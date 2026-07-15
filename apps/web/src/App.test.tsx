@@ -398,6 +398,7 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("region", { name: "Local case queue" })).toBeInTheDocument();
     expect(within(screen.getByRole("region", { name: "Current case" })).getByText("OR-CA-2026-001")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(screen.getByText("Missing items: Lease, mortgage, utility bill, or other occupancy proof")).toBeInTheDocument();
     expect(screen.getByText("Escalation: Denial or appeal deadline")).toBeInTheDocument();
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });
@@ -622,9 +623,10 @@ describe("OpenRelief web workflow", () => {
 
     expect(within(queue).getByText("Status: Needs review")).toBeInTheDocument();
     expect(within(queue).getByText("Missing: 1")).toBeInTheDocument();
+    expect(within(queue).getByText("Missing items: Lease, mortgage, utility bill, or other occupancy proof")).toBeInTheDocument();
     expect(within(queue).getByText(/^Last updated: \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/)).toBeInTheDocument();
     expect(within(queue).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
-    expect(within(queue).getByText("Flags: Denial or appeal deadline")).toBeInTheDocument();
+    expect(within(queue).getByText("Escalation: Denial or appeal deadline")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
 

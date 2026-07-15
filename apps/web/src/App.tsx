@@ -875,6 +875,12 @@ export const App = () => {
                           <span>Status: {caseQueueStatus(savedCase)}</span>
                           <span>Missing: {savedCase.missingEvidence.length}</span>
                           <span>
+                            Missing items:{" "}
+                            {savedCase.missingEvidence.length > 0
+                              ? savedCase.missingEvidence.map((item) => item.label).join(", ")
+                              : "None"}
+                          </span>
+                          <span>
                             Escalation:{" "}
                             {savedCase.riskFlags.length > 0
                               ? savedCase.riskFlags.map((flag) => formatRiskFlag(flag)).join(", ")
@@ -885,12 +891,6 @@ export const App = () => {
                           </span>
                           <span>Last updated: {formatSavedCaseUpdatedAt(savedCase.updatedAt)}</span>
                           <span>Deadline: {savedCase.deadlines[0]?.text ?? "None"}</span>
-                          <span>
-                            Flags:{" "}
-                            {savedCase.riskFlags.length > 0
-                              ? savedCase.riskFlags.map(formatRiskFlag).join(", ")
-                              : "None"}
-                          </span>
                         </button>
                       </li>
                     ))}
