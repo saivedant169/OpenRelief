@@ -24,6 +24,12 @@ Manual safety review must confirm:
 - exports warn reviewers to treat contents as sensitive,
 - hosted demos use synthetic data or browser-local storage only.
 
+After manual review is recorded in `docs/partner-review-log.md`, run:
+
+- `npm run launch:preflight`
+
+This launch gate must pass before public demo promotion. It is separate from `npm run check` because automated CI should stay green while partner review is still pending.
+
 ## Evidence Sources
 
 - [Evals and quality plan](../plans/07-evals-quality-plan.md)

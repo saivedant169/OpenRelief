@@ -30,6 +30,7 @@ const packageJsonPath = path.join(process.cwd(), "package.json");
 const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
 const demoVideoPreflightPath = path.join(process.cwd(), "scripts", "demo-video-preflight.mjs");
 const partnerReviewPreflightPath = path.join(process.cwd(), "scripts", "partner-review-preflight.mjs");
+const publicLaunchPreflightPath = path.join(process.cwd(), "scripts", "public-launch-preflight.mjs");
 const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "pages.yml");
 const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
 
@@ -127,6 +128,7 @@ describe("release readiness", () => {
       "npm run test:security",
       "npm run security:audit",
       "npm run docs:check",
+      "npm run launch:preflight",
       "Manual safety review"
     ];
 
@@ -362,6 +364,36 @@ describe("release readiness", () => {
 
     expect(partnerReviewPreflight).toContain("minimumCaseCount = 108");
     expect(partnerReviewPreflight).toContain("at least 108 passing cases");
+  });
+
+  it("defines public launch decision preflight", () => {
+    expect(existsSync(publicLaunchPreflightPath)).toBe(true);
+
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
+    const releaseReadiness = readFileSync(releaseReadinessPath, "utf8");
+    const technicalReport = readFileSync(technicalReportPath, "utf8");
+    const preflightScript = readFileSync(publicLaunchPreflightPath, "utf8");
+
+    expect(packageJson.scripts["launch:preflight"]).toBe("node scripts/public-launch-preflight.mjs");
+    expect(packageJson.scripts.check).not.toContain("npm run launch:preflight");
+    expect(releaseReadiness).toContain("npm run launch:preflight");
+    expect(technicalReport).toContain("npm run launch:preflight");
+
+    const requiredLaunchFields = [
+      "critical_issues_open",
+      "high_issues_open",
+      "manual_safety_review_complete",
+      "ready_for_public_demo",
+      "decision_owner",
+      "decision_date"
+    ];
+
+    for (const requiredField of requiredLaunchFields) {
+      expect(preflightScript).toContain(requiredField);
+    }
+
+    expect(preflightScript).toContain("Saivedant Hava");
+    expect(preflightScript).toContain("YYYY-MM-DD");
   });
 
   it("defines a demo video preflight command", () => {

@@ -144,6 +144,7 @@ Release readiness requires:
 - `npm run security:audit`
 - `npm run docs:check`
 - `npm run partner:review:preflight`
+- `npm run launch:preflight`
 - manual safety review
 
 The `npm run check` gate includes unit tests, evals, policy validation, TypeScript, accessibility smoke test, security smoke test, dependency audit, docs review, production build, and Playwright E2E tests.
@@ -151,6 +152,8 @@ The `npm run check` gate includes unit tests, evals, policy validation, TypeScri
 Demo recording readiness is checked by `npm run demo:video:preflight`. The command verifies the demo video runbook, public talk track, synthetic demo letter, and current passing eval report before recording.
 
 Partner review readiness is checked by `npm run partner:review:preflight`. The command verifies the Partner review log, partner outreach packet, baseline failure examples, demo runbook, and current passing eval report before review sessions.
+
+Public demo promotion is checked by `npm run launch:preflight` after manual safety review is recorded. The command fails until the launch decision records no critical issues open, high issues accepted or closed, manual safety review complete, public demo readiness, owner, and decision date.
 
 ## Why This Idea Works
 

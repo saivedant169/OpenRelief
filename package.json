@@ -20,7 +20,8 @@
     "security:audit": "npm audit --audit-level=critical",
     "sandbox:preflight": "node scripts/hosted-sandbox-preflight.mjs",
     "demo:video:preflight": "node scripts/demo-video-preflight.mjs",
-    "partner:review:preflight": "node scripts/partner-review-preflight.mjs"
+    "partner:review:preflight": "node scripts/partner-review-preflight.mjs",
+    "launch:preflight": "node scripts/public-launch-preflight.mjs"
   },
   "dependencies": {
     "@tesseract.js-data/eng": "^1.0.0",
