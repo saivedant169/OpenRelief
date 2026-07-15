@@ -38,14 +38,33 @@ const decodePdfLiteralText = (value: string) =>
     .replace(/\\f/g, "\f")
     .replace(/\\([\\()])/g, "$1");
 
-const extractPdfLiteralTexts = (value: string) =>
-  [...value.matchAll(/\(((?:\\.|[^\\)])*)\)/g)].map((match) => decodePdfLiteralText(match[1] ?? ""));
+const decodePdfHexText = (value: string) => {
+  const normalized = value.replace(/\s+/g, "");
+  const padded = normalized.length % 2 === 0 ? normalized : `${normalized}0`;
+  const bytes = [...padded.matchAll(/[0-9a-f]{2}/gi)].map((match) => Number.parseInt(match[0], 16));
+
+  if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+    let text = "";
+    for (let index = 2; index + 1 < bytes.length; index += 2) {
+      text += String.fromCharCode(bytes[index] * 256 + bytes[index + 1]);
+    }
+    return text;
+  }
+
+  return new TextDecoder("latin1").decode(new Uint8Array(bytes));
+};
+
+const extractPdfTextItems = (value: string) => [
+  ...[...value.matchAll(/\(((?:\\.|[^\\)])*)\)/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
+  ...[...value.matchAll(/<([0-9a-f\s]+)>/gi)].map((match) => decodePdfHexText(match[1] ?? ""))
+];
 
 const extractRawPdfText = (data: Uint8Array) => {
   const source = new TextDecoder("latin1").decode(data);
   const textItems = [
     ...[...source.matchAll(/\(((?:\\.|[^\\)])*)\)\s*Tj/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
-    ...[...source.matchAll(/\[([\s\S]*?)\]\s*TJ/g)].flatMap((match) => extractPdfLiteralTexts(match[1] ?? ""))
+    ...[...source.matchAll(/<([0-9a-f\s]+)>\s*Tj/gi)].map((match) => decodePdfHexText(match[1] ?? "")),
+    ...[...source.matchAll(/\[([\s\S]*?)\]\s*TJ/g)].flatMap((match) => extractPdfTextItems(match[1] ?? ""))
   ];
 
   return textItems.join(" ").replace(/\s+/g, " ").trim();
