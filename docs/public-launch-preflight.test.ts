@@ -201,6 +201,15 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: public issue launch risk must be low or none.");
   });
 
+  it("rejects duplicate public issue launch risk evidence", () => {
+    const result = runLaunchPreflight(`${completeReviewLog}public issue launch risk: low\n`);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Public launch blocked: public issue launch risk must have exactly one final value."
+    );
+  });
+
   it("rejects private data in session evidence", () => {
     const result = runLaunchPreflight(
       completeReviewLog

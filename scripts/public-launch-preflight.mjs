@@ -202,6 +202,9 @@ const noteStorageLocation = completedValue("note storage location");
 const sanitizationStatus = completedValue("sanitization status").toLowerCase();
 const publicTrackingIssue = completedValue("public tracking issue");
 const publicIssueLaunchRisk = completedValue("public issue launch risk").toLowerCase();
+const publicIssueLaunchRiskValues = completedValuesForField("public issue launch risk").map((value) =>
+  value.toLowerCase()
+);
 const workflowMatchAnswer = completedValue("workflow_match_answer");
 const misleadingOutputAnswer = completedValue("misleading_output_answer");
 const riskEscalationAnswer = completedValue("risk_escalation_answer");
@@ -296,6 +299,10 @@ if (errors.length === 0) {
 
   if (!normalizedPublicIssueLaunchRiskValues.has(publicIssueLaunchRisk)) {
     addError("Public launch blocked: public issue launch risk must be low or none.");
+  }
+
+  if (publicIssueLaunchRiskValues.length !== 1) {
+    addError("Public launch blocked: public issue launch risk must have exactly one final value.");
   }
 
   if (reviewAnswers.some(({ value }) => value.length < minimumReviewAnswerLength)) {
