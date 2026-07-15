@@ -202,6 +202,7 @@ const readyForPublicDemo = completedValue("ready_for_public_demo").toLowerCase()
 const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
 const decisionNotes = completedValue("notes");
+const publicIssueSafeValues = completedValuesForField("public_issue_safe").map((value) => value.toLowerCase());
 const reviewAnswers = [
   { field: "workflow_match_answer", value: workflowMatchAnswer },
   { field: "misleading_output_answer", value: misleadingOutputAnswer },
@@ -224,7 +225,8 @@ const scannedReviewTextFields = [
   ...requiredSpecificFields.map(({ field }) => field),
   "summary",
   "evidence",
-  "recommended change"
+  "recommended change",
+  "public_issue_safe"
 ];
 
 if (errors.length === 0) {
@@ -263,6 +265,10 @@ if (errors.length === 0) {
 
   if (reviewAnswers.some(({ value }) => value.length < minimumReviewAnswerLength)) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
+  }
+
+  if (publicIssueSafeValues.some((value) => value !== "yes")) {
+    addError("Public launch blocked: public_issue_safe findings must be yes.");
   }
 
   for (const field of scannedReviewTextFields) {

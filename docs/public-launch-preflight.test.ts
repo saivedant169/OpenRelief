@@ -225,6 +225,13 @@ recommended change: remove screenshot copy before launch
     expect(result.stderr).toContain("Public launch blocked: recommended change contains screenshot reference.");
   });
 
+  it("rejects findings not safe for public issue", () => {
+    const result = runLaunchPreflight(`${completeReviewLog}public_issue_safe: no\n`);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: public_issue_safe findings must be yes.");
+  });
+
   it("rejects restricted survivor and partner details", () => {
     const result = runLaunchPreflight(
       completeReviewLog
