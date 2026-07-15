@@ -225,7 +225,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|displacement\s+assistance\s+(?:record|receipt)|immediate\s+housing\s+(?:record|receipt)|family\s+(?:and|or)\s+friends?\s+stay\s+record|host\s+stay\s+record|temporary\s+housing\s+option\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|continued\s+temporary\s+housing\s+assistance\s+(?:application|form|record)|continued\s+rental\s+assistance\s+(?:application|form|record)|ctha\s+(?:application|form|record)|permanent\s+housing\s+plan\s+record|displacement\s+assistance\s+(?:record|receipt)|immediate\s+housing\s+(?:record|receipt)|family\s+(?:and|or)\s+friends?\s+stay\s+record|host\s+stay\s+record|temporary\s+housing\s+option\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[housing identifier removed]"
   },
   {
@@ -619,7 +619,15 @@ const requestDetectionRules: RequestDetectionRule[] = [
   },
   {
     request: "lease agreements",
-    phrases: ["lease agreement", "lease agreements", "written lease agreement", "written lease agreements"],
+    phrases: [
+      "lease agreement",
+      "lease agreements",
+      "written lease agreement",
+      "written lease agreements",
+      "rental agreement",
+      "rental agreements",
+      "lease or rental agreement"
+    ],
     fact: "The letter asks for lease agreements."
   },
   {
@@ -957,6 +965,23 @@ const requestDetectionRules: RequestDetectionRule[] = [
       "available housing option records"
     ],
     fact: "The letter asks for displacement assistance records."
+  },
+  {
+    request: "continued housing assistance records",
+    phrases: [
+      "continued temporary housing assistance records",
+      "continued temporary housing assistance application",
+      "application for continued temporary housing assistance",
+      "continued temporary housing assistance form",
+      "continued rental assistance records",
+      "continued rental assistance application",
+      "ctha application",
+      "ctha records",
+      "permanent housing plan records",
+      "permanent housing plan",
+      "documentation that rental assistance was used for temporary housing"
+    ],
+    fact: "The letter asks for continued housing assistance records."
   },
   {
     request: "serious needs records",
@@ -1651,6 +1676,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "utility records",
             "utility bills",
             "rent receipts",
+            "continued housing assistance records",
             "employer statements",
             "public official statements",
             "bank statements",
@@ -1707,7 +1733,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "court ownership documents",
             "public official ownership letters",
             "lease records",
-            "lease agreements"
+            "lease agreements",
+            "rental agreements"
           ]),
           sourceIds: ["fema-documents"]
         }
@@ -1746,6 +1773,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "repair records",
             "supporting receipts",
             "displacement assistance records",
+            "continued housing assistance records",
             "serious needs records",
             "generator rental receipts",
             "temporary power equipment receipts",

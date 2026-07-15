@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 164,
+  "caseCount": 165,
   "passed": true,
   "metrics": {
-    "passedCount": 164,
+    "passedCount": 165,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1244,6 +1244,23 @@
     {
       "caseId": "ca-wildfire-rfi-displacement-assistance-records",
       "title": "Request for displacement assistance records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-continued-housing-assistance-records",
+      "title": "Request for continued housing assistance records",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

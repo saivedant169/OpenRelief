@@ -829,6 +829,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[housing identifier removed]");
   });
 
+  it("redacts continued housing assistance identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Continued temporary housing assistance application number CTHA-123456 should not stay in notes.",
+        "Continued rental assistance form number CRA-123456 should not stay in notes.",
+        "Permanent housing plan record number PHP-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("CTHA-123456");
+    expect(redacted).not.toContain("CRA-123456");
+    expect(redacted).not.toContain("PHP-123456");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
   it("redacts rental lease identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Rental lease number LEA-123456 should not stay in notes.");
 
@@ -2905,7 +2920,7 @@ describe("OpenRelief domain core", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
       "Additional information is needed before a decision can be made.",
-      "Please send a lease agreement or housing agreement."
+      "Please send a lease agreement, rental agreement, or housing agreement."
     ].join("\n"));
 
     expect(result.detectedRequests).toContain("lease agreements");
@@ -3429,6 +3444,18 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for displacement assistance records.");
   });
 
+  it("extracts continued housing assistance evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send the Application for Continued Temporary Housing Assistance, CTHA records, a current lease or rental agreement, and permanent housing plan records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("continued housing assistance records");
+    expect(result.detectedRequests).toContain("lease agreements");
+    expect(result.facts).toContain("The letter asks for continued housing assistance records.");
+  });
+
   it("extracts serious needs evidence requests", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -3527,6 +3554,13 @@ describe("OpenRelief domain core", () => {
   it("marks requested displacement assistance evidence as missing", () => {
     const packet = buildEvidencePacket(["displacement assistance records"]);
 
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested continued housing assistance evidence as missing", () => {
+    const packet = buildEvidencePacket(["continued housing assistance records"]);
+
+    expect(packet.groups.find((group) => group.category === "residence")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
   });
 
