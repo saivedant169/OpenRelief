@@ -310,6 +310,25 @@ describe("OpenRelief security smoke", () => {
     expect(screen.queryByText("Could not extract PDF text. Paste extracted text below.")).not.toBeInTheDocument();
   });
 
+  it("extracts raw PDF text from quote show operators when PDF parsing fails", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text");
+    const file = new File(
+      ["%PDF-1.4\nBT\n(FEMA Notice Your application is approved.) '\nET\n%%EOF"],
+      "raw-quote.pdf",
+      { type: "application/pdf" }
+    );
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(letterField).toHaveValue("FEMA Notice Your application is approved.");
+    });
+    expect(screen.getByText("raw-quote.pdf")).toBeInTheDocument();
+    expect(screen.queryByText("Could not extract PDF text. Paste extracted text below.")).not.toBeInTheDocument();
+  });
+
   it("clears stale analysis after TXT uploads", async () => {
     render(<App />);
     await loadSampleLetter();

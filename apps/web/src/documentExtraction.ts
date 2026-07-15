@@ -126,13 +126,15 @@ const extractPdfTextItems = (value: string) => [
   ...[...value.matchAll(/<([0-9a-f\s]+)>/gi)].map((match) => decodePdfHexText(match[1] ?? ""))
 ];
 
+const hasPdfShowTextOperator = (value: string) => /^\s*(?:Tj\b|['"])/.test(value);
+
 const extractRawPdfText = (data: Uint8Array) => {
   const source = new TextDecoder("latin1").decode(data);
   const textItems = [
     ...extractPdfLiteralTextItems(source)
-      .filter((item) => /^\s*Tj\b/.test(source.slice(item.endIndex)))
+      .filter((item) => hasPdfShowTextOperator(source.slice(item.endIndex)))
       .map((item) => item.text),
-    ...[...source.matchAll(/<([0-9a-f\s]+)>\s*Tj/gi)].map((match) => decodePdfHexText(match[1] ?? "")),
+    ...[...source.matchAll(/<([0-9a-f\s]+)>\s*(?:Tj\b|['"])/gi)].map((match) => decodePdfHexText(match[1] ?? "")),
     ...[...source.matchAll(/\[([\s\S]*?)\]\s*TJ/g)].flatMap((match) => extractPdfTextItems(match[1] ?? ""))
   ];
 
