@@ -123,6 +123,20 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("heading", { name: "Approval" })).toBeInTheDocument();
   });
 
+  it("caps optional workflow text fields", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Evidence already available"), {
+      target: { value: "e".repeat(10_001) }
+    });
+    fireEvent.change(screen.getByLabelText("Immediate needs and risks"), {
+      target: { value: "i".repeat(10_001) }
+    });
+
+    expect(screen.getByLabelText("Evidence already available")).toHaveValue("e".repeat(10_000));
+    expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("i".repeat(10_000));
+  });
+
   it("shows send-by date deadlines from uploaded letters", async () => {
     render(<App />);
 
@@ -521,6 +535,10 @@ describe("OpenRelief web workflow", () => {
         "Called survivor about occupancy proof."
       );
     });
+
+    fireEvent.change(notesField, { target: { value: "n".repeat(10_001) } });
+
+    expect(notesField).toHaveValue("n".repeat(10_000));
   });
 
   it("shows timeline and checklist in opened saved case detail", async () => {

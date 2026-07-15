@@ -57,6 +57,7 @@ const acceptedFileTypes = [
 ];
 const maxUploadSizeBytes = 10 * 1024 * 1024;
 const maxLetterTextLength = 50_000;
+const maxOptionalTextLength = 10_000;
 const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text below.";
 const imageExtractionMessage = "Could not extract image text. Paste extracted text below.";
 const letterLengthMessage = "Letter text too long. Keep extracted text under 50,000 characters.";
@@ -127,6 +128,9 @@ const readSavedDraft = (): SavedDraft => {
 };
 
 const redactStringList = (items: string[]): string[] => items.map((item) => redactRestrictedIdentifiers(item));
+
+const limitText = (value: string, maxLength: number): string =>
+  value.length > maxLength ? value.slice(0, maxLength) : value;
 
 const parseAvailableEvidenceText = (value: string): string[] =>
   redactRestrictedIdentifiers(value)
@@ -217,17 +221,24 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     }
 
     const sanitizedLetterText = redactRestrictedIdentifiers(candidate.letterText);
-    const sanitizedIntakeText = redactRestrictedIdentifiers(
-      typeof candidate.intakeText === "string" ? candidate.intakeText : ""
+    const sanitizedIntakeText = limitText(
+      redactRestrictedIdentifiers(typeof candidate.intakeText === "string" ? candidate.intakeText : ""),
+      maxOptionalTextLength
     );
     const sanitizedFileName = redactRestrictedIdentifiers(
       typeof candidate.fileName === "string" ? candidate.fileName : "Imported saved case"
     );
-    const sanitizedAvailableEvidenceText = redactRestrictedIdentifiers(
-      typeof candidate.availableEvidenceText === "string" ? candidate.availableEvidenceText : ""
+    const sanitizedAvailableEvidenceText = limitText(
+      redactRestrictedIdentifiers(
+        typeof candidate.availableEvidenceText === "string" ? candidate.availableEvidenceText : ""
+      ),
+      maxOptionalTextLength
     );
     const sanitizedId = redactRestrictedIdentifiers(candidate.id);
-    const sanitizedNotes = redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : "");
+    const sanitizedNotes = limitText(
+      redactRestrictedIdentifiers(typeof candidate.notes === "string" ? candidate.notes : ""),
+      maxOptionalTextLength
+    );
     const restoredAnalysis = analyzeLetter(sanitizedLetterText);
     const restoredRiskFlags = detectRiskFlags(sanitizedIntakeText, restoredAnalysis);
     const restoredChecklist = createChecklist(
@@ -326,8 +337,10 @@ export const App = () => {
   const [savedDraft] = useState(readSavedDraft);
   const [savedCases, setSavedCases] = useState(readSavedCases);
   const [letterText, setLetterText] = useState(savedDraft.letterText ?? sampleLetter);
-  const [intakeText, setIntakeText] = useState(savedDraft.intakeText ?? "");
-  const [availableEvidenceText, setAvailableEvidenceText] = useState(savedDraft.availableEvidenceText ?? "");
+  const [intakeText, setIntakeText] = useState(limitText(savedDraft.intakeText ?? "", maxOptionalTextLength));
+  const [availableEvidenceText, setAvailableEvidenceText] = useState(
+    limitText(savedDraft.availableEvidenceText ?? "", maxOptionalTextLength)
+  );
   const [analysis, setAnalysis] = useState<LetterAnalysis | null>(null);
   const [exportText, setExportText] = useState("");
   const [clearArmed, setClearArmed] = useState(false);
@@ -493,7 +506,7 @@ export const App = () => {
     setSavedCases((current) =>
       current.map((savedCase) =>
         savedCase.id === activeSavedCaseId
-          ? { ...savedCase, notes: redactRestrictedIdentifiers(notes) }
+          ? { ...savedCase, notes: limitText(redactRestrictedIdentifiers(notes), maxOptionalTextLength) }
           : savedCase
       )
     );
@@ -519,8 +532,8 @@ export const App = () => {
 
   const handleOpenSavedCase = (savedCase: SavedCaseSummary) => {
     setLetterText(savedCase.letterText);
-    setIntakeText(savedCase.intakeText);
-    setAvailableEvidenceText(savedCase.availableEvidenceText);
+    setIntakeText(limitText(savedCase.intakeText, maxOptionalTextLength));
+    setAvailableEvidenceText(limitText(savedCase.availableEvidenceText, maxOptionalTextLength));
     setFileName(savedCase.fileName);
     setFileError("");
     setLetterError("");
@@ -802,9 +815,10 @@ export const App = () => {
             <textarea
               aria-label="Evidence already available"
               className="intake-textarea"
+              maxLength={maxOptionalTextLength}
               value={availableEvidenceText}
               onChange={(event) => {
-                setAvailableEvidenceText(event.target.value);
+                setAvailableEvidenceText(limitText(event.target.value, maxOptionalTextLength));
                 setExportText("");
                 setClearArmed(false);
                 setActiveSavedCaseId(null);
@@ -823,9 +837,10 @@ export const App = () => {
             <textarea
               aria-label="Immediate needs and risks"
               className="intake-textarea"
+              maxLength={maxOptionalTextLength}
               value={intakeText}
               onChange={(event) => {
-                setIntakeText(event.target.value);
+                setIntakeText(limitText(event.target.value, maxOptionalTextLength));
                 setExportText("");
                 setClearArmed(false);
                 setActiveSavedCaseId(null);
@@ -1069,6 +1084,7 @@ export const App = () => {
                       <textarea
                         aria-label="Case notes"
                         className="case-notes"
+                        maxLength={maxOptionalTextLength}
                         value={activeSavedCase.notes}
                         onChange={(event) => handleSavedCaseNotes(event.target.value)}
                       />
