@@ -10,6 +10,27 @@ const stylesPath = path.join(process.cwd(), "apps", "web", "src", "styles.css");
 const styleRule = (styles: string, selector: string) =>
   styles.match(new RegExp(`${selector.replaceAll(".", "\\.")}\\s*\\{[^}]+\\}`))?.[0] ?? "";
 
+const hexToRgb = (hex: string) => {
+  const value = hex.replace("#", "");
+
+  return [0, 2, 4].map((index) => Number.parseInt(value.slice(index, index + 2), 16) / 255);
+};
+
+const linearChannel = (channel: number) =>
+  channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+
+const luminance = (hex: string) => {
+  const [red, green, blue] = hexToRgb(hex).map(linearChannel);
+
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+};
+
+const contrastRatio = (foreground: string, background: string) => {
+  const [lighter, darker] = [luminance(foreground), luminance(background)].sort((left, right) => right - left);
+
+  return (lighter + 0.05) / (darker + 0.05);
+};
+
 const expectNamedControls = () => {
   for (const button of screen.getAllByRole("button")) {
     expect(button).toHaveAccessibleName();
@@ -69,5 +90,35 @@ describe("OpenRelief accessibility smoke", () => {
     const fieldRule = styleRule(styles, ".field-group input,\n.field-group select");
 
     expect(fieldRule).toContain("min-height: 44px");
+  });
+
+  it("keeps key text and focus indicators at accessible contrast", () => {
+    const styles = readFileSync(stylesPath, "utf8");
+    const focusRule = styleRule(
+      styles,
+      "textarea:focus,\nbutton:focus-visible,\na:focus-visible,\n.file-control:focus-within,\n.need-options:focus-within"
+    );
+    const textPairs = [
+      ["#15202b", "#f6f7f8"],
+      ["#4b5b6b", "#ffffff"],
+      ["#344253", "#ffffff"],
+      ["#5f6f80", "#ffffff"],
+      ["#073f91", "#ffffff"],
+      ["#ffffff", "#073f91"],
+      ["#0f6b3f", "#e8f7ee"],
+      ["#7a4d00", "#fff3cf"],
+      ["#8b1a1a", "#ffe7e7"],
+      ["#7a2d00", "#fff1df"]
+    ];
+    const focusColor = "#0a66c2";
+
+    expect(focusRule).toContain(`outline: 3px solid ${focusColor}`);
+
+    for (const [foreground, background] of textPairs) {
+      expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
+    }
+
+    expect(contrastRatio(focusColor, "#ffffff")).toBeGreaterThanOrEqual(3);
+    expect(contrastRatio(focusColor, "#f6f7f8")).toBeGreaterThanOrEqual(3);
   });
 });
