@@ -505,6 +505,12 @@ textarea {
   min-height: 120px;
 }
 
+.extraction-quality {
+  margin: 0 0 12px;
+  color: #344253;
+  font-weight: 650;
+}
+
 .need-options {
   display: flex;
   flex-wrap: wrap;

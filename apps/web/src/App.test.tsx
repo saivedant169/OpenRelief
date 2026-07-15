@@ -59,6 +59,9 @@ describe("OpenRelief web workflow", () => {
         "OpenRelief helps organize and explain paperwork. It is not a government agency, official eligibility decision, or legal advice."
       )
     ).toBeInTheDocument();
+    expect(
+      screen.getByText("Extraction quality: Manual review required. Review before analysis.")
+    ).toBeInTheDocument();
   });
 
   it("shows visible human support path before upload", () => {

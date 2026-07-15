@@ -1168,6 +1168,7 @@ export const App = () => {
               </div>
               <span className="quality">Manual review required</span>
             </div>
+            <p className="extraction-quality">Extraction quality: Manual review required. Review before analysis.</p>
             <textarea
               aria-label="Extracted letter text"
               maxLength={maxLetterTextLength}
