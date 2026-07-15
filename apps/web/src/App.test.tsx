@@ -65,6 +65,38 @@ describe("OpenRelief web workflow", () => {
     expect(within(escalationPanel).getByText("Denial or appeal deadline")).toBeInTheDocument();
   });
 
+  it("lets current checklist items be marked done with notes before saving", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
+    expect(checklistCard).not.toBeNull();
+    expect(within(checklistCard as HTMLElement).getByRole("heading", { name: "High priority" })).toBeInTheDocument();
+    expect(within(checklistCard as HTMLElement).getByRole("heading", { name: "Deadline tasks" })).toBeInTheDocument();
+    expect(within(checklistCard as HTMLElement).getByRole("heading", { name: "Evidence tasks" })).toBeInTheDocument();
+    expect(within(checklistCard as HTMLElement).getByRole("link", { name: "Build evidence packet" })).toHaveAttribute(
+      "href",
+      "#evidence-packet-outline"
+    );
+
+    await userEvent.click(
+      within(checklistCard as HTMLElement).getByRole("checkbox", {
+        name: "Mark current task done: Request human review"
+      })
+    );
+    await userEvent.type(
+      within(checklistCard as HTMLElement).getByLabelText("Current checklist note for Request human review"),
+      "Called local case worker."
+    );
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem("openrelief:v1:cases")).toContain('"human-review":"done"');
+      expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("Called local case worker.");
+    });
+  });
+
   it("shows safety boundary before upload", () => {
     render(<App />);
 

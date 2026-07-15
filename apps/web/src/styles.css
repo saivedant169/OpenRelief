@@ -724,6 +724,17 @@ a:focus-visible,
   list-style: none;
 }
 
+.checklist-groups {
+  display: grid;
+  gap: 16px;
+}
+
+.checklist-group h3 {
+  margin: 0 0 10px;
+  color: #344253;
+  font-size: 15px;
+}
+
 .analysis-list li {
   padding-top: 10px;
   border-top: 1px solid #e5e9ef;

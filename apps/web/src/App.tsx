@@ -110,6 +110,13 @@ const deadlineSourceLabels: Record<Deadline["source"], string> = {
   uploaded_letter: "Uploaded letter",
   policy_pack: "Policy pack"
 };
+const checklistCategoryLabels: Record<ChecklistItem["category"], string> = {
+  human_review: "High priority",
+  deadline: "Deadline tasks",
+  evidence: "Evidence tasks",
+  source_review: "Source review"
+};
+const checklistCategoryOrder: ChecklistItem["category"][] = ["human_review", "deadline", "evidence", "source_review"];
 
 type SavedDraft = {
   letterText?: string;
@@ -481,6 +488,8 @@ export const App = () => {
   const [caseQueueSearch, setCaseQueueSearch] = useState("");
   const [caseQueueEscalationsOnly, setCaseQueueEscalationsOnly] = useState(false);
   const [caseQueueSort, setCaseQueueSort] = useState<CaseQueueSort>("updated");
+  const [activeChecklistStatuses, setActiveChecklistStatuses] = useState<ChecklistStatusMap>({});
+  const [activeChecklistNotes, setActiveChecklistNotes] = useState<ChecklistNoteMap>({});
 
   useEffect(() => {
     if (letterText === "" && fileName === "No file selected") {
@@ -526,6 +535,16 @@ export const App = () => {
 
     return createChecklist(caseContext, analysis, californiaWildfirePolicyPack);
   }, [analysis, caseContext]);
+  const checklistGroups = useMemo(
+    () =>
+      checklistCategoryOrder
+        .map((category) => ({
+          category,
+          items: checklist?.items.filter((item) => item.category === category) ?? []
+        }))
+        .filter((group) => group.items.length > 0),
+    [checklist]
+  );
 
   const availableEvidence = useMemo(() => parseAvailableEvidenceText(availableEvidenceText), [availableEvidenceText]);
   const evidencePacket = useMemo(
@@ -555,6 +574,8 @@ export const App = () => {
 
     setLetterError("");
     setAnalysis(analyzeLetter(letterText));
+    setActiveChecklistStatuses({});
+    setActiveChecklistNotes({});
     setExportText("");
     setClearArmed(false);
     setActiveSavedCaseId(null);
@@ -604,6 +625,8 @@ export const App = () => {
     const updatedAt = currentTimestamp();
     setSavedCases((current) => {
       const existingCase = current.find((savedCase) => savedCase.id === snapshotId);
+      const checklistStatuses = { ...(existingCase?.checklistStatuses ?? {}), ...activeChecklistStatuses };
+      const checklistNotes = { ...(existingCase?.checklistNotes ?? {}), ...activeChecklistNotes };
       const snapshot: SavedCaseSummary = {
         id: snapshotId,
         title: letterTypeLabels[analysis.letterType],
@@ -615,8 +638,8 @@ export const App = () => {
         deadlines: analysis.detectedDeadlines,
         missingEvidence: extractMissingEvidence(evidencePacket),
         checklistItems,
-        checklistStatuses: normalizeChecklistStatuses(checklistItems, existingCase?.checklistStatuses),
-        checklistNotes: normalizeChecklistNotes(checklistItems, existingCase?.checklistNotes),
+        checklistStatuses: normalizeChecklistStatuses(checklistItems, checklistStatuses),
+        checklistNotes: normalizeChecklistNotes(checklistItems, checklistNotes),
         riskFlags,
         summary: analysis.summary,
         notes: existingCase?.notes ?? "",
@@ -679,6 +702,7 @@ export const App = () => {
 
   const handleChecklistNote = (savedCaseId: string, itemId: string, note: string) => {
     const updatedAt = currentTimestamp();
+    const sanitizedNote = limitText(redactRestrictedIdentifiers(note), maxOptionalTextLength);
     setSavedCases((current) =>
       current.map((savedCase) =>
         savedCase.id === savedCaseId
@@ -686,18 +710,41 @@ export const App = () => {
               ...savedCase,
               checklistNotes: {
                 ...savedCase.checklistNotes,
-                [itemId]: limitText(redactRestrictedIdentifiers(note), maxOptionalTextLength)
+                [itemId]: sanitizedNote
               },
               updatedAt
             }
           : savedCase
       )
     );
+    if (savedCaseId === activeSavedCaseId) {
+      setActiveChecklistNotes((current) => ({
+        ...current,
+        [itemId]: sanitizedNote
+      }));
+    }
+    setClearArmed(false);
+  };
+
+  const handleCurrentChecklistStatus = (itemId: string, checked: boolean) => {
+    setActiveChecklistStatuses((current) => ({
+      ...current,
+      [itemId]: checked ? "done" : "todo"
+    }));
+    setClearArmed(false);
+  };
+
+  const handleCurrentChecklistNote = (itemId: string, note: string) => {
+    setActiveChecklistNotes((current) => ({
+      ...current,
+      [itemId]: limitText(redactRestrictedIdentifiers(note), maxOptionalTextLength)
+    }));
     setClearArmed(false);
   };
 
   const handleChecklistStatus = (savedCaseId: string, itemId: string, checked: boolean) => {
     const updatedAt = currentTimestamp();
+    const status = checked ? "done" : "todo";
     setSavedCases((current) =>
       current.map((savedCase) =>
         savedCase.id === savedCaseId
@@ -705,13 +752,19 @@ export const App = () => {
               ...savedCase,
               checklistStatuses: {
                 ...savedCase.checklistStatuses,
-                [itemId]: checked ? "done" : "todo"
+                [itemId]: status
               },
               updatedAt
             }
           : savedCase
       )
     );
+    if (savedCaseId === activeSavedCaseId) {
+      setActiveChecklistStatuses((current) => ({
+        ...current,
+        [itemId]: status
+      }));
+    }
     setClearArmed(false);
   };
 
@@ -723,6 +776,8 @@ export const App = () => {
     setFileError("");
     setLetterError("");
     setAnalysis(analyzeLetter(savedCase.letterText));
+    setActiveChecklistStatuses(savedCase.checklistStatuses);
+    setActiveChecklistNotes(savedCase.checklistNotes);
     setExportText("");
     setClearArmed(false);
     setActiveSavedCaseId(savedCase.id);
@@ -740,6 +795,8 @@ export const App = () => {
     setAnalysis(null);
     setExportText("");
     setSavedCases([]);
+    setActiveChecklistStatuses({});
+    setActiveChecklistNotes({});
     setClearArmed(false);
     setActiveSavedCaseId(null);
     setFileName("No file selected");
@@ -1476,32 +1533,65 @@ export const App = () => {
 
               <article className="result-card wide">
                 <h2>Next-step checklist</h2>
-                <ul className="checklist">
-                  {checklist?.items.map((item) => (
-                    <li key={item.id}>
-                      <span className={`category-dot ${item.category}`} />
-                      <div>
-                        <strong>{item.title}</strong>
-                        {item.editable ? <span className="editable-mark">Editable</span> : null}
-                        <p>{item.reason}</p>
-                        {item.deadline ? <span>Deadline: {item.deadline.text}</span> : null}
-                        {item.deadline ? (
-                          <span className="item-sources">Deadline source: {formatDeadlineSource(item.deadline.source)}</span>
-                        ) : null}
-                        <span className="item-sources">
-                          Source:{" "}
-                          {item.sourceIds
-                            .map((sourceId) => sourceById.get(sourceId)?.title)
-                            .filter((title): title is string => Boolean(title))
-                            .join(", ")}
-                        </span>
-                      </div>
-                    </li>
+                <div className="checklist-groups">
+                  {checklistGroups.map((group) => (
+                    <section className="checklist-group" key={group.category}>
+                      <h3>{checklistCategoryLabels[group.category]}</h3>
+                      <ul className="checklist">
+                        {group.items.map((item) => (
+                          <li key={item.id}>
+                            <span className={`category-dot ${item.category}`} />
+                            <div>
+                              <strong>{item.title}</strong>
+                              {item.editable ? <span className="editable-mark">Editable</span> : null}
+                              <label className="case-task-status">
+                                <input
+                                  type="checkbox"
+                                  aria-label={`Mark current task done: ${item.title}`}
+                                  checked={activeChecklistStatuses[item.id] === "done"}
+                                  onChange={(event) => handleCurrentChecklistStatus(item.id, event.target.checked)}
+                                />
+                                Mark current task done
+                              </label>
+                              <p>{item.reason}</p>
+                              {item.deadline ? <span>Deadline: {item.deadline.text}</span> : null}
+                              {item.deadline ? (
+                                <span className="item-sources">
+                                  Deadline source: {formatDeadlineSource(item.deadline.source)}
+                                </span>
+                              ) : null}
+                              <span className="item-sources">
+                                Source:{" "}
+                                {item.sourceIds
+                                  .map((sourceId) => sourceById.get(sourceId)?.title)
+                                  .filter((title): title is string => Boolean(title))
+                                  .join(", ")}
+                              </span>
+                              <label className="case-task-note">
+                                <span>Task note</span>
+                                <textarea
+                                  aria-label={`Current checklist note for ${item.title}`}
+                                  maxLength={maxOptionalTextLength}
+                                  value={activeChecklistNotes[item.id] ?? ""}
+                                  onChange={(event) => handleCurrentChecklistNote(item.id, event.target.value)}
+                                />
+                              </label>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
                   ))}
-                </ul>
+                </div>
+                <div className="panel-footer">
+                  <span>{checklist?.items.length ?? 0} checklist items</span>
+                  <a className="secondary-link" href="#evidence-packet-outline">
+                    Build evidence packet
+                  </a>
+                </div>
               </article>
 
-              <article className="result-card wide">
+              <article className="result-card wide" id="evidence-packet-outline">
                 <h2>Evidence packet outline</h2>
                 <div className="evidence-grid">
                   {evidencePacket.groups.map((group) => (
