@@ -7,6 +7,13 @@ import path from "node:path";
 const repoRoot = process.cwd();
 const scriptPath = path.join(repoRoot, "scripts", "public-launch-preflight.mjs");
 const partnerReviewLogPath = path.join(repoRoot, "docs", "partner-review-log.md");
+const evidencePaths = [
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json",
+  "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+];
 
 const completeReviewLog = `# Partner Review Log
 
@@ -40,13 +47,24 @@ decision_date: 2026-07-15
 notes: sanitized review found launch guardrails ready
 `;
 
-const runLaunchPreflight = (reviewLog: string) => {
+const runLaunchPreflight = (reviewLog: string, options: { omitEvidencePaths?: string[] } = {}) => {
   const tempRoot = mkdtempSync(path.join(os.tmpdir(), "openrelief-launch-"));
   const docsPath = path.join(tempRoot, "docs");
+  const omittedEvidencePaths = new Set(options.omitEvidencePaths ?? []);
 
   try {
     mkdirSync(docsPath);
     writeFileSync(path.join(docsPath, "partner-review-log.md"), reviewLog);
+
+    for (const evidencePath of evidencePaths) {
+      if (omittedEvidencePaths.has(evidencePath)) {
+        continue;
+      }
+
+      const filePath = path.join(tempRoot, evidencePath);
+      mkdirSync(path.dirname(filePath), { recursive: true });
+      writeFileSync(filePath, "synthetic evidence");
+    }
 
     return spawnSync(process.execPath, [scriptPath], {
       cwd: tempRoot,
@@ -226,6 +244,21 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: materials reviewed missing docs/demo-video-runbook.md.");
     expect(result.stderr).toContain(
       "Public launch blocked: synthetic examples used missing examples/california-wildfire/letters/denial-occupancy-proof.txt."
+    );
+  });
+
+  it("rejects missing launch evidence files", () => {
+    const result = runLaunchPreflight(completeReviewLog, {
+      omitEvidencePaths: [
+        "docs/demo-video-runbook.md",
+        "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+      ]
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: evidence path missing docs/demo-video-runbook.md.");
+    expect(result.stderr).toContain(
+      "Public launch blocked: evidence path missing examples/california-wildfire/letters/denial-occupancy-proof.txt."
     );
   });
 

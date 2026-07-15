@@ -45,6 +45,13 @@ const requiredReviewedMaterials = [
   "packages/evals/reports/california-wildfire-v1.json"
 ];
 const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
+const requiredEvidencePaths = [
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json",
+  "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+];
 const minimumReviewAnswerLength = 10;
 const restrictedReviewTextPatterns = [
   { label: "email address", pattern: /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/i },
@@ -151,6 +158,14 @@ const requireListItems = (label, items) => {
   }
 };
 
+const requireExistingPaths = (items) => {
+  for (const item of items) {
+    if (!existsSync(path.join(root, item))) {
+      addError(`Public launch blocked: evidence path missing ${item}.`);
+    }
+  }
+};
+
 const reviewId = completedValue("review_id");
 const reviewDate = completedValue("review_date");
 const reviewerRole = completedValue("Reviewer role");
@@ -192,6 +207,7 @@ const requiredSpecificFields = [
 if (errors.length === 0) {
   requireListItems("materials reviewed", requiredReviewedMaterials);
   requireListItems("synthetic examples used", requiredSyntheticExamples);
+  requireExistingPaths(requiredEvidencePaths);
   const reviewDateValue = requireDate("review_date", reviewDate);
 
   for (const { field, value } of requiredSpecificFields) {
