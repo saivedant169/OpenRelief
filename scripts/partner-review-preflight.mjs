@@ -77,6 +77,13 @@ const requiredReviewedMaterials = [
   "packages/evals/reports/california-wildfire-v1.json"
 ];
 const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
+const requiredEvidencePaths = [
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json",
+  "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+];
 
 const fail = (message) => {
   console.error(message);
@@ -131,6 +138,14 @@ const requireListItems = (content, label, items) => {
   }
 };
 
+const requireExistingPaths = (items) => {
+  for (const item of items) {
+    if (!existsSync(path.join(root, item))) {
+      fail(`Partner review evidence missing: ${item}`);
+    }
+  }
+};
+
 for (const [label, filePath] of Object.entries(files)) {
   if (!existsSync(filePath)) {
     fail(`Missing ${label}: ${filePath}`);
@@ -151,6 +166,7 @@ for (const requiredText of requiredLogText) {
 
 requireListItems(reviewLog, "materials reviewed", requiredReviewedMaterials);
 requireListItems(reviewLog, "synthetic examples used", requiredSyntheticExamples);
+requireExistingPaths(requiredEvidencePaths);
 
 for (const requiredText of requiredOutreachText) {
   if (!outreach.includes(requiredText)) {

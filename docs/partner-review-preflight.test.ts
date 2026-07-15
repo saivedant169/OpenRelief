@@ -1,11 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
 const repoRoot = process.cwd();
 const scriptPath = path.join(repoRoot, "scripts", "partner-review-preflight.mjs");
+const evidencePaths = [
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json",
+  "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+];
 
 const reviewLog = `# Partner Review Log
 
@@ -74,8 +81,13 @@ const baselineFailures = "missing_human_escalation\n";
 const demoRunbook = "No real survivor PII\n";
 const passingReport = JSON.stringify({ caseCount: 108, metrics: { passedCount: 108, failedCount: 0 } });
 
-const runPartnerPreflight = (overrides: Partial<Record<"log" | "outreach" | "baseline" | "demo" | "report", string>> = {}) => {
+const runPartnerPreflight = (
+  overrides: Partial<Record<"log" | "outreach" | "baseline" | "demo" | "report", string>> & {
+    omitEvidencePaths?: string[];
+  } = {}
+) => {
   const tempRoot = mkdtempSync(path.join(os.tmpdir(), "openrelief-partner-"));
+  const omittedEvidencePaths = new Set(overrides.omitEvidencePaths ?? []);
 
   try {
     mkdirSync(path.join(tempRoot, "docs"), { recursive: true });
@@ -85,6 +97,20 @@ const runPartnerPreflight = (overrides: Partial<Record<"log" | "outreach" | "bas
     writeFileSync(path.join(tempRoot, "docs", "baseline-failure-examples.md"), overrides.baseline ?? baselineFailures);
     writeFileSync(path.join(tempRoot, "docs", "demo-video-runbook.md"), overrides.demo ?? demoRunbook);
     writeFileSync(path.join(tempRoot, "packages", "evals", "reports", "california-wildfire-v1.json"), overrides.report ?? passingReport);
+
+    for (const evidencePath of evidencePaths) {
+      if (omittedEvidencePaths.has(evidencePath)) {
+        continue;
+      }
+
+      const filePath = path.join(tempRoot, evidencePath);
+      if (existsSync(filePath)) {
+        continue;
+      }
+
+      mkdirSync(path.dirname(filePath), { recursive: true });
+      writeFileSync(filePath, "synthetic evidence");
+    }
 
     return spawnSync(process.execPath, [scriptPath], {
       cwd: tempRoot,
@@ -143,6 +169,18 @@ describe("partner review preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review log missing materials reviewed item: docs/demo-video-runbook.md");
+  });
+
+  it("rejects missing partner review evidence files", () => {
+    const result = runPartnerPreflight({
+      omitEvidencePaths: [
+        "docs/demo-script.md",
+        "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+      ]
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review evidence missing: docs/demo-script.md");
   });
 
   it("rejects outreach without consent language", () => {
