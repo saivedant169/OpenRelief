@@ -385,7 +385,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|federal\s+id|(?:identification|id)\s+card|identification|passport|dl|birth\s+certificate|social\s+security\s+cards?|employer(?:'s)?\s+payroll\s+documents?|military\s+(?:identification(?:\s+card)?|id)|marriage\s+licenses?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:state|federal)[-\s]+issued\s+id|federal\s+id|(?:identification|id)\s+card|identification|passport|dl|birth\s+certificate|social\s+security\s+cards?|employer(?:'s)?\s+payroll\s+documents?|military\s+(?:identification(?:\s+card)?|id)|marriage\s+licenses?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[identity document removed]"
   },
   {

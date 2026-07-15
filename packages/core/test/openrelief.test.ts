@@ -447,6 +447,8 @@ describe("OpenRelief domain core", () => {
     const redacted = redactRestrictedIdentifiers(
       [
         "Federal ID number FED-A1B2C3 should not stay in local text.",
+        "Federal-issued id number FID-A1B2C3 should not stay in local text.",
+        "State issued id number SID-A1B2C3 should not stay in local text.",
         "Birth certificate number BCT-A1B2C3 should not stay in local text.",
         "Social Security card number SSC-A1B2C3 should not stay in local text.",
         "Employer payroll document number EPD-A1B2C3 should not stay in local text.",
@@ -456,6 +458,8 @@ describe("OpenRelief domain core", () => {
     );
 
     expect(redacted).not.toContain("FED-A1B2C3");
+    expect(redacted).not.toContain("FID-A1B2C3");
+    expect(redacted).not.toContain("SID-A1B2C3");
     expect(redacted).not.toContain("BCT-A1B2C3");
     expect(redacted).not.toContain("SSC-A1B2C3");
     expect(redacted).not.toContain("EPD-A1B2C3");
