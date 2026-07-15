@@ -136,6 +136,18 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: notes must include specific review evidence.");
   });
 
+  it("rejects private data in session evidence", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("Consent record: recorded outside public repo", "Consent record: reviewer@example.test")
+        .replace("note storage location: private review notes folder", "note storage location: call 555-123-4567")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: Consent record contains email address.");
+    expect(result.stderr).toContain("Public launch blocked: note storage location contains phone number.");
+  });
+
   it("rejects private data in launch review text", () => {
     const result = runLaunchPreflight(
       completeReviewLog

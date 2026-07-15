@@ -168,7 +168,7 @@ if (errors.length === 0) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
   }
 
-  for (const { field, value } of launchTextFields) {
+  for (const { field, value } of requiredSpecificFields) {
     for (const { label, pattern } of restrictedReviewTextPatterns) {
       if (pattern.test(value)) {
         addError(`Public launch blocked: ${field} contains ${label}.`);
