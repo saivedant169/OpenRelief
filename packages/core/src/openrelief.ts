@@ -225,7 +225,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|(?:written\s+)?lease\s+agreement|rental\s+agreement|housing\s+agreement|continued\s+temporary\s+housing\s+assistance\s+(?:application|form|record)|continued\s+rental\s+assistance\s+(?:application|form|record)|ctha\s+(?:application|form|record)|permanent\s+housing\s+plan\s+record|displacement\s+assistance\s+(?:record|receipt)|immediate\s+housing\s+(?:record|receipt)|family\s+(?:and|or)\s+friends?\s+stay\s+record|host\s+stay\s+record|temporary\s+housing\s+option\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|(?:written\s+)?lease\s+agreement|rental\s+agreement|housing\s+agreement|continued\s+temporary\s+housing\s+assistance\s+(?:application|form|records?)|application\s+for\s+continued\s+temporary\s+housing\s+assistance|continued\s+rental\s+assistance\s+(?:application|form|records?)|ctha\s+(?:application|form|records?)|permanent\s+housing\s+plan(?:\s+records?)?|documentation\s+that\s+rental\s+assistance\s+was\s+used\s+for\s+temporary\s+housing|displacement\s+assistance\s+(?:record|receipt)|immediate\s+housing\s+(?:record|receipt)|family\s+(?:and|or)\s+friends?\s+stay\s+record|host\s+stay\s+record|temporary\s+housing\s+option\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[housing identifier removed]"
   },
   {

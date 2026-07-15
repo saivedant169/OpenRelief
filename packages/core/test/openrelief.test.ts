@@ -865,6 +865,25 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[housing identifier removed]");
   });
 
+  it("redacts expanded continued housing assistance identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Continued temporary housing assistance records number CTR-A1B2C3 should not stay in notes.",
+        "Application for continued temporary housing assistance number ACT-A1B2C3 should not stay in notes.",
+        "CTHA records number CTH-A1B2C3 should not stay in notes.",
+        "Permanent housing plan records number PHR-A1B2C3 should not stay in notes.",
+        "Documentation that rental assistance was used for temporary housing number DRA-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("CTR-A1B2C3");
+    expect(redacted).not.toContain("ACT-A1B2C3");
+    expect(redacted).not.toContain("CTH-A1B2C3");
+    expect(redacted).not.toContain("PHR-A1B2C3");
+    expect(redacted).not.toContain("DRA-A1B2C3");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
   it("redacts rental lease identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
