@@ -33,6 +33,13 @@ const requiredReviewedMaterials = [
 ];
 const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
 const minimumReviewAnswerLength = 10;
+const restrictedReviewTextPatterns = [
+  { label: "email address", pattern: /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/i },
+  { label: "phone number", pattern: /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/ },
+  { label: "Social Security number", pattern: /\b\d{3}-\d{2}-\d{4}\b/ },
+  { label: "redaction marker", pattern: /\b(?:needs-redaction|private-only)\b/i },
+  { label: "real survivor reference", pattern: /\breal survivor\b/i }
+];
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
@@ -100,13 +107,14 @@ const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
 const decisionNotes = completedValue("notes");
 const reviewAnswers = [
-  workflowMatchAnswer,
-  misleadingOutputAnswer,
-  riskEscalationAnswer,
-  evidenceGapAnswer,
-  citationGapAnswer,
-  removeBeforeLaunchAnswer
+  { field: "workflow_match_answer", value: workflowMatchAnswer },
+  { field: "misleading_output_answer", value: misleadingOutputAnswer },
+  { field: "risk_escalation_answer", value: riskEscalationAnswer },
+  { field: "evidence_gap_answer", value: evidenceGapAnswer },
+  { field: "citation_gap_answer", value: citationGapAnswer },
+  { field: "remove_before_launch_answer", value: removeBeforeLaunchAnswer }
 ];
+const launchTextFields = [...reviewAnswers, { field: "notes", value: decisionNotes }];
 
 if (errors.length === 0) {
   requireListItems("materials reviewed", requiredReviewedMaterials);
@@ -125,8 +133,16 @@ if (errors.length === 0) {
     addError("Public launch blocked: consent record and note storage location are required.");
   }
 
-  if (reviewAnswers.some((answer) => answer.length < minimumReviewAnswerLength)) {
+  if (reviewAnswers.some(({ value }) => value.length < minimumReviewAnswerLength)) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
+  }
+
+  for (const { field, value } of launchTextFields) {
+    for (const { label, pattern } of restrictedReviewTextPatterns) {
+      if (pattern.test(value)) {
+        addError(`Public launch blocked: ${field} contains ${label}.`);
+      }
+    }
   }
 
   if (!normalizedSanitizedValues.has(sanitizationStatus)) {

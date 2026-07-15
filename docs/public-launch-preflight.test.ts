@@ -110,6 +110,24 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: review answers need specific sanitized findings.");
   });
 
+  it("rejects private data in launch review text", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace(
+          "workflow_match_answer: reviewer confirmed workflow matches disaster letter review",
+          "workflow_match_answer: reviewer@example.test confirmed workflow matches disaster letter review"
+        )
+        .replace(
+          "notes: sanitized review found launch guardrails ready",
+          "notes: sanitized review found SSN 123-45-6789 in notes"
+        )
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: workflow_match_answer contains email address.");
+    expect(result.stderr).toContain("Public launch blocked: notes contains Social Security number.");
+  });
+
   it("reports multiple launch blockers together", () => {
     const result = runLaunchPreflight(
       completeReviewLog
