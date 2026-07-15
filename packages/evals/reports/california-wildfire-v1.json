@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 134,
+  "caseCount": 135,
   "passed": true,
   "metrics": {
-    "passedCount": 134,
+    "passedCount": 135,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -634,6 +634,23 @@
       "sourceIds": [
         "fema-documents",
         "fema-appeals",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-identity-evidence",
+      "title": "Request for identity evidence",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
         "sba-disaster"
       ],
       "riskFlags": []
