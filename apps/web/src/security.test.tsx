@@ -203,6 +203,18 @@ describe("OpenRelief security smoke", () => {
     expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
   });
 
+  it("shows an accurate fallback when PDF text cannot be extracted", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const file = new File(["%PDF-1.4\n%%EOF"], "blank.pdf", { type: "application/pdf" });
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await screen.findByText("Could not extract PDF text. Paste extracted text below.");
+    expect(screen.getByText("blank.pdf")).toBeInTheDocument();
+    expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
+  });
+
   it("clears stale analysis after TXT uploads", async () => {
     render(<App />);
     await loadSampleLetter();
