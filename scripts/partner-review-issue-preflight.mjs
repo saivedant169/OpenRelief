@@ -16,7 +16,7 @@ const requiredIssueMaterials = [
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
-const requiredIssueHeadings = ["Launch risk"];
+const requiredIssueHeadings = ["Sanitized findings", "Launch risk"];
 const requiredIssueSections = [
   {
     heading: "Objective",
@@ -56,6 +56,15 @@ const requiredIssueSections = [
       "evidence_gap_answer:",
       "citation_gap_answer:",
       "remove_before_launch_answer:"
+    ]
+  },
+  {
+    heading: "Sanitized findings",
+    texts: [
+      "summary:",
+      "evidence:",
+      "recommended change:",
+      "public_issue_safe: yes | no"
     ]
   },
   {
@@ -117,6 +126,11 @@ const requiredBodyText = [
   "evidence_gap_answer:",
   "citation_gap_answer:",
   "remove_before_launch_answer:",
+  "Sanitized findings",
+  "summary:",
+  "evidence:",
+  "recommended change:",
+  "public_issue_safe: yes | no",
   "critical_issues_open:",
   "high_issues_open:",
   "manual_safety_review_complete:",

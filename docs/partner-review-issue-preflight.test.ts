@@ -63,6 +63,15 @@ citation_gap_answer:
 remove_before_launch_answer:
 \`\`\`
 
+## Sanitized findings
+
+\`\`\`text
+summary:
+evidence:
+recommended change:
+public_issue_safe: yes | no
+\`\`\`
+
 ## Launch decision fields
 
 \`\`\`text
@@ -222,6 +231,24 @@ describe("partner review issue preflight", () => {
       "Partner review issue section Objective missing: Complete external partner review needed before public demo promotion."
     );
     expect(result.stderr).toContain("Partner review issue missing section: Launch risk");
+  });
+
+  it("rejects missing sanitized findings section", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body
+        .replace(
+          "\n## Sanitized findings\n\n```text\nsummary:\nevidence:\nrecommended change:\npublic_issue_safe: yes | no\n```\n",
+          "\n"
+        )
+        .replace(
+          "## Completion checklist",
+          "summary:\nevidence:\nrecommended change:\npublic_issue_safe: yes | no\n\n## Completion checklist"
+        )
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue missing section: Sanitized findings");
   });
 
   it("rejects review targets and questions outside their issue sections", () => {
