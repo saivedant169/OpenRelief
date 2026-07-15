@@ -7,6 +7,13 @@ import { runCaliforniaWildfireEvalSuite } from "./results";
 const reportPath = path.join(process.cwd(), "packages", "evals", "reports", "california-wildfire-v1.json");
 const writeReportPath = path.join(process.cwd(), "packages", "evals", "src", "write-report.ts");
 const packageJsonPath = path.join(process.cwd(), "package.json");
+const restrictedDataPatterns = [
+  /\b\d{3}-\d{2}-\d{4}\b/,
+  /\b\d{3}[-.]\d{3}[-.]\d{4}\b/,
+  /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
+  /\bFEMA-\d{6,}\b/i,
+  /\b\d{5}\s+[A-Z][A-Za-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd)\b/
+];
 
 const buildExpectedReport = () => {
   const suite = runCaliforniaWildfireEvalSuite();
@@ -133,6 +140,12 @@ describe("machine-readable eval report", () => {
         (result) => !result.tags?.includes("emergency") || result.riskFlags?.includes("immediate_danger")
       )
     ).toBe(true);
+  });
+
+  it("keeps California wildfire eval fixtures free of restricted identifiers", () => {
+    for (const fixture of californiaWildfireCases) {
+      expect(restrictedDataPatterns.some((pattern) => pattern.test(JSON.stringify(fixture)))).toBe(false);
+    }
   });
 
   it("matches the California wildfire eval suite summary", () => {
