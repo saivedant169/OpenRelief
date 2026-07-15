@@ -3391,6 +3391,12 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["denial_or_appeal"]);
   });
 
+  it("detects known deadline field as deadline risk", () => {
+    const flags = detectRiskFlags("Deadline if known: Tomorrow");
+
+    expect(flags).toEqual(["denial_or_appeal"]);
+  });
+
   it("detects imminent response deadline risk from survivor context", () => {
     const flags = detectRiskFlags("FEMA says my response deadline is tomorrow.");
 

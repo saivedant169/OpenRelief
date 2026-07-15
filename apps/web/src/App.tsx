@@ -51,11 +51,15 @@ const skipContextOption = "Skip for now";
 const disasterTypeOptions = ["Wildfire", "Flood", "Storm", "Other"];
 const housingStatusOptions = ["Own", "Rent", "Displaced", "Other"];
 const insuranceStatusOptions = ["Have claim", "No", "Unsure"];
+const knownLetterTypeOptions = ["Approval", "Denial", "Request for information", "Deadline notice", "Inspection notice", "Unsure"];
 const intakeContextLabels = {
   disasterType: "Disaster type",
   countyCity: "County/city",
   housingStatus: "Housing status",
-  insuranceStatus: "Insurance status"
+  insuranceStatus: "Insurance status",
+  letterTypeKnown: "Letter type if known",
+  deadlineKnown: "Deadline if known",
+  documentsLost: "Documents lost"
 } as const;
 
 type IntakeContextField = keyof typeof intakeContextLabels;
@@ -824,20 +828,20 @@ export const App = () => {
     const prefix = `${intakeContextLabels[field]}:`;
     const line = intakeText
       .split("\n")
-      .map((item) => item.trim())
-      .find((item) => item.startsWith(prefix));
+      .find((item) => item.trimStart().startsWith(prefix));
+    const value = line?.trimStart().slice(prefix.length) ?? "";
 
-    return line?.slice(prefix.length).trim() ?? "";
+    return value.startsWith(" ") ? value.slice(1) : value;
   };
 
   const handleIntakeContext = (field: IntakeContextField, value: string) => {
     const prefix = `${intakeContextLabels[field]}:`;
-    const sanitizedValue = redactRestrictedIdentifiers(value.trim());
+    const sanitizedValue = redactRestrictedIdentifiers(value);
     const currentLines = intakeText
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && !line.startsWith(prefix));
-    const nextLines = sanitizedValue ? [...currentLines, `${prefix} ${sanitizedValue}`] : currentLines;
+    const nextLines = sanitizedValue.trim() ? [...currentLines, `${prefix} ${sanitizedValue}`] : currentLines;
 
     setIntakeText(limitText(nextLines.join("\n"), maxOptionalTextLength));
     setExportText("");
@@ -1123,9 +1127,13 @@ export const App = () => {
             <div className="basic-context-grid">
               <div className="field-group">
                 <label htmlFor="disaster-type">Disaster type</label>
+                <span className="field-help" id="disaster-type-help">
+                  Chooses disaster checklist.
+                </span>
                 <select
                   id="disaster-type"
                   aria-label="Disaster type"
+                  aria-describedby="disaster-type-help"
                   value={intakeContextValue("disasterType")}
                   onChange={(event) => handleIntakeContext("disasterType", event.target.value)}
                 >
@@ -1139,10 +1147,14 @@ export const App = () => {
               </div>
               <div className="field-group">
                 <label htmlFor="county-city">County/city</label>
+                <span className="field-help" id="county-city-help">
+                  Helps find local sources.
+                </span>
                 <div className="field-with-action">
                   <input
                     id="county-city"
                     aria-label="County/city"
+                    aria-describedby="county-city-help"
                     value={intakeContextValue("countyCity")}
                     onChange={(event) => handleIntakeContext("countyCity", event.target.value)}
                   />
@@ -1158,9 +1170,13 @@ export const App = () => {
               </div>
               <div className="field-group">
                 <label htmlFor="housing-status">Housing status</label>
+                <span className="field-help" id="housing-status-help">
+                  Prioritizes housing tasks.
+                </span>
                 <select
                   id="housing-status"
                   aria-label="Housing status"
+                  aria-describedby="housing-status-help"
                   value={intakeContextValue("housingStatus")}
                   onChange={(event) => handleIntakeContext("housingStatus", event.target.value)}
                 >
@@ -1174,9 +1190,13 @@ export const App = () => {
               </div>
               <div className="field-group">
                 <label htmlFor="insurance-status">Insurance status</label>
+                <span className="field-help" id="insurance-status-help">
+                  Orders insurance evidence.
+                </span>
                 <select
                   id="insurance-status"
                   aria-label="Insurance status"
+                  aria-describedby="insurance-status-help"
                   value={intakeContextValue("insuranceStatus")}
                   onChange={(event) => handleIntakeContext("insuranceStatus", event.target.value)}
                 >
@@ -1187,6 +1207,72 @@ export const App = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div className="field-group">
+                <label htmlFor="letter-type-known">Letter type if known</label>
+                <span className="field-help" id="letter-type-known-help">
+                  Checks letter classification.
+                </span>
+                <select
+                  id="letter-type-known"
+                  aria-label="Letter type if known"
+                  aria-describedby="letter-type-known-help"
+                  value={intakeContextValue("letterTypeKnown")}
+                  onChange={(event) => handleIntakeContext("letterTypeKnown", event.target.value)}
+                >
+                  <option value="">{skipContextOption}</option>
+                  {knownLetterTypeOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="field-group">
+                <label htmlFor="deadline-known">Deadline if known</label>
+                <span className="field-help" id="deadline-known-help">
+                  Raises urgent review.
+                </span>
+                <div className="field-with-action">
+                  <input
+                    id="deadline-known"
+                    aria-label="Deadline if known"
+                    aria-describedby="deadline-known-help"
+                    value={intakeContextValue("deadlineKnown")}
+                    onChange={(event) => handleIntakeContext("deadlineKnown", event.target.value)}
+                  />
+                  <button
+                    aria-label="Skip deadline if known"
+                    className="secondary-action"
+                    type="button"
+                    onClick={() => handleIntakeContext("deadlineKnown", "")}
+                  >
+                    Skip
+                  </button>
+                </div>
+              </div>
+              <div className="field-group">
+                <label htmlFor="documents-lost">Documents lost</label>
+                <span className="field-help" id="documents-lost-help">
+                  Marks replacement tasks.
+                </span>
+                <div className="field-with-action">
+                  <input
+                    id="documents-lost"
+                    aria-label="Documents lost"
+                    aria-describedby="documents-lost-help"
+                    value={intakeContextValue("documentsLost")}
+                    onChange={(event) => handleIntakeContext("documentsLost", event.target.value)}
+                  />
+                  <button
+                    aria-label="Skip documents lost"
+                    className="secondary-action"
+                    type="button"
+                    onClick={() => handleIntakeContext("documentsLost", "")}
+                  >
+                    Skip
+                  </button>
+                </div>
               </div>
             </div>
           </section>

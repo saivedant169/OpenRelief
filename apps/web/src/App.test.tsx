@@ -84,6 +84,10 @@ describe("OpenRelief web workflow", () => {
     expect(within(context).getByLabelText("Disaster type")).toHaveDisplayValue("Skip for now");
     expect(within(context).getByLabelText("Housing status")).toHaveDisplayValue("Skip for now");
     expect(within(context).getByLabelText("Insurance status")).toHaveDisplayValue("Skip for now");
+    expect(within(context).getByLabelText("Letter type if known")).toHaveDisplayValue("Skip for now");
+    expect(within(context).getByText("Checks letter classification.")).toBeInTheDocument();
+    expect(within(context).getByText("Raises urgent review.")).toBeInTheDocument();
+    expect(within(context).getByText("Marks replacement tasks.")).toBeInTheDocument();
     expect(within(context).queryByLabelText(/ssn|social security|full application/i)).not.toBeInTheDocument();
 
     await userEvent.type(within(context).getByLabelText("County/city"), "Pasadena");
@@ -91,6 +95,36 @@ describe("OpenRelief web workflow", () => {
 
     await userEvent.click(within(context).getByRole("button", { name: "Skip county/city" }));
     expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue("");
+  });
+
+  it("captures optional letter context and known deadline escalation", async () => {
+    render(<App />);
+
+    const context = screen.getByRole("region", { name: "Basic context" });
+    await userEvent.selectOptions(within(context).getByLabelText("Letter type if known"), "Request for information");
+    await userEvent.type(within(context).getByLabelText("Deadline if known"), "Tomorrow");
+    await userEvent.type(within(context).getByLabelText("Documents lost"), "Lease and receipts");
+
+    expect(screen.getByLabelText("Immediate needs and risks")).toHaveValue(
+      [
+        "Letter type if known: Request for information",
+        "Deadline if known: Tomorrow",
+        "Documents lost: Lease and receipts"
+      ].join("\n")
+    );
+
+    await userEvent.click(within(context).getByRole("button", { name: "Skip documents lost" }));
+    expect((screen.getByLabelText("Immediate needs and risks") as HTMLTextAreaElement).value).not.toContain(
+      "Documents lost"
+    );
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved." }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const riskList = screen.getByLabelText("High-risk flags");
+    expect(within(riskList).getByText("Denial or appeal deadline")).toBeInTheDocument();
   });
 
   it("shows visible human support path before upload", () => {

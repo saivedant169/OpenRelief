@@ -237,6 +237,12 @@ a:hover {
   font-weight: 650;
 }
 
+.field-help {
+  color: #5f6f80;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .field-group input,
 .field-group select {
   min-height: 44px;
