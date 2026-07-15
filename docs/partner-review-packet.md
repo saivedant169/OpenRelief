@@ -38,7 +38,7 @@ npm run partner:issue:preflight
 npm run launch:preflight
 ```
 
-`npm run launch:preflight` must fail until real sanitized partner review evidence is complete. Do not replace empty review fields with placeholders.
+`npm run launch:preflight` must fail until real sanitized partner review evidence is complete. Review date must be within 90 days before public launch. Do not replace empty review fields with placeholders.
 
 ## Public Copy Rules
 

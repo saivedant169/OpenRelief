@@ -110,6 +110,7 @@ examples/california-wildfire/letters/denial-occupancy-proof.txt
 npm run partner:review:preflight
 npm run partner:issue:preflight
 npm run launch:preflight
+Review date must be within 90 days before public launch.
 Do not replace empty review fields with placeholders.
 `;
 const baselineFailures = "missing_human_escalation\n";

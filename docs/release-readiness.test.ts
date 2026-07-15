@@ -355,6 +355,7 @@ describe("release readiness", () => {
     expect(partnerReviewPacket).toContain("npm run partner:review:preflight");
     expect(partnerReviewPacket).toContain("npm run partner:issue:preflight");
     expect(partnerReviewPacket).toContain("npm run launch:preflight");
+    expect(partnerReviewPacket).toContain("Review date must be within 90 days before public launch.");
     expect(partnerReviewPacket).toContain("No real survivor PII");
     expect(partnerReviewTargets).toContain("Partner Review Targets");
     expect(partnerReviewTargets).toContain("Disaster Legal Assistance Collaborative");
