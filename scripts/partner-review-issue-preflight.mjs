@@ -16,7 +16,15 @@ const requiredIssueMaterials = [
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
+const requiredIssueHeadings = ["Launch risk"];
 const requiredIssueSections = [
+  {
+    heading: "Objective",
+    texts: [
+      "Complete external partner review needed before public demo promotion.",
+      "Public launch remains blocked until sanitized review evidence is recorded in docs/partner-review-log.md and npm run launch:preflight passes."
+    ]
+  },
   {
     heading: "Reviewer targets",
     texts: [
@@ -132,6 +140,14 @@ const addError = (message) => {
   errors.push(message);
 };
 
+const hasHeading = (content, heading) => {
+  const headingText = `## ${heading}`.toLowerCase();
+
+  return content
+    .split(/\r?\n/)
+    .some((line) => line.trim().toLowerCase() === headingText);
+};
+
 const listItemsForHeading = (content, heading) => {
   const lines = content.split(/\r?\n/);
   const headingText = `## ${heading}`.toLowerCase();
@@ -243,6 +259,12 @@ const listedIssueMaterials = listItemsForHeading(issue.body ?? "", "Materials re
 for (const material of requiredIssueMaterials) {
   if (!listedIssueMaterials.some((listedItem) => materialMatches(listedItem, material))) {
     addError(`Partner review issue materials missing: ${material}`);
+  }
+}
+
+for (const heading of requiredIssueHeadings) {
+  if (!hasHeading(issue.body ?? "", heading)) {
+    addError(`Partner review issue missing section: ${heading}`);
   }
 }
 

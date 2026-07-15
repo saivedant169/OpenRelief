@@ -18,6 +18,10 @@ const completeIssue = {
   labels: [{ name: "partner-review" }, { name: "safety" }, { name: "V1" }],
   body: `No real survivor PII
 
+## Objective
+
+Complete external partner review needed before public demo promotion. Public launch remains blocked until sanitized review evidence is recorded in docs/partner-review-log.md and npm run launch:preflight passes.
+
 ## Materials reviewed
 
 - hosted synthetic sandbox: https://saivedant169.github.io/OpenRelief/
@@ -89,7 +93,11 @@ notes:
 - [ ] Public issue URL copied into public tracking issue field.
 - [ ] Critical issues open set to no.
 - [ ] High issues accepted or closed.
-- [ ] npm run launch:preflight passes.`
+- [ ] npm run launch:preflight passes.
+
+## Launch risk
+
+pending`
 };
 
 const runIssuePreflight = (issue = completeIssue, log = reviewLog) => {
@@ -180,6 +188,25 @@ describe("partner review issue preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue materials missing: docs/demo-video-runbook.md");
+  });
+
+  it("rejects missing objective text and launch risk section", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body
+        .replace("Complete external partner review needed before public demo promotion. ", "")
+        .replace("\n## Launch risk\n\npending", "")
+        .replace(
+          "## Completion checklist",
+          "Complete external partner review needed before public demo promotion.\n\n## Completion checklist"
+        )
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Partner review issue section Objective missing: Complete external partner review needed before public demo promotion."
+    );
+    expect(result.stderr).toContain("Partner review issue missing section: Launch risk");
   });
 
   it("rejects review targets and questions outside their issue sections", () => {
