@@ -165,7 +165,19 @@ const listItemsForField = (content, field) => {
   return items;
 };
 
+const listFieldCount = (content, field) => {
+  const fieldLabel = `${field}:`.toLowerCase();
+
+  return content
+    .split(/\r?\n/)
+    .filter((line) => line.trim().toLowerCase() === fieldLabel).length;
+};
+
 const requireListItems = (content, label, items) => {
+  if (listFieldCount(content, label) !== 1) {
+    fail(`Partner review log ${label} must have exactly one template list.`);
+  }
+
   const listedItems = new Set(listItemsForField(content, label));
 
   for (const item of items) {

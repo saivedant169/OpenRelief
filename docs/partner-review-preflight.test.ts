@@ -210,6 +210,26 @@ describe("partner review preflight", () => {
     expect(result.stderr).toContain("Partner review log missing materials reviewed item: docs/demo-video-runbook.md");
   });
 
+  it("rejects duplicate review evidence template lists", () => {
+    const result = runPartnerPreflight({
+      log: [
+        reviewLog,
+        "materials reviewed:",
+        "- hosted synthetic sandbox",
+        "- docs/demo-script.md",
+        "- docs/demo-video-runbook.md",
+        "- docs/partner-review-packet.md",
+        "- docs/baseline-failure-examples.md",
+        "- packages/evals/reports/california-wildfire-v1.json",
+        "synthetic examples used:",
+        "- examples/california-wildfire/letters/denial-occupancy-proof.txt"
+      ].join("\n")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review log materials reviewed must have exactly one template list.");
+  });
+
   it("rejects missing partner review evidence files", () => {
     const result = runPartnerPreflight({
       omitEvidencePaths: [
