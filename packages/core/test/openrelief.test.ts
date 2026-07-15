@@ -1355,15 +1355,27 @@ describe("OpenRelief domain core", () => {
       [
         "Personal property receipt number PPR-123456 should not stay in notes.",
         "Appliance record number APR-123456 should not stay in notes.",
+        "Appliance receipts number APT-A1B2C3 should not stay in notes.",
+        "Clothing receipts number CLR-A1B2C3 should not stay in notes.",
+        "Computer receipts number COR-A1B2C3 should not stay in notes.",
+        "Home furnishing receipts number HFR-A1B2C3 should not stay in notes.",
         "Occupational tool record number OTR-123456 should not stay in notes.",
-        "Educational material record number EMR-123456 should not stay in notes."
+        "Occupational tool receipts number OTR-A1B2C3 should not stay in notes.",
+        "Educational material record number EMR-123456 should not stay in notes.",
+        "Educational material receipts number EMR-A1B2C3 should not stay in notes."
       ].join("\n")
     );
 
     expect(redacted).not.toContain("PPR-123456");
     expect(redacted).not.toContain("APR-123456");
+    expect(redacted).not.toContain("APT-A1B2C3");
+    expect(redacted).not.toContain("CLR-A1B2C3");
+    expect(redacted).not.toContain("COR-A1B2C3");
+    expect(redacted).not.toContain("HFR-A1B2C3");
     expect(redacted).not.toContain("OTR-123456");
+    expect(redacted).not.toContain("OTR-A1B2C3");
     expect(redacted).not.toContain("EMR-123456");
+    expect(redacted).not.toContain("EMR-A1B2C3");
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
