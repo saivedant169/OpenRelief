@@ -1022,7 +1022,11 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("Letter type")).toBeInTheDocument();
     expect(within(detail).getAllByText("Claim denial").length).toBeGreaterThan(0);
     expect(within(detail).getByText("Status")).toBeInTheDocument();
-    expect(within(detail).getByText("This letter appears to deny the request and asks for careful human review before next steps.")).toBeInTheDocument();
+    expect(
+      within(detail).getByText(
+        "This letter appears to deny the request and asks for careful human review before next steps. Deadline found: appeal within 60 days."
+      )
+    ).toBeInTheDocument();
     expect(within(detail).getByRole("heading", { name: "Timeline" })).toBeInTheDocument();
     expect(within(detail).getByText("Letter analyzed")).toBeInTheDocument();
     expect(within(detail).getByText("Checklist created")).toBeInTheDocument();

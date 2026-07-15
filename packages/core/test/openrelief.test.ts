@@ -175,6 +175,7 @@ describe("OpenRelief domain core", () => {
   it("separates letter facts from uncertain interpretation", () => {
     const result = analyzeLetter(denialLetter);
 
+    expect(result.summary).toContain("Deadline found: appeal within 60 days.");
     expect(result.facts).toEqual(
       expect.arrayContaining([
         "The letter says the application is denied.",

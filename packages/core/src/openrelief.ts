@@ -1449,6 +1449,8 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   const facts = buildLetterFacts(normalized, detectedRequests, detectedDeadlines);
   const uncertainties = ["OpenRelief cannot confirm final eligibility or legal options."];
+  const withDeadlineSummary = (summary: string) =>
+    detectedDeadlines.length > 0 ? `${summary} Deadline found: ${detectedDeadlines[0].text}.` : summary;
 
   if (appearsSpanish) {
     uncertainties.push(
@@ -1459,7 +1461,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   if (hasRequestForInformationCue(normalized)) {
     return {
       letterType: "request_for_information",
-      summary: "This letter appears to request more information before a decision can be made.",
+      summary: withDeadlineSummary("This letter appears to request more information before a decision can be made."),
       facts,
       uncertainties,
       detectedDeadlines,
@@ -1472,7 +1474,9 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   if (hasDeniedApplicationCue(normalized)) {
     return {
       letterType: "denial",
-      summary: "This letter appears to deny the request and asks for careful human review before next steps.",
+      summary: withDeadlineSummary(
+        "This letter appears to deny the request and asks for careful human review before next steps."
+      ),
       facts,
       uncertainties,
       detectedDeadlines,
@@ -1485,7 +1489,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   if (normalized.includes("inspection") || normalized.includes("inspector")) {
     return {
       letterType: "inspection_notice",
-      summary: "This letter appears to describe an inspection step.",
+      summary: withDeadlineSummary("This letter appears to describe an inspection step."),
       facts,
       uncertainties,
       detectedDeadlines,
@@ -1498,7 +1502,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   if (detectedDeadlines.length > 0 || normalized.includes("deadline")) {
     return {
       letterType: "deadline_notice",
-      summary: "This letter appears to include a response deadline.",
+      summary: withDeadlineSummary("This letter appears to include a response deadline."),
       facts,
       uncertainties,
       detectedDeadlines,
@@ -1511,7 +1515,9 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
   if (normalized.includes("approved") || normalized.includes("approval")) {
     return {
       letterType: "approval",
-      summary: "This letter appears to approve assistance and should still be reviewed for amounts, dates, and next steps.",
+      summary: withDeadlineSummary(
+        "This letter appears to approve assistance and should still be reviewed for amounts, dates, and next steps."
+      ),
       facts,
       uncertainties,
       detectedDeadlines,
@@ -1523,7 +1529,7 @@ export const analyzeLetter = (letterText: string): LetterAnalysis => {
 
   return {
     letterType: "unknown",
-    summary: "This letter needs human review because OpenRelief could not classify it safely.",
+    summary: withDeadlineSummary("This letter needs human review because OpenRelief could not classify it safely."),
     facts,
     uncertainties,
     detectedDeadlines,

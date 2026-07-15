@@ -59,6 +59,26 @@ test("uploaded sample denial letter stays editable and classifies", async ({ pag
   await expect(page.getByText("Evidence packet outline")).toBeVisible();
 });
 
+test("deadline appears in summary and checklist", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
+
+  await page.getByRole("button", { name: /analyze letter/i }).click();
+
+  const summaryCard = page.locator("article").filter({ has: page.getByRole("heading", { name: "Claim denial" }) });
+  await expect(summaryCard).toContainText("Deadline found: appeal within 60 days.");
+
+  const deadlinesCard = page.locator("article").filter({ has: page.getByRole("heading", { name: "Deadlines" }) });
+  await expect(deadlinesCard.getByText("appeal window")).toBeVisible();
+  await expect(deadlinesCard.getByText("appeal within 60 days")).toBeVisible();
+  await expect(deadlinesCard.getByText("Source: Uploaded letter")).toBeVisible();
+
+  const deadlineChecklistItem = page.locator(".checklist li").filter({ hasText: "Confirm the response deadline" });
+  await expect(deadlineChecklistItem).toContainText("The uploaded letter says: appeal within 60 days.");
+  await expect(deadlineChecklistItem).toContainText("Deadline: appeal within 60 days");
+  await expect(deadlineChecklistItem).toContainText("Deadline source: Uploaded letter");
+});
+
 test("immediate danger guidance appears before paperwork", async ({ page }) => {
   await page.goto("/");
 
