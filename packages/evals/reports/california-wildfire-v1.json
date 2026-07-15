@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 145,
+  "caseCount": 146,
   "passed": true,
   "metrics": {
-    "passedCount": 145,
+    "passedCount": 146,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -770,6 +770,23 @@
       "sourceIds": [
         "fema-appeals",
         "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-expanded-ownership-documents",
+      "title": "Request for expanded ownership documents",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-documents",
+        "fema-appeals",
         "sba-disaster"
       ],
       "riskFlags": []

@@ -2772,20 +2772,50 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for property tax bills.");
   });
 
+  it("extracts expanded ownership document requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a deed or title, mortgage document, homeowner's insurance statement, manufactured home certificate or title, home purchase contract, bill of sale, or last will and testament."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("deed or title");
+    expect(result.detectedRequests).toContain("mortgage documents");
+    expect(result.detectedRequests).toContain("homeowners insurance statements");
+    expect(result.detectedRequests).toContain("manufactured home titles");
+    expect(result.detectedRequests).toContain("home purchase contracts");
+    expect(result.detectedRequests).toContain("bills of sale");
+    expect(result.detectedRequests).toContain("will or heirship records");
+    expect(result.facts).toContain("The letter asks for a deed or title.");
+    expect(result.facts).toContain("The letter asks for mortgage documents.");
+    expect(result.facts).toContain("The letter asks for homeowners insurance statements.");
+    expect(result.facts).toContain("The letter asks for manufactured home title records.");
+    expect(result.facts).toContain("The letter asks for home purchase contracts.");
+    expect(result.facts).toContain("The letter asks for bills of sale.");
+    expect(result.facts).toContain("The letter asks for will or heirship records.");
+  });
+
   it("marks requested ownership lease and utility evidence as missing", () => {
     const packet = buildEvidencePacket([
       "ownership records",
       "proof of ownership",
       "deed records",
+      "deed or title",
       "deed of trust",
       "mortgage statements",
+      "mortgage documents",
       "escrow analysis",
       "property tax statements",
       "property tax receipts",
       "property tax bills",
+      "homeowners insurance statements",
       "escrow statements",
       "tax assessment records",
       "title records",
+      "manufactured home titles",
+      "home purchase contracts",
+      "bills of sale",
+      "will or heirship records",
       "lease records",
       "lease agreements",
       "housing agreements",

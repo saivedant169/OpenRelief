@@ -412,6 +412,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for deed records."
   },
   {
+    request: "deed or title",
+    phrases: ["deed or title"],
+    fact: "The letter asks for a deed or title."
+  },
+  {
     request: "deed of trust",
     phrases: ["deed of trust", "deeds of trust"],
     fact: "The letter asks for a deed of trust."
@@ -420,6 +425,11 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "mortgage statements",
     phrases: ["mortgage statement", "mortgage statements"],
     fact: "The letter asks for mortgage statements."
+  },
+  {
+    request: "mortgage documents",
+    phrases: ["mortgage document", "mortgage documents", "mortgage documentation"],
+    fact: "The letter asks for mortgage documents."
   },
   {
     request: "escrow analysis",
@@ -438,8 +448,20 @@ const requestDetectionRules: RequestDetectionRule[] = [
   },
   {
     request: "property tax bills",
-    phrases: ["property tax bill", "property tax bills"],
+    phrases: ["property tax bill", "property tax bills", "tax bill", "tax bills"],
     fact: "The letter asks for property tax bills."
+  },
+  {
+    request: "homeowners insurance statements",
+    phrases: [
+      "homeowner's insurance statement",
+      "homeowner's insurance statements",
+      "homeowners insurance statement",
+      "homeowners insurance statements",
+      "homeowner insurance statement",
+      "homeowner insurance statements"
+    ],
+    fact: "The letter asks for homeowners insurance statements."
   },
   {
     request: "escrow statements",
@@ -455,6 +477,32 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "title records",
     phrases: ["title record", "title records"],
     fact: "The letter asks for title records."
+  },
+  {
+    request: "manufactured home titles",
+    phrases: [
+      "manufactured home certificate or title",
+      "manufactured home certificate",
+      "manufactured home title",
+      "mobile home certificate of title",
+      "mobile home title"
+    ],
+    fact: "The letter asks for manufactured home title records."
+  },
+  {
+    request: "home purchase contracts",
+    phrases: ["home purchase contract", "home purchase contracts"],
+    fact: "The letter asks for home purchase contracts."
+  },
+  {
+    request: "bills of sale",
+    phrases: ["bill of sale", "bills of sale"],
+    fact: "The letter asks for bills of sale."
+  },
+  {
+    request: "will or heirship records",
+    phrases: ["last will and testament", "affidavit of heirship", "affidavits of heirship"],
+    fact: "The letter asks for will or heirship records."
   },
   {
     request: "lease records",
@@ -1173,15 +1221,22 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "ownership records",
             "proof of ownership",
             "deed records",
+            "deed or title",
             "deed of trust",
             "mortgage statements",
+            "mortgage documents",
             "escrow analysis",
             "property tax statements",
             "property tax receipts",
             "property tax bills",
+            "homeowners insurance statements",
             "escrow statements",
             "tax assessment records",
             "title records",
+            "manufactured home titles",
+            "home purchase contracts",
+            "bills of sale",
+            "will or heirship records",
             "lease records",
             "lease agreements"
           ]),
