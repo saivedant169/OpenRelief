@@ -1366,6 +1366,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts tax and escrow ownership evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Property tax statement number PTS-123456 should not stay in notes.",
+        "Property tax receipt number PTR-123456 should not stay in notes.",
+        "Escrow analysis number ESC-123456 should not stay in notes.",
+        "Tax assessment record number TAR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("PTS-123456");
+    expect(redacted).not.toContain("PTR-123456");
+    expect(redacted).not.toContain("ESC-123456");
+    expect(redacted).not.toContain("TAR-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts title record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Title record ID TTL-123456 should not stay in notes.");
 
