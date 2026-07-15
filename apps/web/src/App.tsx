@@ -875,6 +875,12 @@ export const App = () => {
                           <span>Status: {caseQueueStatus(savedCase)}</span>
                           <span>Missing: {savedCase.missingEvidence.length}</span>
                           <span>
+                            Escalation:{" "}
+                            {savedCase.riskFlags.length > 0
+                              ? savedCase.riskFlags.map((flag) => formatRiskFlag(flag)).join(", ")
+                              : "None"}
+                          </span>
+                          <span>
                             Tasks: {completedChecklistCount(savedCase)}/{savedCase.checklistItems.length} done
                           </span>
                           <span>Last updated: {formatSavedCaseUpdatedAt(savedCase.updatedAt)}</span>

@@ -398,6 +398,7 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("region", { name: "Local case queue" })).toBeInTheDocument();
     expect(within(screen.getByRole("region", { name: "Current case" })).getByText("OR-CA-2026-001")).toBeInTheDocument();
     expect(screen.getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(screen.getByText("Escalation: Denial or appeal deadline")).toBeInTheDocument();
     expect(window.localStorage.getItem("openrelief:v1:cases")).toContain("denial_or_appeal");
   });
 
