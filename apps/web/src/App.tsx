@@ -993,6 +993,13 @@ export const App = () => {
                         <p key={item.label}>
                           {item.label}
                           <span>{item.status}</span>
+                          <span className="item-sources">
+                            Source:{" "}
+                            {item.sourceIds
+                              .map((sourceId) => sourceById.get(sourceId)?.title)
+                              .filter((title): title is string => Boolean(title))
+                              .join(", ")}
+                          </span>
                         </p>
                       ))}
                     </div>

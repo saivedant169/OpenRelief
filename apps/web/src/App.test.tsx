@@ -34,6 +34,11 @@ describe("OpenRelief web workflow", () => {
     expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
     expect(within(checklistCard as HTMLElement).getAllByText(/Source: /).length).toBeGreaterThan(0);
     expect(within(checklistCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
+
+    const evidenceCard = screen.getByRole("heading", { name: "Evidence packet outline" }).closest("article");
+    expect(evidenceCard).not.toBeNull();
+    expect(within(evidenceCard as HTMLElement).getAllByText(/Source: /).length).toBeGreaterThan(0);
+    expect(within(evidenceCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
   });
 
   it("shows safety boundary before upload", () => {

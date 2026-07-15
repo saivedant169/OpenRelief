@@ -613,7 +613,7 @@ a:focus-visible,
   margin: 8px 0 0;
 }
 
-.evidence-group span {
+.evidence-group p > span:not(.item-sources) {
   width: max-content;
   padding: 2px 8px;
   color: #344253;
