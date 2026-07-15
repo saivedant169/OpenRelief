@@ -48,7 +48,7 @@ const immediateNeedOptions = [
   { label: "Disability accommodation", text: "Need disability accommodation." }
 ];
 const skipContextOption = "Skip for now";
-const disasterTypeOptions = ["Wildfire", "Flood", "Storm", "Other"];
+const disasterTypeOptions = ["Wildfire"];
 const housingStatusOptions = ["Own", "Rent", "Displaced", "Other"];
 const insuranceStatusOptions = ["Have claim", "No", "Unsure"];
 const knownLetterTypeOptions = ["Approval", "Denial", "Request for information", "Deadline notice", "Inspection notice", "Unsure"];
@@ -1187,7 +1187,7 @@ export const App = () => {
               <div className="field-group">
                 <label htmlFor="disaster-type">Disaster type</label>
                 <span className="field-help" id="disaster-type-help">
-                  Chooses disaster checklist.
+                  V1 supports California wildfire recovery.
                 </span>
                 <select
                   id="disaster-type"

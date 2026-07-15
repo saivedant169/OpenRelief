@@ -151,6 +151,10 @@ describe("OpenRelief web workflow", () => {
     const context = screen.getByRole("region", { name: "Basic context" });
     expect(within(context).getByText("Why we ask: this shapes checklist order.")).toBeInTheDocument();
     expect(within(context).getByLabelText("Disaster type")).toHaveDisplayValue("Skip for now");
+    expect(within(context).getByText("V1 supports California wildfire recovery.")).toBeInTheDocument();
+    expect(within(context).getByRole("option", { name: "Wildfire" })).toBeInTheDocument();
+    expect(within(context).queryByRole("option", { name: "Flood" })).not.toBeInTheDocument();
+    expect(within(context).queryByRole("option", { name: "Storm" })).not.toBeInTheDocument();
     expect(within(context).getByLabelText("Housing status")).toHaveDisplayValue("Skip for now");
     expect(within(context).getByLabelText("Insurance status")).toHaveDisplayValue("Skip for now");
     expect(within(context).getByLabelText("Letter type if known")).toHaveDisplayValue("Skip for now");
