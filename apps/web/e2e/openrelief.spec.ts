@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
 
+const buildPdfWithText = (text: string) => {
+  const escapedText = text.replaceAll("\\", "\\\\").replaceAll("(", "\\(").replaceAll(")", "\\)");
+  const content = `BT\n/F1 12 Tf\n72 720 Td\n(${escapedText}) Tj\nET`;
+  const objects = [
+    "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n",
+    "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n",
+    "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n",
+    "4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n",
+    `5 0 obj\n<< /Length ${content.length} >>\nstream\n${content}\nendstream\nendobj\n`
+  ];
+
+  let pdf = "%PDF-1.4\n";
+  const offsets = objects.map((object) => {
+    const offset = pdf.length;
+    pdf += object;
+    return offset;
+  });
+  const startxref = pdf.length;
+  const xrefEntries = offsets.map((offset) => `${offset.toString().padStart(10, "0")} 00000 n \n`).join("");
+
+  return [
+    pdf,
+    `xref\n0 ${objects.length + 1}\n`,
+    "0000000000 65535 f \n",
+    xrefEntries,
+    `trailer\n<< /Root 1 0 R /Size ${objects.length + 1} >>\nstartxref\n${startxref}\n%%EOF`
+  ].join("");
+};
+
 test("letter review produces checklist and evidence packet", async ({ page }) => {
   await page.goto("/");
 
@@ -69,6 +98,31 @@ test("app shell reloads offline after service worker cache", async ({ context, p
   await expect(page.getByText("Collect proof of occupancy")).toBeVisible();
   await expect(page.getByText("Evidence packet outline")).toBeVisible();
   await expect(page.getByRole("link", { name: "Appeal FEMA's Decision" })).toBeVisible();
+
+  await context.setOffline(false);
+});
+
+test("PDF upload still works offline after service worker cache", async ({ context, page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Letter Review" })).toBeVisible();
+
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+
+  await context.setOffline(true);
+  await page.getByLabel("Choose file").setInputFiles({
+    name: "offline-approval.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from(buildPdfWithText("FEMA Notice Your application is approved for rental assistance."))
+  });
+
+  await expect(page.getByText("offline-approval.pdf")).toBeVisible();
+  await expect(page.getByLabel("Extracted letter text")).toHaveValue(/approved for rental assistance/);
+
+  await page.getByRole("button", { name: /analyze letter/i }).click();
+  await expect(page.getByRole("heading", { name: "Approval" })).toBeVisible();
+  await expect(page.getByText("Evidence packet outline")).toBeVisible();
 
   await context.setOffline(false);
 });

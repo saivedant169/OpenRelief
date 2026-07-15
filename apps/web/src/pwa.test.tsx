@@ -69,10 +69,18 @@ describe("OpenRelief PWA shell", () => {
     expect(serviceWorker).toContain('"tesseract-core/tesseract-core.wasm.js"');
     expect(serviceWorker).toContain('"tessdata/eng.traineddata.gz"');
     expect(serviceWorker).toContain("const cacheDocumentAssets = async (cache) =>");
+    expect(serviceWorker).toContain("const cacheScriptLinkedAssets = async (cache, assetUrl, script, seenAssets) =>");
+    expect(serviceWorker).toContain("const cacheAsset = async (cache, assetPath, seenAssets) =>");
+    expect(serviceWorker).toContain("scriptDependencyPattern");
+    expect(serviceWorker).toContain("localAssetPattern");
+    expect(serviceWorker).toContain("hashedChunkPattern");
+    expect(serviceWorker).toContain("isLocalScriptDependency");
+    expect(serviceWorker).toContain("cacheScriptLinkedAssets(cache, assetUrl, await response.clone().text(), seenAssets)");
     expect(serviceWorker).toContain("await cache.put(appShellPath, response.clone())");
     expect(serviceWorker).toContain("html.matchAll");
     expect(serviceWorker).toContain("self.addEventListener(\"install\"");
     expect(serviceWorker).toContain("self.addEventListener(\"fetch\"");
+    expect(serviceWorker).toContain("cache.match(request, { ignoreVary: true })");
     expect(serviceWorker).toContain("cache.put(request, response.clone())");
   });
 });

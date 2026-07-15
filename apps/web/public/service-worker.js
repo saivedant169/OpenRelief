@@ -1,6 +1,16 @@
 const CACHE_NAME = "openrelief-v1";
 const appShellPath = new URL(".", self.registration.scope).pathname;
 const withScopePath = (assetPath) => new URL(assetPath, self.registration.scope).pathname;
+const sameScopeRequestPath = (url) =>
+  url.origin === self.location.origin && url.pathname.startsWith(appShellPath) ? `${url.pathname}${url.search}` : "";
+const isScriptAsset = (url) => /\.(?:js|mjs|ts|tsx|jsx)$/.test(url.pathname);
+const scriptDependencyPattern =
+  /(?:import\s*\(\s*|import\s+[^"'`]*?\s+from\s*|import\s*|from\s*|new URL\(\s*)["'`]([^"'`]+)["'`]/g;
+const localAssetPattern = /["'`](\/[^"'`]+?\.(?:js|mjs|css|wasm)(?:\?[^"'`]*)?)["'`]/g;
+const hashedChunkPattern = /["'`](\.\/)?([A-Za-z0-9_.-]+-[A-Za-z0-9_-]+\.(?:js|mjs|css|wasm))["'`]/g;
+const isLocalScriptDependency = (assetPath) =>
+  assetPath.startsWith("/") ||
+  /^\.\/[A-Za-z0-9_.-]+-[A-Za-z0-9_-]+\.(?:js|mjs|css|wasm)(?:\?[^"'`]*)?$/.test(assetPath);
 const APP_SHELL = [
   "",
   "manifest.webmanifest",
@@ -10,6 +20,49 @@ const APP_SHELL = [
   "tesseract-core/tesseract-core.wasm",
   "tessdata/eng.traineddata.gz"
 ].map(withScopePath);
+
+const cacheScriptLinkedAssets = async (cache, assetUrl, script, seenAssets) => {
+  const discoveredAssetPaths = [
+    ...[...script.matchAll(scriptDependencyPattern)]
+      .map((match) => match[1] ?? "")
+      .filter((assetPath) => isLocalScriptDependency(assetPath)),
+    ...[...script.matchAll(localAssetPattern)].map((match) => match[1] ?? ""),
+    ...[...script.matchAll(hashedChunkPattern)].map((match) => `${match[1] ?? ""}${match[2] ?? ""}`)
+  ]
+    .map((assetPath) => {
+      try {
+        return new URL(assetPath, assetUrl);
+      } catch {
+        return undefined;
+      }
+    })
+    .filter((url) => url)
+    .map((url) => sameScopeRequestPath(url))
+    .filter((assetPath) => assetPath);
+
+  await Promise.all(discoveredAssetPaths.map((assetPath) => cacheAsset(cache, assetPath, seenAssets)));
+};
+
+const cacheAsset = async (cache, assetPath, seenAssets) => {
+  if (seenAssets.has(assetPath)) {
+    return;
+  }
+
+  seenAssets.add(assetPath);
+
+  const response = await fetch(assetPath).catch(() => undefined);
+
+  if (!response || !response.ok) {
+    return;
+  }
+
+  await cache.put(assetPath, response.clone());
+
+  const assetUrl = new URL(assetPath, self.location.origin);
+  if (isScriptAsset(assetUrl)) {
+    await cacheScriptLinkedAssets(cache, assetUrl, await response.clone().text(), seenAssets);
+  }
+};
 
 const cacheDocumentAssets = async (cache) => {
   const response = await fetch(appShellPath);
@@ -23,10 +76,11 @@ const cacheDocumentAssets = async (cache) => {
 
   const assetPaths = [...html.matchAll(/(?:href|src)="([^"]+)"/g)]
     .map((match) => new URL(match[1], self.registration.scope))
-    .filter((url) => url.origin === self.location.origin && url.pathname.startsWith(appShellPath))
-    .map((url) => url.pathname);
+    .map((url) => sameScopeRequestPath(url))
+    .filter((assetPath) => assetPath);
 
-  await Promise.all(assetPaths.map((assetPath) => cache.add(assetPath).catch(() => undefined)));
+  const seenAssets = new Set();
+  await Promise.all(assetPaths.map((assetPath) => cacheAsset(cache, assetPath, seenAssets)));
 };
 
 self.addEventListener("install", (event) => {
@@ -73,14 +127,14 @@ self.addEventListener("fetch", (event) => {
 
         return response;
       } catch (error) {
-        const cached = await cache.match(request);
+        const cached = await cache.match(request, { ignoreVary: true });
 
         if (cached) {
           return cached;
         }
 
         if (request.mode === "navigate") {
-          const shell = await cache.match(appShellPath);
+          const shell = await cache.match(appShellPath, { ignoreVary: true });
 
           if (shell) {
             return shell;
