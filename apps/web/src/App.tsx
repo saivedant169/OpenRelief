@@ -1289,6 +1289,13 @@ export const App = () => {
                     </button>
                   </div>
                 </div>
+                <ul className="export-includes" aria-label="Export packet contents">
+                  <li>Case summary</li>
+                  <li>Checklist</li>
+                  <li>Evidence outline</li>
+                  <li>Source appendix</li>
+                  <li>Uploaded files are not included in V1.</li>
+                </ul>
                 {exportText ? (
                   <textarea className="export-output" aria-label="Export packet text" value={exportText} readOnly />
                 ) : null}

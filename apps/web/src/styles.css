@@ -476,6 +476,23 @@ a:focus-visible,
   gap: 10px;
 }
 
+.export-includes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 12px 0 0;
+  list-style: none;
+  color: #344253;
+  font-size: 13px;
+}
+
+.export-includes li {
+  padding: 4px 8px;
+  background: #f2f5f8;
+  border-radius: 6px;
+}
+
 .export-output {
   min-height: 260px;
   margin-top: 12px;

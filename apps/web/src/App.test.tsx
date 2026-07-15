@@ -67,6 +67,12 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
     expect(screen.getByText("This export may include personal information.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /download packet text/i })).toBeDisabled();
+    const exportContents = screen.getByRole("list", { name: "Export packet contents" });
+    expect(within(exportContents).getByText("Case summary")).toBeInTheDocument();
+    expect(within(exportContents).getByText("Checklist")).toBeInTheDocument();
+    expect(within(exportContents).getByText("Evidence outline")).toBeInTheDocument();
+    expect(within(exportContents).getByText("Source appendix")).toBeInTheDocument();
+    expect(within(exportContents).getByText("Uploaded files are not included in V1.")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: /create packet text/i }));
 
