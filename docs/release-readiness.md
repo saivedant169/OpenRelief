@@ -24,7 +24,7 @@ Manual safety review must confirm:
 - exports warn reviewers to treat contents as sensitive,
 - hosted demos use synthetic data or browser-local storage only.
 
-Use the Partner review issue template to track sanitized review status, but keep raw notes and consent records outside public issues. Copy only sanitized outcome fields into `docs/partner-review-log.md`.
+Use the Partner review issue template to track sanitized review status, but keep raw notes and consent records outside public issues. Copy only sanitized outcome fields and the public tracking issue URL into `docs/partner-review-log.md`.
 
 After manual review is recorded in `docs/partner-review-log.md`, run:
 

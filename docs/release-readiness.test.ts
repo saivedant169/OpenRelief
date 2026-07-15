@@ -349,6 +349,7 @@ describe("release readiness", () => {
     expect(readme).toContain("Partner review log");
     expect(releaseReadiness).toContain("Partner review log");
     expect(releaseReadiness).toContain("Partner review issue template");
+    expect(releaseReadiness).toContain("public tracking issue URL");
     expect(technicalReport).toContain("Partner review log");
     expect(partnerOutreach).toContain("Partner review log");
     expect(partnerOutreach).toContain("partner-review");
@@ -357,6 +358,7 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("synthetic examples only");
     expect(partnerReviewIssue).toContain("Sanitized findings");
     expect(partnerReviewIssue).toContain("Launch risk");
+    expect(partnerReviewIssue).toContain("public tracking issue");
     expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
 
     const requiredLogText = [

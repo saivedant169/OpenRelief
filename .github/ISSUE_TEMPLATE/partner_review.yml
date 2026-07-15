@@ -58,3 +58,5 @@ body:
           required: true
         - label: Sanitized outcome can be copied into docs/partner-review-log.md.
           required: true
+        - label: Public issue URL can be copied into the public tracking issue field.
+          required: true
