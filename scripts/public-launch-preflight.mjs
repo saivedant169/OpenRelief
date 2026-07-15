@@ -24,6 +24,18 @@ const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const normalizedNoValues = new Set(["0", "no", "none"]);
 const normalizedResolvedHighValues = new Set(["0", "no", "none", "accepted", "closed"]);
 const normalizedSanitizedValues = new Set(["sanitized"]);
+const normalizedPlaceholderValues = new Set([
+  "n/a",
+  "na",
+  "none",
+  "not applicable",
+  "pending",
+  "placeholder",
+  "tbd",
+  "todo",
+  "to be determined",
+  "unknown"
+]);
 const requiredReviewedMaterials = [
   "hosted synthetic sandbox",
   "docs/demo-script.md",
@@ -120,11 +132,25 @@ const reviewAnswers = [
   { field: "remove_before_launch_answer", value: removeBeforeLaunchAnswer }
 ];
 const launchTextFields = [...reviewAnswers, { field: "notes", value: decisionNotes }];
+const requiredSpecificFields = [
+  { field: "review_id", value: reviewId },
+  { field: "Reviewer role", value: reviewerRole },
+  { field: "reviewer organization type", value: reviewerOrganizationType },
+  { field: "Consent record", value: consentRecord },
+  { field: "note storage location", value: noteStorageLocation },
+  ...launchTextFields
+];
 
 if (errors.length === 0) {
   requireListItems("materials reviewed", requiredReviewedMaterials);
   requireListItems("synthetic examples used", requiredSyntheticExamples);
   const reviewDateValue = requireDate("review_date", reviewDate);
+
+  for (const { field, value } of requiredSpecificFields) {
+    if (normalizedPlaceholderValues.has(value.toLowerCase())) {
+      addError(`Public launch blocked: ${field} must include specific review evidence.`);
+    }
+  }
 
   if (reviewId.length < 3) {
     addError("Public launch blocked: review_id must identify the review session.");

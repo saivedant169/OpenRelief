@@ -110,6 +110,32 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: review answers need specific sanitized findings.");
   });
 
+  it("rejects placeholder session evidence", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("Reviewer role: legal aid reviewer", "Reviewer role: TBD")
+        .replace("Consent record: recorded outside public repo", "Consent record: N/A")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: Reviewer role must include specific review evidence.");
+    expect(result.stderr).toContain("Public launch blocked: Consent record must include specific review evidence.");
+  });
+
+  it("rejects placeholder review answers and launch notes", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("risk_escalation_answer: reviewer confirmed high-risk escalation is visible", "risk_escalation_answer: unknown")
+        .replace("notes: sanitized review found launch guardrails ready", "notes: pending")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Public launch blocked: risk_escalation_answer must include specific review evidence."
+    );
+    expect(result.stderr).toContain("Public launch blocked: notes must include specific review evidence.");
+  });
+
   it("rejects private data in launch review text", () => {
     const result = runLaunchPreflight(
       completeReviewLog
