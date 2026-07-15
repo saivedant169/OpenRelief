@@ -32,6 +32,7 @@ describe("OpenRelief web workflow", () => {
     const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
     expect(checklistCard).not.toBeNull();
     expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
+    expect(within(checklistCard as HTMLElement).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
     expect(within(checklistCard as HTMLElement).getAllByText(/Source: /).length).toBeGreaterThan(0);
     expect(within(checklistCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
 
@@ -580,6 +581,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(checklistSection as HTMLElement).getByText("Request human review")).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getByText("Collect proof of occupancy")).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
+    expect(within(checklistSection as HTMLElement).getByText("Deadline: appeal within 60 days")).toBeInTheDocument();
     expect(within(checklistSection as HTMLElement).getAllByText(/Appeal FEMA's Decision/).length).toBeGreaterThan(0);
     expect(
       within(checklistSection as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length
@@ -637,7 +639,7 @@ describe("OpenRelief web workflow", () => {
       id: string;
       letterType: string;
       letterText: string;
-      checklistItems: Array<{ id: string; editable: boolean }>;
+      checklistItems: Array<{ id: string; editable: boolean; deadline?: { text: string } }>;
     }>;
 
     expect(archive).toHaveLength(1);
@@ -647,6 +649,9 @@ describe("OpenRelief web workflow", () => {
     });
     expect(archive[0].letterText).toContain("proof of occupancy");
     expect(archive[0].checklistItems.find((item) => item.id === "human-review")?.editable).toBe(true);
+    expect(archive[0].checklistItems.find((item) => item.id === "review-deadline")?.deadline?.text).toBe(
+      "appeal within 60 days"
+    );
   });
 
   it("caps saved case archive text before import", async () => {

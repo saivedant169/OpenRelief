@@ -95,7 +95,10 @@ type EvidenceSummaryItem = {
   sourceIds: string[];
 };
 
-type ChecklistSummaryItem = Pick<ChecklistItem, "id" | "title" | "category" | "reason" | "editable" | "sourceIds">;
+type ChecklistSummaryItem = Pick<
+  ChecklistItem,
+  "id" | "title" | "category" | "reason" | "editable" | "deadline" | "sourceIds"
+>;
 
 type ChecklistStatus = "todo" | "done";
 
@@ -210,6 +213,7 @@ const redactChecklistSummaryItem = (item: ChecklistSummaryItem): ChecklistSummar
   id: redactRestrictedIdentifiers(item.id),
   title: redactRestrictedIdentifiers(item.title),
   reason: redactRestrictedIdentifiers(item.reason),
+  ...(item.deadline ? { deadline: redactDeadline(item.deadline) } : {}),
   sourceIds: redactStringList(item.sourceIds)
 });
 
@@ -270,12 +274,13 @@ const normalizeSavedCases = (parsed: unknown): SavedCaseSummary[] => {
     ).map(redactEvidenceSummaryItem);
     const deadlines = restoredAnalysis.detectedDeadlines.map(redactDeadline);
     const checklistItems = restoredChecklist.items
-      .map(({ id, title, category, reason, editable, sourceIds }) => ({
+      .map(({ id, title, category, reason, editable, deadline, sourceIds }) => ({
         id,
         title,
         category,
         reason,
         editable,
+        ...(deadline ? { deadline } : {}),
         sourceIds
       }))
       .map(redactChecklistSummaryItem);
@@ -465,12 +470,13 @@ export const App = () => {
       return;
     }
 
-    const checklistItems = checklist.items.map(({ id, title, category, reason, editable, sourceIds }) => ({
+    const checklistItems = checklist.items.map(({ id, title, category, reason, editable, deadline, sourceIds }) => ({
       id,
       title,
       category,
       reason,
       editable,
+      ...(deadline ? { deadline } : {}),
       sourceIds
     }));
     const snapshotId = activeSavedCaseId ?? nextLocalCaseId(savedCases);
@@ -996,6 +1002,7 @@ export const App = () => {
                         <strong>{item.title}</strong>
                         {item.editable ? <span className="editable-mark">Editable</span> : null}
                         <p>{item.reason}</p>
+                        {item.deadline ? <span>Deadline: {item.deadline.text}</span> : null}
                         <span className="item-sources">
                           Source:{" "}
                           {item.sourceIds
@@ -1069,6 +1076,7 @@ export const App = () => {
                               Mark {item.title} done
                             </label>
                             <span>{item.reason}</span>
+                            {item.deadline ? <span>Deadline: {item.deadline.text}</span> : null}
                             <span className="item-sources">
                               Source:{" "}
                               {item.sourceIds
