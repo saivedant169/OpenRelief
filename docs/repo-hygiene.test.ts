@@ -5,6 +5,7 @@ import path from "node:path";
 const repoRoot = process.cwd();
 const issueTemplateDir = path.join(repoRoot, ".github", "ISSUE_TEMPLATE");
 const labelsPath = path.join(repoRoot, ".github", "labels.yml");
+const githubPath = path.join(repoRoot, ".github");
 const scannedRoots = [
   ".github",
   "apps/web/e2e",
@@ -88,6 +89,39 @@ describe("repo hygiene", () => {
         .map((label) => label.trim().replace(/^["']|["']$/g, ""))
         .filter((label) => label && !declaredLabels.has(label))
         .map((label) => `${entry}: missing label ${label}`);
+    });
+
+    expect(failures).toEqual([]);
+  });
+
+  it("quotes YAML scalar values that contain colon-space", () => {
+    const yamlFiles = collectTextFiles(".github").filter((filePath) => path.extname(filePath) === ".yml");
+    const failures = yamlFiles.flatMap((filePath) => {
+      const relativePath = path.relative(githubPath, filePath);
+      const lines = readFileSync(filePath, "utf8").split(/\r?\n/);
+
+      return lines.flatMap((line, index) => {
+        const match = /^(\s*[A-Za-z0-9_-]+:\s+)(.+)$/.exec(line);
+
+        if (!match) {
+          return [];
+        }
+
+        const value = match[2].trim();
+        const quotedOrStructured =
+          value.startsWith("\"") ||
+          value.startsWith("'") ||
+          value.startsWith("[") ||
+          value.startsWith("{") ||
+          value.startsWith("|") ||
+          value.startsWith(">");
+
+        if (quotedOrStructured || !value.includes(": ")) {
+          return [];
+        }
+
+        return [`${relativePath}:${index + 1}: quote YAML scalar containing colon-space`];
+      });
     });
 
     expect(failures).toEqual([]);

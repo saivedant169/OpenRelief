@@ -17,7 +17,7 @@ body:
     id: publisher
     attributes:
       label: Publisher
-      description: Example: FEMA, SBA, California agency, legal aid org.
+      description: "Example: FEMA, SBA, California agency, legal aid org."
     validations:
       required: true
   - type: input
