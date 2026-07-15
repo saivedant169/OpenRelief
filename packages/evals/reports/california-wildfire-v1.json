@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 131,
+  "caseCount": 132,
   "passed": true,
   "metrics": {
-    "passedCount": 131,
+    "passedCount": 132,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -69,6 +69,25 @@
     {
       "caseId": "ca-wildfire-denial-mail-appeal-by-date",
       "title": "Denial letter with mailed appeal by-date deadline",
+      "expectedLetterType": "denial",
+      "actualLetterType": "denial",
+      "expectedNeedsHumanReview": true,
+      "actualNeedsHumanReview": true,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "denial_or_appeal"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-denial-send-appeal-by-date",
+      "title": "Denial letter with send appeal by-date deadline",
       "expectedLetterType": "denial",
       "actualLetterType": "denial",
       "expectedNeedsHumanReview": true,
