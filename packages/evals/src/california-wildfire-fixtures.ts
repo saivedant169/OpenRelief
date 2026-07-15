@@ -562,6 +562,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-government-identity-evidence",
+    title: "Request for government identity evidence",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a driver's license or passport."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-repair-receipts",
     title: "Request for repair receipts",
     lines: [
