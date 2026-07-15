@@ -95,8 +95,8 @@ Current report summary:
 
 - suite ID: `california-wildfire-v1`
 - schema version: `1`
-- case count: `152`
-- passed count: `152`
+- case count: `153`
+- passed count: `153`
 - failed count: `0`
 
 The suite covers:

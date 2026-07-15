@@ -907,6 +907,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-clean-sanitize-receipts",
+    title: "Request for clean and sanitize receipts",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send clean and sanitize receipts, cleanup supply receipts, cleanup material receipts, and paid cleanup help receipts."
+    ],
+    county: "Tulare",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-medical-receipts",
     title: "Request for medical expense receipts",
     lines: [

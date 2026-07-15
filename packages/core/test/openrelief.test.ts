@@ -962,9 +962,21 @@ describe("OpenRelief domain core", () => {
   });
 
   it("redacts cleanup receipt identifiers", () => {
-    const redacted = redactRestrictedIdentifiers("Cleanup receipt number CLN-123456 should not stay in notes.");
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Cleanup receipt number CLN-123456 should not stay in notes.",
+        "Clean and sanitize receipt number CAS-123456 should not stay in notes.",
+        "Cleanup supply receipt number CSR-123456 should not stay in notes.",
+        "Cleanup material receipt number CMR-123456 should not stay in notes.",
+        "Paid cleanup help receipt number PCH-123456 should not stay in notes."
+      ].join("\n")
+    );
 
     expect(redacted).not.toContain("CLN-123456");
+    expect(redacted).not.toContain("CAS-123456");
+    expect(redacted).not.toContain("CSR-123456");
+    expect(redacted).not.toContain("CMR-123456");
+    expect(redacted).not.toContain("PCH-123456");
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
@@ -3013,6 +3025,17 @@ describe("OpenRelief domain core", () => {
     expect(result.detectedRequests).toContain("cleanup receipts");
     expect(result.detectedRequests).toContain("repair estimates");
     expect(result.facts).toContain("The letter asks for repair estimates.");
+  });
+
+  it("extracts clean and sanitize receipt requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send clean and sanitize receipts, cleanup supply receipts, cleanup material receipts, and paid cleanup help receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("cleanup receipts");
+    expect(result.facts).toContain("The letter asks for cleanup receipts.");
   });
 
   it("extracts contractor license record requests", () => {

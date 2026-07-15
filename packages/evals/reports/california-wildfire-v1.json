@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 152,
+  "caseCount": 153,
   "passed": true,
   "metrics": {
-    "passedCount": 152,
+    "passedCount": 153,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1062,6 +1062,23 @@
     {
       "caseId": "ca-wildfire-rfi-cleanup-costs",
       "title": "Request for cleanup cost records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-clean-sanitize-receipts",
+      "title": "Request for clean and sanitize receipts",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

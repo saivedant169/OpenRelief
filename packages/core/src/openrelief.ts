@@ -249,7 +249,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:generator\s+rental\s+receipt|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:generator\s+rental\s+receipt|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|clean\s+and\s+sanitize\s+receipt|cleanup\s+(?:supply|material)\s+receipt|paid\s+cleanup\s+help\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[recovery expense identifier removed]"
   },
   {
@@ -934,7 +934,24 @@ const requestDetectionRules: RequestDetectionRule[] = [
   },
   {
     request: "cleanup receipts",
-    phrases: ["cleanup receipts"],
+    phrases: [
+      "cleanup receipts",
+      "clean and sanitize receipts",
+      "cleaning and sanitizing receipts",
+      "cleanup supply receipts",
+      "cleanup supplies receipts",
+      "cleanup material receipts",
+      "cleanup materials receipts",
+      "cleaning supply receipts",
+      "cleaning supplies receipts",
+      "cleaning material receipts",
+      "cleaning materials receipts",
+      "paid cleanup help receipts",
+      "receipts from any supplies, materials or paid help",
+      "receipts from any supplies, materials, or paid help",
+      "receipts for supplies, materials or paid help",
+      "receipts for supplies, materials, or paid help"
+    ],
     fact: "The letter asks for cleanup receipts."
   },
   {
