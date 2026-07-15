@@ -222,3 +222,5 @@ body:
           required: true
         - label: Public issue URL can be copied into the public tracking issue field.
           required: true
+        - label: Launch risk can be copied into the public issue launch risk field.
+          required: true

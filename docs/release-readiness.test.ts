@@ -409,6 +409,7 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("docs/partner-review-packet.md");
     expect(partnerReviewIssue).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(partnerReviewIssue).toContain("public tracking issue");
+    expect(partnerReviewIssue).toContain("public issue launch risk");
     expect(partnerReviewIssue).toContain("docs/partner-review-log.md");
     expect(partnerReviewIssue).toContain("SSNs");
     expect(partnerReviewIssue).toContain("screenshots");

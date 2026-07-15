@@ -106,6 +106,7 @@ notes:
 - [ ] Findings use synthetic examples only.
 - [ ] Sanitized outcome copied into docs/partner-review-log.md.
 - [ ] Public issue URL copied into public tracking issue field.
+- [ ] Launch risk copied into public issue launch risk field.
 - [ ] Critical issues open set to no.
 - [ ] High issues accepted or closed.
 - [ ] npm run launch:preflight passes.
