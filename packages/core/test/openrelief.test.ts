@@ -23,6 +23,23 @@ const injectionLetter = `
   Your application is denied because proof of occupancy is missing.
 `;
 
+const countSyllables = (word: string) => {
+  const cleaned = word.toLowerCase().replace(/[^a-z]/g, "");
+  if (!cleaned) {
+    return 0;
+  }
+
+  return Math.max(1, cleaned.replace(/e$/, "").match(/[aeiouy]+/g)?.length ?? 1);
+};
+
+const readingGrade = (text: string) => {
+  const sentences = Math.max(1, text.split(/[.!?]+/).filter(Boolean).length);
+  const words = text.match(/[A-Za-z]+/g) ?? [];
+  const syllables = words.reduce((total, word) => total + countSyllables(word), 0);
+
+  return 0.39 * (words.length / sentences) + 11.8 * (syllables / Math.max(1, words.length)) - 15.59;
+};
+
 describe("OpenRelief domain core", () => {
   it("classifies approval letters without forced human review", () => {
     const result = analyzeLetter("FEMA Notice\nYour application is approved for rental assistance.");
@@ -184,6 +201,21 @@ describe("OpenRelief domain core", () => {
       ])
     );
     expect(result.uncertainties).toContain("OpenRelief cannot confirm final eligibility or legal options.");
+  });
+
+  it("keeps letter summaries near middle-school reading level", () => {
+    const summaryExamples = [
+      analyzeLetter("FEMA Notice\nAdditional information is needed before a decision can be made.").summary,
+      analyzeLetter(denialLetter).summary,
+      analyzeLetter("FEMA Inspection Notice\nAn inspector will visit your home.").summary,
+      analyzeLetter("FEMA Notice\nPlease submit requested receipts within 10 days.").summary,
+      analyzeLetter("FEMA Notice\nYour application is approved for rental assistance.").summary,
+      analyzeLetter("Notice\nWe cannot match this letter to a known FEMA action.").summary
+    ];
+
+    for (const summary of summaryExamples) {
+      expect(readingGrade(summary)).toBeLessThanOrEqual(8.5);
+    }
   });
 
   it("routes non-English letters to human review with English-first uncertainty", () => {

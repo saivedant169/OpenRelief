@@ -1024,7 +1024,7 @@ describe("OpenRelief web workflow", () => {
     expect(within(detail).getByText("Status")).toBeInTheDocument();
     expect(
       within(detail).getByText(
-        "This letter appears to deny the request and asks for careful human review before next steps. Deadline found: appeal within 60 days."
+        "This letter denies the request. Ask a human helper before next steps. Deadline found: appeal within 60 days."
       )
     ).toBeInTheDocument();
     expect(within(detail).getByRole("heading", { name: "Timeline" })).toBeInTheDocument();
@@ -1232,7 +1232,7 @@ describe("OpenRelief web workflow", () => {
     }>;
 
     expect(exported[0]?.letterType).toBe("denial");
-    expect(exported[0]?.summary).toContain("deny");
+    expect(exported[0]?.summary).toContain("denies");
     expect(exported[0]?.deadlines.map((deadline) => deadline.text)).toContain("appeal within 60 days");
     expect(exported[0]?.checklistItems.map((item) => item.id)).toContain("human-review");
     expect(exported[0]?.riskFlags).toContain("denial_or_appeal");
