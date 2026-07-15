@@ -14,6 +14,14 @@ const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const normalizedNoValues = new Set(["0", "no", "none"]);
 const normalizedResolvedHighValues = new Set(["0", "no", "none", "accepted", "closed"]);
 const normalizedSanitizedValues = new Set(["sanitized"]);
+const requiredReviewedMaterials = [
+  "hosted synthetic sandbox",
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json"
+];
+const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
@@ -50,6 +58,14 @@ const requireDate = (field, value) => {
   }
 };
 
+const requireListItems = (label, items) => {
+  for (const item of items) {
+    if (!reviewLog.includes(`- ${item}`)) {
+      fail(`Public launch blocked: ${label} missing ${item}.`);
+    }
+  }
+};
+
 const reviewId = completedValue("review_id");
 const reviewDate = completedValue("review_date");
 const reviewerRole = completedValue("Reviewer role");
@@ -64,6 +80,8 @@ const readyForPublicDemo = completedValue("ready_for_public_demo").toLowerCase()
 const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
 
+requireListItems("materials reviewed", requiredReviewedMaterials);
+requireListItems("synthetic examples used", requiredSyntheticExamples);
 requireDate("review_date", reviewDate);
 
 if (reviewId.length < 3) {

@@ -402,8 +402,15 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("Saivedant Hava");
     expect(preflightScript).toContain("YYYY-MM-DD");
     expect(preflightScript).toContain("sanitized");
+    expect(preflightScript).toContain("requiredReviewedMaterials");
+    expect(preflightScript).toContain("requiredSyntheticExamples");
+    expect(preflightScript).toContain("docs/demo-video-runbook.md");
+    expect(preflightScript).toContain("packages/evals/reports/california-wildfire-v1.json");
+    expect(preflightScript).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
     expect(releaseReadiness).toContain("sanitized notes");
+    expect(releaseReadiness).toContain("reviewed materials");
     expect(technicalReport).toContain("completed reviewer session");
+    expect(technicalReport).toContain("synthetic examples");
   });
 
   it("defines a demo video preflight command", () => {
