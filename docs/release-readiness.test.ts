@@ -375,12 +375,25 @@ describe("release readiness", () => {
     expect(partnerReviewIssue).toContain("SSNs");
     expect(partnerReviewIssue).toContain("screenshots");
     expect(partnerReviewIssue).toContain("partner private data");
+    expect(partnerReviewIssue).toContain("review_id");
+    expect(partnerReviewIssue).toContain("review_date");
+    expect(partnerReviewIssue).toContain("reviewer organization type");
+    expect(partnerReviewIssue).toContain("Consent record");
+    expect(partnerReviewIssue).toContain("note storage location");
+    expect(partnerReviewIssue).toContain("sanitization status");
     expect(partnerReviewIssue).toContain("workflow_match_answer");
     expect(partnerReviewIssue).toContain("misleading_output_answer");
     expect(partnerReviewIssue).toContain("risk_escalation_answer");
     expect(partnerReviewIssue).toContain("evidence_gap_answer");
     expect(partnerReviewIssue).toContain("citation_gap_answer");
     expect(partnerReviewIssue).toContain("remove_before_launch_answer");
+    expect(partnerReviewIssue).toContain("critical_issues_open");
+    expect(partnerReviewIssue).toContain("high_issues_open");
+    expect(partnerReviewIssue).toContain("manual_safety_review_complete");
+    expect(partnerReviewIssue).toContain("ready_for_public_demo");
+    expect(partnerReviewIssue).toContain("decision_owner");
+    expect(partnerReviewIssue).toContain("decision_date");
+    expect(partnerReviewIssue).toContain("notes");
 
     const requiredLogText = [
       "Partner Review Log",

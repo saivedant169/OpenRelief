@@ -7,17 +7,38 @@ body:
     attributes:
       value: "No real survivor PII. Use synthetic examples only. Keep raw notes and consent records outside public issues."
   - type: input
+    id: review-id
+    attributes:
+      label: review_id
+      description: Sanitized review session ID for docs/partner-review-log.md.
+    validations:
+      required: true
+  - type: input
+    id: review-date
+    attributes:
+      label: review_date
+      description: YYYY-MM-DD.
+    validations:
+      required: true
+  - type: input
     id: reviewer-role
     attributes:
       label: Reviewer role
-      description: Example: legal aid reviewer, disaster case worker, accessibility reviewer.
+      description: "Example: legal aid reviewer, disaster case worker, accessibility reviewer."
     validations:
       required: true
   - type: input
     id: organization-type
     attributes:
-      label: Organization type
-      description: Example: nonprofit legal aid, civic technology group, emergency management volunteer group.
+      label: reviewer organization type
+      description: "Example: nonprofit legal aid, civic technology group, emergency management volunteer group."
+    validations:
+      required: true
+  - type: input
+    id: consent-record
+    attributes:
+      label: Consent record
+      description: Sanitized consent reference only. Do not include names, emails, phone numbers, signatures, or private links.
     validations:
       required: true
   - type: textarea
@@ -25,6 +46,24 @@ body:
     attributes:
       label: Materials reviewed
       description: List synthetic sandbox, demo script, demo video runbook, baseline failures, eval report, and synthetic examples reviewed.
+    validations:
+      required: true
+  - type: input
+    id: note-storage-location
+    attributes:
+      label: note storage location
+      description: Sanitized private-note storage reference only. Do not include private links or access details.
+    validations:
+      required: true
+  - type: dropdown
+    id: sanitization-status
+    attributes:
+      label: sanitization status
+      description: Public issues must use sanitized before launch evidence is copied.
+      options:
+        - sanitized
+        - private-only
+        - needs-redaction
     validations:
       required: true
   - type: textarea
@@ -87,6 +126,70 @@ body:
         - medium
         - low
         - none
+    validations:
+      required: true
+  - type: dropdown
+    id: critical-issues-open
+    attributes:
+      label: critical_issues_open
+      description: Public launch stays blocked unless this is no.
+      options:
+        - yes
+        - no
+    validations:
+      required: true
+  - type: dropdown
+    id: high-issues-open
+    attributes:
+      label: high_issues_open
+      description: Use accepted, closed, none, or no only when high issues are resolved for launch.
+      options:
+        - yes
+        - accepted
+        - closed
+        - none
+        - no
+    validations:
+      required: true
+  - type: dropdown
+    id: manual-safety-review-complete
+    attributes:
+      label: manual_safety_review_complete
+      description: Must be yes before launch evidence is copied.
+      options:
+        - no
+        - yes
+    validations:
+      required: true
+  - type: dropdown
+    id: ready-for-public-demo
+    attributes:
+      label: ready_for_public_demo
+      description: Must be yes only after sanitized review evidence is complete.
+      options:
+        - no
+        - yes
+    validations:
+      required: true
+  - type: input
+    id: decision-owner
+    attributes:
+      label: decision_owner
+      description: Must be Saivedant Hava before launch evidence is copied.
+    validations:
+      required: true
+  - type: input
+    id: decision-date
+    attributes:
+      label: decision_date
+      description: YYYY-MM-DD. Must not be before review_date.
+    validations:
+      required: true
+  - type: textarea
+    id: launch-notes
+    attributes:
+      label: notes
+      description: Sanitized launch decision notes for docs/partner-review-log.md.
     validations:
       required: true
   - type: checkboxes
