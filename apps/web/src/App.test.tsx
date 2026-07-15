@@ -1,11 +1,15 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 
 describe("OpenRelief web workflow", () => {
   beforeEach(() => {
     window.localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("turns a sample denial letter into review, checklist, evidence, and sources", async () => {
@@ -62,6 +66,7 @@ describe("OpenRelief web workflow", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
     expect(screen.getByText("This export may include personal information.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /download packet text/i })).toBeDisabled();
 
     await userEvent.click(screen.getByRole("button", { name: /create packet text/i }));
 
@@ -69,6 +74,18 @@ describe("OpenRelief web workflow", () => {
     expect(exportField.value).toContain("OpenRelief packet");
     expect(exportField.value).toContain("This export may include personal information.");
     expect(exportField.value).toContain("Deadlines\n- appeal window: appeal within 60 days");
+
+    const createObjectUrl = vi.fn(() => "blob:openrelief-packet");
+    const revokeObjectUrl = vi.fn();
+    const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    Object.defineProperty(URL, "createObjectURL", { configurable: true, value: createObjectUrl });
+    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: revokeObjectUrl });
+
+    await userEvent.click(screen.getByRole("button", { name: /download packet text/i }));
+
+    expect(createObjectUrl).toHaveBeenCalledWith(expect.any(Blob));
+    expect(anchorClick).toHaveBeenCalled();
+    expect(revokeObjectUrl).toHaveBeenCalledWith("blob:openrelief-packet");
 
     await userEvent.click(screen.getByRole("button", { name: /clear local data/i }));
 

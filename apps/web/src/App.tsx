@@ -484,6 +484,23 @@ export const App = () => {
     setClearArmed(false);
   };
 
+  const handleDownloadPacketText = () => {
+    if (!exportText) {
+      return;
+    }
+
+    const blob = new Blob([exportText], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${currentCaseId}-packet.txt`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setClearArmed(false);
+  };
+
   const handleSaveCaseSnapshot = () => {
     if (!analysis || !checklist) {
       return;
@@ -1261,6 +1278,14 @@ export const App = () => {
                     </button>
                     <button className="secondary-action" type="button" onClick={handleCreatePacketText}>
                       Create packet text
+                    </button>
+                    <button
+                      className="secondary-action"
+                      type="button"
+                      disabled={!exportText}
+                      onClick={handleDownloadPacketText}
+                    >
+                      Download packet text
                     </button>
                   </div>
                 </div>
