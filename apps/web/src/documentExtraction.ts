@@ -38,11 +38,15 @@ const decodePdfLiteralText = (value: string) =>
     .replace(/\\f/g, "\f")
     .replace(/\\([\\()])/g, "$1");
 
+const extractPdfLiteralTexts = (value: string) =>
+  [...value.matchAll(/\(((?:\\.|[^\\)])*)\)/g)].map((match) => decodePdfLiteralText(match[1] ?? ""));
+
 const extractRawPdfText = (data: Uint8Array) => {
   const source = new TextDecoder("latin1").decode(data);
-  const textItems = [...source.matchAll(/\(((?:\\.|[^\\)])*)\)\s*Tj/g)].map((match) =>
-    decodePdfLiteralText(match[1] ?? "")
-  );
+  const textItems = [
+    ...[...source.matchAll(/\(((?:\\.|[^\\)])*)\)\s*Tj/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
+    ...[...source.matchAll(/\[([\s\S]*?)\]\s*TJ/g)].flatMap((match) => extractPdfLiteralTexts(match[1] ?? ""))
+  ];
 
   return textItems.join(" ").replace(/\s+/g, " ").trim();
 };

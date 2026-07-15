@@ -215,6 +215,25 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByLabelText("Extracted letter text")).toHaveValue("");
   });
 
+  it("extracts raw PDF text from TJ arrays when PDF parsing fails", async () => {
+    render(<App />);
+
+    const upload = screen.getByLabelText("Choose file");
+    const letterField = screen.getByLabelText("Extracted letter text");
+    const file = new File(
+      ["%PDF-1.4\nBT\n[(FEMA Notice) 120 (Your application is approved for rental assistance.)] TJ\nET\n%%EOF"],
+      "raw-array.pdf",
+      { type: "application/pdf" }
+    );
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(letterField).toHaveValue("FEMA Notice Your application is approved for rental assistance.");
+    });
+    expect(screen.getByText("raw-array.pdf")).toBeInTheDocument();
+    expect(screen.queryByText("Could not extract PDF text. Paste extracted text below.")).not.toBeInTheDocument();
+  });
+
   it("clears stale analysis after TXT uploads", async () => {
     render(<App />);
     await loadSampleLetter();
