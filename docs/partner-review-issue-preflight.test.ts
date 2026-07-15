@@ -17,13 +17,15 @@ const completeIssue = {
   labels: [{ name: "partner-review" }, { name: "safety" }, { name: "V1" }],
   body: `No real survivor PII
 
-hosted synthetic sandbox
-docs/demo-script.md
-docs/demo-video-runbook.md
-docs/partner-review-packet.md
-docs/baseline-failure-examples.md
-packages/evals/reports/california-wildfire-v1.json
-examples/california-wildfire/letters/denial-occupancy-proof.txt
+## Materials reviewed
+
+- hosted synthetic sandbox: https://saivedant169.github.io/OpenRelief/
+- docs/demo-script.md
+- docs/demo-video-runbook.md
+- docs/partner-review-packet.md
+- docs/baseline-failure-examples.md
+- packages/evals/reports/california-wildfire-v1.json
+- examples/california-wildfire/letters/denial-occupancy-proof.txt
 
 review_id:
 review_date: YYYY-MM-DD
@@ -108,6 +110,18 @@ describe("partner review issue preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review issue missing body text: workflow_match_answer:");
+  });
+
+  it("rejects review materials outside the materials section", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body
+        .replace("- docs/demo-video-runbook.md\n", "")
+        .replace("npm run launch:preflight passes", "npm run launch:preflight passes\n\ndocs/demo-video-runbook.md")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue materials missing: docs/demo-video-runbook.md");
   });
 
   it("rejects issue URL drift from the review log", () => {

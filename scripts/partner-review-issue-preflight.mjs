@@ -6,6 +6,15 @@ const root = process.cwd();
 const reviewLogPath = path.join(root, "docs", "partner-review-log.md");
 const repo = "saivedant169/OpenRelief";
 const requiredLabels = ["partner-review", "safety", "V1"];
+const requiredIssueMaterials = [
+  "hosted synthetic sandbox",
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/partner-review-packet.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json",
+  "examples/california-wildfire/letters/denial-occupancy-proof.txt"
+];
 const requiredBodyText = [
   "No real survivor PII",
   "hosted synthetic sandbox",
@@ -50,6 +59,34 @@ const errors = [];
 const addError = (message) => {
   errors.push(message);
 };
+
+const listItemsForHeading = (content, heading) => {
+  const lines = content.split(/\r?\n/);
+  const headingText = `## ${heading}`.toLowerCase();
+  const startIndex = lines.findIndex((line) => line.trim().toLowerCase() === headingText);
+
+  if (startIndex === -1) {
+    return [];
+  }
+
+  const items = [];
+
+  for (const line of lines.slice(startIndex + 1)) {
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith("## ")) {
+      break;
+    }
+
+    if (trimmed.startsWith("- ")) {
+      items.push(trimmed.slice(2).trim());
+    }
+  }
+
+  return items;
+};
+
+const materialMatches = (listedItem, requiredItem) => listedItem === requiredItem || listedItem.startsWith(`${requiredItem}:`);
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
@@ -100,6 +137,14 @@ for (const label of requiredLabels) {
 for (const text of requiredBodyText) {
   if (!issue.body?.includes(text)) {
     addError(`Partner review issue missing body text: ${text}`);
+  }
+}
+
+const listedIssueMaterials = listItemsForHeading(issue.body ?? "", "Materials reviewed");
+
+for (const material of requiredIssueMaterials) {
+  if (!listedIssueMaterials.some((listedItem) => materialMatches(listedItem, material))) {
+    addError(`Partner review issue materials missing: ${material}`);
   }
 }
 
