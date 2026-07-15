@@ -974,6 +974,25 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts expanded repair evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Repair receipts number RPR-A1B2C3 should not stay in notes.",
+        "Repair estimates number RPE-A1B2C3 should not stay in notes.",
+        "Repair records number RRD-A1B2C3 should not stay in notes.",
+        "Contractor estimates number CES-A1B2C3 should not stay in notes.",
+        "Contractor license records number CLR-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("RPR-A1B2C3");
+    expect(redacted).not.toContain("RPE-A1B2C3");
+    expect(redacted).not.toContain("RRD-A1B2C3");
+    expect(redacted).not.toContain("CES-A1B2C3");
+    expect(redacted).not.toContain("CLR-A1B2C3");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts hazard mitigation record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
