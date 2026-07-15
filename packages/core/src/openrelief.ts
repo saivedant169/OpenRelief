@@ -295,7 +295,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\binsurance\s+(?:status\s+note|denial\s+note|information\s+record|claim\s+status)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:insurance\s+(?:status\s+note|denial\s+(?:note|letter)|information\s+record|claim\s+status|policy\s+exclusion)|proof\s+of\s+lack\s+of\s+insurance|policy\s+exclusion\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[insurance evidence identifier removed]"
   },
   {

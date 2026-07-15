@@ -1397,6 +1397,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance evidence identifier removed]");
   });
 
+  it("redacts insurance coverage evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Insurance denial letter number IDL-123456 should not stay in notes.",
+        "Proof of lack of insurance ID PLI-123456 should not stay in notes.",
+        "Policy exclusion record ID PER-123456 should not stay in notes.",
+        "Insurance policy exclusion number IPE-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("IDL-123456");
+    expect(redacted).not.toContain("PLI-123456");
+    expect(redacted).not.toContain("PER-123456");
+    expect(redacted).not.toContain("IPE-123456");
+    expect(redacted).toContain("[insurance evidence identifier removed]");
+  });
+
   it("redacts medical receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medical receipt number MRC-123456 should not stay in notes.");
 
