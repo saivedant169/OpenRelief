@@ -732,6 +732,12 @@ describe("OpenRelief web workflow", () => {
     expect(within(queue).queryByText("Saved case: Claim denial")).not.toBeInTheDocument();
 
     await userEvent.clear(queueSearch);
+    await userEvent.type(queueSearch, "occupancy proof");
+
+    expect(within(queue).getByText("Saved case: Claim denial")).toBeInTheDocument();
+    expect(within(queue).queryByText("Saved case: Approval")).not.toBeInTheDocument();
+
+    await userEvent.clear(queueSearch);
     await userEvent.type(queueSearch, "no-match");
 
     expect(within(queue).getByText("No matching saved cases")).toBeInTheDocument();

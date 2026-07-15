@@ -936,6 +936,7 @@ export const App = () => {
         savedCase.title,
         caseQueueStatus(savedCase),
         savedCase.deadlines[0]?.text ?? "",
+        ...savedCase.missingEvidence.map((item) => item.label),
         ...savedCase.riskFlags.map(formatRiskFlag)
       ].some((value) => value.toLowerCase().includes(search));
     }).sort((left, right) => compareSavedCases(caseQueueSort, left, right));
