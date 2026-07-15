@@ -56,15 +56,82 @@ const decodePdfHexText = (value: string) => {
   return new TextDecoder("latin1").decode(new Uint8Array(bytes));
 };
 
+type PdfLiteralTextItem = { text: string; endIndex: number };
+
+const readPdfLiteralTextItem = (value: string, startIndex: number): PdfLiteralTextItem | null => {
+  if (value[startIndex] !== "(") {
+    return null;
+  }
+
+  let depth = 1;
+  let cursor = startIndex + 1;
+  let text = "";
+
+  while (cursor < value.length) {
+    const character = value[cursor];
+
+    if (character === "\\") {
+      text += character;
+      cursor += 1;
+      if (cursor < value.length) {
+        text += value[cursor];
+      }
+      cursor += 1;
+      continue;
+    }
+
+    if (character === "(") {
+      depth += 1;
+      text += character;
+      cursor += 1;
+      continue;
+    }
+
+    if (character !== ")") {
+      text += character;
+      cursor += 1;
+      continue;
+    }
+
+    depth -= 1;
+    if (depth === 0) {
+      return { text: decodePdfLiteralText(text), endIndex: cursor + 1 };
+    }
+
+    text += character;
+    cursor += 1;
+  }
+
+  return null;
+};
+
+const extractPdfLiteralTextItems = (value: string): PdfLiteralTextItem[] => {
+  const items: PdfLiteralTextItem[] = [];
+
+  for (let index = 0; index < value.length; index += 1) {
+    const item = readPdfLiteralTextItem(value, index);
+    if (!item) {
+      continue;
+    }
+
+    items.push(item);
+    index = item.endIndex - 1;
+  }
+
+  return items;
+};
+
 const extractPdfTextItems = (value: string) => [
-  ...[...value.matchAll(/\(((?:\\[\s\S]|[^\\)])*)\)/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
+  ...extractPdfLiteralTextItems(value).map((item) => item.text),
   ...[...value.matchAll(/<([0-9a-f\s]+)>/gi)].map((match) => decodePdfHexText(match[1] ?? ""))
 ];
 
 const extractRawPdfText = (data: Uint8Array) => {
   const source = new TextDecoder("latin1").decode(data);
   const textItems = [
-    ...[...source.matchAll(/\(((?:\\[\s\S]|[^\\)])*)\)\s*Tj/g)].map((match) => decodePdfLiteralText(match[1] ?? "")),
+    ...extractPdfLiteralTextItems(source)
+      .filter((item) => /^\s*Tj\b/.test(source.slice(item.endIndex)))
+      .map((item) => item.text),
     ...[...source.matchAll(/<([0-9a-f\s]+)>\s*Tj/gi)].map((match) => decodePdfHexText(match[1] ?? "")),
     ...[...source.matchAll(/\[([\s\S]*?)\]\s*TJ/g)].flatMap((match) => extractPdfTextItems(match[1] ?? ""))
   ];
