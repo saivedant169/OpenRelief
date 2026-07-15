@@ -388,6 +388,7 @@ describe("release readiness", () => {
     expect(workflow).toContain("actions/configure-pages@v6");
     expect(workflow).toContain("actions/upload-pages-artifact@v5");
     expect(workflow).toContain("actions/deploy-pages@v5");
+    expect(workflow).not.toContain("paths:");
     expect(workflow).toContain("OPENRELIEF_BASE_PATH: /OpenRelief/");
     expect(workflow).toContain("npm run sandbox:preflight");
     expect(workflow).toContain("pages: write");
