@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const releaseReadinessPath = path.join(process.cwd(), "docs/release-readiness.md");
+const v1ReleaseAuditPath = path.join(process.cwd(), "docs", "v1-release-audit.md");
 const readmePath = path.join(process.cwd(), "README.md");
 const codeOfConductPath = path.join(process.cwd(), "CODE_OF_CONDUCT.md");
 const contributingPath = path.join(process.cwd(), "CONTRIBUTING.md");
@@ -33,6 +34,72 @@ const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "page
 const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
 
 describe("release readiness", () => {
+  it("maps V1 requirements to release evidence", () => {
+    expect(existsSync(v1ReleaseAuditPath)).toBe(true);
+
+    const readme = readFileSync(readmePath, "utf8");
+    const releaseReadiness = readFileSync(releaseReadinessPath, "utf8");
+    const audit = readFileSync(v1ReleaseAuditPath, "utf8");
+    const requirementIds = [
+      "FR-001",
+      "FR-002",
+      "FR-003",
+      "FR-004",
+      "FR-010",
+      "FR-011",
+      "FR-012",
+      "FR-013",
+      "FR-014",
+      "FR-015",
+      "FR-020",
+      "FR-021",
+      "FR-022",
+      "FR-023",
+      "FR-024",
+      "FR-025",
+      "FR-030",
+      "FR-031",
+      "FR-032",
+      "FR-033",
+      "FR-040",
+      "FR-041",
+      "FR-042",
+      "FR-043",
+      "FR-050",
+      "FR-051",
+      "FR-052",
+      "FR-060",
+      "FR-061",
+      "FR-062",
+      "NFR-001",
+      "NFR-002",
+      "NFR-003",
+      "NFR-004",
+      "NFR-005",
+      "NFR-006",
+      "NFR-007",
+      "NFR-008",
+      "NFR-009",
+      "AC-001",
+      "AC-002",
+      "AC-003",
+      "AC-004",
+      "AC-005",
+      "AC-006",
+      "AC-007",
+      "AC-008"
+    ];
+
+    expect(readme).toContain("V1 release audit");
+    expect(releaseReadiness).toContain("V1 release audit");
+    expect(audit).toContain("Remaining Manual Gate");
+    expect(audit).toContain("docs/partner-review-log.md");
+
+    for (const requirementId of requirementIds) {
+      expect(audit).toContain(requirementId);
+    }
+  });
+
   it("documents required V1 release gates", () => {
     expect(existsSync(releaseReadinessPath)).toBe(true);
 

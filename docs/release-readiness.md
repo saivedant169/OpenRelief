@@ -31,6 +31,7 @@ Manual safety review must confirm:
 - [Roadmap and launch ops plan](../plans/08-roadmap-launch-ops-plan.md)
 - [Incident response playbook](incident-response.md)
 - [Technical report](technical-report.md)
+- [V1 release audit](v1-release-audit.md)
 - [Baseline failure examples](baseline-failure-examples.md)
 - [Evals README](../packages/evals/README.md)
 - [Policy pack contribution guide](policy-pack-contribution.md)
