@@ -1128,6 +1128,13 @@ export const App = () => {
                   </div>
                   <strong>{appealDraft.title}</strong>
                   <pre className="draft-text">{appealDraft.body}</pre>
+                  <span className="item-sources">
+                    Source:{" "}
+                    {appealDraft.sourceIds
+                      .map((sourceId) => sourceById.get(sourceId)?.title)
+                      .filter((title): title is string => Boolean(title))
+                      .join(", ")}
+                  </span>
                 </article>
               ) : null}
 

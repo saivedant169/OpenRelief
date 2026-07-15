@@ -181,6 +181,11 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByRole("heading", { name: "Appeal draft" })).toBeInTheDocument();
     expect(screen.getByText("Draft appeal note for human review")).toBeInTheDocument();
     expect(screen.getByText(/not legal advice/i)).toBeInTheDocument();
+
+    const appealCard = screen.getByRole("heading", { name: "Appeal draft" }).closest("article");
+    expect(appealCard).not.toBeNull();
+    expect(within(appealCard as HTMLElement).getByText(/Source: /)).toBeInTheDocument();
+    expect(within(appealCard as HTMLElement).getByText(/Appeal FEMA's Decision/)).toBeInTheDocument();
   });
 
   it("marks user-listed available evidence in the packet", async () => {
