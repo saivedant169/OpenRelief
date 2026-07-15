@@ -185,6 +185,42 @@ a:hover {
   color: #4b5b6b;
 }
 
+.support-path {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 22px;
+  margin: 0 0 20px;
+  background: #ffffff;
+  border: 1px solid #d8dee6;
+  border-radius: 8px;
+}
+
+.support-path h2 {
+  margin: 0 0 8px;
+  font-size: 19px;
+}
+
+.support-path p {
+  max-width: 760px;
+  margin: 0 0 6px;
+  color: #344253;
+}
+
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 14px;
+  color: #073f91;
+  background: #eef4ff;
+  border: 1px solid #b8c9e8;
+  border-radius: 7px;
+  font-weight: 750;
+}
+
 .queue-search,
 .queue-sort {
   display: grid;
@@ -825,6 +861,7 @@ a:focus-visible,
   .topbar,
   .workspace,
   .review-header,
+  .support-path,
   .upload-band,
   .section-heading,
   .panel-footer,
@@ -840,6 +877,7 @@ a:focus-visible,
   .topbar nav,
   .step-rail,
   .review-header > * + *,
+  .support-path > * + *,
   .upload-band > * + *,
   .quality,
   .risk {

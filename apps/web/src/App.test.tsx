@@ -61,6 +61,18 @@ describe("OpenRelief web workflow", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows visible human support path before upload", () => {
+    render(<App />);
+
+    const support = screen.getByRole("region", { name: "Human support" });
+    expect(support).toBeInTheDocument();
+    expect(within(support).getByText(/Need urgent help/)).toBeInTheDocument();
+    expect(within(support).getByText(/qualified disaster case worker/)).toBeInTheDocument();
+    expect(within(support).getByRole("link", { name: "Go to letter upload" })).toHaveAttribute("href", "#help");
+    expect(screen.getByRole("link", { name: "Help" })).toHaveAttribute("href", "#human-support");
+    expect(support).not.toHaveTextContent(/hotline|911|988/i);
+  });
+
   it("accepts dropped text letters into editable review", async () => {
     render(<App />);
 

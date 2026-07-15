@@ -868,7 +868,7 @@ export const App = () => {
           <span>All data stays on this device</span>
         </div>
         <nav aria-label="Support navigation">
-          <a href="#help">
+          <a href="#human-support">
             <HelpCircle aria-hidden="true" />
             Help
           </a>
@@ -1053,6 +1053,20 @@ export const App = () => {
                 {clearArmed ? "Confirm clear local data" : "Clear local data"}
               </button>
             </div>
+          </section>
+
+          <section className="support-path" id="human-support" aria-label="Human support">
+            <div>
+              <h2>Human support</h2>
+              <p>Need urgent help? If you are in immediate danger, contact local emergency services now.</p>
+              <p>
+                For disaster paperwork, ask a qualified disaster case worker, legal aid helper, or trusted local relief
+                organization to review high-risk cases.
+              </p>
+            </div>
+            <a className="secondary-link" href="#help">
+              Go to letter upload
+            </a>
           </section>
 
           <section
