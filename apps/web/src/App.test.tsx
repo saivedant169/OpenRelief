@@ -29,6 +29,10 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getAllByText(/retrieved 2026-07-13/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/last reviewed 2026-07-13/i).length).toBeGreaterThan(0);
 
+    const deadlinesCard = screen.getByRole("heading", { name: "Deadlines" }).closest("article");
+    expect(deadlinesCard).not.toBeNull();
+    expect(within(deadlinesCard as HTMLElement).getByText("Source: Uploaded letter")).toBeInTheDocument();
+
     const checklistCard = screen.getByRole("heading", { name: "Next-step checklist" }).closest("article");
     expect(checklistCard).not.toBeNull();
     expect(within(checklistCard as HTMLElement).getAllByText("Editable").length).toBeGreaterThan(0);
@@ -518,6 +522,7 @@ describe("OpenRelief web workflow", () => {
 
     expect(within(detail).getByRole("heading", { name: "Deadlines" })).toBeInTheDocument();
     expect(within(detail).getByText("appeal within 60 days")).toBeInTheDocument();
+    expect(within(detail).getByText("Source: Uploaded letter")).toBeInTheDocument();
   });
 
   it("shows queue triage summary and escalation flags in case detail", async () => {

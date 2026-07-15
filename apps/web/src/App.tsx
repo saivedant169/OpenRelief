@@ -82,6 +82,10 @@ const riskFlagLabels: Record<string, string> = {
   immigration_sensitive: "Immigration-sensitive concern",
   suspected_fraud_or_scam: "Suspected fraud or scam"
 };
+const deadlineSourceLabels: Record<Deadline["source"], string> = {
+  uploaded_letter: "Uploaded letter",
+  policy_pack: "Policy pack"
+};
 
 type SavedDraft = {
   letterText?: string;
@@ -156,6 +160,8 @@ const parseAvailableEvidenceText = (value: string): string[] =>
     .filter((item) => item.length > 0);
 
 const formatRiskFlag = (flag: string): string => riskFlagLabels[flag] ?? flag;
+
+const formatDeadlineSource = (source: Deadline["source"]): string => deadlineSourceLabels[source];
 
 const isChecklistStatus = (value: unknown): value is ChecklistStatus => value === "todo" || value === "done";
 
@@ -965,7 +971,10 @@ export const App = () => {
                 {analysis.detectedDeadlines.length > 0 ? (
                   analysis.detectedDeadlines.map((deadline) => (
                     <div className="data-row" key={deadline.label}>
-                      <span>{deadline.label}</span>
+                      <div>
+                        <span>{deadline.label}</span>
+                        <span className="item-sources">Source: {formatDeadlineSource(deadline.source)}</span>
+                      </div>
                       <strong>{deadline.text}</strong>
                     </div>
                   ))
@@ -1117,6 +1126,7 @@ export const App = () => {
                             <li key={deadline.label}>
                               <strong>{deadline.label}</strong>
                               <span>{deadline.text}</span>
+                              <span className="item-sources">Source: {formatDeadlineSource(deadline.source)}</span>
                             </li>
                           ))}
                         </ul>
