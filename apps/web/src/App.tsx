@@ -1221,7 +1221,8 @@ export const App = () => {
                       <ul className="case-detail-list">
                         <li>Letter analyzed</li>
                         <li>Checklist created</li>
-                        <li>Snapshot saved</li>
+                        <li>Snapshot saved: {formatSavedCaseUpdatedAt(activeSavedCase.updatedAt)}</li>
+                        <li>Deadline tracked: {activeSavedCase.deadlines[0]?.text ?? "None"}</li>
                       </ul>
                     </section>
                     <section className="case-detail-section">
