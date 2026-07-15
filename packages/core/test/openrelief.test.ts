@@ -1036,6 +1036,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[communication identifier removed]");
   });
 
+  it("redacts expanded communication evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Agency messages number AGM-A1B2C3 should not stay in notes.",
+        "Appointment notes number APN-A1B2C3 should not stay in notes.",
+        "TSA records number TSR-A1B2C3 should not stay in notes.",
+        "Terms and conditions document number TCD-A1B2C3 should not stay in notes.",
+        "Checkout date notice number CDN-A1B2C3 should not stay in notes.",
+        "Hotel checkout notice number HCN-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("AGM-A1B2C3");
+    expect(redacted).not.toContain("APN-A1B2C3");
+    expect(redacted).not.toContain("TSR-A1B2C3");
+    expect(redacted).not.toContain("TCD-A1B2C3");
+    expect(redacted).not.toContain("CDN-A1B2C3");
+    expect(redacted).not.toContain("HCN-A1B2C3");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
   it("redacts contractor message identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Contractor message ID CTM-123456 should not stay in notes.");
 
