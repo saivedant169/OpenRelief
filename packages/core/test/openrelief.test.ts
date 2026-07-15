@@ -1362,6 +1362,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical travel evidence identifier removed]");
   });
 
+  it("redacts hotel and motel receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Hotel receipt number HOT-123456 should not stay in notes.",
+        "Motel receipt number MOT-123456 should not stay in notes.",
+        "Lodging expense receipt number LER-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("HOT-123456");
+    expect(redacted).not.toContain("MOT-123456");
+    expect(redacted).not.toContain("LER-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
   it("redacts serious needs receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
@@ -3343,6 +3358,17 @@ describe("OpenRelief domain core", () => {
     expect(medicalResult.detectedRequests).toContain("transportation receipts");
     expect(lodgingResult.detectedRequests).toContain("transportation receipts");
     expect(lodgingResult.detectedRequests).toContain("temporary lodging receipts");
+  });
+
+  it("extracts hotel and motel lodging receipt requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send lodging expense receipts, hotel receipts, motel receipts, and verifiable lodging receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("temporary lodging receipts");
+    expect(result.facts).toContain("The letter asks for temporary lodging receipts.");
   });
 
   it("extracts serious needs evidence requests", () => {

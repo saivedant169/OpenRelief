@@ -1012,6 +1012,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-hotel-motel-receipts",
+    title: "Request for hotel and motel receipts",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send lodging expense receipts, hotel receipts, motel receipts, and verifiable lodging receipts."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-serious-needs-records",
     title: "Request for serious needs records",
     lines: [

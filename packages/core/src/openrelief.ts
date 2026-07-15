@@ -300,7 +300,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:medical|medication|transportation|temporary\s+lodging|evacuation\s+lodging)\s+(?:receipts?|notes?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:medical|medication|transportation|temporary\s+lodging|evacuation\s+lodging|lodging\s+expense|short-term\s+lodging|hotel|motel)\s+(?:receipts?|notes?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[medical travel evidence identifier removed]"
   },
   {
@@ -932,6 +932,13 @@ const requestDetectionRules: RequestDetectionRule[] = [
       "temporary lodging receipts",
       "evacuation lodging receipts",
       "temporary lodging records",
+      "lodging expense receipts",
+      "short-term lodging receipts",
+      "hotel receipts",
+      "motel receipts",
+      "hotel or motel receipts",
+      "out-of-pocket lodging receipts",
+      "verifiable lodging receipts",
       "receipts for transportation and temporary lodging"
     ],
     fact: "The letter asks for temporary lodging receipts."
