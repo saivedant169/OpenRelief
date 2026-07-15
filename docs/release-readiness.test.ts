@@ -351,10 +351,30 @@ describe("release readiness", () => {
       "Partner Review Log",
       "Synthetic examples only",
       "No real survivor PII",
+      "review_id:",
+      "review_date: YYYY-MM-DD",
       "Consent record",
       "Reviewer role",
+      "reviewer organization type:",
+      "materials reviewed:",
+      "- hosted synthetic sandbox",
+      "- docs/demo-script.md",
+      "- docs/demo-video-runbook.md",
+      "- docs/baseline-failure-examples.md",
+      "- packages/evals/reports/california-wildfire-v1.json",
+      "synthetic examples used:",
+      "- examples/california-wildfire/letters/denial-occupancy-proof.txt",
+      "note storage location:",
+      "sanitization status: sanitized | private-only | needs-redaction",
       "Critical issue",
-      "Launch decision"
+      "Launch decision",
+      "critical_issues_open:",
+      "high_issues_open:",
+      "manual_safety_review_complete:",
+      "ready_for_public_demo: yes | no",
+      "decision_owner: Saivedant Hava",
+      "decision_date: YYYY-MM-DD",
+      "notes:"
     ];
 
     for (const requiredText of requiredLogText) {
