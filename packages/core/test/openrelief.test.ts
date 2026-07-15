@@ -1798,6 +1798,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts expanded ownership title and contract identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Manufactured home certificate or title number MCT-A1B2C3 should not stay in notes.",
+        "Home purchase contracts number HPC-A1B2C3 should not stay in notes.",
+        "Contracts for deed number CFD-A1B2C3 should not stay in notes.",
+        "Land installment contracts number LIC-A1B2C3 should not stay in notes.",
+        "Quitclaim deeds number QCD-A1B2C3 should not stay in notes.",
+        "Bills of sale number BOS-A1B2C3 should not stay in notes.",
+        "Bonds for title number BFT-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MCT-A1B2C3");
+    expect(redacted).not.toContain("HPC-A1B2C3");
+    expect(redacted).not.toContain("CFD-A1B2C3");
+    expect(redacted).not.toContain("LIC-A1B2C3");
+    expect(redacted).not.toContain("QCD-A1B2C3");
+    expect(redacted).not.toContain("BOS-A1B2C3");
+    expect(redacted).not.toContain("BFT-A1B2C3");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts ownership verification document identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
