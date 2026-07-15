@@ -80,12 +80,15 @@ if (!existsSync(reviewLogPath)) {
 
 const reviewLog = readFileSync(reviewLogPath, "utf8");
 
-const completedValue = (field) => {
+const completedValuesForField = (field) => {
   const pattern = new RegExp(`^${escapeRegExp(field)}:[^\\S\\r\\n]*(.*)$`, "gim");
-  const values = [...reviewLog.matchAll(pattern)].map((match) => match[1].trim());
-  const value = values
-    .reverse()
-    .find((candidate) => candidate && !candidate.includes("|") && candidate !== dateTemplateValue);
+  return [...reviewLog.matchAll(pattern)]
+    .map((match) => match[1].trim())
+    .filter((candidate) => candidate && !candidate.includes("|") && candidate !== dateTemplateValue);
+};
+
+const completedValue = (field) => {
+  const value = completedValuesForField(field).at(-1);
 
   if (!value) {
     addError(`Partner review field incomplete: ${field}`);
@@ -217,6 +220,12 @@ const requiredSpecificFields = [
   { field: "public tracking issue", value: publicTrackingIssue },
   ...launchTextFields
 ];
+const scannedReviewTextFields = [
+  ...requiredSpecificFields.map(({ field }) => field),
+  "summary",
+  "evidence",
+  "recommended change"
+];
 
 if (errors.length === 0) {
   requireListItems("materials reviewed", requiredReviewedMaterials);
@@ -256,8 +265,10 @@ if (errors.length === 0) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
   }
 
-  for (const { field, value } of requiredSpecificFields) {
-    addRestrictedTextErrors(field, value);
+  for (const field of scannedReviewTextFields) {
+    for (const value of completedValuesForField(field)) {
+      addRestrictedTextErrors(field, value);
+    }
   }
 
   if (!normalizedSanitizedValues.has(sanitizationStatus)) {

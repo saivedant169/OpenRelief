@@ -203,6 +203,28 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: notes contains Social Security number.");
   });
 
+  it("rejects private data in stale review and finding fields", () => {
+    const result = runLaunchPreflight(
+      `${completeReviewLog.replace(
+        "workflow_match_answer: reviewer confirmed workflow matches disaster letter review",
+        [
+          "workflow_match_answer: reviewer@example.test stale note",
+          "workflow_match_answer: reviewer confirmed workflow matches disaster letter review"
+        ].join("\n")
+      )}
+summary: old reviewer phone 555-123-4567
+evidence: stale 123 Main Street note
+recommended change: remove screenshot copy before launch
+`
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: workflow_match_answer contains email address.");
+    expect(result.stderr).toContain("Public launch blocked: summary contains phone number.");
+    expect(result.stderr).toContain("Public launch blocked: evidence contains street address.");
+    expect(result.stderr).toContain("Public launch blocked: recommended change contains screenshot reference.");
+  });
+
   it("rejects restricted survivor and partner details", () => {
     const result = runLaunchPreflight(
       completeReviewLog
