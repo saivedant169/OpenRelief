@@ -32,6 +32,7 @@ const requiredReviewedMaterials = [
   "packages/evals/reports/california-wildfire-v1.json"
 ];
 const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
+const minimumReviewAnswerLength = 10;
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
@@ -98,6 +99,14 @@ const readyForPublicDemo = completedValue("ready_for_public_demo").toLowerCase()
 const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
 const decisionNotes = completedValue("notes");
+const reviewAnswers = [
+  workflowMatchAnswer,
+  misleadingOutputAnswer,
+  riskEscalationAnswer,
+  evidenceGapAnswer,
+  citationGapAnswer,
+  removeBeforeLaunchAnswer
+];
 
 if (errors.length === 0) {
   requireListItems("materials reviewed", requiredReviewedMaterials);
@@ -116,15 +125,8 @@ if (errors.length === 0) {
     addError("Public launch blocked: consent record and note storage location are required.");
   }
 
-  if (
-    workflowMatchAnswer.length < 2 ||
-    misleadingOutputAnswer.length < 2 ||
-    riskEscalationAnswer.length < 2 ||
-    evidenceGapAnswer.length < 2 ||
-    citationGapAnswer.length < 2 ||
-    removeBeforeLaunchAnswer.length < 2
-  ) {
-    addError("Public launch blocked: all review answers are required.");
+  if (reviewAnswers.some((answer) => answer.length < minimumReviewAnswerLength)) {
+    addError("Public launch blocked: review answers need specific sanitized findings.");
   }
 
   if (!normalizedSanitizedValues.has(sanitizationStatus)) {

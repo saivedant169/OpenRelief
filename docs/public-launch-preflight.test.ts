@@ -98,6 +98,18 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Partner review field incomplete: remove_before_launch_answer");
   });
 
+  it("rejects thin review answer evidence", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog.replace(
+        "citation_gap_answer: reviewer found source claims acceptable for launch",
+        "citation_gap_answer: ok"
+      )
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: review answers need specific sanitized findings.");
+  });
+
   it("reports multiple launch blockers together", () => {
     const result = runLaunchPreflight(
       completeReviewLog
