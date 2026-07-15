@@ -845,9 +845,19 @@ describe("OpenRelief domain core", () => {
   });
 
   it("redacts rental lease identifiers", () => {
-    const redacted = redactRestrictedIdentifiers("Rental lease number LEA-123456 should not stay in notes.");
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Rental lease number LEA-123456 should not stay in notes.",
+        "Lease agreement number LAG-123456 should not stay in notes.",
+        "Rental agreement number RAG-123456 should not stay in notes.",
+        "Housing agreement number HAG-123456 should not stay in notes."
+      ].join("\n")
+    );
 
     expect(redacted).not.toContain("LEA-123456");
+    expect(redacted).not.toContain("LAG-123456");
+    expect(redacted).not.toContain("RAG-123456");
+    expect(redacted).not.toContain("HAG-123456");
     expect(redacted).toContain("[housing identifier removed]");
   });
 
