@@ -447,6 +447,16 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for utility records."
   },
   {
+    request: "utility bills",
+    phrases: ["utility bill", "utility bills"],
+    fact: "The letter asks for utility bills."
+  },
+  {
+    request: "rent receipts",
+    phrases: ["rent receipt", "rent receipts"],
+    fact: "The letter asks for rent receipts."
+  },
+  {
     request: "account listed records",
     phrases: ["requested records listed in your account"],
     fact: "The letter asks for records listed in the agency account."
@@ -1059,6 +1069,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "proof of occupancy",
             "occupancy records",
             "utility records",
+            "utility bills",
+            "rent receipts",
             "other household records"
           ]),
           sourceIds: ["fema-documents"]
