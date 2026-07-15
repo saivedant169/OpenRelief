@@ -230,6 +230,31 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: ready_for_public_demo must have exactly one final value.");
   });
 
+  it("rejects duplicate launch session metadata values", () => {
+    const result = runLaunchPreflight(
+      [
+        completeReviewLog,
+        "review_id: review-002",
+        `review_date: ${reviewDate}`,
+        "Reviewer role: second reviewer",
+        "reviewer organization type: civic technology group",
+        "Consent record: second consent record",
+        "note storage location: second private notes folder",
+        "sanitization status: sanitized",
+        "public tracking issue: https://github.com/saivedant169/OpenRelief/issues/1",
+        "decision_owner: Saivedant Hava",
+        `decision_date: ${reviewDate}`
+      ].join("\n")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: review_id must have exactly one final value.");
+    expect(result.stderr).toContain("Public launch blocked: review_date must have exactly one final value.");
+    expect(result.stderr).toContain("Public launch blocked: Reviewer role must have exactly one final value.");
+    expect(result.stderr).toContain("Public launch blocked: public tracking issue must have exactly one final value.");
+    expect(result.stderr).toContain("Public launch blocked: decision_date must have exactly one final value.");
+  });
+
   it("rejects private data in session evidence", () => {
     const result = runLaunchPreflight(
       completeReviewLog

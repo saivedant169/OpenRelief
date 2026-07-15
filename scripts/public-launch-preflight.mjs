@@ -59,6 +59,18 @@ const requiredReviewedMaterials = [
 ];
 const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-occupancy-proof.txt"];
 const reviewListFields = ["materials reviewed", "synthetic examples used"];
+const launchSessionScalarFields = [
+  "review_id",
+  "review_date",
+  "Reviewer role",
+  "reviewer organization type",
+  "Consent record",
+  "note storage location",
+  "sanitization status",
+  "public tracking issue",
+  "decision_owner",
+  "decision_date"
+];
 const launchDecisionStatusFields = [
   "critical_issues_open",
   "high_issues_open",
@@ -309,6 +321,12 @@ if (errors.length === 0) {
 
   if (publicIssueLaunchRiskValues.length !== 1) {
     addError("Public launch blocked: public issue launch risk must have exactly one final value.");
+  }
+
+  for (const field of launchSessionScalarFields) {
+    if (completedValuesForField(field).length !== 1) {
+      addError(`Public launch blocked: ${field} must have exactly one final value.`);
+    }
   }
 
   for (const field of launchDecisionStatusFields) {
