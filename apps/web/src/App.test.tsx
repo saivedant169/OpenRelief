@@ -404,6 +404,9 @@ describe("OpenRelief web workflow", () => {
   it("saves multiple local case snapshots with distinct IDs", async () => {
     render(<App />);
 
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is denied because proof of occupancy is missing." }
+    });
     await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
     await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
 
@@ -422,6 +425,14 @@ describe("OpenRelief web workflow", () => {
     const queue = screen.getByRole("region", { name: "Local case queue" });
     const queueSearch = within(queue).getByLabelText("Search saved cases");
     await userEvent.selectOptions(within(queue).getByLabelText("Sort saved cases"), "deadline");
+
+    expect(
+      within(queue)
+        .getAllByRole("button", { name: /Open saved case/ })
+        .map((button) => button.getAttribute("aria-label"))
+    ).toEqual(["Open saved case OR-CA-2026-002", "Open saved case OR-CA-2026-001"]);
+
+    await userEvent.selectOptions(within(queue).getByLabelText("Sort saved cases"), "escalation");
 
     expect(
       within(queue)

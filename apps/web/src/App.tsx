@@ -108,7 +108,7 @@ type ChecklistStatus = "todo" | "done";
 
 type ChecklistStatusMap = Record<string, ChecklistStatus>;
 
-type CaseQueueSort = "updated" | "deadline" | "missing";
+type CaseQueueSort = "updated" | "deadline" | "escalation" | "missing";
 
 type SavedCaseSummary = {
   id: string;
@@ -226,6 +226,13 @@ const compareSavedCases = (sort: CaseQueueSort, left: SavedCaseSummary, right: S
     const deadlineDelta = Number(right.deadlines.length > 0) - Number(left.deadlines.length > 0);
     if (deadlineDelta !== 0) {
       return deadlineDelta;
+    }
+  }
+
+  if (sort === "escalation") {
+    const escalationDelta = Number(right.riskFlags.length > 0) - Number(left.riskFlags.length > 0);
+    if (escalationDelta !== 0) {
+      return escalationDelta;
     }
   }
 
@@ -834,6 +841,7 @@ export const App = () => {
                   >
                     <option value="updated">Last updated</option>
                     <option value="deadline">Deadline</option>
+                    <option value="escalation">Escalation flags</option>
                     <option value="missing">Missing evidence</option>
                   </select>
                 </label>
