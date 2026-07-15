@@ -108,7 +108,7 @@ type ChecklistStatus = "todo" | "done";
 
 type ChecklistStatusMap = Record<string, ChecklistStatus>;
 
-type CaseQueueSort = "updated" | "deadline" | "escalation" | "missing";
+type CaseQueueSort = "updated" | "deadline" | "escalation" | "missing" | "unknown";
 
 type SavedCaseSummary = {
   id: string;
@@ -240,6 +240,13 @@ const compareSavedCases = (sort: CaseQueueSort, left: SavedCaseSummary, right: S
     const missingDelta = right.missingEvidence.length - left.missingEvidence.length;
     if (missingDelta !== 0) {
       return missingDelta;
+    }
+  }
+
+  if (sort === "unknown") {
+    const unknownDelta = Number(right.letterType === "unknown") - Number(left.letterType === "unknown");
+    if (unknownDelta !== 0) {
+      return unknownDelta;
     }
   }
 
@@ -843,6 +850,7 @@ export const App = () => {
                     <option value="deadline">Deadline</option>
                     <option value="escalation">Escalation flags</option>
                     <option value="missing">Missing evidence</option>
+                    <option value="unknown">Unknown letter type</option>
                   </select>
                 </label>
                 <label className="queue-filter">

@@ -463,6 +463,31 @@ describe("OpenRelief web workflow", () => {
     expect(exported.map((savedCase) => savedCase.letterType)).toEqual(["approval", "denial"]);
   });
 
+  it("sorts saved cases by unknown letter type", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nThis notice needs staff review." }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved for rental assistance." }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    await userEvent.click(screen.getByRole("button", { name: /save case snapshot/i }));
+
+    const queue = screen.getByRole("region", { name: "Local case queue" });
+    await userEvent.selectOptions(within(queue).getByLabelText("Sort saved cases"), "unknown");
+
+    expect(
+      within(queue)
+        .getAllByRole("button", { name: /Open saved case/ })
+        .map((button) => button.getAttribute("aria-label"))
+    ).toEqual(["Open saved case OR-CA-2026-001", "Open saved case OR-CA-2026-002"]);
+  });
+
   it("redacts restricted identifiers before local draft storage and saved case export", async () => {
     render(<App />);
 
