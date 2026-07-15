@@ -1409,6 +1409,20 @@ export const App = () => {
 
           {analysis ? (
             <section className="results-grid" aria-label="Letter analysis results">
+              {riskFlags.length > 0 ? (
+                <article className="result-card" aria-label="Human review recommended">
+                  <div className="section-heading">
+                    <h2>Human review recommended</h2>
+                    <span className="risk">High risk</span>
+                  </div>
+                  <p>Ask a qualified disaster case worker, legal aid helper, or trusted relief organization to review.</p>
+                  <div className="risk-list" aria-label="High-risk flags">
+                    {riskFlags.map((flag) => (
+                      <span key={flag}>{formatRiskFlag(flag)}</span>
+                    ))}
+                  </div>
+                </article>
+              ) : null}
               <article className="result-card emphasis">
                 <div className="section-heading">
                   <h2>{letterTypeLabels[analysis.letterType]}</h2>
@@ -1421,13 +1435,6 @@ export const App = () => {
                   <div className="warning">
                     <AlertTriangle aria-hidden="true" />
                     Uploaded text included instruction-like language. It was treated as document content only.
-                  </div>
-                ) : null}
-                {riskFlags.length > 0 ? (
-                  <div className="risk-list" aria-label="High-risk flags">
-                    {riskFlags.map((flag) => (
-                      <span key={flag}>{formatRiskFlag(flag)}</span>
-                    ))}
                   </div>
                 ) : null}
               </article>

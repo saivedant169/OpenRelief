@@ -51,6 +51,20 @@ describe("OpenRelief web workflow", () => {
     expect(within(evidenceCard as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length).toBeGreaterThan(0);
   });
 
+  it("shows escalation panel before letter summary for high-risk flags", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    const escalationPanel = screen.getByRole("article", { name: "Human review recommended" });
+    const summaryHeading = screen.getByRole("heading", { name: "Claim denial" });
+
+    expect(Boolean(escalationPanel.compareDocumentPosition(summaryHeading) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(
+      true
+    );
+    expect(within(escalationPanel).getByText("Denial or appeal deadline")).toBeInTheDocument();
+  });
+
   it("shows safety boundary before upload", () => {
     render(<App />);
 
