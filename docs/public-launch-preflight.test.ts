@@ -31,6 +31,7 @@ manual_safety_review_complete: yes
 ready_for_public_demo: yes
 decision_owner: Saivedant Hava
 decision_date: 2026-07-15
+notes: sanitized review found launch guardrails ready
 `;
 
 const runLaunchPreflight = (reviewLog: string) => {
@@ -86,5 +87,14 @@ describe("public launch preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Public launch blocked: sanitization status must confirm sanitized notes.");
+  });
+
+  it("rejects missing launch decision notes", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog.replace("notes: sanitized review found launch guardrails ready", "notes:")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review field incomplete: notes");
   });
 });

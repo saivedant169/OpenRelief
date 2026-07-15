@@ -79,6 +79,7 @@ const manualSafetyReviewComplete = completedValue("manual_safety_review_complete
 const readyForPublicDemo = completedValue("ready_for_public_demo").toLowerCase();
 const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
+const decisionNotes = completedValue("notes");
 
 requireListItems("materials reviewed", requiredReviewedMaterials);
 requireListItems("synthetic examples used", requiredSyntheticExamples);
@@ -121,5 +122,9 @@ if (decisionOwner !== "Saivedant Hava") {
 }
 
 requireDate("decision_date", decisionDate);
+
+if (decisionNotes.length < 10) {
+  fail("Public launch blocked: launch decision notes are required.");
+}
 
 console.log("Public launch preflight passed.");
