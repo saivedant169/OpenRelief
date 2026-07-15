@@ -443,6 +443,27 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[identity document removed]");
   });
 
+  it("redacts expanded identity evidence identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Federal ID number FED-A1B2C3 should not stay in local text.",
+        "Birth certificate number BCT-A1B2C3 should not stay in local text.",
+        "Social Security card number SSC-A1B2C3 should not stay in local text.",
+        "Employer payroll document number EPD-A1B2C3 should not stay in local text.",
+        "Military identification card number MIC-A1B2C3 should not stay in local text.",
+        "Marriage license number MLC-A1B2C3 should not stay in local text."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("FED-A1B2C3");
+    expect(redacted).not.toContain("BCT-A1B2C3");
+    expect(redacted).not.toContain("SSC-A1B2C3");
+    expect(redacted).not.toContain("EPD-A1B2C3");
+    expect(redacted).not.toContain("MIC-A1B2C3");
+    expect(redacted).not.toContain("MLC-A1B2C3");
+    expect(redacted).toContain("[identity document removed]");
+  });
+
   it("redacts vehicle identification numbers", () => {
     const redacted = redactRestrictedIdentifiers("VIN 1HGCM82633A004352 should not stay in notes.");
 
