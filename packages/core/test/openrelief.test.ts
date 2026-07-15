@@ -885,6 +885,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical support identifier removed]");
   });
 
+  it("redacts vehicle repair record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Mechanic receipt number MEC-123456 should not stay in notes.",
+        "Mechanic estimate number MCE-123456 should not stay in notes.",
+        "Vehicle repair cost record number VRC-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MEC-123456");
+    expect(redacted).not.toContain("MCE-123456");
+    expect(redacted).not.toContain("VRC-123456");
+    expect(redacted).toContain("[vehicle repair identifier removed]");
+  });
+
   it("redacts agency message identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Agency message ID AGMSG-123456 should not stay in notes.");
 
@@ -3386,8 +3401,24 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for dental records.");
   });
 
+  it("extracts vehicle repair evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send mechanic receipts, mechanic estimates, and verification of vehicle repair costs."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("vehicle repair records");
+    expect(result.facts).toContain("The letter asks for vehicle repair records.");
+  });
+
   it("marks requested medicine storage and transportation note evidence as missing", () => {
-    const packet = buildEvidencePacket(["medicine storage receipts", "transportation notes", "dental records"]);
+    const packet = buildEvidencePacket([
+      "medicine storage receipts",
+      "transportation notes",
+      "dental records",
+      "vehicle repair records"
+    ]);
 
     expect(packet.groups.find((group) => group.category === "medical_or_transportation")?.items[0]?.status).toBe(
       "missing"

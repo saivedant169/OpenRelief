@@ -951,6 +951,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-vehicle-repair-records",
+    title: "Request for vehicle repair records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send mechanic receipts, mechanic estimates, and verification of vehicle repair costs."
+    ],
+    county: "Shasta",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-accessibility-documents",
     title: "Request for accessibility expense records",
     lines: [

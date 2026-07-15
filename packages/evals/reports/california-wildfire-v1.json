@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 157,
+  "caseCount": 158,
   "passed": true,
   "metrics": {
-    "passedCount": 157,
+    "passedCount": 158,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1130,6 +1130,23 @@
       "riskFlags": [
         "medical_emergency"
       ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-vehicle-repair-records",
+      "title": "Request for vehicle repair records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
     },
     {
       "caseId": "ca-wildfire-rfi-accessibility-documents",

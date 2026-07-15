@@ -240,6 +240,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:mechanic\s+(?:receipt|estimate)|vehicle\s+repair\s+(?:receipt|estimate|cost\s+record))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[vehicle repair identifier removed]"
+  },
+  {
+    pattern:
       /\b(?:(?:agency|case|contractor)\s+message|appointment\s+note|shelter\s+placement\s+note|unsafe\s+home\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[communication identifier removed]"
   },
@@ -903,6 +908,23 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "transportation notes",
     phrases: ["transportation notes"],
     fact: "The letter asks for transportation notes."
+  },
+  {
+    request: "vehicle repair records",
+    phrases: [
+      "vehicle repair records",
+      "vehicle repair receipts",
+      "vehicle repair receipt",
+      "vehicle repair estimates",
+      "vehicle repair estimate",
+      "vehicle repair costs",
+      "mechanic receipts",
+      "mechanic receipt",
+      "mechanic estimates",
+      "mechanic estimate",
+      "verification of vehicle repair costs"
+    ],
+    fact: "The letter asks for vehicle repair records."
   },
   {
     request: "temporary lodging receipts",
@@ -1661,6 +1683,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "medicine storage receipts",
             "transportation receipts",
             "transportation notes",
+            "vehicle repair records",
             "accessibility expense records",
             "accessibility notes",
             "accommodation expense records",
