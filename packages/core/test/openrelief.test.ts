@@ -2582,8 +2582,28 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for a passport.");
   });
 
+  it("extracts state ID and birth certificate requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a state ID or birth certificate."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("state id");
+    expect(result.detectedRequests).toContain("birth certificate");
+    expect(result.facts).toContain("The letter asks for a state ID.");
+    expect(result.facts).toContain("The letter asks for a birth certificate.");
+  });
+
   it("marks requested identity evidence as missing", () => {
-    const packet = buildEvidencePacket(["photo id", "replacement id note", "driver license", "passport"]);
+    const packet = buildEvidencePacket([
+      "photo id",
+      "replacement id note",
+      "driver license",
+      "passport",
+      "state id",
+      "birth certificate"
+    ]);
 
     expect(packet.groups.find((group) => group.category === "identity")?.items[0]?.status).toBe("missing");
   });
