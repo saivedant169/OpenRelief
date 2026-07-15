@@ -1629,6 +1629,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[record request identifier removed]");
   });
 
+  it("redacts expanded record request identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Requested records listed in your account number RLA-A1B2C3 should not stay in notes.",
+        "Requested records were not received number RNR-A1B2C3 should not stay in notes.",
+        "Supporting documents were not received number SDN-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("RLA-A1B2C3");
+    expect(redacted).not.toContain("RNR-A1B2C3");
+    expect(redacted).not.toContain("SDN-A1B2C3");
+    expect(redacted).toContain("[record request identifier removed]");
+  });
+
   it("redacts proof of occupancy record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Proof of occupancy record ID POO-123456 should not stay in notes.");
 

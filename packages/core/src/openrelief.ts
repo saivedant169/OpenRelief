@@ -280,7 +280,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:insurance\s+settlement\s+(?:information|records?|letters?)|account\s+listed\s+records?|requested\s+records?|(?:other\s+)?household\s+records?|supporting\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:insurance\s+settlement\s+(?:information|records?|letters?)|account\s+listed\s+records?|requested\s+records?(?:\s+(?:listed\s+in\s+your\s+account|were\s+not\s+received))?|(?:other\s+)?household\s+records?|supporting\s+records?|supporting\s+documents\s+were\s+not\s+received)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[record request identifier removed]"
   },
   {
