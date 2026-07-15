@@ -235,7 +235,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip|dental\s+(?:receipt|bill|estimate|expense\s+record))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[medical support identifier removed]"
   },
   {
@@ -872,6 +872,22 @@ const requestDetectionRules: RequestDetectionRule[] = [
     request: "medical receipts",
     phrases: ["medical receipts", "medical, medication, or transportation receipts"],
     fact: "The letter asks for medical receipts."
+  },
+  {
+    request: "dental records",
+    phrases: [
+      "dental receipts",
+      "dental receipt",
+      "dental bills",
+      "dental bill",
+      "itemized dental bills",
+      "dental estimates",
+      "dental expense records",
+      "medical and dental receipts",
+      "medical and dental bills",
+      "itemized bills, receipts, or estimates showing medical or dental expenses"
+    ],
+    fact: "The letter asks for dental records."
   },
   {
     request: "medicine storage receipts",
@@ -1638,9 +1654,10 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
       category: "medical_or_transportation",
       items: [
         {
-          label: "Medical, medication, transportation, or accessibility expense notes",
+          label: "Medical, dental, medication, transportation, or accessibility expense notes",
           status: evidenceStatus(requests, availableEvidence, [
             "medical receipts",
+            "dental records",
             "medicine storage receipts",
             "transportation receipts",
             "transportation notes",

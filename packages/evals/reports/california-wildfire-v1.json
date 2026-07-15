@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 156,
+  "caseCount": 157,
   "passed": true,
   "metrics": {
-    "passedCount": 156,
+    "passedCount": 157,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1096,6 +1096,25 @@
     {
       "caseId": "ca-wildfire-rfi-medical-receipts",
       "title": "Request for medical expense receipts",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": [
+        "medical_emergency"
+      ]
+    },
+    {
+      "caseId": "ca-wildfire-rfi-dental-records",
+      "title": "Request for dental expense records",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

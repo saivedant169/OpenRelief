@@ -870,6 +870,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical support identifier removed]");
   });
 
+  it("redacts dental record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Dental receipt number DRC-123456 should not stay in notes.",
+        "Dental bill number DBL-123456 should not stay in notes.",
+        "Dental estimate number DEN-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("DRC-123456");
+    expect(redacted).not.toContain("DBL-123456");
+    expect(redacted).not.toContain("DEN-123456");
+    expect(redacted).toContain("[medical support identifier removed]");
+  });
+
   it("redacts agency message identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Agency message ID AGMSG-123456 should not stay in notes.");
 
@@ -3360,8 +3375,19 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for transportation notes.");
   });
 
+  it("extracts dental evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send dental receipts, itemized dental bills, dental estimates, and dental expense records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("dental records");
+    expect(result.facts).toContain("The letter asks for dental records.");
+  });
+
   it("marks requested medicine storage and transportation note evidence as missing", () => {
-    const packet = buildEvidencePacket(["medicine storage receipts", "transportation notes"]);
+    const packet = buildEvidencePacket(["medicine storage receipts", "transportation notes", "dental records"]);
 
     expect(packet.groups.find((group) => group.category === "medical_or_transportation")?.items[0]?.status).toBe(
       "missing"
