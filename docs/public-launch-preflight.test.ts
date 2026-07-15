@@ -210,6 +210,26 @@ describe("public launch preflight", () => {
     );
   });
 
+  it("rejects duplicate launch decision status values", () => {
+    const result = runLaunchPreflight(
+      [
+        completeReviewLog,
+        "critical_issues_open: no",
+        "high_issues_open: closed",
+        "manual_safety_review_complete: yes",
+        "ready_for_public_demo: yes"
+      ].join("\n")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: critical_issues_open must have exactly one final value.");
+    expect(result.stderr).toContain("Public launch blocked: high_issues_open must have exactly one final value.");
+    expect(result.stderr).toContain(
+      "Public launch blocked: manual_safety_review_complete must have exactly one final value."
+    );
+    expect(result.stderr).toContain("Public launch blocked: ready_for_public_demo must have exactly one final value.");
+  });
+
   it("rejects private data in session evidence", () => {
     const result = runLaunchPreflight(
       completeReviewLog
