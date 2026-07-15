@@ -53,6 +53,7 @@ const requiredEvidencePaths = [
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
 const minimumReviewAnswerLength = 10;
+const publicTrackingIssuePattern = /^https:\/\/github\.com\/saivedant169\/OpenRelief\/issues\/\d+$/;
 const restrictedReviewTextPatterns = [
   { label: "email address", pattern: /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/i },
   { label: "phone number", pattern: /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/ },
@@ -173,6 +174,7 @@ const reviewerOrganizationType = completedValue("reviewer organization type");
 const consentRecord = completedValue("Consent record");
 const noteStorageLocation = completedValue("note storage location");
 const sanitizationStatus = completedValue("sanitization status").toLowerCase();
+const publicTrackingIssue = completedValue("public tracking issue");
 const workflowMatchAnswer = completedValue("workflow_match_answer");
 const misleadingOutputAnswer = completedValue("misleading_output_answer");
 const riskEscalationAnswer = completedValue("risk_escalation_answer");
@@ -201,6 +203,7 @@ const requiredSpecificFields = [
   { field: "reviewer organization type", value: reviewerOrganizationType },
   { field: "Consent record", value: consentRecord },
   { field: "note storage location", value: noteStorageLocation },
+  { field: "public tracking issue", value: publicTrackingIssue },
   ...launchTextFields
 ];
 
@@ -226,6 +229,10 @@ if (errors.length === 0) {
 
   if (consentRecord.length < 3 || noteStorageLocation.length < 3) {
     addError("Public launch blocked: consent record and note storage location are required.");
+  }
+
+  if (!publicTrackingIssuePattern.test(publicTrackingIssue)) {
+    addError("Public launch blocked: public tracking issue must be an OpenRelief GitHub issue URL.");
   }
 
   if (reviewAnswers.some(({ value }) => value.length < minimumReviewAnswerLength)) {

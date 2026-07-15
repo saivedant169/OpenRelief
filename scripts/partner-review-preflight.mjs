@@ -29,6 +29,7 @@ const requiredLogText = [
   "- examples/california-wildfire/letters/denial-occupancy-proof.txt",
   "note storage location:",
   "sanitization status: sanitized | private-only | needs-redaction",
+  "public tracking issue:",
   "Review Questions",
   "Does workflow match real disaster letter review?",
   "Which output could mislead a survivor under stress?",
