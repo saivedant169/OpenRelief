@@ -156,7 +156,9 @@ describe("OpenRelief web workflow", () => {
 
     const evidenceCard = screen.getByRole("heading", { name: "Evidence packet outline" }).closest("article");
     expect(evidenceCard).not.toBeNull();
-    expect(within(evidenceCard as HTMLElement).getByText("Repair, hotel, replacement, or cleanup receipts")).toBeInTheDocument();
+    expect(
+      within(evidenceCard as HTMLElement).getByText("Repair, hotel, replacement, cleanup, or child care records")
+    ).toBeInTheDocument();
     expect(within(evidenceCard as HTMLElement).getByText("available")).toBeInTheDocument();
   });
 

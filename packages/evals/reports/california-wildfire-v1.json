@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "suiteId": "california-wildfire-v1",
-  "caseCount": 153,
+  "caseCount": 154,
   "passed": true,
   "metrics": {
-    "passedCount": 153,
+    "passedCount": 154,
     "failedCount": 0,
     "failureCount": 0
   },
@@ -1176,6 +1176,23 @@
     {
       "caseId": "ca-wildfire-rfi-personal-property-records",
       "title": "Request for personal property records",
+      "expectedLetterType": "request_for_information",
+      "actualLetterType": "request_for_information",
+      "expectedNeedsHumanReview": false,
+      "actualNeedsHumanReview": false,
+      "tags": [],
+      "passed": true,
+      "failures": [],
+      "sourceIds": [
+        "fema-appeals",
+        "fema-documents",
+        "sba-disaster"
+      ],
+      "riskFlags": []
+    },
+    {
+      "caseId": "ca-wildfire-rfi-child-care-records",
+      "title": "Request for child care records",
       "expectedLetterType": "request_for_information",
       "actualLetterType": "request_for_information",
       "expectedNeedsHumanReview": false,

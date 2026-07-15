@@ -1001,6 +1001,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts child care record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Child care receipt number CCR-123456 should not stay in notes.",
+        "Child care contract number CCC-123456 should not stay in notes.",
+        "Child care provider letter number CPL-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("CCR-123456");
+    expect(redacted).not.toContain("CCC-123456");
+    expect(redacted).not.toContain("CPL-123456");
+    expect(redacted).toContain("[child care identifier removed]");
+  });
+
   it("redacts damage record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Damage record number DMG-123456 should not stay in notes.");
 
@@ -3113,11 +3128,23 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for personal property records.");
   });
 
-  it("marks requested generator and temporary power evidence as missing", () => {
+  it("extracts child care evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send child care receipts, child care contracts, child care estimates, and a signed letter from the child care provider."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("child care records");
+    expect(result.facts).toContain("The letter asks for child care records.");
+  });
+
+  it("marks requested generator temporary power and child care evidence as missing", () => {
     const packet = buildEvidencePacket([
       "generator rental receipts",
       "temporary power equipment receipts",
-      "personal property records"
+      "personal property records",
+      "child care records"
     ]);
 
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");

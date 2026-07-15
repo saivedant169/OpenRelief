@@ -254,6 +254,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
+      /\b(?:child\s*care|childcare)\s+(?:receipt|contract|estimate|provider\s+letter)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    replacement: "[child care identifier removed]"
+  },
+  {
+    pattern:
       /\b(?:damage\s+(?:record|documentation|photo)|supporting\s+(?:document|receipt))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[damage evidence identifier removed]"
   },
@@ -1002,6 +1007,30 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for personal property records."
   },
   {
+    request: "child care records",
+    phrases: [
+      "child care receipts",
+      "childcare receipts",
+      "child care receipt",
+      "childcare receipt",
+      "child care contracts",
+      "childcare contracts",
+      "child care contract",
+      "childcare contract",
+      "child care estimates",
+      "childcare estimates",
+      "child care provider letters",
+      "childcare provider letters",
+      "child care provider letter",
+      "childcare provider letter",
+      "letter from the child care provider",
+      "signed letter from the child care provider",
+      "post-disaster child care receipts or estimates",
+      "pre-disaster child care receipts, contract, or signed letter"
+    ],
+    fact: "The letter asks for child care records."
+  },
+  {
     request: "accessibility expense records",
     phrases: ["accessibility and accommodation expense records"],
     fact: "The letter asks for accessibility expense records."
@@ -1520,7 +1549,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
       category: "receipts",
       items: [
         {
-          label: "Repair, hotel, replacement, or cleanup receipts",
+          label: "Repair, hotel, replacement, cleanup, or child care records",
           status: evidenceStatus(requests, availableEvidence, [
             "repair receipts",
             "temporary lodging receipts",
@@ -1531,7 +1560,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "generator rental receipts",
             "temporary power equipment receipts",
             "replacement item receipts",
-            "personal property records"
+            "personal property records",
+            "child care records"
           ]),
           sourceIds: ["fema-documents"]
         }

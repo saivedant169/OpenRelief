@@ -998,6 +998,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-child-care-records",
+    title: "Request for child care records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send child care receipts, child care contracts, child care estimates, and a signed letter from the child care provider."
+    ],
+    county: "Kern",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-immigration-sensitive-documents",
     title: "Request letter with immigration-sensitive context",
     lines: [
