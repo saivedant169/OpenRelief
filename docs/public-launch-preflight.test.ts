@@ -166,6 +166,26 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Public launch blocked: notes contains Social Security number.");
   });
 
+  it("rejects restricted survivor and partner details", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace(
+          "evidence_gap_answer: reviewer found evidence categories acceptable for launch",
+          "evidence_gap_answer: reviewer saw screenshot with 123 Main Street"
+        )
+        .replace(
+          "notes: sanitized review found launch guardrails ready",
+          "notes: insurance claim number ABC12345 appeared with medical record"
+        )
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: evidence_gap_answer contains street address.");
+    expect(result.stderr).toContain("Public launch blocked: evidence_gap_answer contains screenshot reference.");
+    expect(result.stderr).toContain("Public launch blocked: notes contains insurance claim number.");
+    expect(result.stderr).toContain("Public launch blocked: notes contains medical detail.");
+  });
+
   it("reports multiple launch blockers together", () => {
     const result = runLaunchPreflight(
       completeReviewLog
