@@ -66,6 +66,18 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Partner review field incomplete: note storage location");
   });
 
+  it("reports multiple incomplete review fields together", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("review_id: review-001", "review_id:")
+        .replace("notes: sanitized review found launch guardrails ready", "notes:")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review field incomplete: review_id");
+    expect(result.stderr).toContain("Partner review field incomplete: notes");
+  });
+
   it("rejects missing reviewed materials", () => {
     const result = runLaunchPreflight(completeReviewLog.replace("- docs/demo-video-runbook.md\n", ""));
 

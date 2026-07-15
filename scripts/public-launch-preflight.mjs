@@ -9,6 +9,16 @@ const fail = (message) => {
   process.exit(1);
 };
 
+const errors = [];
+const addError = (message) => {
+  errors.push(message);
+};
+const failIfErrors = () => {
+  if (errors.length > 0) {
+    fail(errors.join("\n"));
+  }
+};
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const normalizedNoValues = new Set(["0", "no", "none"]);
@@ -30,12 +40,13 @@ if (!existsSync(reviewLogPath)) {
 const reviewLog = readFileSync(reviewLogPath, "utf8");
 
 const completedValue = (field) => {
-  const pattern = new RegExp(`^${escapeRegExp(field)}:\\s*(.*)$`, "gim");
+  const pattern = new RegExp(`^${escapeRegExp(field)}:[^\\S\\r\\n]*(.*)$`, "gim");
   const values = [...reviewLog.matchAll(pattern)].map((match) => match[1].trim());
   const value = values.reverse().find((candidate) => candidate && !candidate.includes("|"));
 
   if (!value) {
-    fail(`Partner review field incomplete: ${field}`);
+    addError(`Partner review field incomplete: ${field}`);
+    return "";
   }
 
   return value;
@@ -81,6 +92,7 @@ const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
 const decisionNotes = completedValue("notes");
 
+failIfErrors();
 requireListItems("materials reviewed", requiredReviewedMaterials);
 requireListItems("synthetic examples used", requiredSyntheticExamples);
 requireDate("review_date", reviewDate);
