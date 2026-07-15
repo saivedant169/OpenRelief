@@ -41,6 +41,9 @@ risk_escalation_answer: reviewer confirmed high-risk escalation is visible
 evidence_gap_answer: reviewer found evidence categories acceptable for launch
 citation_gap_answer: reviewer found source claims acceptable for launch
 remove_before_launch_answer: reviewer found no screen to remove before launch
+summary: reviewer found no public launch blocker in synthetic flow
+evidence: reviewer cited synthetic denial letter and hosted sandbox review
+recommended change: reviewer recommended no launch-blocking change
 public_issue_safe: yes
 critical_issues_open: no
 high_issues_open: closed
@@ -238,6 +241,25 @@ recommended change: remove screenshot copy before launch
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Public launch blocked: public_issue_safe findings must be yes.");
+  });
+
+  it("requires sanitized finding details", () => {
+    const result = runLaunchPreflight(completeReviewLog.replace("summary: reviewer found no public launch blocker in synthetic flow\n", ""));
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review field incomplete: summary");
+  });
+
+  it("rejects thin sanitized finding details", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("summary: reviewer found no public launch blocker in synthetic flow", "summary: ok")
+        .replace("evidence: reviewer cited synthetic denial letter and hosted sandbox review", "evidence: ok")
+        .replace("recommended change: reviewer recommended no launch-blocking change", "recommended change: ok")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: sanitized findings need summary, evidence, and recommended change.");
   });
 
   it("rejects restricted survivor and partner details", () => {

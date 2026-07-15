@@ -195,6 +195,9 @@ const riskEscalationAnswer = completedValue("risk_escalation_answer");
 const evidenceGapAnswer = completedValue("evidence_gap_answer");
 const citationGapAnswer = completedValue("citation_gap_answer");
 const removeBeforeLaunchAnswer = completedValue("remove_before_launch_answer");
+const findingSummary = completedValue("summary");
+const findingEvidence = completedValue("evidence");
+const findingRecommendedChange = completedValue("recommended change");
 const criticalIssuesOpen = completedValue("critical_issues_open").toLowerCase();
 const highIssuesOpen = completedValue("high_issues_open").toLowerCase();
 const manualSafetyReviewComplete = completedValue("manual_safety_review_complete").toLowerCase();
@@ -211,7 +214,12 @@ const reviewAnswers = [
   { field: "citation_gap_answer", value: citationGapAnswer },
   { field: "remove_before_launch_answer", value: removeBeforeLaunchAnswer }
 ];
-const launchTextFields = [...reviewAnswers, { field: "notes", value: decisionNotes }];
+const findingFields = [
+  { field: "summary", value: findingSummary },
+  { field: "evidence", value: findingEvidence },
+  { field: "recommended change", value: findingRecommendedChange }
+];
+const launchTextFields = [...reviewAnswers, ...findingFields, { field: "notes", value: decisionNotes }];
 const requiredSpecificFields = [
   { field: "review_id", value: reviewId },
   { field: "Reviewer role", value: reviewerRole },
@@ -223,9 +231,6 @@ const requiredSpecificFields = [
 ];
 const scannedReviewTextFields = [
   ...requiredSpecificFields.map(({ field }) => field),
-  "summary",
-  "evidence",
-  "recommended change",
   "public_issue_safe"
 ];
 
@@ -265,6 +270,10 @@ if (errors.length === 0) {
 
   if (reviewAnswers.some(({ value }) => value.length < minimumReviewAnswerLength)) {
     addError("Public launch blocked: review answers need specific sanitized findings.");
+  }
+
+  if (findingFields.some(({ value }) => value.length < minimumReviewAnswerLength)) {
+    addError("Public launch blocked: sanitized findings need summary, evidence, and recommended change.");
   }
 
   if (publicIssueSafeValues.length === 0 || publicIssueSafeValues.some((value) => value !== "yes")) {

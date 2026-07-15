@@ -523,6 +523,9 @@ describe("release readiness", () => {
       "evidence_gap_answer",
       "citation_gap_answer",
       "remove_before_launch_answer",
+      "summary",
+      "evidence",
+      "recommended change",
       "critical_issues_open",
       "high_issues_open",
       "manual_safety_review_complete",
@@ -546,11 +549,14 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(preflightScript).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
     expect(releaseReadiness).toContain("sanitized review answers");
+    expect(releaseReadiness).toContain("sanitized finding summary");
+    expect(releaseReadiness).toContain("recommended change");
     expect(releaseReadiness).toContain("sanitized notes");
     expect(releaseReadiness).toContain("public_issue_safe: yes");
     expect(releaseReadiness).toContain("reviewed materials");
     expect(technicalReport).toContain("completed reviewer session");
     expect(technicalReport).toContain("sanitized review answers");
+    expect(technicalReport).toContain("sanitized finding summary");
     expect(technicalReport).toContain("public_issue_safe: yes");
     expect(technicalReport).toContain("synthetic examples");
   });
