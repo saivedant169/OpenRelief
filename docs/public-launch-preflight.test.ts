@@ -415,6 +415,27 @@ recommended change: remove screenshot copy before launch
     );
   });
 
+  it("rejects duplicate launch evidence lists", () => {
+    const result = runLaunchPreflight(
+      [
+        completeReviewLog,
+        "materials reviewed:",
+        "- hosted synthetic sandbox",
+        "- docs/demo-script.md",
+        "- docs/demo-video-runbook.md",
+        "- docs/partner-review-packet.md",
+        "- docs/baseline-failure-examples.md",
+        "- packages/evals/reports/california-wildfire-v1.json",
+        "synthetic examples used:",
+        "- examples/california-wildfire/letters/denial-occupancy-proof.txt"
+      ].join("\n")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: materials reviewed must have exactly one final list.");
+    expect(result.stderr).toContain("Public launch blocked: synthetic examples used must have exactly one final list.");
+  });
+
   it("rejects private data in launch evidence lists", () => {
     const result = runLaunchPreflight(
       completeReviewLog

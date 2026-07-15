@@ -185,6 +185,14 @@ const listItemsForField = (field) => {
   return items;
 };
 
+const listFieldCount = (field) => {
+  const fieldLabel = `${field}:`.toLowerCase();
+
+  return reviewLog
+    .split(/\r?\n/)
+    .filter((line) => line.trim().toLowerCase() === fieldLabel).length;
+};
+
 const requireListItems = (label, items) => {
   const listedItems = new Set(listItemsForField(label));
 
@@ -284,6 +292,10 @@ if (errors.length === 0) {
   const reviewDateValue = requireDate("review_date", reviewDate);
 
   for (const field of reviewListFields) {
+    if (listFieldCount(field) !== 1) {
+      addError(`Public launch blocked: ${field} must have exactly one final list.`);
+    }
+
     for (const item of listItemsForField(field)) {
       addRestrictedTextErrors(field, item);
     }
