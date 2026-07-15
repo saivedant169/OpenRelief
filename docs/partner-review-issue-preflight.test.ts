@@ -190,6 +190,21 @@ describe("partner review issue preflight", () => {
     expect(result.stderr).toContain("Partner review issue contains Social Security number.");
   });
 
+  it("rejects restricted survivor details in public issue body", () => {
+    const result = runIssuePreflight({
+      ...completeIssue,
+      body: completeIssue.body.replace(
+        "notes:\n",
+        "notes:\nmedical record shown\nimmigration status copied\nscreenshot attached\n"
+      )
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review issue contains medical detail.");
+    expect(result.stderr).toContain("Partner review issue contains immigration detail.");
+    expect(result.stderr).toContain("Partner review issue contains screenshot reference.");
+  });
+
   it("rejects launch fields outside their issue sections", () => {
     const result = runIssuePreflight({
       ...completeIssue,
