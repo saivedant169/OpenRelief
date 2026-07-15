@@ -232,12 +232,18 @@ const sectionTextForHeading = (content, heading) => {
 };
 
 const materialMatches = (listedItem, requiredItem) => listedItem === requiredItem || listedItem.startsWith(`${requiredItem}:`);
+const completedReviewLogValuesForField = (field) => {
+  const pattern = new RegExp(`^${field}:[^\\S\\r\\n]*(.*)$`, "gim");
+
+  return [...reviewLog.matchAll(pattern)].map((match) => match[1].trim()).filter(Boolean);
+};
 
 if (!existsSync(reviewLogPath)) {
   fail(`Missing partner review log: ${reviewLogPath}`);
 }
 
 const reviewLog = readFileSync(reviewLogPath, "utf8");
+const recordedPublicIssueLaunchRisk = completedReviewLogValuesForField("public issue launch risk").at(-1)?.toLowerCase() ?? "";
 const issueUrl = /^public tracking issue:\s*(https:\/\/github\.com\/saivedant169\/OpenRelief\/issues\/\d+)\s*$/im.exec(
   reviewLog
 )?.[1];
@@ -327,6 +333,18 @@ const launchRiskLines = sectionTextForHeading(issueBody, "Launch risk")
 
 if (!launchRiskLines.some((line) => allowedLaunchRiskValues.has(line))) {
   addError("Partner review issue section Launch risk must include pending, critical, high, medium, low, or none.");
+}
+
+if (recordedPublicIssueLaunchRisk && !allowedLaunchRiskValues.has(recordedPublicIssueLaunchRisk)) {
+  addError("Partner review log public issue launch risk must include pending, critical, high, medium, low, or none.");
+}
+
+if (recordedPublicIssueLaunchRisk && allowedLaunchRiskValues.has(recordedPublicIssueLaunchRisk)) {
+  if (!launchRiskLines.includes(recordedPublicIssueLaunchRisk)) {
+    addError(
+      `Partner review issue Launch risk must match docs/partner-review-log.md public issue launch risk: ${recordedPublicIssueLaunchRisk}`
+    );
+  }
 }
 
 if (errors.length > 0) {

@@ -266,6 +266,28 @@ describe("partner review issue preflight", () => {
     );
   });
 
+  it("passes when recorded public issue launch risk matches issue", () => {
+    const result = runIssuePreflight(
+      {
+        ...completeIssue,
+        body: completeIssue.body.replace("\n## Launch risk\n\npending", "\n## Launch risk\n\nlow")
+      },
+      `${reviewLog}public issue launch risk: low\n`
+    );
+
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Partner review issue preflight passed.");
+  });
+
+  it("rejects recorded public issue launch risk drift", () => {
+    const result = runIssuePreflight(completeIssue, `${reviewLog}public issue launch risk: low\n`);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "Partner review issue Launch risk must match docs/partner-review-log.md public issue launch risk: low"
+    );
+  });
+
   it("rejects missing sanitized findings section", () => {
     const result = runIssuePreflight({
       ...completeIssue,
