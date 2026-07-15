@@ -32,6 +32,7 @@ const packageJsonPath = path.join(process.cwd(), "package.json");
 const sandboxPreflightPath = path.join(process.cwd(), "scripts", "hosted-sandbox-preflight.mjs");
 const demoVideoPreflightPath = path.join(process.cwd(), "scripts", "demo-video-preflight.mjs");
 const partnerReviewPreflightPath = path.join(process.cwd(), "scripts", "partner-review-preflight.mjs");
+const partnerReviewIssuePreflightPath = path.join(process.cwd(), "scripts", "partner-review-issue-preflight.mjs");
 const publicLaunchPreflightPath = path.join(process.cwd(), "scripts", "public-launch-preflight.mjs");
 const pagesWorkflowPath = path.join(process.cwd(), ".github", "workflows", "pages.yml");
 const viteConfigPath = path.join(process.cwd(), "vite.config.ts");
@@ -341,6 +342,7 @@ describe("release readiness", () => {
   it("defines partner review evidence controls", () => {
     expect(existsSync(partnerReviewLogPath)).toBe(true);
     expect(existsSync(partnerReviewPreflightPath)).toBe(true);
+    expect(existsSync(partnerReviewIssuePreflightPath)).toBe(true);
     expect(existsSync(partnerReviewIssuePath)).toBe(true);
 
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { scripts: Record<string, string> };
@@ -351,11 +353,14 @@ describe("release readiness", () => {
     const partnerReviewTargets = readFileSync(partnerReviewTargetsPath, "utf8");
     const partnerReviewLog = readFileSync(partnerReviewLogPath, "utf8");
     const partnerReviewPreflight = readFileSync(partnerReviewPreflightPath, "utf8");
+    const partnerReviewIssuePreflight = readFileSync(partnerReviewIssuePreflightPath, "utf8");
     const partnerReviewIssue = readFileSync(partnerReviewIssuePath, "utf8");
     const labels = readFileSync(labelsPath, "utf8");
 
     expect(packageJson.scripts["partner:review:preflight"]).toBe("node scripts/partner-review-preflight.mjs");
+    expect(packageJson.scripts["partner:issue:preflight"]).toBe("node scripts/partner-review-issue-preflight.mjs");
     expect(packageJson.scripts.check).toContain("npm run partner:review:preflight");
+    expect(packageJson.scripts.check).not.toContain("npm run partner:issue:preflight");
     expect(readme).toContain("Partner review log");
     expect(releaseReadiness).toContain("Partner review log");
     expect(releaseReadiness).toContain("Partner review targets");
@@ -455,6 +460,11 @@ describe("release readiness", () => {
 
     expect(partnerReviewPreflight).toContain("minimumCaseCount = 108");
     expect(partnerReviewPreflight).toContain("at least 108 passing cases");
+    expect(partnerReviewIssuePreflight).toContain("gh");
+    expect(partnerReviewIssuePreflight).toContain("issue");
+    expect(partnerReviewIssuePreflight).toContain("partner-review");
+    expect(partnerReviewIssuePreflight).toContain("workflow_match_answer:");
+    expect(partnerReviewIssuePreflight).toContain("npm run launch:preflight passes");
   });
 
   it("defines public launch decision preflight", () => {
@@ -467,7 +477,9 @@ describe("release readiness", () => {
 
     expect(packageJson.scripts["launch:preflight"]).toBe("node scripts/public-launch-preflight.mjs");
     expect(packageJson.scripts.check).not.toContain("npm run launch:preflight");
+    expect(releaseReadiness).toContain("npm run partner:issue:preflight");
     expect(releaseReadiness).toContain("npm run launch:preflight");
+    expect(releaseReadiness).toContain("authenticated `gh` CLI");
     expect(technicalReport).toContain("npm run launch:preflight");
 
     const requiredLaunchFields = [

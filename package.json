@@ -21,6 +21,7 @@
     "sandbox:preflight": "node scripts/hosted-sandbox-preflight.mjs",
     "demo:video:preflight": "node scripts/demo-video-preflight.mjs",
     "partner:review:preflight": "node scripts/partner-review-preflight.mjs",
+    "partner:issue:preflight": "node scripts/partner-review-issue-preflight.mjs",
     "launch:preflight": "node scripts/public-launch-preflight.mjs"
   },
   "dependencies": {

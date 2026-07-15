@@ -28,9 +28,10 @@ Use the Partner review issue template to track sanitized review status, but keep
 
 After manual review is recorded in `docs/partner-review-log.md`, run:
 
+- `npm run partner:issue:preflight`
 - `npm run launch:preflight`
 
-This launch gate must pass before public demo promotion. It checks completed session fields, reviewed materials, synthetic examples, sanitized review answers, sanitized notes, issue status, owner, and decision date. It is separate from `npm run check` because automated CI should stay green while partner review is still pending.
+The partner issue preflight requires authenticated `gh` CLI access and checks the public tracking issue status, labels, and launch-field placeholders. The launch gate must pass before public demo promotion. It checks completed session fields, reviewed materials, synthetic examples, sanitized review answers, sanitized notes, owner, and decision date. These commands are separate from `npm run check` because automated CI should stay green while partner review is still pending.
 
 ## Evidence Sources
 
