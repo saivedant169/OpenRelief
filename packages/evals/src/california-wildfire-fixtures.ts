@@ -1040,6 +1040,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-displacement-assistance-records",
+    title: "Request for displacement assistance records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send displacement assistance records, immediate housing receipts, family or friend stay records, and temporary housing option records."
+    ],
+    county: "Los Angeles",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-serious-needs-records",
     title: "Request for serious needs records",
     lines: [

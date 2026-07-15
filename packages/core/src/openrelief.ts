@@ -225,7 +225,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease|displacement\s+assistance\s+(?:record|receipt)|immediate\s+housing\s+(?:record|receipt)|family\s+(?:and|or)\s+friends?\s+stay\s+record|host\s+stay\s+record|temporary\s+housing\s+option\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[housing identifier removed]"
   },
   {
@@ -942,6 +942,21 @@ const requestDetectionRules: RequestDetectionRule[] = [
       "receipts for transportation and temporary lodging"
     ],
     fact: "The letter asks for temporary lodging receipts."
+  },
+  {
+    request: "displacement assistance records",
+    phrases: [
+      "displacement assistance records",
+      "displacement assistance receipts",
+      "immediate housing records",
+      "immediate housing receipts",
+      "family and friends stay records",
+      "family or friend stay records",
+      "host stay records",
+      "temporary housing option records",
+      "available housing option records"
+    ],
+    fact: "The letter asks for displacement assistance records."
   },
   {
     request: "serious needs records",
@@ -1730,6 +1745,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "debris removal records",
             "repair records",
             "supporting receipts",
+            "displacement assistance records",
             "serious needs records",
             "generator rental receipts",
             "temporary power equipment receipts",

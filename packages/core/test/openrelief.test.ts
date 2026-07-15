@@ -814,6 +814,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[housing identifier removed]");
   });
 
+  it("redacts displacement assistance record identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Displacement assistance record number DAR-123456 should not stay in notes.",
+        "Immediate housing receipt number IHR-123456 should not stay in notes.",
+        "Family or friend stay record number FFS-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("DAR-123456");
+    expect(redacted).not.toContain("IHR-123456");
+    expect(redacted).not.toContain("FFS-123456");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
   it("redacts rental lease identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Rental lease number LEA-123456 should not stay in notes.");
 
@@ -3403,6 +3418,17 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for temporary lodging receipts.");
   });
 
+  it("extracts displacement assistance evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send displacement assistance records, immediate housing receipts, family or friend stay records, and temporary housing option records."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("displacement assistance records");
+    expect(result.facts).toContain("The letter asks for displacement assistance records.");
+  });
+
   it("extracts serious needs evidence requests", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -3496,6 +3522,12 @@ describe("OpenRelief domain core", () => {
     );
     expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
     expect(packet.groups.find((group) => group.category === "communications")?.items[0]?.status).toBe("missing");
+  });
+
+  it("marks requested displacement assistance evidence as missing", () => {
+    const packet = buildEvidencePacket(["displacement assistance records"]);
+
+    expect(packet.groups.find((group) => group.category === "receipts")?.items[0]?.status).toBe("missing");
   });
 
   it("marks requested serious needs evidence as missing", () => {
