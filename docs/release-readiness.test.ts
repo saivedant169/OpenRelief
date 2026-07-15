@@ -575,6 +575,7 @@ describe("release readiness", () => {
     expect(releaseReadiness).toContain("recommended change");
     expect(releaseReadiness).toContain("sanitized notes");
     expect(releaseReadiness).toContain("final public issue launch risk");
+    expect(releaseReadiness).toContain("final public issue launch risk (`low` or `none`)");
     expect(releaseReadiness).toContain("public_issue_safe: yes");
     expect(releaseReadiness).toContain("recent review date");
     expect(releaseReadiness).toContain("reviewed materials");
@@ -584,6 +585,7 @@ describe("release readiness", () => {
     expect(technicalReport).toContain("recent review date");
     expect(technicalReport).toContain("public_issue_safe: yes");
     expect(technicalReport).toContain("final public issue launch risk");
+    expect(technicalReport).toContain("final public issue launch risk (`low` or `none`)");
     expect(technicalReport).toContain("synthetic examples");
   });
 
