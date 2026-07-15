@@ -56,7 +56,8 @@ const requireDate = (field, value) => {
   const match = /^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})$/.exec(value);
 
   if (!match?.groups) {
-    fail(`Partner review field must use YYYY-MM-DD: ${field}`);
+    addError(`Partner review field must use YYYY-MM-DD: ${field}`);
+    return;
   }
 
   const year = Number(match.groups.year);
@@ -65,14 +66,14 @@ const requireDate = (field, value) => {
   const date = new Date(Date.UTC(year, month - 1, day));
 
   if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
-    fail(`Partner review field must use YYYY-MM-DD: ${field}`);
+    addError(`Partner review field must use YYYY-MM-DD: ${field}`);
   }
 };
 
 const requireListItems = (label, items) => {
   for (const item of items) {
     if (!reviewLog.includes(`- ${item}`)) {
-      fail(`Public launch blocked: ${label} missing ${item}.`);
+      addError(`Public launch blocked: ${label} missing ${item}.`);
     }
   }
 };
@@ -92,51 +93,54 @@ const decisionOwner = completedValue("decision_owner");
 const decisionDate = completedValue("decision_date");
 const decisionNotes = completedValue("notes");
 
+if (errors.length === 0) {
+  requireListItems("materials reviewed", requiredReviewedMaterials);
+  requireListItems("synthetic examples used", requiredSyntheticExamples);
+  requireDate("review_date", reviewDate);
+
+  if (reviewId.length < 3) {
+    addError("Public launch blocked: review_id must identify the review session.");
+  }
+
+  if (reviewerRole.length < 3 || reviewerOrganizationType.length < 3) {
+    addError("Public launch blocked: reviewer role and organization type are required.");
+  }
+
+  if (consentRecord.length < 3 || noteStorageLocation.length < 3) {
+    addError("Public launch blocked: consent record and note storage location are required.");
+  }
+
+  if (!normalizedSanitizedValues.has(sanitizationStatus)) {
+    addError("Public launch blocked: sanitization status must confirm sanitized notes.");
+  }
+
+  if (!normalizedNoValues.has(criticalIssuesOpen)) {
+    addError("Public launch blocked: critical issues remain open.");
+  }
+
+  if (!normalizedResolvedHighValues.has(highIssuesOpen)) {
+    addError("Public launch blocked: high issues must be accepted or closed.");
+  }
+
+  if (manualSafetyReviewComplete !== "yes") {
+    addError("Public launch blocked: manual safety review is not complete.");
+  }
+
+  if (readyForPublicDemo !== "yes") {
+    addError("Public launch blocked: ready_for_public_demo must be yes.");
+  }
+
+  if (decisionOwner !== "Saivedant Hava") {
+    addError("Public launch blocked: decision_owner must be Saivedant Hava.");
+  }
+
+  requireDate("decision_date", decisionDate);
+
+  if (decisionNotes.length < 10) {
+    addError("Public launch blocked: launch decision notes are required.");
+  }
+}
+
 failIfErrors();
-requireListItems("materials reviewed", requiredReviewedMaterials);
-requireListItems("synthetic examples used", requiredSyntheticExamples);
-requireDate("review_date", reviewDate);
-
-if (reviewId.length < 3) {
-  fail("Public launch blocked: review_id must identify the review session.");
-}
-
-if (reviewerRole.length < 3 || reviewerOrganizationType.length < 3) {
-  fail("Public launch blocked: reviewer role and organization type are required.");
-}
-
-if (consentRecord.length < 3 || noteStorageLocation.length < 3) {
-  fail("Public launch blocked: consent record and note storage location are required.");
-}
-
-if (!normalizedSanitizedValues.has(sanitizationStatus)) {
-  fail("Public launch blocked: sanitization status must confirm sanitized notes.");
-}
-
-if (!normalizedNoValues.has(criticalIssuesOpen)) {
-  fail("Public launch blocked: critical issues remain open.");
-}
-
-if (!normalizedResolvedHighValues.has(highIssuesOpen)) {
-  fail("Public launch blocked: high issues must be accepted or closed.");
-}
-
-if (manualSafetyReviewComplete !== "yes") {
-  fail("Public launch blocked: manual safety review is not complete.");
-}
-
-if (readyForPublicDemo !== "yes") {
-  fail("Public launch blocked: ready_for_public_demo must be yes.");
-}
-
-if (decisionOwner !== "Saivedant Hava") {
-  fail("Public launch blocked: decision_owner must be Saivedant Hava.");
-}
-
-requireDate("decision_date", decisionDate);
-
-if (decisionNotes.length < 10) {
-  fail("Public launch blocked: launch decision notes are required.");
-}
 
 console.log("Public launch preflight passed.");

@@ -78,6 +78,22 @@ describe("public launch preflight", () => {
     expect(result.stderr).toContain("Partner review field incomplete: notes");
   });
 
+  it("reports multiple launch blockers together", () => {
+    const result = runLaunchPreflight(
+      completeReviewLog
+        .replace("- docs/demo-video-runbook.md\n", "")
+        .replace("review_date: 2026-07-15", "review_date: 2026-02-31")
+        .replace("critical_issues_open: no", "critical_issues_open: yes")
+        .replace("decision_owner: Saivedant Hava", "decision_owner: reviewer")
+    );
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Public launch blocked: materials reviewed missing docs/demo-video-runbook.md.");
+    expect(result.stderr).toContain("Partner review field must use YYYY-MM-DD: review_date");
+    expect(result.stderr).toContain("Public launch blocked: critical issues remain open.");
+    expect(result.stderr).toContain("Public launch blocked: decision_owner must be Saivedant Hava.");
+  });
+
   it("rejects missing reviewed materials", () => {
     const result = runLaunchPreflight(completeReviewLog.replace("- docs/demo-video-runbook.md\n", ""));
 
