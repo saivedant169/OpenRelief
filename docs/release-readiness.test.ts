@@ -351,6 +351,7 @@ describe("release readiness", () => {
     expect(releaseReadiness).toContain("Partner review issue template");
     expect(technicalReport).toContain("Partner review log");
     expect(partnerOutreach).toContain("Partner review log");
+    expect(partnerOutreach).toContain("partner-review");
     expect(labels).toContain("partner-review");
     expect(partnerReviewIssue).toContain("No real survivor PII");
     expect(partnerReviewIssue).toContain("synthetic examples only");

@@ -60,6 +60,7 @@ Use:
 - `policy-source`,
 - `evals`,
 - `accessibility`,
+- `partner-review`,
 - `local-first`,
 - `V1`.
 
