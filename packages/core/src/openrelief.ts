@@ -275,7 +275,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:damage\s+(?:record|documentation|photo)|(?:private|privately\s+owned|privately-owned)\s+(?:road|bridge|dock)\s+(?:record|damage\s+record|repair\s+record)|private\s+access\s+damage\s+record|sole\s+access\s+damage\s+record|supporting\s+(?:document|receipt))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:damage\s+(?:records?|documentation|photos?)|(?:private|privately\s+owned|privately-owned)\s+(?:road|bridge|dock)\s+(?:records?|damage\s+records?|repair\s+records?)|private\s+access\s+(?:records?|damage\s+records?)|sole\s+access\s+damage\s+records?|(?:bridge|dock)\s+repair\s+estimates?|supporting\s+(?:documents?|receipts?))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[damage evidence identifier removed]"
   },
   {

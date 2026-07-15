@@ -1425,6 +1425,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[damage evidence identifier removed]");
   });
 
+  it("redacts expanded private access identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Private access records number PAR-A1B2C3 should not stay in notes.",
+        "Private access damage records number PAD-A1B2C3 should not stay in notes.",
+        "Privately-owned road repair records number PRR-A1B2C3 should not stay in notes.",
+        "Private road repair records number RRR-A1B2C3 should not stay in notes.",
+        "Private dock repair records number PDR-A1B2C3 should not stay in notes.",
+        "Bridge repair estimates number BRE-A1B2C3 should not stay in notes.",
+        "Dock repair estimates number DRE-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("PAR-A1B2C3");
+    expect(redacted).not.toContain("PAD-A1B2C3");
+    expect(redacted).not.toContain("PRR-A1B2C3");
+    expect(redacted).not.toContain("RRR-A1B2C3");
+    expect(redacted).not.toContain("PDR-A1B2C3");
+    expect(redacted).not.toContain("BRE-A1B2C3");
+    expect(redacted).not.toContain("DRE-A1B2C3");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
   it("redacts supporting document identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Supporting document ID SDOC-123456 should not stay in notes.");
 
