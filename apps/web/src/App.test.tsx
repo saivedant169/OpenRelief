@@ -616,6 +616,18 @@ describe("OpenRelief web workflow", () => {
     expect(archive[0].letterText).toContain("proof of occupancy");
   });
 
+  it("caps saved case archive text before import", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Saved cases JSON"), {
+      target: { value: "x".repeat(100_001) }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /import saved cases/i }));
+
+    expect(screen.getByText("Saved cases JSON too long. Keep archives under 100,000 characters.")).toBeInTheDocument();
+    expect(screen.getByText("No saved cases")).toBeInTheDocument();
+  });
+
   it("imports saved case JSON", async () => {
     const archive = JSON.stringify([
       {

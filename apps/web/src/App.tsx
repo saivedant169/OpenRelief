@@ -58,9 +58,11 @@ const acceptedFileTypes = [
 const maxUploadSizeBytes = 10 * 1024 * 1024;
 const maxLetterTextLength = 50_000;
 const maxOptionalTextLength = 10_000;
+const maxCaseArchiveTextLength = 100_000;
 const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text below.";
 const imageExtractionMessage = "Could not extract image text. Paste extracted text below.";
 const letterLengthMessage = "Letter text too long. Keep extracted text under 50,000 characters.";
+const caseArchiveLengthMessage = "Saved cases JSON too long. Keep archives under 100,000 characters.";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -478,6 +480,11 @@ export const App = () => {
   };
 
   const handleImportSavedCases = () => {
+    if (caseArchiveText.length > maxCaseArchiveTextLength) {
+      setCaseArchiveError(caseArchiveLengthMessage);
+      return;
+    }
+
     try {
       const importedCases = parseSavedCasesJson(caseArchiveText);
       if (importedCases.length === 0) {
@@ -718,9 +725,10 @@ export const App = () => {
                 <span>Saved cases JSON</span>
                 <textarea
                   className="case-archive-textarea"
+                  maxLength={maxCaseArchiveTextLength}
                   value={caseArchiveText}
                   onChange={(event) => {
-                    setCaseArchiveText(event.target.value);
+                    setCaseArchiveText(limitText(event.target.value, maxCaseArchiveTextLength + 1));
                     setCaseArchiveError("");
                   }}
                 />
