@@ -1013,6 +1013,20 @@ const requestCases = [
     }
   }),
   buildCase({
+    id: "ca-wildfire-rfi-miscellaneous-item-records",
+    title: "Request for miscellaneous item records",
+    lines: [
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send miscellaneous item receipts, generator receipts, chainsaw rental receipts, and dehumidifier receipts."
+    ],
+    county: "Sonoma",
+    expected: {
+      letterType: "request_for_information",
+      needsHumanReview: false
+    }
+  }),
+  buildCase({
     id: "ca-wildfire-rfi-personal-property-records",
     title: "Request for personal property records",
     lines: [

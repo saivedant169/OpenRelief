@@ -991,6 +991,23 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts miscellaneous item receipt identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Generator purchase receipt number GPR-123456 should not stay in notes.",
+        "Chainsaw rental receipt number CSR-123456 should not stay in notes.",
+        "Dehumidifier receipt number DHR-123456 should not stay in notes.",
+        "Miscellaneous item receipt number MIR-123456 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("GPR-123456");
+    expect(redacted).not.toContain("CSR-123456");
+    expect(redacted).not.toContain("DHR-123456");
+    expect(redacted).not.toContain("MIR-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts cleanup receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
@@ -3180,6 +3197,17 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for temporary power equipment receipts.");
   });
 
+  it("extracts miscellaneous item evidence requests", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send miscellaneous item receipts, generator receipts, chainsaw rental receipts, and dehumidifier receipts."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("miscellaneous item records");
+    expect(result.facts).toContain("The letter asks for miscellaneous item records.");
+  });
+
   it("extracts personal property evidence requests", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
@@ -3228,6 +3256,7 @@ describe("OpenRelief domain core", () => {
     const packet = buildEvidencePacket([
       "generator rental receipts",
       "temporary power equipment receipts",
+      "miscellaneous item records",
       "personal property records",
       "child care records",
       "moving and storage records"

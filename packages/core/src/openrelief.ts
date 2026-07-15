@@ -255,7 +255,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:generator\s+rental\s+receipt|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|clean\s+and\s+sanitize\s+receipt|cleanup\s+(?:supply|material)\s+receipt|paid\s+cleanup\s+help\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:generator\s+(?:purchase\s+)?receipt|generator\s+rental\s+receipt|chainsaw\s+(?:rental\s+)?receipt|dehumidifier\s+(?:rental\s+)?receipt|miscellaneous\s+item\s+(?:record|receipt)|temporary\s+power\s+equipment\s+receipt|cleanup\s+receipt|clean\s+and\s+sanitize\s+receipt|cleanup\s+(?:supply|material)\s+receipt|paid\s+cleanup\s+help\s+receipt|replacement\s+(?:item\s+)?receipt|debris\s+removal\s+record|smoke\s+damage\s+record)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[recovery expense identifier removed]"
   },
   {
@@ -1029,6 +1029,25 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for temporary power equipment receipts."
   },
   {
+    request: "miscellaneous item records",
+    phrases: [
+      "miscellaneous item records",
+      "miscellaneous item receipts",
+      "generator receipts",
+      "generator receipt",
+      "generator purchase receipts",
+      "chainsaw receipts",
+      "chainsaw receipt",
+      "chainsaw rental receipts",
+      "chainsaw rental receipt",
+      "dehumidifier receipts",
+      "dehumidifier receipt",
+      "dehumidifier rental receipts",
+      "dehumidifier rental receipt"
+    ],
+    fact: "The letter asks for miscellaneous item records."
+  },
+  {
     request: "replacement item receipts",
     phrases: ["replacement household item receipts", "receipts for replacement household items"],
     fact: "The letter asks for replacement item receipts."
@@ -1647,6 +1666,7 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "supporting receipts",
             "generator rental receipts",
             "temporary power equipment receipts",
+            "miscellaneous item records",
             "replacement item receipts",
             "personal property records",
             "child care records",
