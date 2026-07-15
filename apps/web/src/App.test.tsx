@@ -99,6 +99,30 @@ describe("OpenRelief web workflow", () => {
     expect(screen.getByText("Ready to review")).toBeInTheDocument();
   });
 
+  it("caps manual letter text before analysis", async () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "x".repeat(50_001) }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Letter text too long. Keep extracted text under 50,000 characters."
+    );
+    expect(screen.queryByRole("region", { name: "Letter analysis results" })).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText("Extracted letter text"), {
+      target: { value: "FEMA Notice\nYour application is approved for rental assistance." }
+    });
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+
+    expect(
+      screen.queryByText("Letter text too long. Keep extracted text under 50,000 characters.")
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Approval" })).toBeInTheDocument();
+  });
+
   it("shows send-by date deadlines from uploaded letters", async () => {
     render(<App />);
 

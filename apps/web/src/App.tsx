@@ -56,8 +56,10 @@ const acceptedFileTypes = [
   { extensions: [".jpg", ".jpeg"], mimeTypes: ["image/jpeg"] }
 ];
 const maxUploadSizeBytes = 10 * 1024 * 1024;
+const maxLetterTextLength = 50_000;
 const pdfExtractionMessage = "Could not extract PDF text. Paste extracted text below.";
 const imageExtractionMessage = "Could not extract image text. Paste extracted text below.";
+const letterLengthMessage = "Letter text too long. Keep extracted text under 50,000 characters.";
 const letterTypeLabels: Record<LetterType, string> = {
   approval: "Approval",
   denial: "Claim denial",
@@ -332,6 +334,7 @@ export const App = () => {
   const [activeSavedCaseId, setActiveSavedCaseId] = useState<string | null>(null);
   const [fileName, setFileName] = useState(savedDraft.fileName ?? sampleFileName);
   const [fileError, setFileError] = useState("");
+  const [letterError, setLetterError] = useState("");
   const [caseArchiveText, setCaseArchiveText] = useState("");
   const [caseArchiveError, setCaseArchiveError] = useState("");
 
@@ -394,6 +397,14 @@ export const App = () => {
   }, [analysis, checklist]);
 
   const handleAnalyze = () => {
+    if (letterText.length > maxLetterTextLength) {
+      setLetterError(letterLengthMessage);
+      setAnalysis(null);
+      setExportText("");
+      return;
+    }
+
+    setLetterError("");
     setAnalysis(analyzeLetter(letterText));
     setExportText("");
     setClearArmed(false);
@@ -512,6 +523,7 @@ export const App = () => {
     setAvailableEvidenceText(savedCase.availableEvidenceText);
     setFileName(savedCase.fileName);
     setFileError("");
+    setLetterError("");
     setAnalysis(analyzeLetter(savedCase.letterText));
     setExportText("");
     setClearArmed(false);
@@ -534,6 +546,7 @@ export const App = () => {
     setActiveSavedCaseId(null);
     setFileName("No file selected");
     setFileError("");
+    setLetterError("");
     setCaseArchiveText("");
     setCaseArchiveError("");
     clearOpenReliefLocalStorage();
@@ -567,6 +580,7 @@ export const App = () => {
     setActiveSavedCaseId(null);
     setAnalysis(null);
     setExportText("");
+    setLetterError("");
     if (file.type.startsWith("text/") || hasFileExtension(file, textFileExtensions)) {
       setLetterText(await readTextFile(file));
       return;
@@ -746,6 +760,7 @@ export const App = () => {
                   setClearArmed(false);
                   setActiveSavedCaseId(null);
                   setFileError("");
+                  setLetterError("");
                 }}
               >
                 Load sample
@@ -835,15 +850,22 @@ export const App = () => {
             </div>
             <textarea
               aria-label="Extracted letter text"
+              maxLength={maxLetterTextLength}
               value={letterText}
               onChange={(event) => {
                 setLetterText(event.target.value);
                 setAnalysis(null);
                 setExportText("");
+                setLetterError("");
                 setClearArmed(false);
                 setActiveSavedCaseId(null);
               }}
             />
+            {letterError ? (
+              <p className="upload-error" role="alert">
+                {letterError}
+              </p>
+            ) : null}
             <div className="panel-footer">
               <span>Local draft, not submitted anywhere</span>
               <button className="primary-action" type="button" onClick={handleAnalyze}>
