@@ -185,7 +185,8 @@ a:hover {
   color: #4b5b6b;
 }
 
-.queue-search {
+.queue-search,
+.queue-sort {
   display: grid;
   gap: 6px;
   margin-top: 12px;
@@ -194,7 +195,8 @@ a:hover {
   font-weight: 650;
 }
 
-.queue-search input {
+.queue-search input,
+.queue-sort select {
   min-height: 44px;
   padding: 9px 10px;
   color: #1d2733;

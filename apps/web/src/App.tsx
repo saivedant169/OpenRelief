@@ -108,6 +108,8 @@ type ChecklistStatus = "todo" | "done";
 
 type ChecklistStatusMap = Record<string, ChecklistStatus>;
 
+type CaseQueueSort = "updated" | "deadline" | "missing";
+
 type SavedCaseSummary = {
   id: string;
   title: string;
@@ -212,6 +214,29 @@ const caseQueueStatus = (savedCase: SavedCaseSummary): string => {
   }
 
   return "In progress";
+};
+
+const savedCaseUpdatedTime = (savedCase: SavedCaseSummary): number => {
+  const timestamp = Date.parse(savedCase.updatedAt);
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+};
+
+const compareSavedCases = (sort: CaseQueueSort, left: SavedCaseSummary, right: SavedCaseSummary): number => {
+  if (sort === "deadline") {
+    const deadlineDelta = Number(right.deadlines.length > 0) - Number(left.deadlines.length > 0);
+    if (deadlineDelta !== 0) {
+      return deadlineDelta;
+    }
+  }
+
+  if (sort === "missing") {
+    const missingDelta = right.missingEvidence.length - left.missingEvidence.length;
+    if (missingDelta !== 0) {
+      return missingDelta;
+    }
+  }
+
+  return savedCaseUpdatedTime(right) - savedCaseUpdatedTime(left);
 };
 
 const redactDeadline = (deadline: Deadline): Deadline => ({
@@ -398,6 +423,7 @@ export const App = () => {
   const [caseArchiveError, setCaseArchiveError] = useState("");
   const [caseQueueSearch, setCaseQueueSearch] = useState("");
   const [caseQueueEscalationsOnly, setCaseQueueEscalationsOnly] = useState(false);
+  const [caseQueueSort, setCaseQueueSort] = useState<CaseQueueSort>("updated");
 
   useEffect(() => {
     if (letterText === "" && fileName === "No file selected") {
@@ -722,8 +748,8 @@ export const App = () => {
         savedCase.deadlines[0]?.text ?? "",
         ...savedCase.riskFlags.map(formatRiskFlag)
       ].some((value) => value.toLowerCase().includes(search));
-    });
-  }, [caseQueueEscalationsOnly, caseQueueSearch, savedCases]);
+    }).sort((left, right) => compareSavedCases(caseQueueSort, left, right));
+  }, [caseQueueEscalationsOnly, caseQueueSearch, caseQueueSort, savedCases]);
   const activeSavedCase = savedCases.find((savedCase) => savedCase.id === activeSavedCaseId) ?? null;
   const currentCaseId = activeSavedCase?.id ?? nextLocalCaseId(savedCases);
   const activeCaseSourceIds = activeSavedCase
@@ -798,6 +824,18 @@ export const App = () => {
                     value={caseQueueSearch}
                     onChange={(event) => setCaseQueueSearch(event.target.value)}
                   />
+                </label>
+                <label className="queue-sort">
+                  <span>Sort cases</span>
+                  <select
+                    aria-label="Sort saved cases"
+                    value={caseQueueSort}
+                    onChange={(event) => setCaseQueueSort(event.target.value as CaseQueueSort)}
+                  >
+                    <option value="updated">Last updated</option>
+                    <option value="deadline">Deadline</option>
+                    <option value="missing">Missing evidence</option>
+                  </select>
                 </label>
                 <label className="queue-filter">
                   <input

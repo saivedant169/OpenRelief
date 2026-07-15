@@ -421,6 +421,14 @@ describe("OpenRelief web workflow", () => {
 
     const queue = screen.getByRole("region", { name: "Local case queue" });
     const queueSearch = within(queue).getByLabelText("Search saved cases");
+    await userEvent.selectOptions(within(queue).getByLabelText("Sort saved cases"), "deadline");
+
+    expect(
+      within(queue)
+        .getAllByRole("button", { name: /Open saved case/ })
+        .map((button) => button.getAttribute("aria-label"))
+    ).toEqual(["Open saved case OR-CA-2026-001", "Open saved case OR-CA-2026-002"]);
+
     await userEvent.click(within(queue).getByRole("checkbox", { name: "Show escalation cases only" }));
 
     expect(within(queue).getByText("Saved case: Claim denial")).toBeInTheDocument();
