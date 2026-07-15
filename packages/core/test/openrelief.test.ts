@@ -1264,6 +1264,25 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[moving storage identifier removed]");
   });
 
+  it("redacts expanded moving and storage identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Moving and storage records number MSR-A1B2C3 should not stay in notes.",
+        "Moving and storage receipts number MSR-B1C2D3 should not stay in notes.",
+        "Moving expense records number MER-A1B2C3 should not stay in notes.",
+        "Storage expense records number SER-A1B2C3 should not stay in notes.",
+        "Moving and storing personal property number MSP-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("MSR-A1B2C3");
+    expect(redacted).not.toContain("MSR-B1C2D3");
+    expect(redacted).not.toContain("MER-A1B2C3");
+    expect(redacted).not.toContain("SER-A1B2C3");
+    expect(redacted).not.toContain("MSP-A1B2C3");
+    expect(redacted).toContain("[moving storage identifier removed]");
+  });
+
   it("redacts funeral record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [

@@ -260,7 +260,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:moving\s+(?:receipt|expense\s+record|truck\s+rental\s+receipt)|storage\s+(?:receipt|unit\s+receipt|expense\s+record)|moving\s+and\s+storage\s+(?:receipt|expense\s+record))\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:moving\s+(?:receipts?|expense\s+records?|truck\s+rental\s+receipts?)|storage\s+(?:receipts?|unit\s+receipts?|expense\s+records?)|moving\s+and\s+storage\s+(?:records?|receipts?|expense\s+records?)|moving\s+and\s+storing\s+personal\s+property)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[moving storage identifier removed]"
   },
   {
