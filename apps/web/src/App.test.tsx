@@ -233,7 +233,10 @@ describe("OpenRelief web workflow", () => {
   it("shows manual paste fallback tied to editable letter text", () => {
     render(<App />);
 
-    expect(screen.getByText("Upload or paste letter (PDF, JPG, PNG, TXT)")).toBeInTheDocument();
+    const uploadRegion = screen.getByRole("region", { name: "Upload letter" });
+
+    expect(within(uploadRegion).getByText("Upload or paste letter (PDF, JPG, PNG, TXT)")).toBeInTheDocument();
+    expect(within(uploadRegion).getByText("Your files stay on this device unless you export them.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Paste text manually" })).toHaveAttribute(
       "href",
       "#extracted-letter-text"

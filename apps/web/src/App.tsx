@@ -1348,6 +1348,7 @@ export const App = () => {
             </div>
             <div>
               <strong>Upload or paste letter (PDF, JPG, PNG, TXT)</strong>
+              <p>Your files stay on this device unless you export them.</p>
               <p>PDF text and image OCR run locally in this browser.</p>
               <p>Drop PDF, JPG, PNG, or TXT here, or choose file.</p>
             </div>
