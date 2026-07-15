@@ -9,6 +9,7 @@ const scriptPath = path.join(repoRoot, "scripts", "partner-review-preflight.mjs"
 const evidencePaths = [
   "docs/demo-script.md",
   "docs/demo-video-runbook.md",
+  "docs/partner-review-packet.md",
   "docs/baseline-failure-examples.md",
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
@@ -29,6 +30,7 @@ materials reviewed:
 - hosted synthetic sandbox
 - docs/demo-script.md
 - docs/demo-video-runbook.md
+- docs/partner-review-packet.md
 - docs/baseline-failure-examples.md
 - packages/evals/reports/california-wildfire-v1.json
 synthetic examples used:
@@ -91,12 +93,28 @@ Listos California
 California Volunteers
 docs/partner-review-log.md
 `;
+const packet = `# Partner Review Packet
+
+No real survivor PII
+
+https://saivedant169.github.io/OpenRelief/
+https://github.com/saivedant169/OpenRelief/issues/1
+docs/demo-script.md
+docs/demo-video-runbook.md
+docs/baseline-failure-examples.md
+packages/evals/reports/california-wildfire-v1.json
+examples/california-wildfire/letters/denial-occupancy-proof.txt
+npm run partner:review:preflight
+npm run partner:issue:preflight
+npm run launch:preflight
+Do not replace empty review fields with placeholders.
+`;
 const baselineFailures = "missing_human_escalation\n";
 const demoRunbook = "No real survivor PII\n";
 const passingReport = JSON.stringify({ caseCount: 108, metrics: { passedCount: 108, failedCount: 0 } });
 
 const runPartnerPreflight = (
-  overrides: Partial<Record<"log" | "outreach" | "targets" | "baseline" | "demo" | "report", string>> & {
+  overrides: Partial<Record<"log" | "outreach" | "targets" | "packet" | "baseline" | "demo" | "report", string>> & {
     omitEvidencePaths?: string[];
   } = {}
 ) => {
@@ -109,6 +127,7 @@ const runPartnerPreflight = (
     writeFileSync(path.join(tempRoot, "docs", "partner-review-log.md"), overrides.log ?? reviewLog);
     writeFileSync(path.join(tempRoot, "docs", "partner-outreach.md"), overrides.outreach ?? outreach);
     writeFileSync(path.join(tempRoot, "docs", "partner-review-targets.md"), overrides.targets ?? targets);
+    writeFileSync(path.join(tempRoot, "docs", "partner-review-packet.md"), overrides.packet ?? packet);
     writeFileSync(path.join(tempRoot, "docs", "baseline-failure-examples.md"), overrides.baseline ?? baselineFailures);
     writeFileSync(path.join(tempRoot, "docs", "demo-video-runbook.md"), overrides.demo ?? demoRunbook);
     writeFileSync(path.join(tempRoot, "packages", "evals", "reports", "california-wildfire-v1.json"), overrides.report ?? passingReport);
@@ -212,6 +231,15 @@ describe("partner review preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Partner review targets missing: Disaster Legal Assistance Collaborative");
+  });
+
+  it("rejects missing partner review packet evidence", () => {
+    const result = runPartnerPreflight({
+      packet: packet.replace("npm run partner:issue:preflight\n", "")
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review packet missing: npm run partner:issue:preflight");
   });
 
   it("rejects failing eval report", () => {

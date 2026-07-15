@@ -18,6 +18,7 @@ materials reviewed:
 - hosted synthetic sandbox
 - docs/demo-script.md
 - docs/demo-video-runbook.md
+- docs/partner-review-packet.md
 - docs/baseline-failure-examples.md
 - packages/evals/reports/california-wildfire-v1.json
 synthetic examples used:

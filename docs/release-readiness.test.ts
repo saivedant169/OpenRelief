@@ -432,6 +432,7 @@ describe("release readiness", () => {
       "- hosted synthetic sandbox",
       "- docs/demo-script.md",
       "- docs/demo-video-runbook.md",
+      "- docs/partner-review-packet.md",
       "- docs/baseline-failure-examples.md",
       "- packages/evals/reports/california-wildfire-v1.json",
       "synthetic examples used:",
@@ -483,6 +484,7 @@ describe("release readiness", () => {
     expect(partnerReviewIssuePreflight).toContain("issue");
     expect(partnerReviewIssuePreflight).toContain("partner-review");
     expect(partnerReviewIssuePreflight).toContain("workflow_match_answer:");
+    expect(partnerReviewIssuePreflight).toContain("docs/partner-review-packet.md");
     expect(partnerReviewIssuePreflight).toContain("npm run launch:preflight passes");
   });
 
@@ -534,6 +536,7 @@ describe("release readiness", () => {
     expect(preflightScript).toContain("requiredReviewedMaterials");
     expect(preflightScript).toContain("requiredSyntheticExamples");
     expect(preflightScript).toContain("docs/demo-video-runbook.md");
+    expect(preflightScript).toContain("docs/partner-review-packet.md");
     expect(preflightScript).toContain("packages/evals/reports/california-wildfire-v1.json");
     expect(preflightScript).toContain("examples/california-wildfire/letters/denial-occupancy-proof.txt");
     expect(releaseReadiness).toContain("sanitized review answers");

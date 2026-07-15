@@ -7,6 +7,7 @@ const files = {
   outreach: path.join(root, "docs", "partner-outreach.md"),
   baselineFailures: path.join(root, "docs", "baseline-failure-examples.md"),
   demoRunbook: path.join(root, "docs", "demo-video-runbook.md"),
+  packet: path.join(root, "docs", "partner-review-packet.md"),
   report: path.join(root, "packages", "evals", "reports", "california-wildfire-v1.json"),
   targets: path.join(root, "docs", "partner-review-targets.md")
 };
@@ -24,6 +25,7 @@ const requiredLogText = [
   "- hosted synthetic sandbox",
   "- docs/demo-script.md",
   "- docs/demo-video-runbook.md",
+  "- docs/partner-review-packet.md",
   "- docs/baseline-failure-examples.md",
   "- packages/evals/reports/california-wildfire-v1.json",
   "synthetic examples used:",
@@ -83,10 +85,26 @@ const requiredTargetsText = [
   "California Volunteers",
   "docs/partner-review-log.md"
 ];
+const requiredPacketText = [
+  "Partner Review Packet",
+  "No real survivor PII",
+  "https://saivedant169.github.io/OpenRelief/",
+  "https://github.com/saivedant169/OpenRelief/issues/1",
+  "docs/demo-script.md",
+  "docs/demo-video-runbook.md",
+  "docs/baseline-failure-examples.md",
+  "packages/evals/reports/california-wildfire-v1.json",
+  "examples/california-wildfire/letters/denial-occupancy-proof.txt",
+  "npm run partner:review:preflight",
+  "npm run partner:issue:preflight",
+  "npm run launch:preflight",
+  "Do not replace empty review fields with placeholders."
+];
 const requiredReviewedMaterials = [
   "hosted synthetic sandbox",
   "docs/demo-script.md",
   "docs/demo-video-runbook.md",
+  "docs/partner-review-packet.md",
   "docs/baseline-failure-examples.md",
   "packages/evals/reports/california-wildfire-v1.json"
 ];
@@ -94,6 +112,7 @@ const requiredSyntheticExamples = ["examples/california-wildfire/letters/denial-
 const requiredEvidencePaths = [
   "docs/demo-script.md",
   "docs/demo-video-runbook.md",
+  "docs/partner-review-packet.md",
   "docs/baseline-failure-examples.md",
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
@@ -169,6 +188,7 @@ for (const [label, filePath] of Object.entries(files)) {
 const reviewLog = readFileSync(files.log, "utf8");
 const outreach = readFileSync(files.outreach, "utf8");
 const targets = readFileSync(files.targets, "utf8");
+const packet = readFileSync(files.packet, "utf8");
 const baselineFailures = readFileSync(files.baselineFailures, "utf8");
 const demoRunbook = readFileSync(files.demoRunbook, "utf8");
 const report = JSON.parse(readFileSync(files.report, "utf8"));
@@ -192,6 +212,12 @@ for (const requiredText of requiredOutreachText) {
 for (const requiredText of requiredTargetsText) {
   if (!targets.includes(requiredText)) {
     fail(`Partner review targets missing: ${requiredText}`);
+  }
+}
+
+for (const requiredText of requiredPacketText) {
+  if (!packet.includes(requiredText)) {
+    fail(`Partner review packet missing: ${requiredText}`);
   }
 }
 

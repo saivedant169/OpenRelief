@@ -20,6 +20,7 @@ const completeIssue = {
 hosted synthetic sandbox
 docs/demo-script.md
 docs/demo-video-runbook.md
+docs/partner-review-packet.md
 docs/baseline-failure-examples.md
 packages/evals/reports/california-wildfire-v1.json
 examples/california-wildfire/letters/denial-occupancy-proof.txt
