@@ -1060,6 +1060,13 @@ export const App = () => {
                               Mark {item.title} done
                             </label>
                             <span>{item.reason}</span>
+                            <span className="item-sources">
+                              Source:{" "}
+                              {item.sourceIds
+                                .map((sourceId) => sourceById.get(sourceId)?.title)
+                                .filter((title): title is string => Boolean(title))
+                                .join(", ")}
+                            </span>
                           </li>
                         ))}
                       </ul>

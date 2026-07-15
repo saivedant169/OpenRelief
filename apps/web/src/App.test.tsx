@@ -569,14 +569,20 @@ describe("OpenRelief web workflow", () => {
     await userEvent.click(screen.getByRole("button", { name: "Open saved case OR-CA-2026-001" }));
 
     const detail = screen.getByRole("region", { name: "Case detail" });
+    const checklistSection = within(detail).getByRole("heading", { name: "Checklist" }).closest("section");
 
     expect(within(detail).getByRole("heading", { name: "Timeline" })).toBeInTheDocument();
     expect(within(detail).getByText("Letter analyzed")).toBeInTheDocument();
     expect(within(detail).getByText("Checklist created")).toBeInTheDocument();
     expect(within(detail).getByText("Snapshot saved")).toBeInTheDocument();
+    expect(checklistSection).not.toBeNull();
     expect(within(detail).getByRole("heading", { name: "Checklist" })).toBeInTheDocument();
-    expect(within(detail).getByText("Request human review")).toBeInTheDocument();
-    expect(within(detail).getByText("Collect proof of occupancy")).toBeInTheDocument();
+    expect(within(checklistSection as HTMLElement).getByText("Request human review")).toBeInTheDocument();
+    expect(within(checklistSection as HTMLElement).getByText("Collect proof of occupancy")).toBeInTheDocument();
+    expect(within(checklistSection as HTMLElement).getAllByText(/Appeal FEMA's Decision/).length).toBeGreaterThan(0);
+    expect(
+      within(checklistSection as HTMLElement).getAllByText(/Documents Needed for FEMA Assistance/).length
+    ).toBeGreaterThan(0);
   });
 
   it("tracks checklist status in the local case queue", async () => {
