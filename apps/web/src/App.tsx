@@ -1437,11 +1437,36 @@ export const App = () => {
                   </div>
                 </div>
                 <ul className="export-includes" aria-label="Export packet contents">
-                  <li>Case summary</li>
-                  <li>Checklist</li>
-                  <li>Evidence outline</li>
-                  <li>Source appendix</li>
-                  <li>Uploaded files are not included in V1.</li>
+                  <li>
+                    <label>
+                      <input type="checkbox" defaultChecked disabled />
+                      Case summary
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" defaultChecked disabled />
+                      Checklist
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" defaultChecked disabled />
+                      Evidence outline
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" defaultChecked disabled />
+                      Source appendix
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" disabled />
+                      Uploaded files are not included in V1.
+                    </label>
+                  </li>
                 </ul>
                 {exportText ? (
                   <textarea className="export-output" aria-label="Export packet text" value={exportText} readOnly />

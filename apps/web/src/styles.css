@@ -529,6 +529,17 @@ a:focus-visible,
   border-radius: 6px;
 }
 
+.export-includes label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.export-includes input {
+  width: 16px;
+  height: 16px;
+}
+
 .export-output {
   min-height: 260px;
   margin-top: 12px;

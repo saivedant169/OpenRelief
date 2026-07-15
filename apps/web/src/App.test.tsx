@@ -73,6 +73,16 @@ describe("OpenRelief web workflow", () => {
     expect(within(exportContents).getByText("Evidence outline")).toBeInTheDocument();
     expect(within(exportContents).getByText("Source appendix")).toBeInTheDocument();
     expect(within(exportContents).getByText("Uploaded files are not included in V1.")).toBeInTheDocument();
+    expect(within(exportContents).getByRole("checkbox", { name: "Case summary" })).toBeChecked();
+    expect(within(exportContents).getByRole("checkbox", { name: "Checklist" })).toBeChecked();
+    expect(within(exportContents).getByRole("checkbox", { name: "Evidence outline" })).toBeChecked();
+    expect(within(exportContents).getByRole("checkbox", { name: "Source appendix" })).toBeChecked();
+    expect(
+      within(exportContents).getByRole("checkbox", { name: "Uploaded files are not included in V1." })
+    ).not.toBeChecked();
+    expect(
+      within(exportContents).getByRole("checkbox", { name: "Uploaded files are not included in V1." })
+    ).toBeDisabled();
 
     await userEvent.click(screen.getByRole("button", { name: /create packet text/i }));
 
