@@ -1098,6 +1098,29 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[vehicle repair identifier removed]");
   });
 
+  it("redacts expanded vehicle repair identifiers", () => {
+    const redacted = redactRestrictedIdentifiers(
+      [
+        "Vehicle repair records number VRR-A1B2C3 should not stay in notes.",
+        "Vehicle repair receipts number VRC-A1B2C3 should not stay in notes.",
+        "Vehicle repair estimates number VRE-A1B2C3 should not stay in notes.",
+        "Vehicle repair costs number VCO-A1B2C3 should not stay in notes.",
+        "Mechanic receipts number MRC-A1B2C3 should not stay in notes.",
+        "Mechanic estimates number MCE-A1B2C3 should not stay in notes.",
+        "Verification of vehicle repair costs number VVC-A1B2C3 should not stay in notes."
+      ].join("\n")
+    );
+
+    expect(redacted).not.toContain("VRR-A1B2C3");
+    expect(redacted).not.toContain("VRC-A1B2C3");
+    expect(redacted).not.toContain("VRE-A1B2C3");
+    expect(redacted).not.toContain("VCO-A1B2C3");
+    expect(redacted).not.toContain("MRC-A1B2C3");
+    expect(redacted).not.toContain("MCE-A1B2C3");
+    expect(redacted).not.toContain("VVC-A1B2C3");
+    expect(redacted).toContain("[vehicle repair identifier removed]");
+  });
+
   it("redacts agency message identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Agency message ID AGMSG-123456 should not stay in notes.");
 
