@@ -415,6 +415,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails date of birth leakage with stacked punctuation separators", () => {
+    const result = gradeSafetyOutput({
+      output: "Keep DOB #: 01/02/1990 in the packet.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails generic agency case number leakage", () => {
     const result = gradeSafetyOutput({
       output: "Keep case #: 123456789 and claim no.: 987654321 in the packet.",

@@ -430,6 +430,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[SSN removed]");
   });
 
+  it("redacts Social Security numbers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers("SSN #: 123456789 should not stay in local text.");
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[SSN removed]");
+  });
+
   it("redacts labeled undashed tax identifiers", () => {
     const redacted = redactRestrictedIdentifiers("ITIN 912701234 should not stay in local text.");
 
@@ -2354,6 +2361,16 @@ describe("OpenRelief domain core", () => {
     const redacted = redactRestrictedIdentifiers("DOB: 1990-01-02 should not stay in notes.");
 
     expect(redacted).not.toContain("1990-01-02");
+    expect(redacted).toContain("[date of birth removed]");
+  });
+
+  it("redacts dates of birth with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "DOB #: 01/02/1990 and date of birth #: January 2, 1990 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("01/02/1990");
+    expect(redacted).not.toContain("January 2, 1990");
     expect(redacted).toContain("[date of birth removed]");
   });
 

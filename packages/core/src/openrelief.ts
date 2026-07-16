@@ -357,7 +357,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:ssn|ss\s*#|social security(?:\s+(?:number|card)|\s*#)?)\s*[:#-]?\s*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
+      /\b(?:ssn|ss\s*#|social security(?:\s+(?:number|card)|\s*#)?)\s*(?:[:#-]\s*)*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/gi,
     replacement: "[SSN removed]"
   },
   {
@@ -370,12 +370,12 @@ const restrictedIdentifierPatterns = [
     replacement: "[SSN removed]"
   },
   {
-    pattern: /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})\b/gi,
+    pattern: /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*(?:[:#-]\s*)*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})\b/gi,
     replacement: "[date of birth removed]"
   },
   {
     pattern:
-      /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*[:#-]?\s*(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/gi,
+      /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*(?:[:#-]\s*)*(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/gi,
     replacement: "[date of birth removed]"
   },
   {
