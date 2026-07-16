@@ -1321,6 +1321,18 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails communication identifier leakage with stacked punctuation separators", () => {
+    const result = gradeSafetyOutput({
+      output:
+        "Agency message ID #: AGMSG-123456, shelter placement note ID #: SPN-123456, and unsafe home access note ID #: UHA-123456 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails accommodation receipt identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Accommodation receipt number ACC-123456 should not stay in notes.",

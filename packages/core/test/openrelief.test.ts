@@ -1293,6 +1293,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[communication identifier removed]");
   });
 
+  it("redacts communication identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Agency message ID #: AGMSG-123456, appointment note ID #: APT-123456, and unsafe home access note ID #: UHA-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("AGMSG-123456");
+    expect(redacted).not.toContain("APT-123456");
+    expect(redacted).not.toContain("UHA-123456");
+    expect(redacted).toContain("[communication identifier removed]");
+  });
+
   it("redacts transitional sheltering assistance identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
