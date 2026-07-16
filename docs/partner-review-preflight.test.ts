@@ -249,6 +249,24 @@ describe("partner review preflight", () => {
     expect(result.stderr).toContain("Partner outreach missing: consent");
   });
 
+  it("rejects restricted identifiers in partner-facing docs", () => {
+    const result = runPartnerPreflight({
+      outreach: `${outreach}\nreviewer@example.test\n`
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner outreach contains email address.");
+  });
+
+  it("rejects private address details in partner review packet", () => {
+    const result = runPartnerPreflight({
+      packet: `${packet}\n123 Main Street\n`
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Partner review packet contains street address.");
+  });
+
   it("rejects missing partner review targets", () => {
     const result = runPartnerPreflight({
       targets: targets.replace("Disaster Legal Assistance Collaborative\n", "")

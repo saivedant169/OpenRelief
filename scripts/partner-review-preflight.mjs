@@ -121,6 +121,16 @@ const requiredEvidencePaths = [
   "packages/evals/reports/california-wildfire-v1.json",
   "examples/california-wildfire/letters/denial-occupancy-proof.txt"
 ];
+const restrictedPartnerTextPatterns = [
+  { label: "Social Security number", pattern: /\b\d{3}-\d{2}-\d{4}\b/ },
+  { label: "email address", pattern: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i },
+  { label: "phone number", pattern: /\b\d{3}[-.]\d{3}[-.]\d{4}\b/ },
+  { label: "street address", pattern: /\b\d{1,6}\s+[A-Za-z0-9.'-]+(?:\s+[A-Za-z0-9.'-]+){0,4}\s+(?:street|st\.?|avenue|ave\.?|road|rd\.?|boulevard|blvd\.?|drive|dr\.?|lane|ln\.?|court|ct\.?|way|place|pl\.?)\b/i },
+  { label: "agency ID", pattern: /\b(?:agency|case|registration|application)\s*(?:id|number|#)\s*[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i },
+  { label: "insurance claim number", pattern: /\binsurance\s+claim\s*(?:number|#|id)?\s*[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i },
+  { label: "medical record identifier", pattern: /\b(?:medical record|mrn)\s*(?:id|number|#)?\s*[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i },
+  { label: "immigration identifier", pattern: /\b(?:visa number|alien registration|a-number|green card)\s*[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i }
+];
 
 const fail = (message) => {
   console.error(message);
@@ -195,6 +205,14 @@ const requireExistingPaths = (items) => {
   }
 };
 
+const rejectRestrictedPartnerText = (label, content) => {
+  for (const { label: patternLabel, pattern } of restrictedPartnerTextPatterns) {
+    if (pattern.test(content)) {
+      fail(`${label} contains ${patternLabel}.`);
+    }
+  }
+};
+
 for (const [label, filePath] of Object.entries(files)) {
   if (!existsSync(filePath)) {
     fail(`Missing ${label}: ${filePath}`);
@@ -208,6 +226,11 @@ const packet = readFileSync(files.packet, "utf8");
 const baselineFailures = readFileSync(files.baselineFailures, "utf8");
 const demoRunbook = readFileSync(files.demoRunbook, "utf8");
 const report = JSON.parse(readFileSync(files.report, "utf8"));
+
+rejectRestrictedPartnerText("Partner review log", reviewLog);
+rejectRestrictedPartnerText("Partner outreach", outreach);
+rejectRestrictedPartnerText("Partner review targets", targets);
+rejectRestrictedPartnerText("Partner review packet", packet);
 
 for (const requiredText of requiredLogText) {
   if (!reviewLog.includes(requiredText)) {
