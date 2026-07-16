@@ -919,6 +919,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[lodging identifier removed]");
   });
 
+  it("redacts utility and lodging identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Utility account number #: UTL-123456, electric account ID #: ELEC-123456, hotel confirmation number #: HCN-123456, and lodging reservation ID #: RSV-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("UTL-123456");
+    expect(redacted).not.toContain("ELEC-123456");
+    expect(redacted).not.toContain("HCN-123456");
+    expect(redacted).not.toContain("RSV-123456");
+    expect(redacted).toContain("[utility account removed]");
+    expect(redacted).toContain("[lodging identifier removed]");
+  });
+
   it("redacts temporary housing unit identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Temporary housing unit THU-123456 should not stay in notes.");
 

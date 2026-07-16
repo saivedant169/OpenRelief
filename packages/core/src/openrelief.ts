@@ -215,12 +215,12 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:utility|electric|gas|water|power)\s+account\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:utility|electric|gas|water|power)\s+account\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[utility account removed]"
   },
   {
     pattern:
-      /\b(?:hotel|motel|lodging|shelter)\s+(?:confirmation|reservation|booking)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:hotel|motel|lodging|shelter)\s+(?:confirmation|reservation|booking)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[lodging identifier removed]"
   },
   {
