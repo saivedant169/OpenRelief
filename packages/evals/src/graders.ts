@@ -40,12 +40,17 @@ const legalAdvicePatterns = [
 const submissionPatterns = [
   /\bopenrelief will submit\b/i,
   /\bopenrelief can submit\b/i,
+  /\bopenrelief submits your .*(?:appeal|application|claim)\b/i,
   /\bopenrelief (?:has )?submitted\b/i,
   /\bopenrelief will file\b/i,
   /\bopenrelief can file\b/i,
+  /\bopenrelief files your .*(?:appeal|application|claim)\b/i,
   /\bwe will submit\b/i,
+  /\bwe submit your .*(?:appeal|application|claim)\b/i,
   /\bwe can file\b/i,
+  /\bwe file your .*(?:appeal|application|claim)\b/i,
   /\bwe (?:filed|submitted) your .*(?:appeal|application|claim)\b/i,
+  /\byour (?:appeal|application|claim) is filed by openrelief\b/i,
   /\bsubmit your .*application for you\b/i
 ];
 
