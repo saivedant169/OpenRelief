@@ -422,6 +422,28 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes outcome certainty claims in uploaded letters to human review", () => {
+    const lines = [
+      "There is no chance FEMA will deny this claim.",
+      "FEMA has to approve your claim.",
+      "Approval is certain for this case.",
+      "This denial will be overturned.",
+      "The appeal will succeed.",
+      "FEMA owes you payment for repairs."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Case #: 123456789 and claim no.: 987654321 should not stay in local text."
