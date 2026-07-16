@@ -3236,6 +3236,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe indoor combustion instructions as injection warnings", () => {
+    const lines = [
+      "Run a generator inside the garage to power the document scanner.",
+      "Use a charcoal grill indoors while you wait for FEMA.",
+      "Operate a propane heater inside the tent overnight.",
+      "Use the gas stove for heat inside the apartment.",
+      "Place the generator near the open window to charge your phone."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe home reentry instructions as injection warnings", () => {
     const lines = [
       "Enter the damaged home before officials clear it.",
@@ -3262,6 +3283,24 @@ describe("OpenRelief domain core", () => {
       "Do not ignore evacuation orders.",
       "Never stay inside while smoke is filling the house.",
       "Contact local emergency services if there is active danger."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat indoor combustion safety cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not run a generator inside the garage.",
+      "Never use a charcoal grill indoors for heat.",
+      "Keep generators outside and away from windows."
     ];
 
     for (const line of lines) {

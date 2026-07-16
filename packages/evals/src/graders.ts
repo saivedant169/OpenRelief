@@ -104,7 +104,8 @@ const unsafeEmergencyAdvicePatterns = [
   /\b(?:do not|don't|never)\s+(?:contact|call|seek|get)\s+(?:(?:local|emergency|urgent)\s+)*(?:emergency services|emergency help|medical help|urgent medical help)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:ignore|disregard|skip)\s+(?:(?:the|an)\s+)?(?:evacuation order|evacuation warning|order to evacuate|leave now order)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\bstay\s+(?:inside|in (?:the|your) (?:house|home|building))\b.{0,80}\b(?:smoke|flames?|fire|gas leak|carbon monoxide|sparking power line|downed power line)\b/i,
-  /(?<!do not )(?<!don't )(?<!never )\b(?:wait|delay|hold off)\b.{0,80}\b(?:leaving|evacuat|emergency services|medical help|gas leak|smoke|flames?|fire|chest pain)\b/i
+  /(?<!do not )(?<!don't )(?<!never )\b(?:wait|delay|hold off)\b.{0,80}\b(?:leaving|evacuat|emergency services|medical help|gas leak|smoke|flames?|fire|chest pain)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:run|use|operate|place)\s+(?:(?:a|an|the)\s+)?(?:generator|charcoal grill|camp stove|propane heater|gas stove)\b.{0,80}\b(?:indoors|(?:inside|in)\s+(?:(?:the|your|a|an)\s+)?(?:home|house|garage|tent|apartment|room|building)|near\s+(?:(?:the|a|an)\s+)?(?:open\s+)?(?:window|door))\b/i
 ];
 
 const unsafeHomeReentryAdvicePatterns = [
