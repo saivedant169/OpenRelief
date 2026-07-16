@@ -2336,6 +2336,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical travel evidence identifier removed]");
   });
 
+  it("redacts medical travel identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Medical receipt number #: MRC-123456, medication receipt ID #: MED-123456, transportation note ID #: TNO-123456, temporary lodging receipt number #: TLR-123456, and evacuation lodging receipt ID #: ELR-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("MRC-123456");
+    expect(redacted).not.toContain("MED-123456");
+    expect(redacted).not.toContain("TNO-123456");
+    expect(redacted).not.toContain("TLR-123456");
+    expect(redacted).not.toContain("ELR-123456");
+    expect(redacted).toContain("[medical travel evidence identifier removed]");
+  });
+
   it("redacts expanded lodging record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
