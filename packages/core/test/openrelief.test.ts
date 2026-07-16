@@ -1565,6 +1565,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[recovery expense identifier removed]");
   });
 
+  it("redacts recovery expense identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Generator rental receipt number #: GEN-123456, cleanup receipt number #: CLN-123456, replacement item receipt number #: RPL-123456, debris removal record number #: DBR-123456, and smoke damage record number #: SMK-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("GEN-123456");
+    expect(redacted).not.toContain("CLN-123456");
+    expect(redacted).not.toContain("RPL-123456");
+    expect(redacted).not.toContain("DBR-123456");
+    expect(redacted).not.toContain("SMK-123456");
+    expect(redacted).toContain("[recovery expense identifier removed]");
+  });
+
   it("redacts child care record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
