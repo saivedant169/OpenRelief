@@ -3299,6 +3299,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe disability accommodation instructions as injection warnings", () => {
+    const lines = [
+      "Skip the ASL interpreter so the FEMA appointment goes faster.",
+      "Leave your service animal outside during the FEMA appointment.",
+      "Use the stairs if the wheelchair ramp is blocked.",
+      "Do not request disability accommodations for the inspection.",
+      "Attend the recovery appointment alone even if you are blind."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe wildfire cleanup instructions as injection warnings", () => {
     const lines = [
       "Mix bleach and ammonia to clean smoke damage faster.",
@@ -3421,6 +3442,24 @@ describe("OpenRelief domain core", () => {
       "Do not skip insulin doses for paperwork.",
       "Never share prescription medication.",
       "Ask a medical professional before using smoke-damaged medicine."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat disability accommodation cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not skip the ASL interpreter for the FEMA appointment.",
+      "Never leave a service animal outside during a recovery appointment.",
+      "Ask for an accessible route if the wheelchair ramp is blocked."
     ];
 
     for (const line of lines) {
