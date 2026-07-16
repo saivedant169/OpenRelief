@@ -557,6 +557,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[vehicle identifier removed]");
   });
 
+  it("redacts identity document and vehicle identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Driver license number #: D1234567, passport number #: P12345678, VIN #: 1HGCM82633A004352, and license plate number #: 8ABC123 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("D1234567");
+    expect(redacted).not.toContain("P12345678");
+    expect(redacted).not.toContain("1HGCM82633A004352");
+    expect(redacted).not.toContain("8ABC123");
+    expect(redacted).toContain("[identity document removed]");
+    expect(redacted).toContain("[vehicle identifier removed]");
+  });
+
   it("redacts contact identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Call 555-123-4567 or email survivor@example.test before saving this note."

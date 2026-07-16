@@ -385,17 +385,17 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:state|federal)[-\s]+issued\s+id|federal\s+id|photo\s+id|(?:identification|id)\s+card|identification|passport|dl|birth\s+certificate|social\s+security\s+cards?|employer(?:'s)?\s+payroll\s+documents?|military\s+(?:identification(?:\s+card)?|id)|marriage\s+licenses?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:state|federal)[-\s]+issued\s+id|federal\s+id|photo\s+id|(?:identification|id)\s+card|identification|passport|dl|birth\s+certificate|social\s+security\s+cards?|employer(?:'s)?\s+payroll\s+documents?|military\s+(?:identification(?:\s+card)?|id)|marriage\s+licenses?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[identity document removed]"
   },
   {
     pattern:
-      /\b(?:vin|vehicle identification number)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*[A-HJ-NPR-Z0-9]{17}\b/gi,
+      /\b(?:vin|vehicle identification number)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*[A-HJ-NPR-Z0-9]{17}\b/gi,
     replacement: "[vehicle identifier removed]"
   },
   {
     pattern:
-      /\b(?:license|licence)\s+plate\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,9}\b/gi,
+      /\b(?:license|licence)\s+plate\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,9}\b/gi,
     replacement: "[vehicle identifier removed]"
   },
   {
