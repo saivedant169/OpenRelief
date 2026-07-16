@@ -1936,6 +1936,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts residence evidence identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Proof of occupancy record ID #: POO-123456, occupancy proof ID #: OCP-123456, utility bill number #: UBL-123456, deed record number #: DED-123456, and mortgage statement number #: MTG-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("POO-123456");
+    expect(redacted).not.toContain("OCP-123456");
+    expect(redacted).not.toContain("UBL-123456");
+    expect(redacted).not.toContain("DED-123456");
+    expect(redacted).not.toContain("MTG-123456");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts expanded ownership and mortgage evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
