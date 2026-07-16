@@ -1163,6 +1163,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts expanded repair identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Hazard mitigation record no. #: HMR-A1B2C3, mitigation measure receipt ID #: MMR-A1B2C3, and rebuild stronger record number #: RSR-A1B2C3 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("HMR-A1B2C3");
+    expect(redacted).not.toContain("MMR-A1B2C3");
+    expect(redacted).not.toContain("RSR-A1B2C3");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts expanded repair evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
