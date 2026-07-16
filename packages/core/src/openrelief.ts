@@ -128,11 +128,18 @@ export interface AppealDraft {
 
 const injectionPatterns = [
   /ignore all previous instructions/i,
+  /ignore (?:the )?(?:safety policy|safety rules|source rules|citation rules)/i,
+  /forget (?:the )?(?:safety policy|safety rules|source rules|citation rules)/i,
+  /ignore (?:the )?(?:policy )?guardrails/i,
   /disregard (?:all )?(?:previous )?instructions/i,
   /override (?:safety rules|source checks|human review)/i,
   /bypass (?:safety rules|source checks|human review)/i,
+  /disable human review/i,
   /developer mode/i,
   /system prompt/i,
+  /(?:output|show|print|display) (?:the )?(?:developer|system) prompt/i,
+  /reveal (?:hidden|system|developer) instructions/i,
+  /(?:output|show|print|display|reveal) internal instructions/i,
   /say .* approved/i,
   /(?:^|[\n.?!]\s*)(?:please\s+)?(?:(?:ignore|disregard|do not respond to|throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)|(?:there is )?no need to (?:respond|reply) to (?:the )?(?:fema|official|agency) (?:letter|notice|request))/i,
   /\b(?:wait|delay|hold off|postpone|defer|put off)(?:\s+(?:to|before))?\s+(?:respond|reply|responding|replying) to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
