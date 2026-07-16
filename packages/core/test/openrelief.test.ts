@@ -1761,6 +1761,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[damage evidence identifier removed]");
   });
 
+  it("redacts damage evidence identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Damage record number #: DMG-123456, damage documentation ID #: DOC-123456, damage photo ID #: DPH-123456, supporting document ID #: SDOC-123456, and supporting receipt number #: SUP-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("DMG-123456");
+    expect(redacted).not.toContain("DOC-123456");
+    expect(redacted).not.toContain("DPH-123456");
+    expect(redacted).not.toContain("SDOC-123456");
+    expect(redacted).not.toContain("SUP-123456");
+    expect(redacted).toContain("[damage evidence identifier removed]");
+  });
+
   it("redacts insurance settlement record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
