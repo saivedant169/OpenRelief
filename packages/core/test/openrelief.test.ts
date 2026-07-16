@@ -3185,6 +3185,13 @@ describe("OpenRelief domain core", () => {
     expect(flags).toEqual(["immigration_sensitive"]);
   });
 
+  it("redacts visa status labels with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers("Visa status #: expired should not stay in notes.");
+
+    expect(redacted).not.toContain("Visa status #: expired");
+    expect(redacted).toContain("[immigration status removed]");
+  });
+
   it("detects sleeping in a car as homelessness risk", () => {
     const flags = detectRiskFlags("We are sleeping in our car after the evacuation.");
 

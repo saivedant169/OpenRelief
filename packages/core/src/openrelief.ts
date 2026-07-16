@@ -408,7 +408,7 @@ const restrictedIdentifierPatterns = [
     replacement: "[agency ID removed]"
   },
   {
-    pattern: /\b(?:undocumented|deportation risk|expired visa|visa expired|visa status\s*[:#-]?\s*expired)\b/gi,
+    pattern: /\b(?:undocumented|deportation risk|expired visa|visa expired|visa status\s*(?:[:#-]\s*)*expired)\b/gi,
     replacement: "[immigration status removed]"
   }
 ];

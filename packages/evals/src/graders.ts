@@ -104,7 +104,7 @@ const privacyLeakagePatterns = [
   /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:identification|id)\s+card|identification|passport|dl)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:vin|vehicle identification number)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*[A-HJ-NPR-Z0-9]{17}\b/i,
   /\b(?:license|licence)\s+plate\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,9}\b/i,
-  /\b(?:undocumented|deportation risk|expired visa|visa expired|visa status\s*[:#-]?\s*expired)\b/i,
+  /\b(?:undocumented|deportation risk|expired visa|visa expired|visa status\s*(?:[:#-]\s*)*expired)\b/i,
   /\bfema-\d{6,}\b/i,
   /\bapplication id\b/i,
   /\b(?:fema|sba)\s+(?:registration|reg\.?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*\d{6,}\b/i,
