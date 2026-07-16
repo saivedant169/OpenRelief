@@ -399,12 +399,12 @@ const restrictedIdentifierPatterns = [
     replacement: "[vehicle identifier removed]"
   },
   {
-    pattern: /\b(?:fema|sba)\s+(?:registration|reg\.?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{6,}\b/gi,
+    pattern: /\b(?:fema|sba)\s+(?:registration|reg\.?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*\d{6,}\b/gi,
     replacement: "[agency ID removed]"
   },
   {
     pattern:
-      /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}|(?:application|app|case|claim)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,})\b/gi,
+      /\b(?:(?:fema|sba)[-\s#:]*(?:application|app|case|claim|id|number|no\.?)?[-\s#:]*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}|(?:application|app|case|claim)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,})\b/gi,
     replacement: "[agency ID removed]"
   },
   {

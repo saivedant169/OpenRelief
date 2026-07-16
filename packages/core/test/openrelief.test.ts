@@ -338,7 +338,7 @@ describe("OpenRelief domain core", () => {
 
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
-      "Case # 123456789 and claim no. 987654321 should not stay in local text."
+      "Case #: 123456789 and claim no.: 987654321 should not stay in local text."
     );
 
     expect(redacted).not.toContain("123456789");
@@ -352,6 +352,16 @@ describe("OpenRelief domain core", () => {
     );
 
     expect(redacted).not.toContain("123456789");
+    expect(redacted).toContain("[agency ID removed]");
+  });
+
+  it("redacts FEMA registration numbers with punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "FEMA Registration #: 123456789 and FEMA reg. no.: 987654321 should not stay in local text."
+    );
+
+    expect(redacted).not.toContain("123456789");
+    expect(redacted).not.toContain("987654321");
     expect(redacted).toContain("[agency ID removed]");
   });
 
