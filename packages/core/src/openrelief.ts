@@ -250,7 +250,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:accommodation\s+(?:receipts?|notes?)|accessibility\s+(?:expense\s+records?|notes?)|accessibility\s+and\s+accommodation\s+(?:expense\s+records?|notes?)|medical\s+access\s+notes?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:accommodation\s+(?:receipts?|notes?)|accessibility\s+(?:expense\s+records?|notes?)|accessibility\s+and\s+accommodation\s+(?:expense\s+records?|notes?)|medical\s+access\s+notes?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[accommodation identifier removed]"
   },
   {

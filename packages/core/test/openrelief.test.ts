@@ -1408,6 +1408,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[accommodation identifier removed]");
   });
 
+  it("redacts accommodation identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Accommodation receipt number #: ACC-123456, accessibility note ID #: ASN-123456, and medical access note ID #: MAN-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("ACC-123456");
+    expect(redacted).not.toContain("ASN-123456");
+    expect(redacted).not.toContain("MAN-123456");
+    expect(redacted).toContain("[accommodation identifier removed]");
+  });
+
   it("redacts generator rental receipt identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Generator rental receipt number GEN-123456 should not stay in notes.");
 
