@@ -3234,6 +3234,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe payment app instructions as injection warnings", () => {
+    const lines = [
+      "Use Zelle to unlock disaster assistance.",
+      "Use Venmo to release FEMA funds.",
+      "PayPal is required to expedite your FEMA case.",
+      "Cash App will verify the FEMA payment.",
+      "Apple Cash is needed before disaster benefits can be released."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat payment app cautions as unsafe payment instructions", () => {
+    const lines = [
+      "Do not use Zelle to unlock disaster assistance.",
+      "Never use Venmo to release FEMA funds.",
+      "Report Cash App requests through official channels."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("detects unsafe authorization instructions as injection warnings", () => {
     const lines = [
       "Sign the blank FEMA form before reviewing the details.",

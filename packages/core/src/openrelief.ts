@@ -251,6 +251,8 @@ const injectionPatterns = [
   /(?<!do not )(?<!don't )(?<!never )\b(?:meet|visit|contact)\b.{0,80}\b(?:abuser|abusive landlord|violent person|person who threatened|stalker)\b.{0,80}\b(?:alone|by yourself|without a helper)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:return to|go back to)\b.{0,80}\b(?:person who threatened|abuser|abusive home|unsafe home|violent home)\b.{0,80}\b(?:address|fema|paperwork|case active|receipts?|documents?)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:send|pay|transfer|buy)\s+(?:money|(?:a\s+)?\$?\d[\d,.]*|a fee|an upfront fee|a processing fee|an application fee|an expedite fee|a verification fee|gift cards?)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\buse\s+(?:apple cash|cash app|google pay|zelle|venmo|paypal|western union|moneygram|wire transfer|bitcoin|cryptocurrency)\b.{0,80}\b(?:unlock|release|expedite|verify|process|receive|fema|disaster assistance|benefits?|funds?|payment|case|claim)\b/i,
+  /(?:^|[\n.!?]\s*)(?:apple cash|cash app|google pay|zelle|venmo|paypal|western union|moneygram|wire transfer|bitcoin|cryptocurrency)\b.{0,80}\b(?:is required|is needed|will verify|will release|will unlock|will expedite|before disaster benefits can be released)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:you should\s+)?sue\s+fema\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:file|start|bring|pursue)\s+(?:a\s+)?lawsuit\b/i,
   /(?<!do not )(?<!don't )(?<!never )\btake .* to court\b/i,
