@@ -230,7 +230,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:major\s+)?repair\s+(?:estimates?|receipts?|records?)|(?:maintenance|improvement)\s+receipts?|receipts?\s+for\s+major\s+repairs?(?:\s+or\s+improvements?)?|contractor\s+(?:licenses?|estimates?|license\s+records?)|hazard\s+mitigation\s+(?:records?|receipts?|estimates?)|mitigation\s+(?:repair|measure)\s+(?:records?|receipts?|estimates?)|(?:repair\s+and\s+)?rebuild\s+stronger\s+records?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:major\s+)?repair\s+(?:estimates?|receipts?|records?)|(?:maintenance|improvement)\s+receipts?|receipts?\s+for\s+major\s+repairs?(?:\s+or\s+improvements?)?|contractor\s+(?:licenses?|estimates?|license\s+records?)|hazard\s+mitigation\s+(?:records?|receipts?|estimates?)|mitigation\s+(?:repair|measure)\s+(?:records?|receipts?|estimates?)|(?:repair\s+and\s+)?rebuild\s+stronger\s+records?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[repair identifier removed]"
   },
   {

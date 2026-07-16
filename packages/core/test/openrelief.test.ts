@@ -1096,6 +1096,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[repair identifier removed]");
   });
 
+  it("redacts repair identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Repair estimate number #: EST-123456, contractor license ID #: CSLB-123456, and repair record ID #: RRD-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("EST-123456");
+    expect(redacted).not.toContain("CSLB-123456");
+    expect(redacted).not.toContain("RRD-123456");
+    expect(redacted).toContain("[repair identifier removed]");
+  });
+
   it("redacts expanded repair evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
