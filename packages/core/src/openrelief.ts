@@ -152,6 +152,7 @@ const injectionPatterns = [
   /\bfile late without asking (?:fema|the agency|the official) for an extension\b/i,
   /(?<!do not )(?<!don't )(?<!never )\bskip (?:the )?requested (?:documents|records|evidence)\b/i,
   /\bdo not send (?:the )?(?:records|documents|evidence) (?:fema|the agency|the official) requested\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:send|pay|transfer|buy)\s+(?:money|(?:a\s+)?\$?\d[\d,.]*|a fee|an upfront fee|a processing fee|an application fee|an expedite fee|a verification fee|gift cards?)\b/i,
   /(?:^|[\n.?!]\s*)(?:please\s+)?(?:(?:ignore|disregard|do not respond to|throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)|(?:there is )?no need to (?:respond|reply) to (?:the )?(?:fema|official|agency) (?:letter|notice|request))/i,
   /\b(?:wait|delay|hold off|postpone|defer|put off)(?:\s+(?:to|before))?\s+(?:respond|reply|responding|replying) to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:store|save|paste|enter|upload|send)\s+(?:(?:your|the)\s+)?(?:fema\s+(?:case|claim|application|registration)\s+number|bank\s+routing\s+number|routing\s+number|bank\s+account\s+number|full\s+bank\s+number)\b.{0,80}\b(?:server|cloud|hosted sandbox|online form|support|team)\b/i,

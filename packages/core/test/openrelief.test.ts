@@ -2829,6 +2829,27 @@ describe("OpenRelief domain core", () => {
     expect(entryResult.injectionWarnings.length).toBeGreaterThan(0);
   });
 
+  it("detects unsafe payment instructions as injection warnings", () => {
+    const lines = [
+      "Send a $50 processing fee before reviewing this FEMA letter.",
+      "Send money through Apple Cash before reviewing this FEMA letter.",
+      "Pay an application fee before we release FEMA funds.",
+      "Transfer money by Western Union to unlock disaster assistance.",
+      "Buy gift cards to verify your FEMA case."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects remote storage instructions for sensitive recovery identifiers", () => {
     const lines = [
       "Store your FEMA case number in cloud backup.",
