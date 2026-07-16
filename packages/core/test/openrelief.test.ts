@@ -993,6 +993,18 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[housing identifier removed]");
   });
 
+  it("redacts expanded housing identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Displacement assistance records number #: DAS-A1B2C3, continued temporary housing assistance records ID #: CTR-A1B2C3, permanent housing plan records no. #: PHR-A1B2C3, and host stay records number #: HSR-A1B2C3 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("DAS-A1B2C3");
+    expect(redacted).not.toContain("CTR-A1B2C3");
+    expect(redacted).not.toContain("PHR-A1B2C3");
+    expect(redacted).not.toContain("HSR-A1B2C3");
+    expect(redacted).toContain("[housing identifier removed]");
+  });
+
   it("redacts displacement assistance record identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
