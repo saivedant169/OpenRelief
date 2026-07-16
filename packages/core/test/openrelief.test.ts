@@ -400,6 +400,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[loan identifier removed]");
   });
 
+  it("redacts agency account and loan identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Agency account ID #: AGY-123456, SBA loan number #: 1234567, SBA loan no. #: LN12345, and loan number #: LN67890 should not stay in the packet."
+    );
+
+    expect(redacted).not.toContain("AGY-123456");
+    expect(redacted).not.toContain("1234567");
+    expect(redacted).not.toContain("LN12345");
+    expect(redacted).not.toContain("LN67890");
+    expect(redacted).toContain("[agency ID removed]");
+    expect(redacted).toContain("[loan identifier removed]");
+  });
+
   it("redacts alphanumeric application identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Application ID ABC-123456 should not stay in local text.");
 
