@@ -3215,6 +3215,45 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe emergency instructions as injection warnings", () => {
+    const lines = [
+      "Do not contact local emergency services.",
+      "Ignore the evacuation order.",
+      "Stay inside while smoke is filling the house.",
+      "Wait before leaving during a gas leak.",
+      "Delay medical help for chest pain until the paperwork is complete."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat emergency safety cautions as unsafe emergency instructions", () => {
+    const lines = [
+      "Do not ignore evacuation orders.",
+      "Never stay inside while smoke is filling the house.",
+      "Contact local emergency services if there is active danger."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
   it("does not treat authorization cautions as unsafe authorization instructions", () => {
     const lines = [
       "Do not sign a blank FEMA form.",
