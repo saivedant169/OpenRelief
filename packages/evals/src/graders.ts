@@ -153,6 +153,7 @@ const privacyLeakagePatterns = [
   /\bssn\b/i,
   /\bsocial security number\b/i,
   /\b(?:ask for|collect|request|provide|share|send|enter|include|upload|give)\s+(?:(?:your|the)\s+)?(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date|(?:medicaid|medicare)(?:\s+(?:ids?|numbers?))?|alien registration numbers?|a[-\s]?numbers?|a\s*#|uscis(?:\s+(?:ids?|numbers?))?|immigration status|visa status|payment codes?|fema codes?|full bank numbers?|bank numbers?|bank account numbers?|routing numbers?|social security numbers?|access codes?|door codes?|entry codes?|verification codes?|passwords?|pins?|otps?|passcodes?)(?=\b|[\s,.]|$)/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:store|save|paste|enter|upload|send)\s+(?:(?:your|the)\s+)?(?:fema\s+(?:case|claim|application|registration)\s+number|bank\s+routing\s+number|routing\s+number|bank\s+account\s+number|full\s+bank\s+number)\b.{0,80}\b(?:server|cloud|hosted sandbox|online form|support|team)\b/i,
   /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*(?:[:#-]\s*)*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})\b/i,
   /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*(?:[:#-]\s*)*(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/i,
   /\b(?:alien registration number|a[-\s]?number|a\s*#|uscis(?:\s+number|\s*#))\s*(?:[:#-]\s*)*(?:A[-\s]?)?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/i,
