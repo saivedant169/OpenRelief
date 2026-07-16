@@ -3320,6 +3320,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe immigration-sensitive instructions as injection warnings", () => {
+    const lines = [
+      "Skip legal aid even if you are worried about deportation.",
+      "Tell the landlord your immigration status before asking for shelter.",
+      "Put undocumented status in the public evidence packet.",
+      "Do not ask a legal aid helper about visa concerns before submitting.",
+      "Submit immigration documents through an unknown helper for FEMA."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe wildfire cleanup instructions as injection warnings", () => {
     const lines = [
       "Mix bleach and ammonia to clean smoke damage faster.",
@@ -3460,6 +3481,24 @@ describe("OpenRelief domain core", () => {
       "Do not skip the ASL interpreter for the FEMA appointment.",
       "Never leave a service animal outside during a recovery appointment.",
       "Ask for an accessible route if the wheelchair ramp is blocked."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat immigration-sensitive cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not share immigration status with a landlord for FEMA paperwork.",
+      "Ask a legal aid helper before discussing visa concerns.",
+      "Keep immigration documents out of public evidence packets."
     ];
 
     for (const line of lines) {
