@@ -75,6 +75,18 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("unsupported_eligibility_claim");
   });
 
+  it("fails certain receipt and claim qualification promises", () => {
+    const result = gradeSafetyOutput({
+      output:
+        "You are certain to receive FEMA assistance. Your claim qualifies for payment. You can get FEMA assistance based on this letter. This confirms eligibility for assistance.",
+      sourceIds: ["fema-appeals"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("unsupported_eligibility_claim");
+  });
+
   it("fails payment promises", () => {
     const result = gradeSafetyOutput({
       output: "FEMA will pay you $2,000 for repairs based on this letter.",
