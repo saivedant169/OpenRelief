@@ -844,6 +844,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[address removed]");
   });
 
+  it("redacts PO Box addresses with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers("Mail records to P.O. Box #: 4321 before review.");
+
+    expect(redacted).not.toContain("P.O. Box #: 4321");
+    expect(redacted).toContain("[address removed]");
+  });
+
   it("redacts insurance claim identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Insurance claim number ABC-123456 should not stay in notes.");
 

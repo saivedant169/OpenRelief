@@ -185,7 +185,7 @@ const restrictedIdentifierPatterns = [
     replacement: "[address removed]"
   },
   {
-    pattern: /\bp\.?\s*o\.?\s+box\s+#?\s*[A-Z0-9][A-Z0-9-]{0,10}\b/gi,
+    pattern: /\bp\.?\s*o\.?\s+box\s*(?:[:#-]\s*)*[A-Z0-9][A-Z0-9-]{0,10}\b/gi,
     replacement: "[address removed]"
   },
   {
