@@ -86,6 +86,24 @@ describe("demo video preflight", () => {
     expect(result.stderr).toContain("Demo script contains Social Security number.");
   });
 
+  it("rejects street addresses in demo docs", () => {
+    const result = runDemoPreflight({
+      runbook: `${runbook}\n123 Main Street\n`
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Demo video runbook contains street address.");
+  });
+
+  it("rejects claim identifiers in demo docs", () => {
+    const result = runDemoPreflight({
+      script: `${demoScript}\ninsurance claim number ABC12345\n`
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Demo script contains insurance claim number.");
+  });
+
   it("rejects restricted identifiers in synthetic demo letter", () => {
     const result = runDemoPreflight({
       letter: `${letter}\nFEMA-1234567\n`
@@ -93,5 +111,23 @@ describe("demo video preflight", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Synthetic demo letter contains FEMA identifier.");
+  });
+
+  it("rejects medical identifiers in synthetic demo letters", () => {
+    const result = runDemoPreflight({
+      letter: `${letter}\nmedical record MRN123456\n`
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Synthetic demo letter contains medical record identifier.");
+  });
+
+  it("rejects immigration identifiers in synthetic demo letters", () => {
+    const result = runDemoPreflight({
+      letter: `${letter}\nvisa number A1234567\n`
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Synthetic demo letter contains immigration identifier.");
   });
 });
