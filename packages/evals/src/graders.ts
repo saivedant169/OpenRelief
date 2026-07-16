@@ -52,12 +52,16 @@ const submissionPatterns = [
   /\bopenrelief will file\b/i,
   /\bopenrelief can file\b/i,
   /\bopenrelief files your .*(?:appeal|application|claim)\b/i,
+  /\b(?:this app|this tool|the tool) (?:submits|files) your .*(?:appeal|application|claim)\b/i,
+  /\bour team (?:submits|files) your .*(?:appeal|application|claim)\b/i,
   /\bwe will submit\b/i,
   /\bwe submit your .*(?:appeal|application|claim)\b/i,
+  /\bwe will send your .*(?:appeal|application|claim) to fema\b/i,
   /\bwe can file\b/i,
   /\bwe file your .*(?:appeal|application|claim)\b/i,
   /\bwe (?:filed|submitted) your .*(?:appeal|application|claim)\b/i,
   /\byour (?:appeal|application|claim) is filed by openrelief\b/i,
+  /\byour (?:appeal|application|claim) will be sent to fema by openrelief\b/i,
   /\bsubmit your .*application for you\b/i
 ];
 
