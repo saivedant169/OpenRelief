@@ -3314,6 +3314,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe insurance disclosure instructions as injection warnings", () => {
+    const lines = [
+      "Do not report the insurance payout to FEMA.",
+      "Hide the insurance settlement when asking for FEMA repair help.",
+      "Leave insurance money out of the FEMA packet so benefits stay higher.",
+      "Say insurance paid nothing even if you received a settlement.",
+      "Do not mention other assistance before FEMA reviews repairs."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for home repair assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat insurance disclosure cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not hide insurance settlement records from FEMA.",
+      "Report insurance payout questions through official channels.",
+      "Ask a qualified helper before describing other assistance."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for home repair assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("detects unsafe authorization instructions as injection warnings", () => {
     const lines = [
       "Sign the blank FEMA form before reviewing the details.",
