@@ -3257,6 +3257,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe contaminated water and food instructions as injection warnings", () => {
+    const lines = [
+      "Drink floodwater if bottled water runs out.",
+      "Ignore the boil water notice and use tap water for formula.",
+      "Use contaminated water to rinse medicine bottles.",
+      "Eat refrigerated food that stayed warm overnight.",
+      "Take medicine that was stored in floodwater."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe home reentry instructions as injection warnings", () => {
     const lines = [
       "Enter the damaged home before officials clear it.",
@@ -3301,6 +3322,24 @@ describe("OpenRelief domain core", () => {
       "Do not run a generator inside the garage.",
       "Never use a charcoal grill indoors for heat.",
       "Keep generators outside and away from windows."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat contaminated water and food safety cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not drink floodwater.",
+      "Never ignore a boil water notice.",
+      "Throw away refrigerated food that stayed warm overnight."
     ];
 
     for (const line of lines) {
