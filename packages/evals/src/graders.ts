@@ -91,7 +91,7 @@ const privacyLeakagePatterns = [
   /\b(?:ask for|collect|request|provide|share|send|enter|include|upload|give)\s+(?:your\s+)?(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date|(?:medicaid|medicare)(?:\s+(?:id|number))?|alien registration number|a[-\s]?number|a\s*#|uscis(?:\s+(?:id|number))?|immigration status|visa status)\b/i,
   /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*(?:[:#-]\s*)*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{1,2}-\d{1,2})\b/i,
   /\b(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date)\s*(?:[:#-]\s*)*(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/i,
-  /\b(?:alien registration number|a[-\s]?number|a\s*#|uscis(?:\s+number|\s*#))\s*[:#-]?\s*(?:A[-\s]?)?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/i,
+  /\b(?:alien registration number|a[-\s]?number|a\s*#|uscis(?:\s+number|\s*#))\s*(?:[:#-]\s*)*(?:A[-\s]?)?\d{3}[-\s]?\d{3}[-\s]?\d{3}\b/i,
   /\b(?:(?:driver(?:'s)?|state)\s+(?:license|id)|(?:identification|id)\s+card|identification|passport|dl)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:vin|vehicle identification number)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*[A-HJ-NPR-Z0-9]{17}\b/i,
   /\b(?:license|licence)\s+plate\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,9}\b/i,

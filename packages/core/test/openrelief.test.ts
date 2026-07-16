@@ -2395,6 +2395,16 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[immigration identifier removed]");
   });
 
+  it("redacts immigration identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "A-number #: A123456789 and USCIS #: 987654321 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("A123456789");
+    expect(redacted).not.toContain("987654321");
+    expect(redacted).toContain("[immigration identifier removed]");
+  });
+
   it("redacts immigration status labels", () => {
     const redacted = redactRestrictedIdentifiers("Visa status: expired should not stay in notes.");
 
