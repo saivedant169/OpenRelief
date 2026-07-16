@@ -362,7 +362,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:itin|tin|ein|individual taxpayer identification number|employer identification number|tax id|tax identification number)\s*[:#-]?\s*(?:\d{3}[-\s]?\d{2}[-\s]?\d{4}|\d{2}[-\s]?\d{7})\b/gi,
+      /\b(?:itin|tin|ein|individual taxpayer identification number|employer identification number|tax id|tax identification number)\s*(?:[:#-]\s*)*(?:\d{3}[-\s]?\d{2}[-\s]?\d{4}|\d{2}[-\s]?\d{7})\b/gi,
     replacement: "[tax identifier removed]"
   },
   {

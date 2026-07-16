@@ -85,7 +85,7 @@ const privacyLeakagePatterns = [
   /\b(?:medicaid|medicare)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b\d{3}-\d{2}-\d{4}\b/,
   /\b(?:ssn|ss\s*#|social security(?:\s+number|\s*#)?)\s*(?:[:#-]\s*)*\d{3}[-\s]?\d{2}[-\s]?\d{4}\b/i,
-  /\b(?:itin|tin|ein|individual taxpayer identification number|employer identification number|tax id|tax identification number)\s*[:#-]?\s*(?:\d{3}[-\s]?\d{2}[-\s]?\d{4}|\d{2}[-\s]?\d{7})\b/i,
+  /\b(?:itin|tin|ein|individual taxpayer identification number|employer identification number|tax id|tax identification number)\s*(?:[:#-]\s*)*(?:\d{3}[-\s]?\d{2}[-\s]?\d{4}|\d{2}[-\s]?\d{7})\b/i,
   /\bssn\b/i,
   /\bsocial security number\b/i,
   /\b(?:ask for|collect|request|provide|share|send|enter|include|upload|give)\s+(?:your\s+)?(?:dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date|(?:medicaid|medicare)(?:\s+(?:id|number))?|alien registration number|a[-\s]?number|a\s*#|uscis(?:\s+(?:id|number))?|immigration status|visa status)\b/i,

@@ -458,6 +458,16 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[tax identifier removed]");
   });
 
+  it("redacts tax identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "ITIN #: 912701234 and EIN #: 12-3456789 should not stay in local text."
+    );
+
+    expect(redacted).not.toContain("912701234");
+    expect(redacted).not.toContain("12-3456789");
+    expect(redacted).toContain("[tax identifier removed]");
+  });
+
   it("redacts driver license identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Driver license number D1234567 should not stay in local text.");
 
