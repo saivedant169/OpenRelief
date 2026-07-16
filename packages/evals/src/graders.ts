@@ -201,6 +201,8 @@ const ignoreOfficialLetterPatterns = [
   /\b(?:throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /\bskip (?:the )?requested (?:documents|records|evidence)\b/i,
   /\bdo not send (?:the )?(?:records|documents|evidence) (?:fema|the agency|the official) requested\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:withdraw|cancel|close|abandon)\s+(?:(?:your|the)\s+)?(?:(?:fema|disaster assistance)\s+)?(?:claim|case|application|appeal)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\bgive up on\s+(?:(?:your|the)\s+)?(?:(?:fema|disaster assistance)\s+)?(?:claim|case|application|appeal)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:delete|destroy|throw away|discard|shred|erase) (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
   /\b(?:do not|don't|never) keep (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:make up|fabricate|invent)\s+(?:(?:the|your)\s+)?(?:receipts?|documents?|records?|evidence|proof|damage photos?|repair estimates?|lease|landlord letter)\b/i,

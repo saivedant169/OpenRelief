@@ -388,6 +388,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes claim withdrawal instructions to human review", () => {
+    const lines = [
+      "Withdraw your FEMA claim.",
+      "Cancel your disaster assistance application.",
+      "Close the FEMA case before sending records.",
+      "Abandon the appeal because FEMA will not help.",
+      "Give up on your disaster assistance claim."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat withdrawal warnings as claim withdrawal instructions", () => {
+    const lines = [
+      "Do not withdraw your FEMA claim without qualified help.",
+      "Never cancel your disaster assistance application based on an unofficial message.",
+      "Keep your case open while you review official records."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("routes evidence destruction instructions to human review", () => {
     const lines = [
       "Delete your receipts.",
