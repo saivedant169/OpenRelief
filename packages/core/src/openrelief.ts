@@ -181,6 +181,7 @@ const injectionPatterns = [
   /\bdo not send (?:the )?(?:records|documents|evidence) (?:fema|the agency|the official) requested\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:delete|destroy|throw away|discard|shred|erase) (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
   /\b(?:do not|don't|never) keep (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:post|publish|share|upload|put)\s+(?:(?:your|the|all)\s+)?(?:fema\s+)?(?:letter|notice|documents?|recovery documents?|records?|receipts?|evidence(?:\s+packet)?|case packet|damage photos?|supporting documents?)\b.{0,80}\b(?:online|public\s+(?:website|link|folder|drive)|social media|internet|shared public folder)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:send|pay|transfer|buy)\s+(?:money|(?:a\s+)?\$?\d[\d,.]*|a fee|an upfront fee|a processing fee|an application fee|an expedite fee|a verification fee|gift cards?)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:you should\s+)?sue\s+fema\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:file|start|bring|pursue)\s+(?:a\s+)?lawsuit\b/i,

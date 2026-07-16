@@ -3088,6 +3088,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes public document sharing instructions to human review", () => {
+    const lines = [
+      "Post your FEMA letter online.",
+      "Publish your recovery documents on a public website.",
+      "Share your evidence packet in a public link.",
+      "Upload all receipts to social media.",
+      "Put your case packet in a shared public folder."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat public-sharing warnings as unsafe sharing instructions", () => {
+    const lines = [
+      "Do not post your FEMA letter online.",
+      "Never publish recovery documents on a public website.",
+      "Keep receipts private and local."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("detects access code collection instructions as injection warnings", () => {
     const result = analyzeLetter([
       "FEMA Inspection Notice",
