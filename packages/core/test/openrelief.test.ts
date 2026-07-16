@@ -2011,6 +2011,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 
+  it("redacts expanded residence evidence identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Bank statement number #: BST-A1B2C3, voter registration card ID #: VRC-A1B2C3, rent receipt no. #: RRT-A1B2C3, manufactured home title number #: MHT-A1B2C3, and affidavit of heirship ID #: AOH-A1B2C3 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("BST-A1B2C3");
+    expect(redacted).not.toContain("VRC-A1B2C3");
+    expect(redacted).not.toContain("RRT-A1B2C3");
+    expect(redacted).not.toContain("MHT-A1B2C3");
+    expect(redacted).not.toContain("AOH-A1B2C3");
+    expect(redacted).toContain("[residence evidence identifier removed]");
+  });
+
   it("redacts expanded ownership and mortgage evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
