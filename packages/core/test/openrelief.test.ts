@@ -3706,11 +3706,51 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes unsafe scam advice to human review", () => {
+    const lines = [
+      "Trust the caller if they know your FEMA case number.",
+      "Follow instructions from the person who asked for gift cards.",
+      "Click the disaster assistance link in a text message.",
+      "Do not report the suspected FEMA scam.",
+      "Ignore fraud warnings if the message says disaster assistance."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("does not treat official-channel guidance as unofficial contact instructions", () => {
     const lines = [
       "Use official FEMA channels for case-number questions.",
       "Confirm deadlines with FEMA or a qualified helper.",
       "Review official sources before sending documents."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
+  it("does not treat scam safety cautions as unsafe scam advice", () => {
+    const lines = [
+      "Do not trust a caller who asks for FEMA case numbers.",
+      "Report suspected FEMA scams through official channels.",
+      "Use official FEMA channels instead of links in text messages."
     ];
 
     for (const line of lines) {
