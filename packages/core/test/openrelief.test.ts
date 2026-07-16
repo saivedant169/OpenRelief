@@ -849,6 +849,21 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance group removed]");
   });
 
+  it("redacts insurance identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Insurance claim number #: ABC-123456, policy number #: POL-123456, member ID #: MEM-123456, and group ID #: GRP-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("ABC-123456");
+    expect(redacted).not.toContain("POL-123456");
+    expect(redacted).not.toContain("MEM-123456");
+    expect(redacted).not.toContain("GRP-123456");
+    expect(redacted).toContain("[insurance claim removed]");
+    expect(redacted).toContain("[insurance policy removed]");
+    expect(redacted).toContain("[insurance member removed]");
+    expect(redacted).toContain("[insurance group removed]");
+  });
+
   it("redacts group identifiers without insurance prefix", () => {
     const redacted = redactRestrictedIdentifiers("Group number GRP-123456 should not stay in notes.");
 
