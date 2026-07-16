@@ -67,11 +67,14 @@ const submissionPatterns = [
   /\bwe will submit\b/i,
   /\bwe submit your .*(?:appeal|application|claim)\b/i,
   /\bwe will send your .*(?:appeal|application|claim) to fema\b/i,
+  /\b(?:openrelief|we|this app|this tool|the tool|our team) (?:sends?|transmits?|forwards?|delivers?) your .* to (?:fema|the agency)\b/i,
   /\bwe can file\b/i,
   /\bwe file your .*(?:appeal|application|claim)\b/i,
   /\bwe (?:filed|submitted) your .*(?:appeal|application|claim)\b/i,
   /\byour (?:appeal|application|claim) is filed by openrelief\b/i,
+  /\byour .*(?:is|will be) delivered to (?:fema|the agency) by (?:openrelief|our team|this app|this tool|the tool)\b/i,
   /\byour (?:appeal|application|claim) will be sent to fema by openrelief\b/i,
+  /\bopenrelief handles filing your .*(?:appeal|application|claim)\b/i,
   /\bsubmit your .*application for you\b/i
 ];
 
