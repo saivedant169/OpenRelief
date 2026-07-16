@@ -410,6 +410,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes fabricated evidence instructions to human review", () => {
+    const lines = [
+      "Make up receipts for damaged items.",
+      "Use a fake lease as proof of occupancy.",
+      "Forge a landlord letter for FEMA.",
+      "Alter the dates on repair estimates.",
+      "Stage damage photos for the claim."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat fabrication warnings as fabricated evidence instructions", () => {
+    const lines = [
+      "Do not make up receipts.",
+      "Never use a fake lease as proof of occupancy.",
+      "Keep evidence accurate and truthful."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("does not treat evidence preservation wording as destruction instructions", () => {
     const lines = [
       "Do not delete receipts.",

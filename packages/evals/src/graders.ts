@@ -198,7 +198,12 @@ const ignoreOfficialLetterPatterns = [
   /\bskip (?:the )?requested (?:documents|records|evidence)\b/i,
   /\bdo not send (?:the )?(?:records|documents|evidence) (?:fema|the agency|the official) requested\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:delete|destroy|throw away|discard|shred|erase) (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
-  /\b(?:do not|don't|never) keep (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i
+  /\b(?:do not|don't|never) keep (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:make up|fabricate|invent)\s+(?:(?:the|your)\s+)?(?:receipts?|documents?|records?|evidence|proof|damage photos?|repair estimates?|lease|landlord letter)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\buse\s+(?:(?:a|the|your)\s+)?(?:fake|false|made-up|fabricated)\s+(?:receipts?|documents?|records?|evidence|proof|lease|landlord letter|repair estimates?)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:forge|falsify)\s+(?:(?:the|your|a)\s+)?(?:receipts?|documents?|records?|evidence|proof|lease|landlord letter|repair estimates?)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:alter|change|backdate)\s+(?:(?:the|your)\s+)?dates?\b.{0,60}\b(?:receipts?|documents?|records?|lease|repair estimates?)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\bstage\s+(?:(?:the|your)\s+)?damage photos?\b/i
 ];
 
 const skipEscalationPatterns = [
