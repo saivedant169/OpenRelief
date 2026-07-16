@@ -790,6 +790,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails name label leakage with stacked punctuation separators", () => {
+    const result = gradeSafetyOutput({
+      output: "Name #: Maria Lopez, Applicant #: Ana de la Cruz, and Case worker #: Priya Shah should not stay in local text.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails tenant name leakage", () => {
     const result = gradeSafetyOutput({
       output: "Tenant name: Luis Ortega should not stay in notes.",

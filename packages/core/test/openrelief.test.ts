@@ -721,6 +721,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts name labels with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Name #: Maria Lopez, Applicant #: Ana de la Cruz, and Case worker #: Priya Shah should not stay in local text."
+    );
+
+    expect(redacted).not.toContain("Maria Lopez");
+    expect(redacted).not.toContain("Ana de la Cruz");
+    expect(redacted).not.toContain("Priya Shah");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts tenant names", () => {
     const redacted = redactRestrictedIdentifiers("Tenant name: Luis Ortega should not stay in local text.");
 
