@@ -2325,6 +2325,18 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[health identifier removed]");
   });
 
+  it("redacts medical identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Medical record #: MRN-123456, Medicaid ID #: MCD-123456, and Medicare number #: MCR-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("MRN-123456");
+    expect(redacted).not.toContain("MCD-123456");
+    expect(redacted).not.toContain("MCR-123456");
+    expect(redacted).toContain("[medical record removed]");
+    expect(redacted).toContain("[health identifier removed]");
+  });
+
   it("redacts spelled-out dates of birth", () => {
     const redacted = redactRestrictedIdentifiers("Date of birth: January 2, 1990 should not stay in notes.");
 

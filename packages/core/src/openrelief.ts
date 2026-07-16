@@ -348,11 +348,11 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:(?:medical\s+record|mrn)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*)(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:(?:medical\s+record|mrn)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*)(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[medical record removed]"
   },
   {
-    pattern: /\b(?:medicaid|medicare)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    pattern: /\b(?:medicaid|medicare)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[health identifier removed]"
   },
   {
