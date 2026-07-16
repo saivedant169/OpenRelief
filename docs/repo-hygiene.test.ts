@@ -37,6 +37,11 @@ const provenanceMarkers = [
   ["assistance", " from ", "A", "I"],
   ["Co-Authored", "-By"]
 ].map((parts) => parts.join(""));
+const disallowedWordingMarkers = [
+  ["bu", "ll", " ", "sh", "it"],
+  ["bu", "ll", "sh", "it"],
+  ["bu", "ll", "-", "sh", "it"]
+].map((parts) => parts.join(""));
 const disallowedDashes = [String.fromCodePoint(0x2013), String.fromCodePoint(0x2014)];
 
 const collectTextFiles = (target: string): string[] => {
@@ -51,19 +56,23 @@ const collectTextFiles = (target: string): string[] => {
 };
 
 describe("repo hygiene", () => {
-  it("keeps public artifacts free of tool provenance markers and typographic dashes", () => {
+  it("keeps public artifacts free of tool provenance markers, disallowed wording, and typographic dashes", () => {
     const failures = scannedRoots.flatMap((root) =>
       collectTextFiles(root).flatMap((filePath) => {
         const relativePath = path.relative(repoRoot, filePath);
         const content = readFileSync(filePath, "utf8");
+        const normalizedContent = content.toLowerCase();
         const markerFailures = provenanceMarkers
           .filter((marker) => content.includes(marker))
           .map((marker) => `${relativePath}: marker ${marker}`);
+        const wordingFailures = disallowedWordingMarkers
+          .filter((marker) => normalizedContent.includes(marker))
+          .map((marker) => `${relativePath}: wording ${marker}`);
         const dashFailures = disallowedDashes
           .filter((dash) => content.includes(dash))
           .map((dash) => `${relativePath}: unicode dash U+${dash.codePointAt(0)?.toString(16).toUpperCase()}`);
 
-        return [...markerFailures, ...dashFailures];
+        return [...markerFailures, ...wordingFailures, ...dashFailures];
       })
     );
 
