@@ -2806,6 +2806,27 @@ describe("OpenRelief domain core", () => {
     expect(entryResult.injectionWarnings.length).toBeGreaterThan(0);
   });
 
+  it("detects remote storage instructions for sensitive recovery identifiers", () => {
+    const lines = [
+      "Store your FEMA case number in cloud backup.",
+      "Paste your bank routing number into the hosted sandbox.",
+      "Save your FEMA application number on the server.",
+      "Enter your bank account number into the online form.",
+      "Send your FEMA claim number to the support team."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects access code collection instructions as injection warnings", () => {
     const result = analyzeLetter([
       "FEMA Inspection Notice",
