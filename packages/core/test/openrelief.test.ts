@@ -428,6 +428,49 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes appeal abandonment instructions to human review", () => {
+    const lines = [
+      "Do not appeal the FEMA denial.",
+      "Don't file an appeal.",
+      "Never submit an appeal.",
+      "Skip the appeal.",
+      "Waive your appeal rights.",
+      "Forfeit your right to appeal.",
+      "Let the appeal deadline pass.",
+      "Miss your appeal deadline."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is denied. You may appeal this decision."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat appeal preservation warnings as abandonment instructions", () => {
+    const lines = [
+      "Do not miss your appeal deadline.",
+      "Never waive your appeal rights based on an unofficial message.",
+      "Keep your right to appeal while you confirm official deadlines."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is denied. You may appeal this decision."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("routes evidence destruction instructions to human review", () => {
     const lines = [
       "Delete your receipts.",
