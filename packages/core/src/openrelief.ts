@@ -240,7 +240,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:mechanic\s+(?:receipts?|estimates?)|vehicle\s+repair\s+(?:records?|receipts?|estimates?|costs?|cost\s+records?)|verification\s+of\s+vehicle\s+repair\s+costs?)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:mechanic\s+(?:receipts?|estimates?)|vehicle\s+repair\s+(?:records?|receipts?|estimates?|costs?|cost\s+records?)|verification\s+of\s+vehicle\s+repair\s+costs?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[vehicle repair identifier removed]"
   },
   {

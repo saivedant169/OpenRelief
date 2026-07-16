@@ -1278,6 +1278,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[vehicle repair identifier removed]");
   });
 
+  it("redacts vehicle repair identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Mechanic receipt number #: MEC-123456, vehicle repair records ID #: VRR-123456, and verification of vehicle repair costs number #: VVC-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("MEC-123456");
+    expect(redacted).not.toContain("VRR-123456");
+    expect(redacted).not.toContain("VVC-123456");
+    expect(redacted).toContain("[vehicle repair identifier removed]");
+  });
+
   it("redacts agency message identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Agency message ID AGMSG-123456 should not stay in notes.");
 

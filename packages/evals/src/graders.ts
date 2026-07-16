@@ -67,6 +67,7 @@ const privacyLeakagePatterns = [
   /\b(?:hotel|motel|lodging|shelter)\s+(?:confirmation|reservation|booking)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:temporary\s+housing\s+unit|(?:rental\s+)?lease)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:repair\s+(?:estimate|receipt|record)|contractor\s+(?:license|estimate))\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
+  /\b(?:mechanic\s+(?:receipts?|estimates?)|vehicle\s+repair\s+(?:records?|receipts?|estimates?|costs?|cost\s+records?)|verification\s+of\s+vehicle\s+repair\s+costs?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:medicine\s+storage\s+receipt|medical\s+transportation\s+trip)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:(?:agency|case|contractor)\s+message|appointment\s+note|shelter\s+placement\s+note|unsafe\s+home\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
   /\b(?:accommodation\s+(?:receipt|note)|accessibility\s+(?:expense\s+record|note)|medical\s+access\s+note)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/i,
