@@ -329,16 +329,16 @@ const restrictedIdentifierPatterns = [
     replacement: "[medical travel evidence identifier removed]"
   },
   {
-    pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*\d{8,17}\b/gi,
+    pattern: /\b(?:(?:bank\s+)?account|routing)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*\d{8,17}\b/gi,
     replacement: "[bank identifier removed]"
   },
   {
     pattern:
-      /\b(?:credit|debit|prepaid|ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?:\d[ -]?){13,19}\b/gi,
+      /\b(?:credit|debit|prepaid|ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?:\d[ -]?){13,19}\b/gi,
     replacement: "[payment card removed]"
   },
   {
-    pattern: /\b(?:ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+    pattern: /\b(?:ebt|benefits)\s+card\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[payment card removed]"
   },
   {

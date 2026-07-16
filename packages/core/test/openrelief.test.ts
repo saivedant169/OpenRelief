@@ -866,6 +866,16 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[bank identifier removed]");
   });
 
+  it("redacts bank identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Bank account number #: 123456789012 and routing number #: 021000021 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("123456789012");
+    expect(redacted).not.toContain("021000021");
+    expect(redacted).toContain("[bank identifier removed]");
+  });
+
   it("redacts utility account identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Utility account number UTL-123456 should not stay in notes.");
 
@@ -2264,6 +2274,17 @@ describe("OpenRelief domain core", () => {
   it("redacts short benefits card identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Benefits card ID BEN-123456 should not stay in notes.");
 
+    expect(redacted).not.toContain("BEN-123456");
+    expect(redacted).toContain("[payment card removed]");
+  });
+
+  it("redacts payment card identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Credit card number #: 4111111111111111, EBT card number #: 5078123412341234, and benefits card ID #: BEN-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("4111111111111111");
+    expect(redacted).not.toContain("5078123412341234");
     expect(redacted).not.toContain("BEN-123456");
     expect(redacted).toContain("[payment card removed]");
   });
