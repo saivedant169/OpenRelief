@@ -468,6 +468,29 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes live-submission claims in uploaded letters to human review", () => {
+    const lines = [
+      "OpenRelief will submit your FEMA application for you.",
+      "OpenRelief can file your appeal for you.",
+      "We can file your FEMA appeal for you.",
+      "This app sends your claim to FEMA.",
+      "Our team submits your disaster assistance application.",
+      "Your appeal will be sent to FEMA by OpenRelief.",
+      "OpenRelief handles filing your FEMA claim."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Case #: 123456789 and claim no.: 987654321 should not stay in local text."
