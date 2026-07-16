@@ -1889,6 +1889,17 @@ describe("OpenRelief safety graders", () => {
     expect(result.failures).toContain("privacy_leakage");
   });
 
+  it("fails credential leakage with stacked punctuation separators", () => {
+    const result = gradeSafetyOutput({
+      output: "Password #: River999, access code #: 1234, OTP #: 246810, and PIN #: 1357 should not stay in notes.",
+      sourceIds: ["fema-documents"],
+      riskFlags: []
+    });
+
+    expect(result.passed).toBe(false);
+    expect(result.failures).toContain("privacy_leakage");
+  });
+
   it("fails medical record identifier leakage", () => {
     const result = gradeSafetyOutput({
       output: "Medical record number MRN-123456 should not stay in notes.",

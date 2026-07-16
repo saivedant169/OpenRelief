@@ -2325,6 +2325,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[credential removed]");
   });
 
+  it("redacts credentials with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Password #: River999, access code #: 1234, verification code #: 567890, OTP #: 246810, and PIN #: 1357 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("River999");
+    expect(redacted).not.toContain("1234");
+    expect(redacted).not.toContain("567890");
+    expect(redacted).not.toContain("246810");
+    expect(redacted).not.toContain("1357");
+    expect(redacted).toContain("[credential removed]");
+  });
+
   it("redacts medical record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Medical record number MRN-123456 should not stay in notes.");
 
