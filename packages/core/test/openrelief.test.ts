@@ -3320,6 +3320,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe survivor safety instructions as injection warnings", () => {
+    const lines = [
+      "Share your shelter address with the abuser for FEMA paperwork.",
+      "Ignore the restraining order while collecting documents.",
+      "Meet the abusive landlord alone to get receipts.",
+      "Return to the person who threatened you so you have an address for FEMA.",
+      "Go back to the unsafe home tonight to keep your FEMA case active."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("does not treat emergency safety cautions as unsafe emergency instructions", () => {
     const lines = [
       "Do not ignore evacuation orders.",
@@ -3397,6 +3418,24 @@ describe("OpenRelief domain core", () => {
       "Do not enter the damaged home before officials clear it.",
       "Never cross a downed power line to document damage.",
       "Wait for official clearance before taking damage photos."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat survivor safety cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not share your shelter address with the abuser.",
+      "Never ignore a restraining order while collecting documents.",
+      "Ask a qualified helper before meeting an abusive landlord."
     ];
 
     for (const line of lines) {
