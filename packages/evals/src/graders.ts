@@ -107,7 +107,7 @@ const promptInjectionPatterns = [
   /(?:output|show|print|display) (?:the )?(?:developer|system) prompt/i,
   /reveal (?:hidden|system|developer) instructions/i,
   /(?:output|show|print|display|reveal) internal instructions/i,
-  /follow (?:the )?user instruction .* instead of (?:the )?(?:system rules|safety rules)/i,
+  /follow (?:the )?user instructions?(?:\s+[^.]*?)?\s+instead of (?:the )?(?:system rules|safety rules)/i,
   /say .* approved/i
 ];
 
