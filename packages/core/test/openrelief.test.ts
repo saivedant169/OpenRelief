@@ -518,11 +518,51 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes unsafe identity document instructions to human review", () => {
+    const lines = [
+      "Use someone else's driver license for the FEMA packet.",
+      "Borrow a neighbor's passport to prove identity.",
+      "Submit a fake birth certificate if your ID was lost.",
+      "Alter the name on the state ID before uploading it.",
+      "Hide that the photo ID belongs to another person."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("does not treat fabrication warnings as fabricated evidence instructions", () => {
     const lines = [
       "Do not make up receipts.",
       "Never use a fake lease as proof of occupancy.",
       "Keep evidence accurate and truthful."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
+  it("does not treat identity document cautions as unsafe identity instructions", () => {
+    const lines = [
+      "Do not use someone else's driver license for FEMA.",
+      "Never submit a fake birth certificate.",
+      "Ask a qualified helper about replacing lost photo ID."
     ];
 
     for (const line of lines) {
