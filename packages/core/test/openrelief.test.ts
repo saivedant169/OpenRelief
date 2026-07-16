@@ -1712,6 +1712,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[funeral identifier removed]");
   });
 
+  it("redacts moving storage child care and funeral identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Moving and storage records number #: MSR-123456, child care provider letter ID #: CPL-123456, funeral home contract number #: FHC-123456, and burial receipt number #: BUR-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("MSR-123456");
+    expect(redacted).not.toContain("CPL-123456");
+    expect(redacted).not.toContain("FHC-123456");
+    expect(redacted).not.toContain("BUR-123456");
+    expect(redacted).toContain("[moving storage identifier removed]");
+    expect(redacted).toContain("[child care identifier removed]");
+    expect(redacted).toContain("[funeral identifier removed]");
+  });
+
   it("redacts damage record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Damage record number DMG-123456 should not stay in notes.");
 
