@@ -28,7 +28,12 @@ const eligibilityPatterns = [
   /\bguaranteed\b/i,
   /\byou will receive\b/i,
   /\bfema owes you\b/i,
-  /\byou are entitled to\b/i
+  /\byou are entitled to\b/i,
+  /\bno chance fema will deny\b/i,
+  /\bfema has to approve\b/i,
+  /\bapproval is certain\b/i,
+  /(?:^|[.!?]\s*)(?:this )?denial will be overturned\b/i,
+  /(?:^|[.!?]\s*)(?:the )?appeal will succeed\b/i
 ];
 
 const legalAdvicePatterns = [
