@@ -179,6 +179,8 @@ const injectionPatterns = [
   /\bfile late without asking (?:fema|the agency|the official) for an extension\b/i,
   /(?<!do not )(?<!don't )(?<!never )\bskip (?:the )?requested (?:documents|records|evidence)\b/i,
   /\bdo not send (?:the )?(?:records|documents|evidence) (?:fema|the agency|the official) requested\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:delete|destroy|throw away|discard|shred|erase) (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
+  /\b(?:do not|don't|never) keep (?:(?:the|your|all)\s+)?(?:receipts?|documents?|records?|evidence|proof|photos?|damage photos?|repair estimates?|supporting documents?|proof of occupancy|proof of ownership|lease|utility bills?)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:send|pay|transfer|buy)\s+(?:money|(?:a\s+)?\$?\d[\d,.]*|a fee|an upfront fee|a processing fee|an application fee|an expedite fee|a verification fee|gift cards?)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:you should\s+)?sue\s+fema\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:file|start|bring|pursue)\s+(?:a\s+)?lawsuit\b/i,

@@ -388,6 +388,47 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes evidence destruction instructions to human review", () => {
+    const lines = [
+      "Delete your receipts.",
+      "Destroy proof of occupancy.",
+      "Throw away the damage photos.",
+      "Discard the supporting documents.",
+      "Do not keep the records FEMA requested.",
+      "Shred all repair estimates."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat evidence preservation wording as destruction instructions", () => {
+    const lines = [
+      "Do not delete receipts.",
+      "Do not throw away the damage photos.",
+      "Keep your records and receipts."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("routes no-response official notice text to human review", () => {
     const result = analyzeLetter([
       "FEMA Notice",
