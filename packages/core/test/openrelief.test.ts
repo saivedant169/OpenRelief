@@ -2180,6 +2180,16 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[identity evidence identifier removed]");
   });
 
+  it("redacts identity note identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Replacement ID note ID #: RIN-123456 and photo ID note number #: PID-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("RIN-123456");
+    expect(redacted).not.toContain("PID-123456");
+    expect(redacted).toContain("[identity evidence identifier removed]");
+  });
+
   it("redacts insurance status note identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Insurance status note ID ISN-123456 should not stay in notes.");
 
