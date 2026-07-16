@@ -3274,6 +3274,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe contractor repair instructions as injection warnings", () => {
+    const lines = [
+      "Sign the blank repair contract before the contractor fills in details.",
+      "Pay the contractor in cash before getting a written estimate.",
+      "Pay the full repair cost upfront before any work starts.",
+      "Use an unlicensed contractor to speed up FEMA repairs.",
+      "Skip checking the contractor license if they can start tomorrow."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for home repair assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat contractor safety cautions as unsafe repair instructions", () => {
+    const lines = [
+      "Do not sign a blank repair contract.",
+      "Never pay the full repair cost upfront.",
+      "Check contractor license records before repairs."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for home repair assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("detects unsafe authorization instructions as injection warnings", () => {
     const lines = [
       "Sign the blank FEMA form before reviewing the details.",
