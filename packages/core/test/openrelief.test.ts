@@ -401,6 +401,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes legal-action advice in uploaded letters to human review", () => {
+    const lines = [
+      "You should sue FEMA and argue negligence in your appeal.",
+      "File a lawsuit against FEMA if they deny the appeal.",
+      "Take FEMA to court if the appeal is denied.",
+      "File in federal court and demand damages from FEMA.",
+      "Threaten FEMA with legal action if the appeal deadline is close."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Case #: 123456789 and claim no.: 987654321 should not stay in local text."
