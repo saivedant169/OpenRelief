@@ -3168,6 +3168,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes unofficial FEMA contact instructions to human review", () => {
+    const lines = [
+      "Email your FEMA documents to femahelp@gmail.com.",
+      "Call 555-123-4567 to verify your FEMA case.",
+      "Text your application number to 555-123-4567.",
+      "Send your receipts by WhatsApp to the FEMA helper.",
+      "Use disaster-relief-help.example to update your FEMA claim."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat official-channel guidance as unofficial contact instructions", () => {
+    const lines = [
+      "Use official FEMA channels for case-number questions.",
+      "Confirm deadlines with FEMA or a qualified helper.",
+      "Review official sources before sending documents."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(false);
+    }
+  });
+
   it("detects access code collection instructions as injection warnings", () => {
     const result = analyzeLetter([
       "FEMA Inspection Notice",
