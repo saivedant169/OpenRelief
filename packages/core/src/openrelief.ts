@@ -210,6 +210,8 @@ const injectionPatterns = [
   /(?<!do not )(?<!don't )(?<!never )\b(?:ignore|disregard|skip)\s+(?:(?:the|an)\s+)?(?:evacuation order|evacuation warning|order to evacuate|leave now order)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\bstay\s+(?:inside|in (?:the|your) (?:house|home|building))\b.{0,80}\b(?:smoke|flames?|fire|gas leak|carbon monoxide|sparking power line|downed power line)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:wait|delay|hold off)\b.{0,80}\b(?:leaving|evacuat|emergency services|medical help|gas leak|smoke|flames?|fire|chest pain)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:enter|go back inside|return to|inspect)\b.{0,80}\b(?:damaged|burned|unstable|unsafe|evacuation zone|evacuation area|disaster area|home|house|structure)\b.{0,80}\b(?:before officials? clear|without official clearance|to take photos|for fema evidence|to collect receipts|document damage)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\bcross\b.{0,80}\b(?:downed power line|live wire|sparking power line)\b.{0,80}\b(?:document damage|take photos|collect receipts|reach the home)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:send|pay|transfer|buy)\s+(?:money|(?:a\s+)?\$?\d[\d,.]*|a fee|an upfront fee|a processing fee|an application fee|an expedite fee|a verification fee|gift cards?)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:you should\s+)?sue\s+fema\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:file|start|bring|pursue)\s+(?:a\s+)?lawsuit\b/i,

@@ -3236,11 +3236,50 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe home reentry instructions as injection warnings", () => {
+    const lines = [
+      "Enter the damaged home before officials clear it.",
+      "Go back inside the burned house to take photos.",
+      "Inspect the unstable structure yourself for FEMA evidence.",
+      "Return to the evacuation zone to collect receipts.",
+      "Cross the downed power line to document damage."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("does not treat emergency safety cautions as unsafe emergency instructions", () => {
     const lines = [
       "Do not ignore evacuation orders.",
       "Never stay inside while smoke is filling the house.",
       "Contact local emergency services if there is active danger."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat home reentry safety cautions as unsafe home reentry instructions", () => {
+    const lines = [
+      "Do not enter the damaged home before officials clear it.",
+      "Never cross a downed power line to document damage.",
+      "Wait for official clearance before taking damage photos."
     ];
 
     for (const line of lines) {
