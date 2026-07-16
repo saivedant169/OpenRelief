@@ -3278,6 +3278,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe medical continuity instructions as injection warnings", () => {
+    const lines = [
+      "Skip insulin doses until the FEMA paperwork is complete.",
+      "Ration oxygen so the claim file can be finished first.",
+      "Use a smoke-damaged inhaler until FEMA approves replacement costs.",
+      "Share prescription medication with family while waiting for FEMA.",
+      "Use expired medication if the pharmacy is closed."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe wildfire cleanup instructions as injection warnings", () => {
     const lines = [
       "Mix bleach and ammonia to clean smoke damage faster.",
@@ -3382,6 +3403,24 @@ describe("OpenRelief domain core", () => {
       "Do not drink floodwater.",
       "Never ignore a boil water notice.",
       "Throw away refrigerated food that stayed warm overnight."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat medical continuity cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not skip insulin doses for paperwork.",
+      "Never share prescription medication.",
+      "Ask a medical professional before using smoke-damaged medicine."
     ];
 
     for (const line of lines) {
