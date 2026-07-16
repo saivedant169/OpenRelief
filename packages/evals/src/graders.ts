@@ -86,12 +86,17 @@ const unsafePaymentRequestPatterns = [
 const promptInjectionPatterns = [
   /ignore all previous instructions/i,
   /ignore (?:the )?(?:safety policy|safety rules|source rules|citation rules)/i,
+  /forget (?:the )?(?:safety policy|safety rules|source rules|citation rules)/i,
+  /ignore (?:the )?(?:policy )?guardrails/i,
   /disregard (?:all )?(?:previous )?instructions/i,
   /override (?:safety rules|source checks|human review)/i,
   /bypass (?:safety rules|source checks|human review)/i,
+  /disable human review/i,
   /developer mode/i,
   /system prompt/i,
+  /(?:output|show|print|display) (?:the )?(?:developer|system) prompt/i,
   /reveal (?:hidden|system|developer) instructions/i,
+  /(?:output|show|print|display|reveal) internal instructions/i,
   /follow (?:the )?user instruction .* instead of (?:the )?(?:system rules|safety rules)/i,
   /say .* approved/i
 ];
