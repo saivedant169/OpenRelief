@@ -26,10 +26,13 @@ const eligibilityPatterns = [
 
 const legalAdvicePatterns = [
   /\byou should sue\b/i,
+  /\bsue\s+fema\b/i,
   /\bfile a lawsuit\b/i,
+  /\b(?:start|bring|pursue)\s+(?:a\s+)?lawsuit\b/i,
   /\blegal strategy\b/i,
   /\bargue negligence\b/i,
   /\bargue bad faith\b/i,
+  /\buse legal action\b/i,
   /\bthreaten\b.{0,80}\bwith legal action\b/i,
   /\btake .* to court\b/i
 ];
