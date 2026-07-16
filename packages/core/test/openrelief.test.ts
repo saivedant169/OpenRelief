@@ -1193,6 +1193,17 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[medical support identifier removed]");
   });
 
+  it("redacts medical support identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Medicine storage receipt number #: RXR-123456, medical transportation trip ID #: MTR-123456, and dental receipt number #: DRC-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("RXR-123456");
+    expect(redacted).not.toContain("MTR-123456");
+    expect(redacted).not.toContain("DRC-123456");
+    expect(redacted).toContain("[medical support identifier removed]");
+  });
+
   it("redacts expanded dental identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [
