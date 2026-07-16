@@ -3194,6 +3194,46 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe authorization instructions as injection warnings", () => {
+    const lines = [
+      "Sign the blank FEMA form before reviewing the details.",
+      "Sign a blank appeal form so we can fill it in later.",
+      "Add me as your authorized representative for this FEMA case.",
+      "Give us power of attorney for your disaster assistance claim.",
+      "Authorize this helper to speak for you with FEMA."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is denied because requested records were not received."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
+  it("does not treat authorization cautions as unsafe authorization instructions", () => {
+    const lines = [
+      "Do not sign a blank FEMA form.",
+      "Never add an unknown person as your authorized representative.",
+      "Review any representative form with a qualified helper first."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is denied because requested records were not received."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects remote storage instructions for sensitive recovery identifiers", () => {
     const lines = [
       "Store your FEMA case number in cloud backup.",
