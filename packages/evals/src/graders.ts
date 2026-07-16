@@ -32,6 +32,11 @@ const eligibilityPatterns = [
   /\bno chance fema will deny\b/i,
   /\bfema has to approve\b/i,
   /\bapproval is certain\b/i,
+  /\bfema accepted your claim\b/i,
+  /\byou passed the eligibility review\b/i,
+  /\byour disaster assistance is active\b/i,
+  /\bfema cleared your case for payment\b/i,
+  /\bthis letter proves fema accepted the application\b/i,
   /(?:^|[.!?]\s*)(?:this )?denial will be overturned\b/i,
   /(?:^|[.!?]\s*)(?:the )?appeal will succeed\b/i
 ];
