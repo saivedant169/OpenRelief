@@ -1832,6 +1832,19 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[record request identifier removed]");
   });
 
+  it("redacts record request identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Insurance settlement record number #: SET-123456, account listed record ID #: ALR-123456, requested record ID #: REQ-123456, household record ID #: HHR-123456, and supporting record number #: SRG-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("SET-123456");
+    expect(redacted).not.toContain("ALR-123456");
+    expect(redacted).not.toContain("REQ-123456");
+    expect(redacted).not.toContain("HHR-123456");
+    expect(redacted).not.toContain("SRG-123456");
+    expect(redacted).toContain("[record request identifier removed]");
+  });
+
   it("redacts proof of occupancy record identifiers", () => {
     const redacted = redactRestrictedIdentifiers("Proof of occupancy record ID POO-123456 should not stay in notes.");
 
