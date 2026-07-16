@@ -357,6 +357,27 @@ describe("OpenRelief domain core", () => {
     expect(result.needsHumanReview).toBe(true);
   });
 
+  it("routes deadline dismissal instructions to human review", () => {
+    const lines = [
+      "It is okay to miss the FEMA deadline.",
+      "The deadline does not matter.",
+      "Respond after the FEMA deadline passes.",
+      "There are no consequences for missing the deadline.",
+      "File late without asking FEMA for an extension."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Case #: 123456789 and claim no.: 987654321 should not stay in local text."

@@ -141,6 +141,11 @@ const injectionPatterns = [
   /reveal (?:hidden|system|developer) instructions/i,
   /(?:output|show|print|display|reveal) internal instructions/i,
   /say .* approved/i,
+  /\bit is okay to miss (?:the )?(?:(?:fema|official|agency) )?deadline\b/i,
+  /\b(?:the )?(?:(?:fema|official|agency) )?deadline does not matter\b/i,
+  /\brespond after (?:the )?(?:(?:fema|official|agency) )?deadline passes\b/i,
+  /\bno consequences for missing (?:the )?(?:(?:fema|official|agency) )?deadline\b/i,
+  /\bfile late without asking (?:fema|the agency|the official) for an extension\b/i,
   /(?:^|[\n.?!]\s*)(?:please\s+)?(?:(?:ignore|disregard|do not respond to|throw away|discard|skip) (?:the )?(?:fema|official|agency) (?:letter|notice|request)|(?:there is )?no need to (?:respond|reply) to (?:the )?(?:fema|official|agency) (?:letter|notice|request))/i,
   /\b(?:wait|delay|hold off|postpone|defer|put off)(?:\s+(?:to|before))?\s+(?:respond|reply|responding|replying) to (?:the )?(?:fema|official|agency) (?:letter|notice|request)\b/i,
   /(?:ask for|collect|request|share|provide|send|enter|include|upload|give).*(?:payment codes?|full bank numbers?|bank numbers?|bank account numbers?|routing numbers?|full ssn|ssn|social security numbers?|dob|d\.?\s*o\.?\s*b\.?|date of birth|birth\s*date|immigration status|visa status|alien registration numbers?|a-number|a\s*#|uscis(?:\s+(?:numbers?|ids?))?|medicaid(?:\s+(?:numbers?|ids?))?|medicare(?:\s+(?:numbers?|ids?))?|full application id|fema codes?|access codes?|door codes?|entry codes?|verification codes?|passwords?|pins?|otps?|passcodes?)/i
