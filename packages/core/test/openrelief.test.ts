@@ -2225,6 +2225,18 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[insurance evidence identifier removed]");
   });
 
+  it("redacts insurance evidence identifiers with stacked punctuation separators", () => {
+    const redacted = redactRestrictedIdentifiers(
+      "Insurance status note ID #: ISN-123456, insurance denial note ID #: IDN-123456, insurance information record ID #: IIR-123456, and insurance claim status ID #: ICS-123456 should not stay in notes."
+    );
+
+    expect(redacted).not.toContain("ISN-123456");
+    expect(redacted).not.toContain("IDN-123456");
+    expect(redacted).not.toContain("IIR-123456");
+    expect(redacted).not.toContain("ICS-123456");
+    expect(redacted).toContain("[insurance evidence identifier removed]");
+  });
+
   it("redacts insurance coverage evidence identifiers", () => {
     const redacted = redactRestrictedIdentifiers(
       [

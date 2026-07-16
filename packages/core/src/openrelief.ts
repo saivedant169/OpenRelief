@@ -320,7 +320,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:insurance\s+(?:status\s+note|denial\s+(?:notes?|letters?)?|information\s+record|claim\s+status|policy\s+exclusion)|denial\s+from\s+insurance|denial\s+because\s+damage\s+did\s+not\s+exceed\s+the\s+policy\s+deductible|proof\s+of\s+lack\s+of\s+insurance|lack\s+of\s+insurance|no\s+insurance\s+coverage|policy\s+with\s+an\s+exclusion|policy\s+exclusions?|policy\s+exclusion\s+record|insurance)\s*(?:(?:id|number|no\.?)\s*)?[:#-]?\s*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:insurance\s+(?:status\s+note|denial\s+(?:notes?|letters?)?|information\s+record|claim\s+status|policy\s+exclusion)|denial\s+from\s+insurance|denial\s+because\s+damage\s+did\s+not\s+exceed\s+the\s+policy\s+deductible|proof\s+of\s+lack\s+of\s+insurance|lack\s+of\s+insurance|no\s+insurance\s+coverage|policy\s+with\s+an\s+exclusion|policy\s+exclusions?|policy\s+exclusion\s+record|insurance)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[insurance evidence identifier removed]"
   },
   {
