@@ -444,6 +444,30 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("routes eligibility promise claims in uploaded letters to human review", () => {
+    const lines = [
+      "FEMA will approve your application.",
+      "You qualify for FEMA assistance based on this letter.",
+      "You meet all eligibility requirements for FEMA assistance.",
+      "You are certain to receive FEMA assistance.",
+      "Your claim qualifies for payment.",
+      "This confirms eligibility for assistance.",
+      "FEMA will cover your repairs.",
+      "You will receive FEMA assistance."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary housing assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("redacts generic agency case numbers", () => {
     const redacted = redactRestrictedIdentifiers(
       "Case #: 123456789 and claim no.: 987654321 should not stay in local text."
