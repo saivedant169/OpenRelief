@@ -21,7 +21,7 @@ const restrictedDataPatterns = [
   /\b\d{3}[-.]\d{3}[-.]\d{4}\b/,
   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
   /\bFEMA-\d{6,}\b/i,
-  /\b\d{5}\s+[A-Z][A-Za-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd)\b/
+  /\b\d{1,6}\s+[A-Z][A-Za-z0-9.'-]+(?:\s+[A-Z][A-Za-z0-9.'-]+){0,4}\s+(Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Court|Ct|Way|Place|Pl)\b/i
 ];
 
 type ExampleCase = {
@@ -40,6 +40,11 @@ type ExampleCase = {
 const readCaseManifest = () => JSON.parse(readFileSync(casesPath, "utf8")) as ExampleCase[];
 
 describe("California wildfire example fixtures", () => {
+  it("detects common restricted address shapes", () => {
+    expect(restrictedDataPatterns.some((pattern) => pattern.test("123 Main Street"))).toBe(true);
+    expect(restrictedDataPatterns.some((pattern) => pattern.test("12345 North Canyon Road"))).toBe(true);
+  });
+
   it("ships sample letters for each V1 classifier path", () => {
     expect(existsSync(lettersDir)).toBe(true);
 
