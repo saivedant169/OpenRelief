@@ -3278,6 +3278,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe wildfire cleanup instructions as injection warnings", () => {
+    const lines = [
+      "Mix bleach and ammonia to clean smoke damage faster.",
+      "Sweep wildfire ash without a mask before documenting damage.",
+      "Remove asbestos debris yourself to speed up the FEMA packet.",
+      "Clean moldy drywall without gloves or a respirator.",
+      "Use a leaf blower on ash to clear the driveway for photos."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for cleanup assistance."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe home reentry instructions as injection warnings", () => {
     const lines = [
       "Enter the damaged home before officials clear it.",
@@ -3347,6 +3368,24 @@ describe("OpenRelief domain core", () => {
         "FEMA Notice",
         line,
         "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat wildfire cleanup safety cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not mix bleach and ammonia.",
+      "Never sweep wildfire ash without a mask.",
+      "Use protective gear and local cleanup guidance before handling debris."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for cleanup assistance."
       ].join("\n"));
 
       expect(result.injectionWarnings).toHaveLength(0);

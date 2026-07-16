@@ -107,7 +107,11 @@ const unsafeEmergencyAdvicePatterns = [
   /(?<!do not )(?<!don't )(?<!never )\b(?:wait|delay|hold off)\b.{0,80}\b(?:leaving|evacuat|emergency services|medical help|gas leak|smoke|flames?|fire|chest pain)\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:run|use|operate|place)\s+(?:(?:a|an|the)\s+)?(?:generator|charcoal grill|camp stove|propane heater|gas stove)\b.{0,80}\b(?:indoors|(?:inside|in)\s+(?:(?:the|your|a|an)\s+)?(?:home|house|garage|tent|apartment|room|building)|near\s+(?:(?:the|a|an)\s+)?(?:open\s+)?(?:window|door))\b/i,
   /(?<!do not )(?<!don't )(?<!never )\b(?:ignore|disregard|skip)\s+(?:(?:the|a|an)\s+)?(?:boil[-\s]?water (?:notice|advisory|order)|water safety notice)\b/i,
-  /(?<!do not )(?<!don't )(?<!never )\b(?:drink|use|eat|serve|take)\b.{0,80}\b(?:floodwater|flood water|contaminated water|refrigerated food|spoiled food|medicine|medication)\b.{0,80}\b(?:if bottled water runs out|to (?:rinse|clean|wash) medicine|stayed warm|stored in floodwater|touched floodwater|smells bad|smells like fuel|after (?:a )?power outage)\b/i
+  /(?<!do not )(?<!don't )(?<!never )\b(?:drink|use|eat|serve|take)\b.{0,80}\b(?:floodwater|flood water|contaminated water|refrigerated food|spoiled food|medicine|medication)\b.{0,80}\b(?:if bottled water runs out|to (?:rinse|clean|wash) medicine|stayed warm|stored in floodwater|touched floodwater|smells bad|smells like fuel|after (?:a )?power outage)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\bmix\b.{0,40}\b(?:bleach\b.{0,40}\bammonia|ammonia\b.{0,40}\bbleach)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:sweep|vacuum)\b.{0,80}\b(?:wildfire ash|ash|debris|smoke damage)\b.{0,80}\bwithout (?:a )?(?:mask|respirator|protective gear|ppe)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\b(?:remove|handle|clean|clean up)\b.{0,80}\b(?:asbestos|moldy drywall|mold|hazardous debris|chemical debris)\b.{0,80}\b(?:yourself|without (?:gloves|a respirator|respirator|protective gear|ppe|mask)|to speed up|before official cleanup)\b/i,
+  /(?<!do not )(?<!don't )(?<!never )\buse\s+(?:(?:a|the)\s+)?leaf blower\b.{0,80}\b(?:ash|debris|smoke damage)\b/i
 ];
 
 const unsafeHomeReentryAdvicePatterns = [
