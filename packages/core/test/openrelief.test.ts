@@ -3341,6 +3341,27 @@ describe("OpenRelief domain core", () => {
     }
   });
 
+  it("detects unsafe housing instability instructions as injection warnings", () => {
+    const lines = [
+      "Sleep in your car until FEMA approves lodging.",
+      "Stay outside tonight so the FEMA case is not interrupted.",
+      "Avoid the shelter because paperwork is more important.",
+      "Do not ask a shelter or case worker for emergency housing.",
+      "Return to the condemned apartment to keep a mailing address for FEMA."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings.length).toBeGreaterThan(0);
+      expect(result.needsHumanReview).toBe(true);
+    }
+  });
+
   it("detects unsafe wildfire cleanup instructions as injection warnings", () => {
     const lines = [
       "Mix bleach and ammonia to clean smoke damage faster.",
@@ -3499,6 +3520,24 @@ describe("OpenRelief domain core", () => {
       "Do not share immigration status with a landlord for FEMA paperwork.",
       "Ask a legal aid helper before discussing visa concerns.",
       "Keep immigration documents out of public evidence packets."
+    ];
+
+    for (const line of lines) {
+      const result = analyzeLetter([
+        "FEMA Notice",
+        line,
+        "Your application is approved for temporary lodging support."
+      ].join("\n"));
+
+      expect(result.injectionWarnings).toHaveLength(0);
+    }
+  });
+
+  it("does not treat housing instability cautions as unsafe instructions", () => {
+    const lines = [
+      "Do not sleep in your car while waiting for FEMA.",
+      "Ask a shelter or case worker for emergency housing.",
+      "Use a safe mailing address instead of returning to a condemned apartment."
     ];
 
     for (const line of lines) {
