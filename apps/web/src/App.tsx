@@ -813,6 +813,10 @@ export const App = () => {
       setFileError("Unsupported file type. Upload TXT, PDF, JPG, or PNG.");
       setClearArmed(false);
       setActiveSavedCaseId(null);
+      setAnalysis(null);
+      setExportText("");
+      setActiveChecklistStatuses({});
+      setActiveChecklistNotes({});
       return false;
     }
 
@@ -820,6 +824,10 @@ export const App = () => {
       setFileError("File too large. Upload a file under 10 MB.");
       setClearArmed(false);
       setActiveSavedCaseId(null);
+      setAnalysis(null);
+      setExportText("");
+      setActiveChecklistStatuses({});
+      setActiveChecklistNotes({});
       return false;
     }
 

@@ -115,6 +115,21 @@ describe("OpenRelief security smoke", () => {
     expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
   });
 
+  it("clears stale analysis after unsupported uploads", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    const upload = screen.getByLabelText("Choose file");
+    const file = new File(["not a letter"], "installer.exe", { type: "application/x-msdownload" });
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    expect(screen.getByText("Unsupported file type. Upload TXT, PDF, JPG, or PNG.")).toBeInTheDocument();
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+    expect(screen.getByText("Ready to review")).toBeInTheDocument();
+  });
+
   it("rejects files with mismatched MIME types", () => {
     render(<App />);
 
@@ -135,6 +150,21 @@ describe("OpenRelief security smoke", () => {
 
     expect(screen.getByText("File too large. Upload a file under 10 MB.")).toBeInTheDocument();
     expect(screen.getByText("Sample_FEMA_Denial.txt")).toBeInTheDocument();
+  });
+
+  it("clears stale analysis after oversized uploads", async () => {
+    render(<App />);
+
+    await userEvent.click(screen.getByRole("button", { name: /analyze letter/i }));
+    expect(screen.getByText("Claim denial")).toBeInTheDocument();
+
+    const upload = screen.getByLabelText("Choose file");
+    const file = new File([new Uint8Array(10 * 1024 * 1024 + 1)], "large.txt", { type: "text/plain" });
+    fireEvent.change(upload, { target: { files: [file] } });
+
+    expect(screen.getByText("File too large. Upload a file under 10 MB.")).toBeInTheDocument();
+    expect(screen.queryByText("Claim denial")).not.toBeInTheDocument();
+    expect(screen.getByText("Ready to review")).toBeInTheDocument();
   });
 
   it("redacts restricted identifiers from uploaded file names in local storage", async () => {
