@@ -1251,6 +1251,13 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts public official label names", () => {
+    const redacted = redactRestrictedIdentifiers("Public official: Elena Torres should not stay in local text.");
+
+    expect(redacted).not.toContain("Elena Torres");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts insurance adjuster names", () => {
     const redacted = redactRestrictedIdentifiers("Insurance adjuster: Victor Lane should not stay in local text.");
 
