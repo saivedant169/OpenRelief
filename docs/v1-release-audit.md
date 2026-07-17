@@ -1,6 +1,6 @@
 # V1 Release Audit
 
-Status date: 2026-07-15
+Status date: 2026-07-18
 
 This audit maps V1 requirements to repo evidence. It supports release review, but does not replace partner or manual safety review.
 
@@ -69,7 +69,7 @@ This audit maps V1 requirements to repo evidence. It supports release review, bu
 | NFR-003 | Hosted sandbox preflight scans source and build output for telemetry markers. |
 | NFR-004 | Mobile E2E verifies 360px viewport without horizontal overflow. |
 | NFR-005 | A11y tests verify 44px target contracts for primary actions, upload, intake fields, queue rows, archive actions, and task rows. |
-| NFR-006 | A11y smoke tests verify named controls and release readiness documents WCAG target. |
+| NFR-006 | A11y smoke tests verify named controls, skip navigation to focusable primary content, and release readiness documents WCAG target. |
 | NFR-007 | Core tests verify letter summary reading grade target. |
 | NFR-008 | Policy validation tests require source URL, retrieved date, and review date. |
 | NFR-009 | `npm run check` runs evals before build and E2E; eval tests fail on critical safety regressions. |
