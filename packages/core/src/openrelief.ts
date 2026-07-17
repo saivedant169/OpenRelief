@@ -820,6 +820,30 @@ const requestDetectionRules: RequestDetectionRule[] = [
     fact: "The letter asks for public official statements."
   },
   {
+    request: "landlord statements",
+    phrases: [
+      "landlord statement",
+      "landlord statements",
+      "landlord letter",
+      "landlord letters",
+      "letter from landlord",
+      "statement from landlord"
+    ],
+    fact: "The letter asks for landlord statements."
+  },
+  {
+    request: "property manager letters",
+    phrases: [
+      "property manager letter",
+      "property manager letters",
+      "property manager statement",
+      "property manager statements",
+      "letter from property manager",
+      "statement from property manager"
+    ],
+    fact: "The letter asks for property manager letters."
+  },
+  {
     request: "bank statements",
     phrases: ["bank statement", "bank statements"],
     fact: "The letter asks for bank statements."
@@ -1868,6 +1892,8 @@ export const buildEvidencePacket = (requests: string[], availableEvidence: strin
             "continued housing assistance records",
             "employer statements",
             "public official statements",
+            "landlord statements",
+            "property manager letters",
             "bank statements",
             "credit card statements",
             "phone bills",

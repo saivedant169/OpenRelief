@@ -5392,6 +5392,22 @@ describe("OpenRelief domain core", () => {
     expect(result.facts).toContain("The letter asks for public official statements.");
   });
 
+  it("extracts landlord and property manager residence statements", () => {
+    const result = analyzeLetter([
+      "FEMA Request for Information",
+      "Additional information is needed before a decision can be made.",
+      "Please send a landlord statement or property manager letter confirming occupancy."
+    ].join("\n"));
+
+    expect(result.detectedRequests).toContain("landlord statements");
+    expect(result.detectedRequests).toContain("property manager letters");
+    expect(result.facts).toContain("The letter asks for landlord statements.");
+    expect(result.facts).toContain("The letter asks for property manager letters.");
+
+    const packet = buildEvidencePacket(result.detectedRequests);
+    expect(packet.groups.find((group) => group.category === "residence")?.items[0]?.status).toBe("missing");
+  });
+
   it("extracts bank credit card and phone bill residence requests", () => {
     const result = analyzeLetter([
       "FEMA Request for Information",
