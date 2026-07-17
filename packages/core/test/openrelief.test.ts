@@ -2597,7 +2597,9 @@ describe("OpenRelief domain core", () => {
         "Rent receipt number RRT-A1B2C3 should not stay in notes.",
         "Employer statement number EMS-A1B2C3 should not stay in notes.",
         "Pay stub number PST-A1B2C3 should not stay in notes.",
-        "Public official statement number POS-A1B2C3 should not stay in notes."
+        "Public official statement number POS-A1B2C3 should not stay in notes.",
+        "Landlord statement number LLS-A1B2C3 should not stay in notes.",
+        "Property manager letter number PML-A1B2C3 should not stay in notes."
       ].join("\n")
     );
 
@@ -2605,6 +2607,8 @@ describe("OpenRelief domain core", () => {
     expect(redacted).not.toContain("EMS-A1B2C3");
     expect(redacted).not.toContain("PST-A1B2C3");
     expect(redacted).not.toContain("POS-A1B2C3");
+    expect(redacted).not.toContain("LLS-A1B2C3");
+    expect(redacted).not.toContain("PML-A1B2C3");
     expect(redacted).toContain("[residence evidence identifier removed]");
   });
 

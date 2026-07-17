@@ -434,7 +434,7 @@ const restrictedIdentifierPatterns = [
   },
   {
     pattern:
-      /\b(?:rent\s+receipts?|employer\s+statements?|pay\s+stubs?|public\s+official\s+statements?)\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
+      /\b(?:rent\s+receipts?|employer\s+statements?|pay\s+stubs?|public\s+official\s+statements?|landlord\s+(?:statements?|letters?)|property\s+manager\s+(?:statements?|letters?))\s*(?:(?:id|number|no\.?)\s*)?(?:[:#-]\s*)*(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,}\b/gi,
     replacement: "[residence evidence identifier removed]"
   },
   {
