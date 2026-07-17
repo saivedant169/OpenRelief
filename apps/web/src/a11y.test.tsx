@@ -46,6 +46,14 @@ const expectNamedControls = () => {
 };
 
 describe("OpenRelief accessibility smoke", () => {
+  it("provides a skip link to primary content", () => {
+    render(<App />);
+
+    expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveAttribute("href", "#main-content");
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
+    expect(screen.getByRole("main")).toHaveAttribute("tabindex", "-1");
+  });
+
   it("keeps interactive controls named", async () => {
     render(<App />);
 

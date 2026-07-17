@@ -41,6 +41,22 @@ a:hover {
   min-height: 100vh;
 }
 
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  z-index: 10;
+  padding: 10px 14px;
+  color: #ffffff;
+  background: #073f91;
+  border-radius: 7px;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -389,6 +405,11 @@ a:hover {
 
 .main-panel {
   padding: 32px;
+}
+
+.main-panel:focus {
+  outline: 3px solid #0a66c2;
+  outline-offset: -3px;
 }
 
 .review-header {

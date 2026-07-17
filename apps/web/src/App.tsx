@@ -965,6 +965,9 @@ export const App = () => {
 
   return (
     <div className="app-shell">
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <header className="topbar">
         <div className="brand">
           <ShieldCheck aria-hidden="true" />
@@ -1124,7 +1127,7 @@ export const App = () => {
           </section>
         </aside>
 
-        <main className="main-panel">
+        <main className="main-panel" id="main-content" tabIndex={-1}>
           <section className="review-header">
             <div>
               <div className="title-row">
