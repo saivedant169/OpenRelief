@@ -1237,6 +1237,20 @@ describe("OpenRelief domain core", () => {
     expect(redacted).toContain("[name removed]");
   });
 
+  it("redacts property manager names", () => {
+    const redacted = redactRestrictedIdentifiers("Property manager name: Dana Ross should not stay in local text.");
+
+    expect(redacted).not.toContain("Dana Ross");
+    expect(redacted).toContain("[name removed]");
+  });
+
+  it("redacts property manager label names", () => {
+    const redacted = redactRestrictedIdentifiers("Property manager: Dana Ross should not stay in local text.");
+
+    expect(redacted).not.toContain("Dana Ross");
+    expect(redacted).toContain("[name removed]");
+  });
+
   it("redacts insurance adjuster names", () => {
     const redacted = redactRestrictedIdentifiers("Insurance adjuster: Victor Lane should not stay in local text.");
 
